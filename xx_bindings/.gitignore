@@ -1,0 +1,9 @@
+# Created by .ignore support plugin (hsz.mobi)
+### Android template
+
+# Gradle files
+build/
+lint/
+
+# IntelliJ
+*.iml

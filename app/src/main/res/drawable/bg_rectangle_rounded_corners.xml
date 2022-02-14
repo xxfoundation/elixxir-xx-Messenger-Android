@@ -1,0 +1,11 @@
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/transparent" />
+    <corners android:radius="@dimen/spacing_18" />
+    <padding
+        android:bottom="5dp"
+        android:left="@dimen/spacing_10"
+        android:right="@dimen/spacing_10"
+        android:top="5dp" />
+
+    <solid android:color="@color/tealTagVariation" />
+</shape>

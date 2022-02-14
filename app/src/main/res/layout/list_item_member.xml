@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/spacing_100"
+    android:layout_height="@dimen/spacing_100"
+    android:orientation="vertical">
+
+    <io.xxlabs.messenger.support.view.SquaredCornerLayout
+        android:id="@+id/contactMemberPhotoHolder"
+        android:layout_width="@dimen/spacing_48"
+        android:layout_height="@dimen/spacing_48"
+        app:layout_constraintBottom_toTopOf="@id/contactMemberName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:background="@drawable/component_avatar_semi_rounded">
+
+        <TextView
+            android:id="@+id/contactMemberPhotoDefault"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@drawable/ic_contact_light"
+            android:textColor="@color/white"
+            tools:text="RB" />
+
+        <ImageView
+            android:id="@+id/contactMemberPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+    </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+
+    <io.xxlabs.messenger.support.view.RoundedCornerLayout
+        android:id="@+id/contactMemberBtnCancel"
+        android:layout_width="@dimen/spacing_18"
+        android:layout_height="@dimen/spacing_18"
+        android:layout_marginStart="@dimen/spacing_5"
+        android:backgroundTint="#cc4343"
+        android:translationX="@dimen/spacing_5"
+        app:layout_constraintEnd_toEndOf="@id/contactMemberPhotoHolder"
+        app:layout_constraintTop_toTopOf="@id/contactMemberPhotoHolder">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_16"
+            android:layout_height="@dimen/spacing_16"
+            android:layout_gravity="center"
+            android:padding="2dp"
+            android:src="@drawable/ic_close_mini"
+            app:tint="@color/white" />
+    </io.xxlabs.messenger.support.view.RoundedCornerLayout>
+
+
+    <TextView
+        android:id="@+id/contactMemberName"
+        style="@style/XxTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="marquee"
+        android:lines="1"
+        android:textColor="@color/neutral_active"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/contactMemberPhotoHolder"
+        app:layout_constraintStart_toStartOf="@id/contactMemberPhotoHolder"
+        app:layout_constraintTop_toBottomOf="@id/contactMemberPhotoHolder"
+        tools:text="\@username" />
+</androidx.constraintlayout.widget.ConstraintLayout>

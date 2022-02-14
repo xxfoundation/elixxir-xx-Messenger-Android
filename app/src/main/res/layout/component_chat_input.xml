@@ -1,0 +1,293 @@
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatBottomBox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingStart="@dimen/spacing_16"
+    android:paddingTop="@dimen/spacing_16"
+    android:paddingEnd="@dimen/spacing_16"
+    android:paddingBottom="@dimen/spacing_16"
+    tools:layout_gravity="bottom">
+
+    <ImageView
+        android:id="@+id/chatPlusBtn"
+        android:layout_width="@dimen/spacing_42"
+        android:layout_height="@dimen/spacing_42"
+        android:layout_marginEnd="@dimen/spacing_7"
+        android:padding="@dimen/spacing_5"
+        android:src="@drawable/ic_plus"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/chatMsgBg"
+        app:layout_constraintEnd_toStartOf="@id/chatMsgBg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/chatMsgBg"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_weight="1"
+        tools:visibility="visible" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/chatMsgBg"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@drawable/component_rounded_bg_chat_enabled"
+        android:shape="ring"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatSendBtn"
+        app:layout_constraintStart_toEndOf="@id/chatPlusBtn"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/replyToMsgLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/component_rounded_top_bg_gray"
+            android:backgroundTint="@color/chatBgMessageInput"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/urlPreviewLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="spread"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/replyToTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:text="Replying to"
+                android:contentDescription="chat.reply.to"
+                android:textColor="@color/textLightTheme"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toTopOf="@id/replyToMsgUsername"
+                app:layout_constraintEnd_toStartOf="@id/replyToMsgClose"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineHeight="@dimen/text_14" />
+
+            <TextView
+                android:id="@+id/replyToMsgUsername"
+                style="@style/XxTextStyle.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:layout_marginEnd="@dimen/spacing_8"
+                android:ellipsize="end"
+                android:lines="1"
+                android:maxLines="1"
+                android:contentDescription="chat.reply.to.name"
+                android:textColor="@color/textLightTheme"
+                android:textSize="@dimen/text_11"
+                app:layout_constraintBottom_toTopOf="@id/replyToMsgText"
+                app:layout_constraintEnd_toStartOf="@id/replyToImage"
+                app:layout_constraintStart_toStartOf="@id/replyToTitle"
+                app:layout_constraintTop_toBottomOf="@id/replyToTitle"
+                tools:text="Happy McLucky " />
+
+            <TextView
+                android:id="@+id/replyToMsgText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_20"
+                android:layout_marginTop="@dimen/spacing_5"
+                android:layout_marginEnd="@dimen/spacing_8"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/text_grayed_blue"
+                android:textSize="@dimen/text_11"
+                android:contentDescription="chat.reply.to.msg"
+                app:layout_constraintBottom_toTopOf="@id/replyToMsgBar"
+                app:layout_constraintEnd_toStartOf="@id/replyToImage"
+                app:layout_constraintStart_toStartOf="@id/replyToMsgUsername"
+                app:layout_constraintTop_toBottomOf="@id/replyToMsgUsername"
+                tools:text="Lorem ipsum dolor sit amet, consectetu dsdsd sdsr adipiscing elit, sed do eiusmod temporincididunt… ut labore et dolore magna aliqua. Ut enim ad minim" />
+
+            <View
+                android:id="@+id/replyToMsgBar"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="@dimen/spacing_7"
+                android:layout_marginBottom="@dimen/spacing_7"
+                android:background="@color/lightThemeBg"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/replyToMsgClose"
+                app:layout_constraintStart_toStartOf="@id/replyToTitle"
+                app:layout_constraintTop_toBottomOf="@id/replyToMsgText" />
+
+            <ImageView
+                android:id="@+id/replyToImage"
+                android:layout_width="@dimen/spacing_32"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/spacing_12"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:adjustViewBounds="true"
+                android:padding="@dimen/spacing_5"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="H, 1:1"
+                app:layout_constraintEnd_toStartOf="@id/replyToMsgClose"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_link_img" />
+
+            <ImageView
+                android:id="@+id/replyToMsgClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_12"
+                android:contentDescription="chat.reply.cancel"
+                android:padding="@dimen/spacing_8"
+                android:src="@drawable/ic_baseline_cancel_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/replyToTitle"
+                app:layout_constraintVertical_bias="0.0" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/urlPreviewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/paleGray"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chatMsgInputScroll"
+            app:layout_constraintEnd_toEndOf="@id/chatMsgBg"
+            app:layout_constraintStart_toStartOf="@id/chatMsgBg"
+            app:layout_constraintTop_toBottomOf="@id/replyToMsgLayout"
+            tools:visibility="visible">
+
+            <ImageView
+                android:id="@+id/urlPreviewImage"
+                android:layout_width="@dimen/spacing_32"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/spacing_12"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:adjustViewBounds="true"
+                android:padding="@dimen/spacing_5"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="H, 1:1"
+                app:layout_constraintEnd_toStartOf="@id/urlPreviewClose"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:src="@drawable/ic_empty_link_img" />
+
+            <TextView
+                android:id="@+id/urlPreviewTitle"
+                style="@style/XxTextStyle.Bold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_16"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:layout_marginEnd="@dimen/spacing_8"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/chatTextActiveMessageColor"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toTopOf="@id/urlPreviewDescription"
+                app:layout_constraintEnd_toStartOf="@id/urlPreviewImage"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="FunTimes - Awesome Beach Gateways Etc" />
+
+            <TextView
+                android:id="@+id/urlPreviewDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_5"
+                android:layout_marginEnd="@dimen/spacing_8"
+                android:layout_marginBottom="@dimen/spacing_5"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/chatTextActiveMessageColor"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/urlPreviewImage"
+                app:layout_constraintStart_toStartOf="@id/urlPreviewTitle"
+                app:layout_constraintTop_toBottomOf="@id/urlPreviewTitle"
+                tools:text="beachthings.com" />
+
+            <ImageView
+                android:id="@+id/urlPreviewClose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_12"
+                android:padding="@dimen/spacing_8"
+                android:src="@drawable/ic_baseline_cancel_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias=".5" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ScrollView
+            android:id="@+id/chatMsgInputScroll"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:overScrollMode="never"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/chatMsgBg"
+            app:layout_constraintHeight_min="wrap"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/chatMsgBg"
+            app:layout_constraintTop_toBottomOf="@id/urlPreviewLayout"
+            tools:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/chatMsgInput"
+                    style="@style/InputEditText"
+                    android:contentDescription="chat.input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:backgroundTint="@color/neutral_off_white"
+                    android:ems="10"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:hint="Message"
+                    android:isScrollContainer="true"
+                    android:maxLength="9500"
+                    android:padding="@dimen/spacing_12"
+                    android:textColor="@color/neutral_active"
+                    android:textColorHint="@color/neutral_disabled"
+                    android:textIsSelectable="true"
+                    android:textSize="@dimen/text_14" />
+            </LinearLayout>
+        </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/chatSendBtn"
+        android:layout_width="@dimen/spacing_42"
+        android:layout_height="@dimen/spacing_42"
+        android:layout_marginStart="@dimen/spacing_10"
+        android:padding="@dimen/spacing_5"
+        android:contentDescription="chat.btn.send"
+        android:src="@drawable/selector_btn_chat"
+        app:layout_constraintBottom_toBottomOf="@id/chatMsgBg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chatMsgBg"
+        app:layout_constraintTop_toTopOf="@id/chatMsgBg"
+        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_weight="1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

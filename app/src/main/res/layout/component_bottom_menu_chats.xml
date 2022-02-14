@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/chatsBottomMenu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rectangle_rounded_corners"
+    android:backgroundTint="@color/neutral_white">
+
+    <ImageView
+        android:id="@+id/chatsBottomMenuPin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_24"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:contentDescription="chats.menu.bottom.pin"
+        android:padding="@dimen/spacing_18"
+        android:src="@drawable/ic_pin"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatsBottomMenuMute"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/chatsBottomMenuMute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:contentDescription="chats.menu.bottom.mute"
+        android:padding="@dimen/spacing_18"
+        android:src="@drawable/ic_mute"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatsBottomMenuDelete"
+        app:layout_constraintStart_toEndOf="@id/chatsBottomMenuPin"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/chatsBottomMenuDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:contentDescription="chats.menu.bottom.delete"
+        android:padding="@dimen/spacing_18"
+        android:src="@drawable/ic_trash_can"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/chatsBottomMenuDeleteAll"
+        app:layout_constraintStart_toEndOf="@id/chatsBottomMenuMute"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/chatsBottomMenuDeleteAll"
+        style="@style/XxTextStyle.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/spacing_24"
+        android:contentDescription="chats.menu.bottom.delete.all"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/spacing_5"
+        android:text="Delete All"
+        android:textColor="@color/accent_danger"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/chatsBottomMenuDelete"
+        app:layout_constraintTop_toTopOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

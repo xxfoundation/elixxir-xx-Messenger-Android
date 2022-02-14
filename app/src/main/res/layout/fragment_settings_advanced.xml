@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/settingsAdvancedLayoutRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_40">
+
+        <include layout="@layout/component_toolbar_generic" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsAdvancedTopLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_40"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsAdvancedDebugIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_logs"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsAdvancedDebugTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:text="Record Logs"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedDebugIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsAdvancedDebugExport"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@id/settingsAdvancedDebugIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedDebugIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <ImageView
+                android:id="@+id/settingsAdvancedDebugExport"
+                android:layout_width="@dimen/spacing_36"
+                android:layout_height="@dimen/spacing_36"
+                android:layout_marginStart="@dimen/spacing_12"
+                android:padding="@dimen/spacing_8"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_download"
+                android:contentDescription="settings.advanced.download.logs"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedDebugTitle"
+                app:layout_constraintEnd_toStartOf="@id/settingsAdvancedDebugSize"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@id/settingsAdvancedDebugTitle"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedDebugTitle"
+                app:tint="@color/neutral_active" />
+
+            <TextView
+                android:id="@+id/settingsAdvancedDebugSize"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_8"
+                android:layout_marginEnd="@dimen/spacing_16"
+                android:gravity="center_vertical"
+                android:text="1MB"
+                android:textColor="@color/neutral_weak"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedDebugExport"
+                app:layout_constraintEnd_toStartOf="@+id/settingsAdvancedDebugSwitch"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@id/settingsAdvancedDebugExport"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedDebugExport" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsAdvancedDebugSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.advanced.switch.logs"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedDebugTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedDebugTitle" />
+
+            <View
+                android:id="@+id/settingsAdvancedDebugSwitchLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_14"
+                android:background="@color/neutral_line"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsPredictiveTextDescription" />
+
+            <TextView
+                android:id="@+id/settingsPredictiveTextDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Tracks information about the application logs for debugging purposes."
+                android:textColor="@color/settingsAccentColorDescription"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsAdvancedDebugTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsAdvancedDebugTitle"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsAdvancedBottomLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsAdvancedCrashIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_crash_report"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsAdvancedCrashReportTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:text="Crash Reporting"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedCrashIcon"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toEndOf="@id/settingsAdvancedCrashIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedCrashIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsAdvancedCrashReportSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.advanced.switch.crash"
+                app:layout_constraintBottom_toBottomOf="@id/settingsAdvancedCrashReportTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsAdvancedCrashReportTitle" />
+
+            <View
+                android:id="@+id/settingsAdvancedCrashReportLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_14"
+                android:background="@color/neutral_line"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsAdvancedCrashReportDescription" />
+
+            <TextView
+                android:id="@+id/settingsAdvancedCrashReportDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Crash reporting automatically sends anonymous reports containing crash data."
+                android:textColor="@color/settingsAccentColorDescription"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsAdvancedCrashReportTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsAdvancedCrashReportTitle"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

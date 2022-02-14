@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/networkStatusLayout"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="@color/tealThemeColor"
+    android:gravity="center_vertical"
+    tools:showIn="@layout/fragment_chats_list">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_20"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:layout_marginEnd="@dimen/spacing_14"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:src="@drawable/ic_alert"
+        app:tint="@color/white" />
+
+    <TextView
+        android:id="@+id/networkStatusText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:lineSpacingExtra="3sp"
+        android:textColor="@color/statusTextColor"
+        android:textSize="@dimen/text_13"
+        tools:text="No internet connection. Connect to a network to continue receiving messages." />
+</LinearLayout>

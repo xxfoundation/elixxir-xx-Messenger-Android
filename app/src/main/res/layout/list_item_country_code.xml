@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="@dimen/spacing_40"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/spacing_20">
+
+    <TextView
+        android:id="@+id/countryCodeFlag"
+        style="@style/XxTextStyle"
+        android:layout_width="@dimen/spacing_32"
+        android:layout_height="@dimen/spacing_32"
+        android:layout_marginStart="@dimen/spacing_10"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="🇺🇸" />
+
+    <TextView
+        android:id="@+id/countryCodeName"
+        style="@style/XxTextStyle.SemiBold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_weight="1"
+        android:ellipsize="marquee"
+        android:maxLines="1"
+        android:textColor="@color/neutral_dark"
+        android:textSize="@dimen/text_18"
+        app:layout_constraintBottom_toBottomOf="@id/countryCodeFlag"
+        app:layout_constraintEnd_toStartOf="@id/countryCodeNumber"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/countryCodeFlag"
+        app:layout_constraintTop_toTopOf="@id/countryCodeFlag"
+        tools:text="United States of America" />
+
+    <TextView
+        android:id="@+id/countryCodeNumber"
+        style="@style/XxTextStyle.SemiBold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_14"
+        android:layout_marginEnd="@dimen/spacing_10"
+        android:textColor="@color/neutral_weak"
+        android:textSize="@dimen/text_18"
+        app:layout_constraintBottom_toBottomOf="@id/countryCodeName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1"
+        app:layout_constraintTop_toTopOf="@id/countryCodeName"
+        tools:text="+1" />
+</LinearLayout>

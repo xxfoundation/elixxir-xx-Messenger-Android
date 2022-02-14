@@ -1,0 +1,478 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/menu_background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <io.xxlabs.messenger.support.view.SquaredCornerLayout
+            android:id="@+id/menuProfilePhotoHolder"
+            android:layout_width="@dimen/spacing_77"
+            android:layout_height="@dimen/spacing_77"
+            android:contentDescription="menu.photo"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuGuideTop"
+            tools:background="@drawable/component_avatar_semi_rounded">
+
+            <TextView
+                android:id="@+id/menuProfilePhotoDefault"
+                style="@style/XxTextStyle.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_24"
+                tools:text="RB" />
+
+            <ImageView
+                android:id="@+id/menuProfilePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center_horizontal"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
+        </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+
+        <TextView
+            android:id="@+id/menuTopText"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="0sp"
+            android:text="Hello"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toTopOf="@id/menuUsername"
+            app:layout_constraintStart_toEndOf="@id/menuProfilePhotoHolder"
+            app:layout_constraintTop_toBottomOf="@id/menuGuideTop" />
+
+        <TextView
+            android:id="@+id/menuUsername"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:contentDescription="menu.username"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="0sp"
+            android:textColor="@color/neutral_line"
+            android:textSize="@dimen/text_18"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/menuGuideMiddle75"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/menuProfilePhotoHolder"
+            app:layout_constraintTop_toBottomOf="@id/menuTopText"
+            tools:text="\@username asskasas" />
+
+        <TextView
+            android:id="@+id/menuViewProfile"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:contentDescription="menu.view.profile"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="0sp"
+            android:text="View Profile"
+            android:textColor="@color/brand_dark"
+            android:textSize="@dimen/text_12"
+            android:visibility="gone"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toStartOf="@id/menuGuideMiddle75"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/menuProfilePhotoHolder"
+            app:layout_constraintTop_toBottomOf="@id/menuUsername" />
+
+        <TextView
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginTop="@dimen/spacing_10"
+            android:letterSpacing="0.02"
+            android:text="edit profile"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_12"
+            android:visibility="gone"
+            app:layout_constraintStart_toEndOf="@id/menuProfilePhotoHolder"
+            app:layout_constraintTop_toBottomOf="@id/menuUsername" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/menuBarrierUsername"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_20"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="menuTopText, menuUsername" />
+
+        <ImageView
+            android:id="@+id/menuQrCode"
+            android:layout_width="@dimen/spacing_40"
+            android:layout_height="@dimen/spacing_40"
+            android:layout_marginStart="@dimen/spacing_12"
+            android:background="@drawable/ic_qr_squared"
+            android:contentDescription="menu.qrcode"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="@id/menuUsername"
+            app:layout_constraintEnd_toEndOf="@id/menuGuideEnd"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/menuBarrierUsername"
+            app:layout_constraintTop_toTopOf="@id/menuTopText"
+            app:layout_constraintVertical_bias="0"/>
+
+        <!-- CHATS -->
+        <ImageView
+            android:id="@+id/menuChatsIcon"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_10"
+            android:src="@drawable/ic_menu_chats"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuGuideUpperMidHor" />
+
+        <TextView
+            android:id="@+id/menuChatsText"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.chats"
+            android:padding="@dimen/spacing_8"
+            android:paddingEnd="0dp"
+            android:text="@string/menu_chats"
+            android:textColor="@color/brand_dark"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuChatsIcon"
+            app:layout_constraintStart_toEndOf="@id/menuChatsIcon"
+            app:layout_constraintTop_toTopOf="@id/menuChatsIcon" />
+
+        <!-- END CONTACTS -->
+
+        <!-- CONTACTS -->
+        <ImageView
+            android:id="@+id/menuContactsIcon"
+            android:src="@drawable/ic_menu_contacts"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuChatsText"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuContactsTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.contacts"
+            android:padding="@dimen/spacing_8"
+            android:paddingEnd="0dp"
+            android:text="@string/menu_contacts"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuContactsIcon"
+            app:layout_constraintStart_toEndOf="@id/menuContactsIcon"
+            app:layout_constraintTop_toTopOf="@id/menuContactsIcon" />
+        <!-- END CONTACTS -->
+
+        <!-- REQUESTS -->
+        <ImageView
+            android:id="@+id/menuContactRequestsIcon"
+            android:src="@drawable/ic_mail"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuContactsTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuContactRequestsTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.requests"
+            android:padding="@dimen/spacing_8"
+            android:paddingEnd="0dp"
+            android:text="@string/menu_requests"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuContactRequestsIcon"
+            app:layout_constraintStart_toEndOf="@id/menuContactRequestsIcon"
+            app:layout_constraintTop_toTopOf="@id/menuContactRequestsIcon" />
+
+        <View
+            android:id="@+id/menuContactsNotification"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_16"
+            android:layout_marginStart="2dp"
+            android:background="@drawable/component_semi_circular_bg"
+            android:backgroundTint="@color/brand_dark"
+            app:layout_constraintBottom_toBottomOf="@id/menuContactRequestsTxt"
+            app:layout_constraintStart_toEndOf="@id/menuContactRequestsTxt"
+            app:layout_constraintTop_toTopOf="@id/menuContactRequestsTxt" />
+
+        <TextView
+            android:id="@+id/menuContactsNotificationNumber"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="menu.option.requests.badge"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="@id/menuContactsNotification"
+            app:layout_constraintEnd_toEndOf="@id/menuContactsNotification"
+            app:layout_constraintStart_toStartOf="@id/menuContactsNotification"
+            app:layout_constraintTop_toTopOf="@id/menuContactsNotification"
+            tools:text="2" />
+
+        <!-- REQUESTS -->
+
+        <!-- PROFILE -->
+        <ImageView
+            android:id="@+id/menuContactProfileIcon"
+            android:src="@drawable/ic_menu_profile"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuContactRequestsTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuContactProfileTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.profile"
+            android:padding="@dimen/spacing_8"
+            android:paddingEnd="0dp"
+            android:text="@string/menu_profile"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuContactProfileIcon"
+            app:layout_constraintStart_toEndOf="@id/menuContactProfileIcon"
+            app:layout_constraintTop_toTopOf="@id/menuContactProfileIcon" />
+
+        <!-- PROFILE -->
+
+        <!-- PROFILE -->
+        <ImageView
+            android:id="@+id/menuScanIcon"
+            android:src="@drawable/ic_qr_scan"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuContactProfileTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuScanText"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.scan"
+            android:padding="@dimen/spacing_8"
+            android:paddingEnd="0dp"
+            android:text="@string/menu_scan"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuScanIcon"
+            app:layout_constraintStart_toEndOf="@id/menuScanIcon"
+            app:layout_constraintTop_toTopOf="@id/menuScanIcon" />
+
+        <!-- PROFILE -->
+
+        <!-- SETTINGS -->
+        <ImageView
+            android:id="@+id/menuSettingsIcon"
+            android:src="@drawable/ic_menu_settings"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuJoinXxTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuSettingsTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.settings"
+            android:padding="@dimen/spacing_8"
+            android:text="@string/settings"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuSettingsIcon"
+            app:layout_constraintStart_toEndOf="@id/menuSettingsIcon"
+            app:layout_constraintTop_toTopOf="@id/menuSettingsIcon" />
+
+        <ImageView
+            android:id="@+id/menuDashboardIcon"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:padding="@dimen/spacing_3"
+            android:src="@drawable/ic_dashboard"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuScanText"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuDashboardTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.dashboard"
+            android:padding="@dimen/spacing_8"
+            android:text="@string/dashboard"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuDashboardIcon"
+            app:layout_constraintStart_toEndOf="@id/menuDashboardIcon"
+            app:layout_constraintTop_toTopOf="@id/menuDashboardIcon" />
+
+        <ImageView
+            android:id="@+id/menuJoinXxIcon"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:padding="@dimen/spacing_3"
+            android:src="@drawable/ic_logo_xx"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuDashboardTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuJoinXxTxt"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.dashboard"
+            android:padding="@dimen/spacing_8"
+            android:text="@string/menu_join_xx_network"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuJoinXxIcon"
+            app:layout_constraintStart_toEndOf="@id/menuJoinXxIcon"
+            app:layout_constraintTop_toTopOf="@id/menuJoinXxIcon" />
+
+        <TextView
+            android:id="@+id/menuBottomBuildTxt"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_5"
+            android:layout_marginBottom="@dimen/spacing_5"
+            android:letterSpacing="0.02"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintBottom_toTopOf="@id/menuBottomVersionTxt"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuSettingsTxt"
+            app:layout_constraintVertical_bias="1"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Build 1.1.0" />
+
+        <TextView
+            android:id="@+id/menuBottomVersionTxt"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_5"
+            android:letterSpacing="0.02"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintBottom_toTopOf="@id/menuBottomSemVersionTxt"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuBottomBuildTxt"
+            app:layout_constraintVertical_bias="1"
+            tools:text="Version 1.1.0" />
+
+        <TextView
+            android:id="@+id/menuBottomSemVersionTxt"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_10"
+            android:letterSpacing="0.02"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuBottomVersionTxt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="1"
+            tools:text="SEMVER: 1.1.0" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuMiddleHor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideTop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.03" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideBottom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.97" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideUpperMidHor"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.20" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuMiddleVer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideMiddle75"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.7" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideStart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="0dp"
+            android:background="@color/red"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/menuGuideStart"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toTopOf="@id/menuGuideStart" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/menuGuideEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

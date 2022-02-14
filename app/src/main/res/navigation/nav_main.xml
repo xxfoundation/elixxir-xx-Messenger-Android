@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_main"
+    app:startDestination="@id/transitionMainScreen">
+
+    <fragment
+        android:id="@+id/registrationFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.RegistrationFragment"
+        android:label="Registration #Permissioning"
+        tools:layout="@layout/fragment_register">
+
+        <action
+            android:id="@+id/action_registration_to_chats"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/transitionMainScreen"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactsFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.ContactsFragment"
+        android:label="Contacts"
+        tools:layout="@layout/fragment_contacts">
+        <action
+            android:id="@+id/action_contacts_to_profile"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/push_down_in"
+            app:popExitAnim="@anim/push_up_out" />
+
+        <action
+            android:id="@+id/action_contacts_pop"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_contacts_to_invitation"
+            app:destination="@id/contactInvitationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_contacts_fragment_to_ud_search_fragment"
+            app:destination="@id/udPrivateSearchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactsSelectFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment"
+        android:label="Contacts Selection"
+        tools:layout="@layout/fragment_contacts">
+
+        <action
+            android:id="@+id/action_contacts_selection_to_chat"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment" />
+
+        <action
+            android:id="@+id/action_contacts_selection_to_profile"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment" />
+
+        <action
+            android:id="@+id/action_contacts_selection_to_invitation"
+            app:destination="@id/contactInvitationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment" />
+
+        <action
+            android:id="@+id/action_contacts_selection_to_ud_search_fragment"
+            app:destination="@id/udPrivateSearchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactInvitationFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitation"
+        android:label="ContactInvitation"
+        tools:layout="@layout/fragment_contact_details">
+        <action
+            android:id="@+id/action_contact_invitation_pop"
+            app:destination="@id/contactInvitationFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="io.xxlabs.messenger.ui.main.chats.ChatsFragment"
+        android:label="Chats List"
+        tools:layout="@layout/fragment_chats_list">
+
+        <action
+            android:id="@+id/action_chats_to_select_contact"
+            app:destination="@id/contactsSelectFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+        <action
+            android:id="@+id/action_chats_to_contacts"
+            app:destination="@id/contactsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_chats_to_ud_search"
+            app:destination="@id/udPrivateSearchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/groupsChatFragment"
+        tools:layout="@layout/fragment_chat"
+        android:name="io.xxlabs.messenger.ui.main.groups.GroupMessagesFragment"
+        android:label="GroupsChatFragment">
+
+        <action
+            android:id="@+id/action_groups_chat_pop_to_chats_list"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/chatsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="io.xxlabs.messenger.ui.main.settings.SettingsFragment"
+        android:label="Settings"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_settings_advanced"
+            app:destination="@id/settingsAdvancedFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_settings_pop"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_settingsFragment_to_deleteAccountFragment"
+            app:destination="@id/deleteAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment"
+        android:label="Chat"
+        tools:layout="@layout/fragment_chat">
+
+        <action
+            android:id="@+id/action_chat_to_profile_from_chat_flow"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/push_down_in"
+            app:popExitAnim="@anim/push_up_out"
+            app:popUpTo="@id/chatFragment" />
+
+        <action
+            android:id="@+id/action_chat_pop_from_profile_flow"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/push_down_in"
+            app:popExitAnim="@anim/push_up_out"
+            app:popUpTo="@id/contactDetailsFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_chat_pop_from_chat_flow"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/chatFragment"
+            app:popUpToInclusive="true" />
+
+        <action
+            android:id="@+id/action_chat_pop_to_chats"
+            app:destination="@id/chatsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/chatsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactDetailsFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.profile.ContactProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_contact_details">
+        <action
+            android:id="@+id/action_user_profile_to_chat"
+            app:destination="@id/chatFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/settingsAdvancedFragment"
+        android:name="io.xxlabs.messenger.ui.main.settings.SettingsAdvancedFragment"
+        android:label="Advanced Settings"
+        tools:layout="@layout/fragment_settings_advanced" />
+
+    <fragment
+        android:id="@+id/qrCodeFragment"
+        android:name="io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment"
+        android:label="QrCodeFragment"
+        tools:layout="@layout/fragment_qr_code">
+
+        <action
+            android:id="@+id/action_qr_code_to_qr_code_success"
+            app:destination="@id/contactSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/qr_code_to_contact_details"
+            app:destination="@id/contactDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:popExitAnim="@anim/slide_out_left"
+            app:popUpTo="@id/chatFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/contactSuccessFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.success.ContactSuccessFragment"
+        android:label="contactSuccessFragment"
+        tools:layout="@layout/fragment_contact_success">
+
+        <argument
+            android:name="contact"
+            android:defaultValue="@null"
+            app:argType="string"
+            app:nullable="true" />
+
+        <action
+            android:id="@+id/action_contact_view_requests"
+            app:destination="@id/requestsFragment"
+            app:enterAnim="@anim/slide_in_left"
+            app:exitAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/fade_out"
+            app:popUpTo="@id/chatsFragment" />
+
+        <action
+            android:id="@+id/action_contact_success_done"
+            app:popEnterAnim="@anim/slide_out_right"
+            app:popExitAnim="@anim/slide_in_left"
+            app:popUpTo="@id/chatsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/transitionMainScreen"
+        android:name="io.xxlabs.messenger.ui.main.TransitionMainScreen"
+        android:label="TransitionMainScreen">
+        <argument
+            android:name="shouldNavigate"
+            android:defaultValue="true"
+            app:argType="boolean" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/udPrivateSearchFragment"
+        android:name="io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment"
+        android:label="UdPrivateSearchFragment"
+        tools:layout="@layout/fragment_private_search">
+
+        <action
+            android:id="@+id/action_ud_search_to_contact_success"
+            app:destination="@id/contactSuccessFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/requestsFragment"
+        android:name="io.xxlabs.messenger.ui.main.requests.RequestsFragment"
+        android:label="RequestsFragment"
+        tools:layout="@layout/fragment_requests">
+
+        <argument
+            android:name="selectedTab"
+            android:defaultValue="0"
+            app:argType="integer" />
+
+        <action
+            android:id="@+id/action_requests_to_ud_search"
+            app:destination="@id/udPrivateSearchFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/udProfileFragment"
+        android:name="io.xxlabs.messenger.ui.main.ud.profile.UdProfileFragment"
+        android:label="UdProfileFragment"
+        tools:layout="@layout/fragment_ud_profile" />
+
+    <!--    <dialog-->
+    <!--        android:id="@+id/webViewDialogFragment"-->
+    <!--        android:name="io.xxlabs.messenger.ui.main.dashboard.WebViewDialog"-->
+    <!--        tools:layout="@layout/component_webview" />-->
+
+    <action
+        android:id="@+id/action_global_contact_invitation"
+        app:destination="@id/contactInvitationFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_ud_profile"
+        app:destination="@id/udProfileFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_contact_details"
+        app:destination="@id/contactDetailsFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_registration"
+        app:destination="@id/registrationFragment"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_chats"
+        app:destination="@id/chatsFragment"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
+        app:popUpTo="@id/nav_main" />
+
+    <fragment
+        android:id="@+id/photoSelectorFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment"
+        android:label="PhotoSelectorFragment"
+        tools:layout="@layout/fragment_photo_selection" />
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="io.xxlabs.messenger.ui.main.dashboard.WebViewDialog"
+        android:label="DashboardFragment"
+        tools:layout="@layout/component_webview" />
+
+    <!-- Menu -->
+    <action
+        android:id="@+id/action_global_chat"
+        app:destination="@id/chatFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_qr_code"
+        app:destination="@id/qrCodeFragment"
+        app:enterAnim="@anim/push_down_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/fade_in"
+        app:popExitAnim="@anim/push_up_out" />
+
+    <action
+        android:id="@+id/action_global_requests"
+        app:destination="@id/requestsFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_menu_pop_to_contacts"
+        app:destination="@id/contactsFragment"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
+        app:popUpTo="@id/contactsFragment"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_dashboard"
+        app:destination="@id/dashboardFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_menu_pop_to_settings"
+        app:destination="@id/settingsFragment"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right"
+        app:popUpTo="@id/settingsFragment"
+        app:popUpToInclusive="true" />
+
+    <action
+        android:id="@+id/action_global_photo_selector"
+        app:destination="@id/photoSelectorFragment"
+        app:enterAnim="@anim/push_down_in"
+        app:exitAnim="@anim/fade_out"
+        app:popEnterAnim="@anim/fade_in"
+        app:popExitAnim="@anim/push_up_out" />
+
+    <action
+        android:id="@+id/action_global_groups_chat"
+        app:destination="@id/groupsChatFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
+    <action
+        android:id="@+id/action_global_onboarding"
+        app:destination="@id/registrationUsernameFragment"
+        app:enterAnim="@anim/slide_in_left"
+        app:exitAnim="@anim/slide_out_right"
+        app:popUpToInclusive="false" />
+
+    <fragment
+        android:id="@+id/registrationUsernameFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.username.RegistrationUsernameFragment"
+        android:label="Username Registration"
+        tools:layout="@layout/fragment_registration_username">
+        <action
+            android:id="@+id/action_registrationUsernameFragment_to_registrationWelcomeFragment"
+            app:destination="@id/registrationWelcomeFragment"
+            app:popUpTo="@id/transitionMainScreen"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationWelcomeFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.welcome.RegistrationWelcomeFragment"
+        android:label="RegistrationWelcomeFragment"
+        tools:layout="@layout/fragment_registration_welcome">
+        <action
+            android:id="@+id/action_registrationWelcomeFragment_to_registrationEmailFragment"
+            app:destination="@id/registrationEmailFragment" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationAddedFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.added.RegistrationAddedFragment"
+        android:label="RegistrationAddedFragment"
+        tools:layout="@layout/fragment_registration_added">
+        <argument
+            android:name="factType"
+            app:argType="io.xxlabs.messenger.data.datatype.FactType" />
+        <action
+            android:id="@+id/action_registrationAddedFragment_to_registrationPhoneFragment"
+            app:destination="@id/registrationPhoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationPhoneFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.phone.RegistrationPhoneFragment"
+        android:label="RegistrationPhoneFragment"
+        tools:layout="@layout/fragment_registration_phone">
+        <action
+            android:id="@+id/action_registrationPhoneFragment_to_registrationTfaFragment"
+            app:destination="@id/registrationTfaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationEmailFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.email.RegistrationEmailFragment"
+        android:label="RegistrationEmailFragment"
+        tools:layout="@layout/fragment_registration_email">
+        <action
+            android:id="@+id/action_registrationEmailFragment_to_registrationTfaFragment"
+            app:destination="@id/registrationTfaFragment" />
+        <action
+            android:id="@+id/action_registrationEmailFragment_to_registrationPhoneFragment"
+            app:destination="@id/registrationPhoneFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationTfaFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.tfa.RegistrationTfaFragment"
+        android:label="RegistrationTfaFragment"
+        tools:layout="@layout/fragment_registration_2fa" >
+        <action
+            android:id="@+id/action_registrationTfaFragment_to_registrationAddedFragment"
+            app:destination="@id/registrationAddedFragment" />
+        <argument
+            android:name="tfaCredentials"
+            app:argType="io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials" />
+    </fragment>
+    <fragment
+        android:id="@+id/deleteAccountFragment"
+        android:name="io.xxlabs.messenger.ui.main.settings.DeleteAccountFragment"
+        android:label="DeleteAccountFragment"
+        tools:layout="@layout/fragment_delete_account"/>
+    <fragment
+        android:id="@+id/fullScreenImageFragment"
+        android:name="io.xxlabs.messenger.media.FullScreenImageFragment"
+        android:label="FullScreenImageFragment" >
+        <argument
+            android:name="imageUri"
+            app:argType="string" />
+    </fragment>
+    <action android:id="@+id/action_global_fullScreenImageFragment" app:destination="@id/fullScreenImageFragment" />
+</navigation>

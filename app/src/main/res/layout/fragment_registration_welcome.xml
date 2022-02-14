@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="username"
+            type="String" />
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.intro.registration.welcome.WelcomeRegistrationUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/registration_welcome_title_text"
+            android:text="@{ui.welcomeTitle(username)}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/bold_title"
+            tools:text="@string/registration_welcome_title" />
+
+        <TextView
+            android:id="@+id/registration_welcome_body_text"
+            android:text="@string/registration_welcome_body"
+            android:drawablePadding="@dimen/ic_info_padding"
+            android:onClick="@{() -> ui.onWelcomeInfoClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_welcome_title_text"
+            style="@style/dialog_body"
+            app:drawableBottomCompat="@drawable/ic_outline_info_24" />
+
+        <Button
+            android:id="@+id/registration_welcome_next_btn"
+            android:text="@string/registration_welcome_continue"
+            android:onClick="@{() -> ui.onWelcomeNextClicked()}"
+            app:layout_constraintBottom_toTopOf="@id/registration_welcome_skip_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+            style="@style/registration_step_next_button" />
+
+        <Button
+            android:id="@+id/registration_welcome_skip_btn"
+            android:text="@string/registration_welcome_skip"
+            android:onClick="@{() -> ui.onWelcomeSkipClicked()}"
+            android:layout_marginBottom="@dimen/registration_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

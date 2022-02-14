@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/registration_email_title_text"
+            android:text="@{ui.emailTitle}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/bold_title"
+            tools:text="@string/registration_email_title" />
+
+        <TextView
+            android:id="@+id/registration_email_body_text"
+            android:text="@string/registration_email_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_email_title_text"
+            style="@style/dialog_body" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registration_email_input"
+            android:enabled="@{ui.emailInputEnabled}"
+            app:error="@{ui.emailError}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_email_body_text"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_outline_info_24"
+            app:endIconTint="@color/brand_default"
+            app:endIconOnClickListener="@{() -> ui.onEmailInfoClicked()}"
+            style="@style/registration_text_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress"
+                android:hint="@string/registration_add_email_hint"
+                android:text="@={ui.email}"
+                android:maxLength="@{ui.maxEmailLength}"
+                android:imeOptions="actionDone"
+                style="@style/registration_text_input_edittext" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/registration_email_next_btn"
+            android:text="@string/registration_flow_next"
+            android:onClick="@{() -> ui.onEmailNextClicked()}"
+            android:enabled="@{ui.emailNextButtonEnabled}"
+            app:layout_constraintBottom_toTopOf="@id/registration_email_skip_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+
+        <Button
+            android:id="@+id/registration_email_skip_btn"
+            style="@style/registration_borderless_text_button"
+            android:enabled="@{ui.emailSkipButtonEnabled}"
+            android:onClick="@{() -> ui.onEmailSkipClicked()}"
+            android:text="@string/registration_email_skip_text"
+            android:layout_marginBottom="@dimen/registration_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ProgressBar
+            android:id="@+id/registration_email_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/brand_default"
+            android:visibility="@{!ui.emailInputEnabled}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/webViewToolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/webViewToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/actionBarSize"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ImageView
+            android:id="@+id/webViewToolbarCloseBtn"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:contentDescription="dialog.country.code.btn.close"
+            android:padding="@dimen/spacing_5"
+            android:src="@drawable/ic_close_20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/neutral_active" />
+
+        <TextView
+            android:id="@+id/webViewToolbarTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_18"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/webViewToolbarBackBtn"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/webViewToolbarCloseBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <ImageView
+            android:id="@+id/webViewToolbarBackBtn"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:src="@drawable/ic_arrow_left"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/webViewToolbarForwardBtn"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/webViewToolbarForwardBtn"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:src="@drawable/ic_arrow_right"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="xx_app_name">xx messenger</string>
+    <string name="xx_app_name_mock">xx messenger</string>
+    <string name="xx_app_name_mainNet">xx messenger</string>
+    <string name="xx_app_name_mainNetDebug">xx messenger</string>
+    <string name="xx_app_name_releaseNetDebug">xx messenger</string>
+
+    <!-- Bottom navigation Menu Titles -->
+
+    <string name="menu_chats">Chats</string>
+    <string name="menu_contacts">Connections</string>
+    <string name="menu_requests">Requests</string>
+    <string name="menu_profile">Profile</string>
+    <string name="menu_scan">Scan QR</string>
+    <string name="chats">Chats</string>
+    <string name="search_bar_text">Search Chats</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="search_contacts">Search connections</string>
+    <string name="search_chats">Search chats</string>
+    <string name="search_country">+1 United States</string>
+    <string name="password_recovery_info">Where can I get a code?</string>
+    <string name="network_title">Network Info</string>
+    <string name="network_description">
+        Check out our Network Dashboard for real-time information on the Elixxir network
+        including node locations, computation size, time to finalization and other
+        statistics.</string>
+    <string name="dashboard_btn_description">Dashboard</string>
+    <string name="password_recovery_is_not_supported">Password Recovery Is Not Supported</string>
+    <string name="password_keep_a_copy">
+        Please keep a copy of your login credentials somewhere safe for reference.
+        You will not be able to recover your account through the app if you forget your
+        password or email.</string>
+    <string name="error_unrecoverable">
+        Unrecoverable error, something went wrong in your registration.
+        Please reinstall it and try again.</string>
+    <string name="error_unrecoverable_title">Something Went Wrong.</string>
+    <string name="error_connection_down_desc">
+        Please return to an area with cellular data or wifi and check to make sure your
+        mobile data or wifi setting is enabled. Also check that Airplane Mode is disabled.
+        Restart your app to finish the registration process.</string>
+    <string name="error_connection_down_title">You are no longer connected to the network</string>
+    <string name="error_server_down_title">Unable to Connect</string>
+    <string name="error_server_down_desc">
+        The xx messenger needs an internet connection to run properly.
+        Check that you have a connection to a cellular or wifi network and try again.
+        If the problem persists, try again later.</string>
+    <string name="fcm_message">xx network</string>
+    <string name="progress_secondary_text">
+        [B]Did you know?[B]<br /> When you send an xm,
+        it travels to and is mixed across 4 continents, travelling the equivalent of
+        half the distance to the moon!</string>
+    <string name="settings">Settings</string>
+
+    <!-- Biometrics -->
+
+    <string name="biometric_error_sdk_not_supported">SDK version not supported</string>
+    <string name="biometric_error_hardware_not_supported">
+        Device does not support biometric authentication</string>
+    <string name="biometric_error_fingerprint_not_available">
+        Fingerprint is not registered in device or secure lock is not set.</string>
+    <string name="biometric_error_permission_not_granted">Permission is not granted by user</string>
+    <string name="biometric_reset">Your biometrics configuration has been reset</string>
+    <string name="biometric_failure">Biometric auth has failed!</string>
+    <string name="biometric_cancelled">Authentication cancelled by user</string>
+    <string name="biometric_success">Biometrics Login was Successful!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_qr_code">QrCodeActivity</string>
+
+    <!-- General -->
+
+    <string name="ok">Ok</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!-- Hints -->
+    <string name="hint_password">Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="hint_result">Result</string>
+    <string name="hint_username">Username</string>
+
+    <!-- Confirmation & Btn -->
+    <string name="btn_next">Next</string>
+    <string name="btn_not_now">Not right now</string>
+    <string name="btn_unlock">Unlock</string>
+
+    <!-- Create Account Screen -->
+
+    <string name="registration_create_account_title">Create Account</string>
+    <string name="registration_keystore_created">Keystore Created</string>
+    <string name="registration_public_profile_msg">
+        Help others find you by completing your public profile</string>
+    <string name="registration_complete_now">Complete Now!</string>
+    <string name="registration_btn_skip">Skip</string>
+    <string name="registration_password_msg">Password must contain 6 characters</string>
+    <string name="registration_password_must_contain_msg">Password must contain<br />6 characters.</string>
+    <string name="registration_passwords_must_match_msg">Passwords must match</string>
+    <string name="registration_passwords_contains_char_msg">Password contains 6 characters</string>
+    <string name="registration_passwords_match">Passwords Match</string>
+    <string name="registration_username_must_be_char">Username must be at least 4 characters.</string>
+    <string name="registration_username_invalid_char">Username has invalid characters</string>
+    <string name="registration_username_max_char">Max character limit reached.</string>
+    <string name="registration_username_already_taken">Name already exists.</string>
+    <string name="registration_character_requirement_met">Character requirement met.</string>
+    <string name="registration_unique_username_msg">
+        Create a unique username on the xx network that will appear in both the Public Search
+        and in users’ contacts.</string>
+    <string name="registration_username_cannot_be_empty">Username can\'t be empty</string>
+
+    <!-- Chat screen -->
+
+    <string name="chat_say_hello_text">Say hello to %s!</string>
+    <string name="chat_msg_elapsed_time">%1$02d:%2$02d</string>
+    <string name="chat_msg_document_file_size">%02d KB</string>
+
+    <!-- Notifications -->
+
+    <string name="default_notification_channel_id" translatable="false">notifications_channel</string>
+    <string name="request_notification_channel_id" translatable="false">request_channel</string>
+    <string name="confirm_notification_channel_id" translatable="false">confirm_channel</string>
+    <string name="group_notification_channel_id" translatable="false">group_channel</string>
+    <string name="e2e_notification_channel_id" translatable="false">e2e_channel</string>
+
+    <string name="notification_request_text">Request received</string>
+    <string name="notification_confirm_text">Request accepted</string>
+    <string name="notification_e2e_text">New private message</string>
+    <string name="notification_group_text">New group message</string>
+    <string name="notification_endft_text">New media received</string>
+
+    <string name="default_notification_channel_label">Other notifications</string>
+    <string name="notification_request_channel_label">Received requests</string>
+    <string name="notification_confirm_channel_label">Sent requests</string>
+    <string name="notification_e2e_channel_label">Private messages</string>
+    <string name="notification_group_channel_label">Group messages</string>
+
+    <!-- Requests -->
+
+    <string name="request_verifying_popup_title">Verifying</string>
+    <string name="request_verifying_popup_message">
+        We are working on verifying the request to make
+        sure it’s not spam. Please check again shortly.</string>
+
+    <!-- Registration: Common -->
+
+    <string name="registration_intro_tagline">A quantum leap in privacy</string>
+    <string name="registration_intro_cta">Get Started</string>
+    <string name="registration_flow_next">Next</string>
+    <string name="registration_flow_ok">Got it</string>
+    <string name="registration_flow_done">Done</string>
+
+    <!-- Registration: Username -->
+
+    <string name="registration_username_title">Choose your username.</string>
+    <string name="registration_username_body">
+        Your unique username is the first name your contacts
+        will see in their searches and contact lists.\n\nThis cannot be changed.</string>
+    <string name="registration_choose_username_hint">Username</string>
+    <string name="registration_username_explanation">
+        Your chosen username will be registered with
+        the User Discovery Service allowing your public keys to be accessible to anyone who knows
+        your username. They will then be able to send a request to create an authenticated channel
+        with you. You will then be able to reject unwanted requests.</string>
+    <string name="registration_username_info_title">Your Username</string>
+    <string name="registration_username_info_body">
+        Your chosen username will be registered with the
+        User Discovery Service allowing your public keys to be accessible to anyone who knows your
+        username. They will then be able to send a request to create an authenticated channel
+        with you. You will then be able to reject unwanted requests.</string>
+    <string name="registration_username_info_dialog_link_text">User Discovery Service</string>
+    <string name="registration_username_info_dialog_link_url">https://links.xx.network/ud</string>
+    <string name="registration_error_username_min_len">
+        User name must be at least four characters</string>
+    <string name="registration_error_username_taken">Username taken. Try again.</string>
+
+    <!-- Registration: Welcome -->
+
+    <string name="registration_welcome_title">%s, <br />welcome to xx network</string>
+    <string name="registration_welcome_body">
+        Would you like to register an email or phone number
+        to help other users find your account? If not, you can still be found by your username,
+        or completely off the grid using QR codes.</string>
+    <string name="registration_welcome_continue">Yes, continue </string>
+    <string name="registration_welcome_skip">No, skip this step</string>
+    <string name="registration_welcome_dialog_title">Welcome</string>
+    <string name="registration_welcome_dialog_body">Registration is completely optional. When
+        registering an email or phone number, they will be evaluated by twilio, a 3rd party
+        partner.  Afterwards, salted hashes will be registered in User Discovery to allow
+        other uses to search for you using the registered data completely privately. </string>
+    <string name="registration_welcome_dialog_link_text">User Discovery</string>
+    <string name="registration_welcome_dialog_link_url">https://links.xx.network/ud</string>
+
+    <!-- Registration: Email -->
+
+    <string name="registration_email_title">Add your email.</string>
+    <string name="registration_email_body">
+        You can add, remove, or edit this email in your profile
+        settings. Adding an email is optional.</string>
+    <string name="registration_add_email_hint">Email</string>
+    <string name="registration_email_skip_text">Skip. Do not add an email</string>
+    <string name="registration_email_info_title">Your Email</string>
+    <string name="registration_email_info_body">
+        This email will be shared with our third-party provider, Twilio, to verify your
+        ownership through a confirmation code. However, it will be immediately removed from
+        the xx network’s systems and only a salted hash of the email will be stored in the
+        User Discovery Service.</string>
+    <string name="registration_email_info_link_text">User Discovery Service</string>
+    <string name="registration_email_info_link_url">https://links.xx.network/ud</string>
+    <string name="registration_email_error_already_exists">That email is already registered.</string>
+
+    <!-- Registration: Phone -->
+
+    <string name="registration_phone_title">Add your phone number.</string>
+    <string name="registration_phone_body">
+        You can add, remove, or edit this phone number in your profile settings.
+        Adding a phone number is optional.</string>
+    <string name="registration_add_phone_hint">Phone Number</string>
+    <string name="registration_phone_skip_text">Skip. Do not add a phone number</string>
+    <string name="registration_phone_info_title">Your Phone Number</string>
+    <string name="registration_phone_info_body">
+        This phone number will be shared with our third-party provider, Twilio, to verify your
+        ownership through a confirmation code. However, it will be immediately removed from
+        the xx network’s systems and only a salted hash of the phone number will be stored in the
+        User Discovery Service.</string>
+    <string name="registration_phone_info_link_text">User Discovery Service</string>
+    <string name="registration_phone_info_link_url">https://links.xx.network/ud</string>
+    <!-- Registration: 2FA -->
+
+    <string name="registration_2fa_title">Please enter the code sent to your %s</string>
+    <string name="registration_2fa_body">We sent a verification code to %s.</string>
+    <string name="registration_2fa_input_hint">0000</string>
+    <string name="registration_2fa_resend">Resend Code (%d sec)</string>
+    <string name="registration_2fa_info_title">2-Factor Authentication</string>
+    <string name="registration_2fa_info_body">
+        xx messenger uses Twilio’s two-factor authentication to prevent someone from fraudulently
+        registering your email or phone number on xx messenger.</string>
+    <string name="registration_2fa_code_expired">
+        Failed to confirm code. Your verification code may have expired; please resubmit.
+    </string>
+
+    <!-- Registration: Email 2FA -->
+    <string name="registration_email_2fa_title">email.</string>
+
+    <!-- Registration: Phone 2FA -->
+
+    <string name="registration_phone_2fa_title">phone through SMS.</string>
+
+    <!-- Registration: Successfully added -->
+
+    <string name="registration_successfully_added_title">
+        Your %s has been successfully added.</string>
+
+    <!-- Settings -->
+
+    <string name="settings_notification_info_dialog_title">Notifications</string>
+    <string name="settings_notification_info_dialog_body">
+        Selecting this setting will share your account ID and unique phone identifiers with
+        a notification service run by the xx network team. However, these details are
+        obfuscated via an ID collision system when you receive a notification. As a result,
+        both the notifications service and your notifications provider
+        (Firebase on Android, Apple on iOS) cannot tell exactly when you receive a message.</string>
+    <string name="settings_notification_info_dialog_link_text">ID collision system</string>
+    <string name="settings_notification_info_dialog_link_url">https://links.xx.network/denseids</string>
+    <string name="settings_biometric_info_dialog_title">Biometric Authentication</string>
+    <string name="settings_biometric_info_dialog_body">
+        Biometric authentication is stored through the native system on your phone, not by the xx
+        messenger app. The xx network cannot access your biometric authentication data.</string>
+    <string name="settings_predictive_text_info_dialog_title">Predictive Text</string>
+    <string name="settings_predictive_text_info_dialog_body">
+        Predictive text is a feature offered by your phone’s operating system. It involves
+        storing entered text within your phone’s operating system and may involve sending it
+        to remote servers. As a result, it may significantly degrade your privacy.</string>
+
+    <!-- Delete account -->
+
+    <string name="settings_confirm_delete_account_title">Delete Account</string>
+    <string name="settings_confirm_delete_account_body">
+        A deleted account cannot be recovered.
+        The username associated with this account cannot be reused in the future.
+        \n\nTo confirm your account deletion, type in your username.
+    </string>
+    <string name="settings_confirm_delete_account_info_dialog_title">Deleting Your Account</string>
+    <string name="settings_confirm_delete_account_info_dialog_body">
+        On deletion, all keys for your account are purged from your phone. This action will
+        not notify your contacts. Your keys and any registered emails or phone numbers are
+        removed from the user discovery system.</string>
+
+    <!-- Chats -->
+
+    <string name="confirm_delete_all_chats_dialog_title">Delete All Chats?</string>
+    <string name="confirm_delete_all_chats_dialog_body">
+        All chats will be deleted from this phone. However, your contacts and their copies
+        of your chats will remain unchanged. Encrypted copies may remain on the decentralized
+        network for up to three weeks.\n\nThis will only delete chats locally—they can remain
+        on the network (only decryptable by you) for up to three weeks, and they will also
+        remain on the recipient(s) device(s).</string>
+    <string name="confirm_delete_all_chats_dialog_button">Delete All Chats</string>
+
+    <!-- Connections -->
+
+    <string name="send_message_info_dialog_title">Send Message</string>
+    <string name="send_message_info_dialog_body">
+        Messages are sent over the xx network cMix protocol ensuring that no one can link
+        the sender and recipient. Furthermore, they are encrypted with quantum-secure,
+        end-to-end encryption, with forward secrecy.</string>
+    <string name="send_message_info_dialog_link_text">xx network cMix protocol</string>
+    <string name="send_message_info_dialog_link_url">https://links.xx.network/cmix</string>
+    <string name="confirm_delete_connection_dialog_title">Delete Connection?</string>
+    <string name="confirm_delete_connection_dialog_body">This is a silent deletion, %s will not
+        know you deleted them. This action will remove all information on your phone about this
+        user, including your communications. You cannot undo this step, and
+        <b>cannot re-add them unless they delete you as a connection as well.</b></string>
+    <string name="confirm_delete_connection_dialog_button">Delete Connection</string>
+    <string name="deleting_connection_info_dialog_title">Deleting Connection</string>
+    <string name="deleting_connection_info_dialog_body">
+        When a connection is deleted, all private and symmetric keys associated with the
+        connection are purged. It will be impossible to recover them and/or read any new
+        messages they send you.</string>
+
+    <!-- Search -->
+
+    <string name="search_info_dialog_title">Search</string>
+    <string name="search_info_dialog_body">
+        You can search for users by their username, email, or phone number using the xx
+        network’s Anonymous Data Retrieval protocol which keeps a user’s identity anonymous
+        while requesting data. All sent requests contain salted hashes of what you are
+        searching for. Raw data on emails, usernames, and phone numbers do not leave your
+        phone.</string>
+    <string name="search_info_dialog_link_text">Anonymous Data Retrieval protocol</string>
+    <string name="search_info_dialog_link_url">https://links.xx.network/adrp</string>
+    <string name="search_placeholder_text">
+        Your searches are anonymous. Search information is never linked to your account or
+        personally identifiable.</string>
+    <string name="search_hint">Search</string>
+
+    <!-- Group Chat -->
+
+    <string name="group_limit_dialog_title">Max Groups Limit</string>
+    <string name="group_limit_dialog_body">
+        You have reached the maximum amount of groups. Please leave or delete a group to
+        create a new one.</string>
+    <string name="group_limit_dialog_button">Edit Groups</string>
+    <string name="create_group_info_dialog_title">Create Group</string>
+    <string name="create_group_info_dialog_body">
+        A group request will be sent to every user who can choose to join or not. Group chat
+        requests are secured and sent via the xx network cMix protocol. However, due to
+        the inherent batching associated with communicating with many people and current
+        implementation details, it should not be considered as private as a standard,
+        peer-to-peer chat.</string>
+
+    <!-- User Profile -->
+
+    <string name="confirm_delete_fact_dialog_title">Delete %s?</string>
+    <string name="confirm_delete_fact_dialog_body">
+        You will no longer be found by this %s. You can add your %s back later.</string>
+    <string name="confirm_delete_fact_dialog_button">Delete %s</string>
+
+    <!-- Private chat -->
+
+    <string name="chat_contact_pending_placeholder">
+        You have sent a friend request to %s.\n\n</string>
+    <string name="chat_contact_pending_placeholder2">
+        You will not be able to begin chatting until %s has accepted your request.</string>
+    <string name="chat_empty_placeholder">
+        You and %s now have a quantum-secure, completely private channel for messaging.
+        \nSay hello!</string>
+    <string name="message_hint">Type your message here...</string>
+
+    <!-- Uncategorized -->
+
+    <string name="label_add">Add</string>
+    <string name="label_remove">Remove</string>
+    <string name="connections_new_group">Create Group</string>
+    <string name="connections_title">Connections</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_biometrics_description">Unlock the app with your device biometrics.</string>
+    <string name="settings_predictive_text_description">Allow keyboard to use activity for predictive text in-app.</string>
+    <string name="title_activity_intro">IntroActivity</string>
+
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="contact_details_nickname">Nickname</string>
+    <string name="menu_join_xx_network">Join xx network</string>
+    <string name="profile_none_provided">None provided</string>
+    <string name="contacts_max_members_msg">You have reached the maximum amount of members.</string>
+    <string name="contacts_requests">Requests</string>
+    <string name="settings_disclosures">Disclosures</string>
+    <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_cover_traffic_title">Cover Traffic</string>
+    <string name="settings_cover_traffic_description">Hide when you send messages.</string>
+    <string name="settings_cover_traffic_dialog_body">
+        Cover Traffic hides when you are sending messages by randomly sending messages to
+        random users.  Other user’s phones will pick up these messages but they will not see
+        them or know you sent them. As a result, it not only hides when you send messages,
+        but helps hide who you are talking to. Read more about it</string>
+    <string name="settings_cover_traffic_link_text">Read more about it</string>
+    <string name="settings_cover_traffic_link_url">https://links.xx.network/covertraffic</string>
+    <string name="settings_general_section">General Settings</string>
+
+    <string name="group_create_dialog_title">Create Group</string>
+    <string name="group_create_dialog_body">You are about to create a group message with %d
+        users. The information below will be visible to all members of the group message.</string>
+    <string name="group_create_dialog_name_hint">Group Name</string>
+    <string name="group_create_dialog_description_hint">Enter description here</string>
+    <string name="group_create_dialog_button">@string/group_create_dialog_title</string>
+    <string name="group_create_dialog_info_title">@string/group_create_dialog_title</string>
+    <string name="group_create_dialog_info_body">A group request will be sent to every user who
+        can choose to join or not. Group chat requests are secured and sent via the xx network
+        cMix protocol. However, due to the inherent batching associated with communicating with
+        many people and current implementation details, it should not be considered as private
+        as a standard, peer-to-peer chat.</string>
+    <string name="chat_reply_deleted_Message">This message was deleted.</string>
+    <string name="enable">Enable</string>
+    <string name="not_now">Not now</string>
+    <string name="settings_push_notifications_dialog_title">Do you want to enable notifications?</string>
+    <string name="settings_push_notifications_dialog_body">To receive notifications about new requests or messages even when your app is closed, you can enable push notifications now or later in the app settings.</string>
+    <string name="not_provided">Not provided</string>
+    <string name="msg_show_mix"><u>show mix</u></string>
+    <string name="label_edit">Edit</string>
+    <string name="notification_group_request_text">Group request received</string>
+    <string name="registration_error_username_invalid">Username must start and end with an alphanumeric character.</string>
+    <string name="settings_confirm_delete_button">Confirm Delete</string>
+    <string name="settings_delete_account_confirm_username_hint">Username</string>
+    <string name="settings_account_recovery_dialog_title">Please note</string>
+    <string name="settings_account_recovery_dialog_body">Because xx messenger does not capture your personal data or save your private keys, we will not be able to, at this time, help new users recover their account in case of being locked out, changing devices, etc.\n\nAccount recovery support that continues to protect your privacy and personal data will be coming soon.</string>
+    <string name="confirm_delete_chats_dialog_title">Are you sure you want to delete?</string>
+    <string name="confirm_delete_chats_dialog_body">This will clear the selected chat messages only for you. It can’t be undone.</string>
+    <string name="confirm_delete_chats_dialog_button">Yes, Delete</string>
+    <string name="confirm_delete_groups_dialog_title">Are you sure you want to leave one or more groups?</string>
+    <string name="confirm_delete_groups_dialog_body">You will be leaving the selected group chats. It can\'t be undone.</string>
+    <string name="confirm_delete_groups_dialog_button">Leave Groups</string>
+    <string name="confirm_leave_group_dialog_title">Leave group</string>
+    <string name="confirm_leave_group_dialog_body">You will be leaving this group chat. It can\'t be undone.</string>
+    <string name="confirm_leave_group_dialog_button">Leave Group</string>
+    <string name="group_invitation_pending">You will not be able to send messages until you have accepted the invitation.</string>
+    <string name="settings_delete_account_username_error">Username does not match.</string>
+</resources>

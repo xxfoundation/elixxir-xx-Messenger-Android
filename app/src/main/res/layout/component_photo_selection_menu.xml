@@ -1,0 +1,125 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menuChatPopup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded_top_edges_short_dark"
+    android:backgroundTint="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="@dimen/spacing_16"
+    android:paddingTop="@dimen/spacing_12"
+    android:paddingEnd="@dimen/spacing_16"
+    android:paddingBottom="@dimen/spacing_12"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:id="@+id/photoSelectorDeletePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="photo.selector.menu.delete"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_18"
+            android:layout_height="@dimen/spacing_20"
+            android:src="@drawable/ic_delete" />
+
+        <TextView
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Delete Photo"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/photoSelectorTakePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:contentDescription="photo.selector.menu.take"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_18"
+            android:layout_height="@dimen/spacing_20"
+            android:src="@drawable/ic_gallery" />
+
+        <TextView
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Take Photo"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/photoSelectorChoosePhoto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:contentDescription="photo.selector.menu.choose"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_18"
+            android:layout_height="@dimen/spacing_20"
+            android:src="@drawable/ic_gallery" />
+
+        <TextView
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Choose Photo"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/photoSelectorCancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:contentDescription="photo.selector.menu.cancel"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_18"
+            android:layout_height="@dimen/spacing_20"
+            android:src="@drawable/ic_delete_contact"
+            android:visibility="invisible" />
+
+        <TextView
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Cancel"
+            android:textColor="@color/redTheme"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_brand_gradient">
+
+        <ImageView
+            android:id="@+id/registration_intro_logo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/xxm_logotype_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginEnd="@dimen/registration_horizontal_margin"
+            android:layout_marginStart="@dimen/registration_horizontal_margin"
+            android:layout_marginTop="@dimen/registration_vertical_margin" />
+
+        <TextView
+            android:id="@+id/registration_intro_tagline"
+            android:text="@string/registration_intro_tagline"
+            android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+            android:gravity="center_horizontal"
+            android:textColor="@color/neutral_white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/registration_intro_next_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/dialog_body" />
+
+        <Button
+            android:id="@+id/registration_intro_next_button"
+            android:text="@string/registration_intro_cta"
+            android:backgroundTint="@color/neutral_white"
+            android:textColor="@color/brand_default"
+            android:layout_marginBottom="@dimen/registration_vertical_margin"
+            app:layout_constraintBottom_toTopOf="@id/poweredByXxImageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+
+        <ImageView
+            android:id="@+id/poweredByXxImageView"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            app:srcCompat="@drawable/ic_powered_by_xx_network"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="@dimen/registration_vertical_margin" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

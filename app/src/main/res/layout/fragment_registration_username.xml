@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/registration_username_title_text"
+            android:text="@{ui.usernameTitle}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/bold_title"
+            tools:text="@string/registration_username_title"/>
+
+        <TextView
+            android:id="@+id/registration_username_body_text"
+            android:text="@string/registration_username_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_username_title_text"
+            style="@style/dialog_body" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registration_username_input"
+            android:enabled="@{ui.usernameInputEnabled}"
+            app:error="@{ui.usernameError}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_username_body_text"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_outline_info_24"
+            app:endIconTint="@color/brand_default"
+            app:endIconOnClickListener="@{() -> ui.onUsernameInfoClicked()}"
+            style="@style/registration_text_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/registration_text_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/registration_choose_username_hint"
+                android:imeOptions="actionDone"
+                android:maxLength="@{ui.maxUsernameLength}"
+                android:text="@={ui.username}"
+                app:inputFilters="@{ui.usernameFilters}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/registration_username_next_btn"
+            android:text="@string/registration_flow_next"
+            android:onClick="@{() -> ui.onUsernameNextClicked()}"
+            android:enabled="@{ui.usernameNextButtonEnabled}"
+            android:layout_marginBottom="@dimen/registration_vertical_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+
+        <ProgressBar
+            android:id="@+id/registration_username_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/brand_default"
+            android:visibility="@{!ui.usernameInputEnabled}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

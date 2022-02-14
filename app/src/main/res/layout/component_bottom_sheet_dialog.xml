@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dialogPopUp"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    android:background="@drawable/bg_rounded_top_corners"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <View
+        android:layout_width="@dimen/spacing_32"
+        android:layout_height="@dimen/spacing_5"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/spacing_16"
+        android:background="@drawable/component_bar"
+        android:backgroundTint="@color/neutral_disabled" />
+
+    <ImageView
+        android:id="@+id/dialogPopUpIcon"
+        android:layout_width="@dimen/spacing_80"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_42"
+        android:visibility="gone"
+        android:src="@drawable/ic_alert_rounded" />
+
+    <TextView
+        android:id="@+id/dialogPopUpDesc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_32"
+        android:layout_marginTop="@dimen/spacing_32"
+        android:layout_marginEnd="@dimen/spacing_32"
+        android:layout_marginBottom="@dimen/spacing_20"
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/text_7"
+        android:textColor="@color/neutral_body"
+        android:textSize="@dimen/text_16"
+        tools:text="Lorem Ipsum here bla bla bla" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialogPopUpBtnPrimary"
+        style="@style/XxButtonStyle.Teal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_18"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:layout_marginEnd="@dimen/spacing_18"
+        android:layout_marginBottom="@dimen/spacing_32"
+        android:maxLines="2"
+        android:textColor="@color/selector_text_active_inactive"
+        android:textSize="@dimen/text_15"
+        tools:text="Got It!" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialogPopUpBtnNeutral"
+        style="@style/XxButtonStyle.Outlined.Dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_18"
+        android:layout_marginEnd="@dimen/spacing_18"
+        android:layout_marginBottom="@dimen/spacing_32"
+        android:maxLines="2"
+        android:textColor="@color/brand_dark"
+        android:textSize="@dimen/text_15"
+        tools:text="Got It!" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/dialogPopUpBtnSecondary"
+        style="@style/XxButtonStyle.Outlined.Dark"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_18"
+        android:layout_marginEnd="@dimen/spacing_18"
+        android:layout_marginBottom="@dimen/spacing_32"
+        android:maxLines="2"
+        android:textColor="@color/brand_dark"
+        android:textSize="@dimen/text_15"
+        tools:text="Got It!" />
+
+    <CheckBox
+        android:id="@+id/dialogPopUpCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:buttonTint="@color/selector_checkbox"
+        android:padding="@dimen/spacing_8"
+        android:textColor="@color/textGrayedWhite" />
+</LinearLayout>

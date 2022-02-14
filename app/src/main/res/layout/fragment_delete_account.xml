@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.settings.DeleteAccountUI" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/component_toolbar_generic"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/delete_account_danger_icon"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/bg_btn_white"
+                    android:backgroundTint="@color/accent_danger"
+                    android:scaleType="centerInside"
+                    android:layout_marginTop="@dimen/registration_body_vertical_margin"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_danger_24"
+                    app:tint="@color/neutral_white" />
+
+                <TextView
+                    android:id="@+id/delete_account_title"
+                    style="@style/bold_title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/registration_body_vertical_margin"
+                    android:gravity="center"
+                    android:text="@string/settings_confirm_delete_account_title"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.495"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_account_danger_icon" />
+
+                <TextView
+                    android:id="@+id/delete_account_body"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_confirm_delete_account_body"
+                    android:gravity="center"
+                    android:drawablePadding="@dimen/spacing_8"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{() -> ui.onInfoClicked()}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_account_title"
+                    style="@style/dialog_body"
+                    app:drawableBottomCompat="@drawable/ic_outline_info_24" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/delete_account_confirm_username_input"
+                    style="@style/registration_text_input"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    app:error="@{ui.inputError}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_account_body">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        android:hint="@string/settings_delete_account_confirm_username_hint"
+                        android:text="@={ui.confirmDeleteInput}"
+                        android:enabled="@{!ui.loading}"
+                        android:imeOptions="actionDone" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/delete_account_confirm_button"
+                    style="@style/registration_step_next_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:enabled="@{ui.confirmEnabled}"
+                    android:onClick="@{() -> ui.onConfirmDeleteClicked()}"
+                    android:text="@string/settings_confirm_delete_button"
+                    app:layout_constraintBottom_toTopOf="@+id/delete_account_cancel_button"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/delete_account_confirm_username_input"
+                    app:layout_constraintVertical_bias="1.0" />
+
+                <TextView
+                    android:id="@+id/delete_account_cancel_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@android:string/cancel"
+                    android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+                    android:onClick="@{() -> ui.onCancelClicked()}"
+                    android:enabled="@{!ui.loading}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    style="@style/registration_borderless_text_button" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:visibility="@{ui.loading}"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    tools:visibility="visible" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </ScrollView>
+    </LinearLayout>
+</layout>

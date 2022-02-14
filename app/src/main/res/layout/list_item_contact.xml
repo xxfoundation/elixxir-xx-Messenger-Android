@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <io.xxlabs.messenger.support.view.RoundedCornerLayout
+        android:id="@+id/contactPhotoHolder"
+        android:layout_width="@dimen/spacing_32"
+        android:layout_height="@dimen/spacing_32"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_marginTop="@dimen/spacing_10"
+        android:layout_marginBottom="@dimen/spacing_16"
+        tools:backgroundTint="@color/menuAvatarAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/contactCheckbox"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_goneMarginStart="@dimen/spacing_24">
+
+        <TextView
+            android:id="@+id/contactPhotoDefault"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:src="@drawable/ic_contact_light"
+            android:textColor="@color/white"
+            tools:text="RB" />
+
+        <ImageView
+            android:id="@+id/contactPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:scaleType="centerCrop" />
+    </io.xxlabs.messenger.support.view.RoundedCornerLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@+id/contactCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_24"
+        android:button="@drawable/bg_checkbox_circular"
+        android:clickable="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/contactName"
+        style="@style/XxTextStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_26"
+        android:textColor="@color/neutral_active"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintBottom_toBottomOf="@id/contactPhotoHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/contactPhotoHolder"
+        app:layout_constraintTop_toTopOf="@id/contactPhotoHolder"
+        tools:text="\@username" />
+
+    <View
+        android:id="@+id/contactDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:background="@color/neutral_line"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactPhotoHolder"
+        app:layout_constraintVertical_bias="1" />
+</androidx.constraintlayout.widget.ConstraintLayout>

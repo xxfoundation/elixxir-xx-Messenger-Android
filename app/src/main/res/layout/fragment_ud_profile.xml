@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/spacing_24"
+        android:paddingBottom="@dimen/spacing_24"
+        android:background="@color/menu_background">
+
+        <ImageView
+            android:id="@+id/udProfileBackBtn"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:contentDescription="ud.profile.btn.back"
+            android:padding="@dimen/spacing_5"
+            android:src="@drawable/ic_back"
+            app:layout_constraintEnd_toEndOf="@id/udProfileTopGuideStart"
+            app:layout_constraintStart_toStartOf="@id/udProfileTopGuideStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/neutral_white" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udProfileTopGuide"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.15" />
+
+        <io.xxlabs.messenger.support.view.SquaredCornerLayout
+            android:id="@+id/udProfilePhotoHolder"
+            android:layout_width="@dimen/spacing_100"
+            android:layout_height="@dimen/spacing_100"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:background="@drawable/bg_rectangle_rounded_corners_big_radius"
+            android:backgroundTint="@color/brand_default"
+            android:contentDescription="ud.profile.photo.holder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/udProfileBackBtn">
+
+            <ImageView
+                android:id="@+id/udProfilePhotoDefault"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom|center_horizontal"
+                android:contentDescription="ud.profile.photo.default"
+                android:src="@drawable/ic_contact_light"
+                android:scaleType="centerInside"
+                app:tint="@color/neutral_white"
+                tools:visibility="visible" />
+
+            <ImageView
+                android:id="@+id/udProfilePhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:contentDescription="ud.profile.photo"
+                android:layout_gravity="bottom|center_horizontal"
+                android:scaleType="centerCrop" />
+        </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+
+        <ImageView
+            android:id="@+id/udProfileImageEditIcon"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_camera_new"
+            app:layout_constraintBottom_toBottomOf="@id/udProfilePhotoHolder"
+            app:layout_constraintEnd_toEndOf="@id/udProfilePhotoHolder" />
+
+        <TextView
+            android:id="@+id/udProfileTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_26"
+            android:contentDescription="ud.profile.title"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="25sp"
+            android:orientation="horizontal"
+            android:text="Username"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/udProfilePhotoHolder"
+            app:lineHeight="@dimen/text_32" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udProfileTopGuideStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/udProfileWhiteBg"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/udProfileTitle">
+
+        <TextView
+            android:id="@+id/udProfileUsernameTitle"
+            style="@style/XxInputEditTextInputLayoutDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:contentDescription="ud.profile.username.header"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="25sp"
+            android:orientation="horizontal"
+            android:text="Username"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/udProfileUsername"
+            style="@style/XxTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_5"
+            android:layout_marginEnd="@dimen/spacing_34"
+            android:contentDescription="ud.profile.username.value"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:letterSpacing="0.01"
+            android:textColor="@color/neutral_active"
+            android:textSize="14dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@id/udProfileBarrier"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udProfileUsernameTitle"
+            app:layout_constraintWidth_min="@dimen/spacing_110"
+            tools:text="aaa@aaa.com" />
+
+        <TextView
+            android:id="@+id/udProfileEmailTitle"
+            style="@style/XxInputEditTextInputLayoutDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:contentDescription="ud.profile.email.header"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="25sp"
+            android:orientation="horizontal"
+            android:text="Email Address"
+            android:textAllCaps="true"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udProfileUsername" />
+
+        <TextView
+            android:id="@+id/udProfileEmail"
+            style="@style/XxTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_5"
+            android:layout_marginEnd="@dimen/spacing_34"
+            android:contentDescription="ud.profile.email.value"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:letterSpacing="0.01"
+            android:textColor="@color/neutral_active"
+            android:textSize="14dp"
+            app:layout_constraintEnd_toStartOf="@id/udProfileBarrier"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udProfileEmailTitle"
+            app:layout_constraintWidth_min="@dimen/spacing_110"
+            tools:text="aaa@aaa.com" />
+
+        <Button
+            android:id="@+id/udProfileEmailBtn"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/spacing_32"
+            android:checked="true"
+            android:padding="@dimen/spacing_3"
+            android:drawableLeft="@drawable/ic_add"
+            android:text="@string/label_add"
+            android:textColor="@color/brand_default"
+            android:textAllCaps="false"
+            android:background="@color/transparent"
+            android:drawablePadding="@dimen/spacing_8"
+            android:gravity="left|center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/udProfileEmail"
+            app:layout_constraintEnd_toEndOf="@id/udProfileGuideEnd"
+            app:layout_constraintTop_toTopOf="@id/udProfileEmailTitle" />
+
+        <TextView
+            android:id="@+id/udProfilePhoneTitle"
+            style="@style/XxInputEditTextInputLayoutDark"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:contentDescription="ud.profile.phone.header"
+            android:letterSpacing="0.01"
+            android:lineSpacingExtra="25sp"
+            android:orientation="horizontal"
+            android:text="Phone Number"
+            android:textAllCaps="true"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udProfileEmail" />
+
+        <TextView
+            android:id="@+id/udProfilePhone"
+            style="@style/XxTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_5"
+            android:layout_marginEnd="@dimen/spacing_34"
+            android:contentDescription="ud.profile.phone.value"
+            android:focusable="true"
+            android:letterSpacing="0.01"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintEnd_toStartOf="@id/udProfileBarrier"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/udProfileGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udProfilePhoneTitle"
+            app:layout_constraintWidth_min="@dimen/spacing_110"
+            tools:text="+1 991 2345 3" />
+
+        <Button
+            android:id="@+id/udProfilePhoneBtn"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/spacing_32"
+            android:checked="true"
+            android:padding="@dimen/spacing_3"
+            android:drawableLeft="@drawable/ic_add"
+            android:text="Add"
+            android:textColor="@color/brand_default"
+            android:textAllCaps="false"
+            android:background="@color/transparent"
+            android:drawablePadding="@dimen/spacing_8"
+            android:gravity="left|center_vertical"
+            app:layout_constraintBottom_toBottomOf="@id/udProfilePhone"
+            app:layout_constraintEnd_toEndOf="@id/udProfileGuideEnd"
+            app:layout_constraintTop_toTopOf="@id/udProfilePhoneTitle" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udProfileGuideStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udProfileGuideMiddle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udProfileGuideEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.95" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/udProfileBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:barrierAllowsGoneWidgets="true"
+            app:barrierDirection="start"
+            app:constraint_referenced_ids="udProfileEmailBtn, udProfilePhoneBtn" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

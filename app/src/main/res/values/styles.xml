@@ -1,0 +1,613 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar.Bridge">
+        <item name="colorPrimary">@color/brand_default</item>
+        <item name="colorPrimaryDark">@color/brand_dark</item>
+        <item name="colorAccent">@color/brand_dark</item>
+        <item name="android:windowBackground">@color/neutral_white</item>
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
+        <item name="bottomSheetStyle">@style/XxBottomSheet</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@color/transparent</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
+    <!-- Splash Screen theme -->
+    <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:background">@drawable/bg_splash_screen</item>
+        <item name="android:windowAnimationStyle">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <!-- Registration Info theme -->
+    <style name="IntroTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+
+    <style name="XxTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/mainTextLightTheme</item>
+        <item name="android:textColorLink">@color/accent_safe</item>
+        <item name="android:textColorHint">@color/mainTextLightTheme</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+
+    <style name="XxTextStyle.NoColor" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+    <style name="XxTextStyle.NoColor.Book">
+        <item name="android:fontFamily">@font/mulish_semi_bold</item>
+        <item name="fontFamily">@font/mulish_semi_bold</item>
+    </style>
+
+    <style name="XxTextStyle.Bold">
+        <item name="android:fontFamily">@font/mulish_bold</item>
+        <item name="fontFamily">@font/mulish_bold</item>
+    </style>
+
+    <style name="XxTextStyle.SemiBold">
+        <item name="android:fontFamily">@font/mulish_semi_bold</item>
+        <item name="fontFamily">@font/mulish_semi_bold</item>
+    </style>
+
+    <style name="XxTextStyle.Black">
+        <item name="android:fontFamily">@font/mulish_bold</item>
+        <item name="fontFamily">@font/mulish_bold</item>
+    </style>
+
+
+    <style name="XxBadge" parent="@style/Widget.MaterialComponents.Badge">
+        <item name="backgroundColor">?attr/colorAccent</item>
+    </style>
+
+    <!-- Input Fields -->
+    <style name="XxInputEditText.RoundedWhite">
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="android:background">@drawable/component_rounded_bg_white</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="XxInputEditText.Regular.RoundedWhite">
+        <item name="android:backgroundTint">@color/background</item>
+        <item name="android:background">@drawable/component_rounded_bg_white</item>
+    </style>
+
+    <style name="XxInputEditText.Regular">
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+    </style>
+
+    <style name="XxInputEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/XxTextStyle.Bold</item>
+        <item name="android:textSize">@dimen/text_18</item>
+        <item name="android:textColor">@color/selector_edit_text</item>
+        <item name="android:textColorHint">@color/mainTextLightThemeTransp</item>
+        <item name="android:textCursorDrawable">@drawable/component_cursor</item>
+        <item name="backgroundTint">@color/selector_input_hint</item>
+        <item name="android:backgroundTint">@color/selector_input_hint</item>
+        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlActivated">@color/background</item>
+        <item name="colorAccent">@color/background</item>
+    </style>
+
+    <style name="XxInputEditText.Dark">
+        <item name="android:textColor">@color/selector_edit_text_dark</item>
+        <item name="android:textColorHint">@color/selector_input_hint_dark</item>
+        <item name="backgroundTint">@color/selector_input_background_dark</item>
+        <item name="android:backgroundTint">@color/selector_input_background_dark</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="XxInputEditText.LightAccent">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textColorHint">@color/white</item>
+        <item name="android:textCursorDrawable">@drawable/component_cursor</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@color/white</item>
+    </style>
+
+    <style name="XxInputEditText.Medium">
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:textSize">@dimen/text_12</item>
+    </style>
+
+    <style name="XxInputEditText.Medium.Dark">
+        <item name="android:textColor">@color/selector_edit_text_dark</item>
+        <item name="android:textColorHint">@color/selector_input_hint_dark</item>
+        <item name="backgroundTint">@color/selector_input_background_dark</item>
+        <item name="android:backgroundTint">@color/selector_input_background_dark</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
+
+    <style name="XxInputEditTextInputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="helperTextTextAppearance">@style/XxInputHelperTextAppearance</item>
+        <item name="hintTextAppearance">@style/XxInputHintAppearance</item>
+        <item name="errorTextAppearance">@style/XxInputHintAppearance</item>
+        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlActivated">@color/textInputFieldActive</item>
+        <item name="colorControlHighlight">@color/textInputFieldActive</item>
+        <item name="android:textColorHint">@color/white_50</item>
+    </style>
+
+    <style name="XxInputEditTextInputLayoutLight" parent="Widget.Design.TextInputLayout">
+        <item name="helperTextTextAppearance">@style/XxInputHelperTextAppearance</item>
+        <item name="hintTextAppearance">@style/XxInputHintAppearance</item>
+        <item name="errorTextAppearance">@style/XxInputHintAppearance</item>
+        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="android:textColorHint">@color/white_50</item>
+    </style>
+
+    <style name="XxInputEditTextInputLayoutDark" parent="Widget.Design.TextInputLayout">
+        <item name="android:textSize">@dimen/text_17</item>
+        <item name="backgroundTint">@color/selector_input_background_dark</item>
+        <item name="android:textColorHint">@color/selector_input_hint_dark</item>
+        <item name="android:backgroundTint">@color/selector_input_background_dark</item>
+        <item name="helperTextTextAppearance">@style/XxInputHelperTextAppearance</item>
+        <item name="hintTextAppearance">@style/XxInputHintAppearance.Medium.Dark</item>
+        <item name="errorTextAppearance">@style/XxErrorAppearance.Small</item>
+        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlActivated">@color/selector_input_hint_dark</item>
+        <item name="backgroundColor">@color/selector_input_background_dark</item>
+    </style>
+
+    <style name="XxInputHelperTextAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:fontFamily">@font/gotham_book</item>
+        <item name="android:textStyle">italic</item>
+        <item name="lineHeight">@dimen/spacing_18</item>
+        <item name="android:textColor">@color/tealThemeColor</item>
+    </style>
+
+    <style name="XxInputHintAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="fontFamily">@font/gotham_book</item>
+        <item name="android:fontFamily">@font/gotham_book</item>
+        <item name="android:textColor">@color/selector_input_hint</item>
+    </style>
+
+    <style name="XxInputHintAppearance.Light" parent="TextAppearance.Design.Hint">
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="XxInputHintAppearance.Dark">
+        <item name="android:textColor">@color/selector_input_hint_dark</item>
+    </style>
+
+    <style name="XxInputHintAppearance.Medium">
+        <item name="fontFamily">@font/gotham_medium</item>
+        <item name="android:fontFamily">@font/gotham_medium</item>
+    </style>
+
+    <style name="XxInputHintAppearance.Medium.Dark">
+        <item name="android:textColor">@color/selector_input_hint_dark</item>
+    </style>
+
+    <style name="XxErrorAppearance" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/red_lighter</item>
+    </style>
+
+    <style name="XxErrorAppearance.Small" parent="@android:style/TextAppearance">
+        <item name="android:textColor">@color/red_lighter</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textSize">@dimen/text_12</item>
+    </style>
+
+    <!-- Progress -->
+    <style name="XxProgressBarHorizontalBlue" parent="Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:layout_height">2dp</item>
+        <item name="android:progressTint">@color/linkColor</item>
+        <item name="android:secondaryProgressTint">@color/text_grayed_blue</item>
+    </style>
+
+    <!-- Progress -->
+    <style name="XxProgressBarCircularBlue" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:layout_height">2dp</item>
+        <item name="android:progressTint">@color/linkColor</item>
+        <item name="android:indeterminate">true</item>
+        <item name="indeterminateAnimationType">contiguous</item>
+    </style>
+
+    <!-- Button -->
+    <style name="XxButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textColor">@color/selector_text_active_inactive</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_14</item>
+    </style>
+
+    <style name="XxButtonStyle.White">
+        <item name="android:textAppearance">@style/XxTextStyle.Bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/brand_default</item>
+        <item name="android:background">@drawable/bg_btn_white</item>
+    </style>
+
+    <style name="XxButtonStyle.Teal">
+        <item name="android:textAppearance">@style/XxTextStyle.Bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/background</item>
+        <item name="android:background">@drawable/selector_btn_teal</item>
+    </style>
+
+    <style name="XxButtonStyle.DarkBlue">
+        <item name="android:textAppearance">@style/XxTextStyle.Bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:background">@drawable/btn_color_dark_teal</item>
+    </style>
+
+    <style name="XxButtonStyle.Outlined">
+        <item name="android:textAppearance">@style/XxTextStyle.Bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:background">@drawable/btn_color_outlined</item>
+    </style>
+
+    <style name="XxButtonStyle.Outlined.Dark">
+        <item name="android:textColor">@color/brand_default</item>
+        <item name="android:background">@drawable/btn_color_outlined_dark</item>
+    </style>
+
+    <style name="XxFullscreenDialog" parent="AppTheme">
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:padding">0dp</item>
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+        <item name="android:windowAnimationStyle">@style/Animation.WindowSlideUpDown</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustResize</item>
+    </style>
+
+    <style name="XxDialogBottomSheet" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <!-- Customize your theme here. -->
+        <item name="android:windowBackground">@drawable/bg_rectangle_rounded_corners_mini</item>
+        <item name="colorPrimary">@color/textActiveMessageColorInverse</item>
+        <item name="android:textColor">@color/textActiveMessageColorInverse</item>
+        <item name="android:windowAnimationStyle">@style/Animation.WindowSlideUpDown</item>
+    </style>
+
+    <style name="XxDialog" parent="Theme.AppCompat.DayNight.Dialog.Alert">
+        <!-- Customize your theme here. -->
+        <item name="android:background">@color/transparent</item>
+        <item name="colorPrimary">@color/textActiveMessageColorInverse</item>
+        <item name="android:textColor">@color/textActiveMessageColorInverse</item>
+    </style>
+
+    <style name="XxLoadingDialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item>
+    </style>
+
+    <style name="XxBottomSheet" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:textColor">@color/background</item>
+    </style>
+
+    <style name="XxBottomSheetDialog" parent="Theme.Design.BottomSheetDialog">
+        <item name="android:windowIsFloating">false</item>
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="bottomSheetStyle">@style/XxBottomSheet</item>
+    </style>
+
+
+    <style name="XxBottomSheetDialogX" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="android:windowBackground">@color/transparent</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="bottomSheetStyle">@style/XxBottomSheet</item>
+    </style>
+
+    <style name="XxDialog.RedPositive">
+        <item name="buttonBarPositiveButtonStyle">@style/XxDialogButtonError</item>
+    </style>
+
+    <style name="XxDialogButtonError">
+        <item name="android:textColor">@color/red_lighter</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <style name="Animation.WindowSlideUpDown" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
+    <style name="Animation.WindowSlideDownUp" parent="@android:style/Animation.Activity">
+        <item name="android:windowEnterAnimation">@anim/slide_up</item>
+        <item name="android:windowExitAnimation">@anim/slide_out_down</item>
+    </style>
+
+    <!-- Switch -->
+    <style name="XxSwitcherStyle" parent="AppTheme">
+        <item name="trackTint">@color/selector_track_tint</item>
+        <item name="thumbTint">@color/selector_switcher_thumb</item>
+    </style>
+
+    <style name="XxSwitcherStyle.Secondary">
+        <item name="trackTint">@color/selector_track_tint</item>
+        <item name="thumbTint">@color/selector_switcher_thumb</item>
+    </style>
+
+    <style name="SwitchStyleDark" parent="AppTheme">
+        <item name="trackTint">@color/selector_track_tint_dark</item>
+        <item name="thumbTint">@color/selector_switcher_thumb</item>
+    </style>
+
+    <style name="PopupMenuOverlapAnchor" parent="AppTheme">
+        <item name="android:overlapAnchor">true</item>
+        <item name="android:dropDownVerticalOffset">0dp</item>
+        <item name="android:dropDownHorizontalOffset">0dp</item>
+    </style>
+
+    <!-- set the rounded drawable as background to your bottom sheet -->
+    <style name="BottomSheet" parent="@style/Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@drawable/bg_rounded_top_edges_short_light</item>
+    </style>
+
+    <style name="XxSpinner" parent="Widget.AppCompat.Spinner.DropDown">
+        <item name="android:backgroundTint">@color/chatsAccentColor</item>
+    </style>
+
+    <style name="TabTextStyle" parent="XxTextStyle">
+        <item name="android:textSize">@dimen/text_14</item>
+    </style>
+
+
+    <!-- New Styles -->
+    <style name="InputLayout" parent="Widget.Design.TextInputLayout">
+        <item name="helperTextTextAppearance">@style/InputHelperTextAppearance</item>
+        <item name="hintTextAppearance">@style/InputHintAppearance</item>
+        <item name="errorTextAppearance">@style/InputErrorAppearance</item>
+        <item name="colorControlNormal">@color/white_50</item>
+        <item name="colorControlActivated">@color/white</item>
+        <item name="colorControlHighlight">@color/white</item>
+        <item name="boxBackgroundMode">none</item>
+    </style>
+
+    <style name="InputHintAppearance" parent="TextAppearance.Design.Hint">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="android:textColor">@color/neutral_disabled</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="lineHeight">@dimen/text_24</item>
+    </style>
+
+    <style name="InputHelperTextAppearance" parent="TextAppearance.Design.HelperText">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+        <item name="lineHeight">@dimen/text_20</item>
+    </style>
+
+    <style name="InputErrorAppearance" parent="TextAppearance.Design.Error">
+        <item name="android:textSize">@dimen/text_12</item>
+        <item name="android:textColor">@color/accent_danger</item>
+        <item name="android:gravity">end</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+        <item name="lineHeight">@dimen/text_20</item>
+        <item name="android:layout_gravity">end</item>
+    </style>
+
+    <style name="InputEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:textColor">@color/selector_edit_text</item>
+        <item name="android:textColorHint">@color/neutral_disabled</item>
+        <item name="android:textCursorDrawable">@drawable/component_cursor</item>
+        <item name="lineHeight">@dimen/text_24</item>
+        <item name="android:background">@drawable/bg_input_light</item>
+        <item name="android:padding">@dimen/spacing_8</item>
+    </style>
+
+    <style name="InputEditText.Search">
+        <item name="android:drawableStart">@drawable/ic_search</item>
+        <item name="android:drawablePadding">@dimen/spacing_12</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="lineHeight">@dimen/text_24</item>
+        <item name="android:padding">@dimen/spacing_10</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">textFilter</item>
+        <item name="minHeight">@dimen/spacing_36</item>
+        <item name="drawableTint">@color/selector_edit_text</item>
+        <item name="android:textColor">@color/selector_edit_text</item>
+        <item name="colorControlNormal">@color/neutral_disabled</item>
+        <item name="colorControlActivated">@color/neutral_active</item>
+        <item name="colorControlHighlight">@color/neutral_active</item>
+        <item name="android:background">@drawable/bg_input_search_light</item>
+    </style>
+
+    <style name="InputEditText.Search.Squared">
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:paddingStart">6dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingEnd">6dp</item>
+        <item name="android:paddingBottom">6dp</item>
+        <item name="android:imeOptions">actionSearch</item>
+        <item name="android:inputType">textFilter</item>
+        <item name="android:textAppearance">@style/XxTextStyle.SemiBold</item>
+        <item name="android:background">@drawable/bg_input_search_squared</item>
+    </style>
+
+    <style name="InputEditText.Dark" parent="Widget.AppCompat.EditText">
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:textSize">@dimen/text_14</item>
+        <item name="android:textColor">@color/selector_edit_text</item>
+        <item name="android:textColorHint">@color/neutral_disabled</item>
+        <item name="android:textCursorDrawable">@drawable/component_cursor</item>
+        <item name="lineHeight">@dimen/text_24</item>
+        <item name="android:background">@drawable/bg_input_light</item>
+        <item name="android:padding">@dimen/spacing_8</item>
+    </style>
+
+    <!-- Button -->
+    <style name="ButtonStyle" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:textColor">@color/selector_text_active_inactive</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_16</item>
+        <item name="lineHeight">@dimen/text_28</item>
+    </style>
+
+    <style name="ButtonStyle.White">
+        <item name="android:textColor">@color/selector_btn_white_input</item>
+        <item name="android:background">@drawable/bg_btn_white</item>
+        <item name="android:backgroundTint">@color/selector_btn_white</item>
+    </style>
+
+    <style name="ButtonStyle.Secondary">
+        <item name="android:textColor">@color/neutral_off_white</item>
+        <item name="android:background">@drawable/bg_btn_white</item>
+        <item name="android:backgroundTint">@color/selector_btn_default</item>
+    </style>
+
+    <style name="ButtonStyle.Outline">
+        <item name="android:textColor">@color/brand_dark</item>
+        <item name="android:background">@drawable/bg_btn_outline</item>
+    </style>
+
+    <style name="ButtonStyle.Outline.White">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:background">@drawable/bg_btn_outline_white</item>
+    </style>
+
+    <style name="xx_font">
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+    <style name="bold_title" parent="XxTextStyle.Bold">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_vertical_margin</item>
+        <item name="android:textSize">@dimen/registration_title_text_size</item>
+        <item name="android:textColor">@color/neutral_active</item>
+    </style>
+
+    <style name="dialog_title" parent="xx_font">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_vertical_margin</item>
+        <item name="android:textSize">@dimen/registration_dialog_title_text_size</item>
+        <item name="android:textColor">@color/neutral_active</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="dialog_body" parent="xx_font">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_body_vertical_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:textSize">@dimen/registration_body_text_size</item>
+        <item name="android:textColor">@color/neutral_dark</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="registration_text_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_edittext_top_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="errorEnabled">true</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+    <style name="registration_step_next_button" parent="xx_font">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">@dimen/registration_button_height</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/registration_body_vertical_margin</item>
+        <item name="android:textColor">@color/neutral_off_white</item>
+        <item name="android:background">@drawable/bg_rectangle_rounded_corners_big_radius</item>
+        <item name="android:backgroundTint">@color/selector_btn_default</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="dialog_button" parent="xx_font">
+        <item name="android:layout_width">@dimen/registration_dialog_button_width</item>
+        <item name="android:layout_height">@dimen/registration_button_height</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/registration_vertical_margin</item>
+        <item name="android:textColor">@color/brand_default</item>
+        <item name="android:background">@drawable/bg_btn_outline</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <style name="confirm_dialog_button" parent="dialog_button">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@drawable/bg_rectangle_rounded_corners_big_radius</item>
+        <item name="android:backgroundTint">@color/accent_danger</item>
+        <item name="android:textColor">@color/neutral_off_white</item>
+    </style>
+
+    <style name="registration_borderless_text_button" parent="Widget.MaterialComponents.Button.TextButton">
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginBottom">@dimen/registration_vertical_margin</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+    <style name="info_tooltip_textview" parent="XxTextStyle.SemiBold">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:drawableEnd">@drawable/ic_outline_info_24</item>
+        <item name="android:drawablePadding">@dimen/ic_info_padding</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
+    <style name="menu_icon">
+        <item name="android:layout_width">@dimen/spacing_24</item>
+        <item name="android:layout_height">@dimen/spacing_24</item>
+        <item name="android:layout_marginTop">@dimen/spacing_24</item>
+        <item name="android:backgroundTint">@color/neutral_weak</item>
+        <item name="android:tint">@color/neutral_weak</item>
+    </style>
+
+    <style name="registration_text_input_edittext" parent="xx_font">
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="RoundedModalBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
+        <item name="colorPrimary">@color/brand_default</item>
+        <item name="colorPrimaryDark">@color/brand_dark</item>
+        <item name="colorAccent">@color/brand_dark</item>
+        <item name="bottomSheetStyle">@style/BottomSheetDialogStyle</item>
+    </style>
+
+    <style name="BottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+</resources>

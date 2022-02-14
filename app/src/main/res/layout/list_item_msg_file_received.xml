@@ -1,0 +1,403 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="listener"
+            type="io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener" />
+        <variable
+            name="message"
+            type="io.xxlabs.messenger.data.room.model.PrivateMessage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hapticFeedbackEnabled="true">
+
+        <include
+            layout="@layout/list_item_msg_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/spacing_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/itemMsgReceivedCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:button="@drawable/bg_checkbox_circular"
+            android:clickable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/itemMsgReceivedHolder"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/itemMsgReceivedHolder" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/itemMsgReceivedBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierAllowsGoneWidgets="true"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="itemMsgReceivedCheckbox, itemMsgReceivedReplyIconMsg" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/itemMsgReceivedHolder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_14"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:clickable="true"
+            android:descendantFocusability="beforeDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:longClickable="true"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/itemMsgReceivedBarrier"
+            app:layout_constraintTop_toBottomOf="@id/itemMsgHeaderHolder"
+            app:layout_goneMarginStart="@dimen/spacing_16">
+
+            <ImageView
+                android:id="@+id/itemMsgReceivedReplyIconMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_10"
+                android:src="@drawable/ic_reply_arrow"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/itemMsgReceivedLayout"
+                app:layout_constraintVertical_bias="0.05" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/itemMsgReceivedLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/component_msg_received"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/itemMsgReceivedUrlLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintHorizontal_chainStyle="packed"
+                app:layout_constraintStart_toEndOf="@id/itemMsgReceivedReplyIconMsg"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_goneMarginStart="0dp">
+
+                <TextView
+                    android:id="@+id/itemMsgReceivedUsername"
+                    style="@style/XxTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_14"
+                    android:layout_marginTop="@dimen/spacing_12"
+                    android:layout_marginEnd="@dimen/spacing_14"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/brand_default"
+                    android:textSize="@dimen/text_10"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Happy McLucky"
+                    tools:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/itemMsgReceivedReplyLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_10"
+                    android:layout_marginTop="@dimen/spacing_10"
+                    android:layout_marginEnd="@dimen/spacing_10"
+                    android:background="@drawable/component_msg_reply"
+                    android:backgroundTint="@color/brand_dark"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/fileBg"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgReceivedUsername"
+                    app:layout_constraintWidth_min="wrap"
+                    tools:visibility="gone">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/component_msg_reply" />
+
+                    <LinearLayout
+                        android:id="@+id/itemMsgReceivedReplyHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                        <TextView
+                            android:id="@+id/itemMsgReceivedReplyUsername"
+                            style="@style/XxTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_14"
+                            android:layout_marginTop="@dimen/spacing_12"
+                            android:layout_marginEnd="@dimen/spacing_14"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/neutral_white"
+                            android:textSize="@dimen/text_10"
+                            app:layout_constraintEnd_toStartOf="@id/itemMsgReplyUrlPreviewIcon"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            tools:text="Happy McLucky" />
+
+                        <TextView
+                            android:id="@+id/itemMsgReceivedReplyText"
+                            style="@style/XxTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_16"
+                            android:layout_marginLeft="@dimen/spacing_14"
+                            android:layout_marginTop="@dimen/spacing_5"
+                            android:layout_marginEnd="@dimen/spacing_8"
+                            android:layout_marginBottom="@dimen/spacing_12"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@color/neutral_white"
+                            android:textSize="@dimen/text_14"
+                            tools:text="Beachth dddfddfdfdfdfdffdfddffddffddfdfddfdfddffddfdfddfdfddfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfdfaa" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/itemMsgReceivedReplyUrlPreviewIcon"
+                        android:layout_width="29dp"
+                        android:layout_height="29dp"
+                        android:layout_marginStart="@dimen/spacing_8"
+                        android:layout_marginEnd="@dimen/spacing_8"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintDimensionRatio="H, 1:1"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:src="@drawable/placeholder_beach" />
+                </LinearLayout>
+
+                <View
+                    android:id="@+id/fileBg"
+                    android:layout_width="300dp"
+                    android:layout_height="75dp"
+                    android:background="@drawable/bg_rectangle_rounded_corners"
+                    android:layout_margin="@dimen/spacing_8"
+                    android:padding="@dimen/spacing_8"
+                    app:layout_constraintBottom_toTopOf="@id/itemMsgReceivedTimestamp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgReceivedReplyLayout" />
+
+                <ImageView
+                    android:id="@+id/fileIcon"
+                    android:layout_width="20dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_8"
+                    android:adjustViewBounds="true"
+                    android:clickable="true"
+                    android:src="@drawable/ic_msg_file"
+                    app:layout_constraintTop_toTopOf="@id/fileBg"
+                    app:layout_constraintStart_toStartOf="@id/fileBg"
+                    app:layout_constraintBottom_toBottomOf="@id/fileBg" />
+
+                <TextView
+                    android:id="@+id/fileNameLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_8"
+                    android:layout_marginEnd="@dimen/spacing_8"
+                    android:layout_marginTop="@dimen/spacing_8"
+                    android:textColor="@color/neutral_white"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    app:layout_constraintStart_toEndOf="@id/fileIcon"
+                    app:layout_constraintTop_toTopOf="@id/fileBg"
+                    app:layout_constraintBottom_toTopOf="@id/fileSizeLabel"
+                    app:layout_constraintEnd_toEndOf="@id/fileBg"
+                    tools:text="Brand Academy Slide Dec.pptx" />
+
+                <TextView
+                    android:id="@+id/fileSizeLabel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_8"
+                    android:layout_marginBottom="@dimen/spacing_8"
+                    android:textColor="@color/white_50"
+                    app:layout_constraintTop_toBottomOf="@id/fileNameLabel"
+                    app:layout_constraintStart_toEndOf="@id/fileIcon"
+                    app:layout_constraintBottom_toBottomOf="@id/fileBg"
+                    app:layout_constraintEnd_toEndOf="@id/fileBg"
+                    tools:text="100.5 KB"/>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/itemMsgReceived"
+                    style="@style/XxTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_5"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:layout_marginBottom="@dimen/spacing_7"
+                    android:autoLink="web"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:linksClickable="true"
+                    android:minWidth="@dimen/spacing_30"
+                    android:textColor="@color/neutral_active"
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toTopOf="@id/itemMsgReceivedTimestamp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgReceivedReplyLayout"
+                    tools:text="Youdfdf " />
+
+                <TextView
+                    android:id="@+id/itemMsgReceivedTimestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/spacing_14"
+                    android:layout_marginEnd="@dimen/spacing_14"
+                    android:layout_marginBottom="@dimen/spacing_10"
+                    android:gravity="bottom"
+                    android:textColor="@color/neutral_disabled"
+                    android:textSize="@dimen/spacing_10"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintVertical_bias="1"
+                    tools:text="16:45" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/itemMsgReceivedUrlLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginTop="@dimen/spacing_1"
+                android:layout_marginEnd="@dimen/spacing_10"
+                android:background="@drawable/component_msg_received"
+                android:visibility="gone"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@id/itemMsgReceivedReplyIconMsg"
+                app:layout_constraintTop_toBottomOf="@id/itemMsgReceivedLayout"
+                app:layout_goneMarginStart="0dp">
+
+                <TextView
+                    android:id="@+id/itemMsgReceivedPreviewTitle"
+                    style="@style/XxTextStyle.Bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/chatTextActiveReceivedMessageColor"
+                    android:textSize="@dimen/text_12"
+                    app:layout_constraintEnd_toStartOf="@id/itemMsgReceivedPreviewIcon"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="FunTimes - Awesome Beach Getaways Etc" />
+
+                <TextView
+                    android:id="@+id/itemMsgReceivedDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/itemMsgReceivedPreviewTitle"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_5"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:layout_marginBottom="@dimen/spacing_16"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/chatTextActiveReceivedMessageColor"
+                    android:textSize="@dimen/text_12"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/itemMsgReceivedPreviewFrontBarrier"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgReceivedPreviewTitle"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="Page description ad ddssa dsdsd dssdsdddsdssadds ddsdsdssdds" />
+
+                <ImageView
+                    android:id="@+id/itemMsgReceivedPreviewIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="@dimen/spacing_8"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgReceivedPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/placeholder_beach" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/itemMsgReceivedPreviewLoading"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/spacing_8"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgReceivedPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/itemMsgReceivedPreviewFrontBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="left"
+                    app:constraint_referenced_ids="itemMsgReceivedPreviewIcon, itemMsgReceivedPreviewLoading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgReceivedPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

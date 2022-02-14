@@ -1,0 +1,835 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral_white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/spacing_40">
+
+        <include layout="@layout/component_toolbar_generic" />
+
+        <TextView
+            android:id="@+id/settingsGenericTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:text="@string/settings_general_section"
+            android:textColor="@color/settingsAccentColorDescription"
+            android:textSize="@dimen/text_18"
+            app:lineHeight="@dimen/text_18" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsPushNotificationsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsPushIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_notification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsPushTitle"
+                style="@style/info_tooltip_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="@string/settings_notifications_title"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsPushIcon"
+                app:layout_constraintStart_toEndOf="@id/settingsPushIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsPushIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsPushSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.push"
+                app:layout_constraintBottom_toBottomOf="@id/settingsPushTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsPushTitle" />
+
+
+            <TextView
+                android:id="@+id/settingsPushDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Enable push notifications."
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="@id/settingsPushLine"
+                app:layout_constraintStart_toStartOf="@id/settingsPushTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsPushTitle"
+                app:lineHeight="@dimen/text_18" />
+
+            <View
+                android:id="@+id/settingsPushLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/neutral_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsPushDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsInAppNotificationsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsInAppNotificationsIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_notification"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsInAppNotificationsTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="In-app Notifications"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsInAppNotificationsIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsInAppNotificationsSwitch"
+                app:layout_constraintStart_toEndOf="@id/settingsInAppNotificationsIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsInAppNotificationsIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsInAppNotificationsSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.inapp"
+                app:layout_constraintBottom_toBottomOf="@id/settingsInAppNotificationsTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsInAppNotificationsTitle" />
+
+            <TextView
+                android:id="@+id/settingsInAppNotificationsDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Enable in-app notifications."
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="@id/settingsInAppLine"
+                app:layout_constraintStart_toStartOf="@id/settingsInAppNotificationsTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsInAppNotificationsTitle"
+                app:lineHeight="@dimen/text_18" />
+
+            <View
+                android:id="@+id/settingsInAppLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/neutral_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsInAppNotificationsDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsCoverTrafficLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsCoverTrafficIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_earth"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsCoverTrafficTitle"
+                style="@style/info_tooltip_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="@string/settings_cover_traffic_title"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsCoverTrafficIcon"
+                app:layout_constraintStart_toEndOf="@id/settingsCoverTrafficIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsCoverTrafficIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsCoverTrafficSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.inapp"
+                app:layout_constraintBottom_toBottomOf="@id/settingsCoverTrafficTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsCoverTrafficTitle" />
+
+
+            <TextView
+                android:id="@+id/settingCoverTrafficDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="@string/settings_cover_traffic_description"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="@id/settingsCoverTrafficLine"
+                app:layout_constraintStart_toStartOf="@id/settingsCoverTrafficTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsCoverTrafficTitle"
+                app:lineHeight="@dimen/text_18" />
+
+            <View
+                android:id="@+id/settingsCoverTrafficLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/neutral_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingCoverTrafficDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsBiometricsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsBiometricsIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_biometric_auth"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsBiometricsTitle"
+                style="@style/info_tooltip_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Biometric Authentication"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsBiometricsIcon"
+                app:layout_constraintStart_toEndOf="@id/settingsBiometricsIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsBiometricsIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsBiometricSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.biometric"
+                app:layout_constraintBottom_toBottomOf="@id/settingsBiometricsTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsBiometricsTitle" />
+
+            <TextView
+                android:id="@+id/settingsBiometricsDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="@string/settings_biometrics_description"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsBiometricsTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsBiometricsTitle"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/settingsChatText"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:text="Chat Settings"
+            android:textColor="@color/settingsAccentColorDescription"
+            android:textSize="@dimen/text_18"
+            app:lineHeight="@dimen/text_18" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsHideScreenLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_10"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsHideAppIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_hide_screen"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsHideAppTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Hide Screen"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintEnd_toStartOf="@id/settingsHideAppSwitch"
+                app:layout_constraintStart_toEndOf="@id/settingsHideAppIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsHideAppIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsHideAppSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.hide"
+                app:layout_constraintBottom_toBottomOf="@id/settingsHideAppTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsHideAppTitle"
+                tools:checked="true" />
+
+            <View
+                android:id="@+id/settingsHideAppLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/neutral_weak"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsHideAppDescription" />
+
+            <TextView
+                android:id="@+id/settingsHideAppDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Hide screen in recent apps list."
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsHideAppTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsHideAppTitle"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsPredictiveTextLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:id="@+id/settingsPredictiveTextIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_predictive_text"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsPredictiveTextTitle"
+                style="@style/info_tooltip_textview"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Predictive Text"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsPredictiveTextIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsPredictiveTextSwitch"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/settingsPredictiveTextIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsPredictiveTextIcon"
+                app:layout_constraintVertical_bias="0.0"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsPredictiveTextSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.predictive"
+                app:layout_constraintBottom_toBottomOf="@id/settingsPredictiveTextTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsPredictiveTextTitle" />
+
+            <TextView
+                android:id="@+id/settingsPredictiveTextDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="@string/settings_predictive_text_description"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsPredictiveTextTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsPredictiveTextTitle"
+                app:lineHeight="@dimen/text_18" />
+
+            <View
+                android:id="@+id/settingsPredictiveTextLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/neutral_line"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsPredictiveTextDescription" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsUrlPreviewLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_40"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_36"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_36"
+            android:paddingBottom="@dimen/spacing_14"
+            android:visibility="gone">
+
+            <ImageView
+                android:id="@+id/settingsUrlPreviewIcon"
+                android:layout_width="@dimen/spacing_14"
+                android:layout_height="@dimen/spacing_18"
+                android:layout_marginTop="@dimen/spacing_12"
+                android:src="@drawable/ic_hyperlink"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/selector_settings_cell" />
+
+            <TextView
+                android:id="@+id/settingsUrlPreviewTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_24"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Url Preview"
+                android:textColor="@color/selector_settings_cell"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@id/settingsUrlPreviewIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsUrlPreviewSwitch"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/settingsUrlPreviewIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsUrlPreviewIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsUrlPreviewSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@id/settingsUrlPreviewTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsUrlPreviewTitle"
+                tools:checked="true" />
+
+            <View
+                android:id="@+id/settingsUrlPreviewLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_14"
+                android:background="@color/menuAvatarAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsUrlPreviewTitle" />
+
+            <TextView
+                android:id="@+id/settingsUrlPreviewDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Allow the app to access websites to fetch preview content."
+                android:textColor="@color/settingsAccentColorDescription"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsUrlPreviewLine"
+                app:layout_constraintTop_toBottomOf="@id/settingsUrlPreviewLine"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsEnterToSendLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_24"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/settingsEnterToSendIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:paddingBottom="@dimen/spacing_5"
+                android:src="@drawable/ic_enter_to_send"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/settingsEnterToSendTitle"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Press Enter to Send"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/settingsEnterToSendIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsEnterToSendSwitch"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toEndOf="@id/settingsEnterToSendIcon"
+                app:layout_constraintTop_toTopOf="@id/settingsEnterToSendIcon"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsEnterToSendSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.enter.send"
+                app:layout_constraintBottom_toBottomOf="@id/settingsEnterToSendTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsEnterToSendTitle" />
+
+            <View
+                android:id="@+id/settingsEnterToSendLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_40"
+                android:background="@color/neutral_weak"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsEnterToSendTitle" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/settingsBackupProfile"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_40"
+            android:background="@color/backgroundSettingsCell"
+            android:orientation="vertical"
+            android:paddingStart="@dimen/spacing_36"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_36"
+            android:paddingBottom="@dimen/spacing_14"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/settingsBackupProfileTitle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Backup Profile"
+                android:textColor="@color/selector_settings_cell"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@id/settingsBackupProfileDownload"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:lineHeight="@dimen/text_18" />
+
+            <ImageView
+                android:id="@+id/settingsBackupProfileDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_download"
+                app:layout_constraintBottom_toBottomOf="@id/settingsBackupProfileTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsBackupProfileTitle"
+                app:tint="@color/selector_settings_cell" />
+
+            <View
+                android:id="@+id/settingsBackupProfileLine"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_14"
+                android:background="@color/menuAvatarAccent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsBackupProfileTitle" />
+
+            <TextView
+                android:id="@+id/settingsBackupProfileDescription"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="Save a your session file  to use account on another device or as a backup?"
+                android:textColor="@color/settingsAccentColorDescription"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/settingsBackupProfileLine"
+                app:layout_constraintTop_toBottomOf="@id/settingsBackupProfileLine"
+                app:lineHeight="@dimen/text_18" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroundSettingsCell"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <LinearLayout
+                android:id="@+id/settingsPrivacyLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.btn.privacy"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_20"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_privacy_policy" />
+
+                <TextView
+                    android:id="@+id/settingsPrivatePolicy"
+                    style="@style/XxTextStyle.SemiBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_10"
+                    android:layout_weight="1"
+                    android:text="@string/settings_privacy_policy"
+                    android:textColor="@color/neutral_active"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="bold"
+                    app:lineHeight="@dimen/text_18" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_right" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/settingsDisclosuresLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_24"
+                android:contentDescription="settings.btn.disclosures"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsPrivacyLayout">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_20"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_disclosure" />
+
+                <TextView
+                    android:id="@+id/settingsDisclosures"
+                    style="@style/XxTextStyle.SemiBold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_10"
+                    android:layout_weight="1"
+                    android:text="@string/settings_disclosures"
+                    android:textColor="@color/neutral_active"
+                    android:textSize="@dimen/text_14"
+                    app:lineHeight="@dimen/text_18" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_arrow_right" />
+            </LinearLayout>
+
+            <View
+                android:id="@+id/settingsLineEight"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/line_thin"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:background="@color/lineGray"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsDisclosuresLayout" />
+
+            <LinearLayout
+                android:id="@+id/settingsTermsOfUseLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/settingsLineEight">
+
+                <TextView
+                    android:id="@+id/settingsTermsOfUse"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Terms of Use"
+                    android:textColor="@color/selector_settings_cell"
+                    android:textSize="@dimen/text_14"
+                    android:textStyle="bold"
+                    android:visibility="gone"
+                    app:lineHeight="@dimen/text_18" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_external_link"
+                    android:visibility="gone"
+                    app:tint="@color/tealThemeColor" />
+            </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <LinearLayout
+            android:id="@+id/settingsAdvanced"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:background="@color/backgroundSettingsCell"
+            android:contentDescription="settings.btn.advanced"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14">
+
+            <ImageView
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_menu_settings"
+                app:tint="@color/neutral_active" />
+
+            <TextView
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="Advanced Settings"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:lineHeight="@dimen/text_18" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_arrow_right" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/settingsDeleteAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:background="@color/backgroundSettingsCell"
+            android:contentDescription="settings.btn.delete"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_14"
+            android:paddingEnd="@dimen/spacing_20"
+            android:paddingBottom="@dimen/spacing_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Delete Account"
+                android:textColor="#ce5454"
+                android:textSize="@dimen/text_14"
+                android:textStyle="bold"
+                app:lineHeight="@dimen/text_18" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.core.widget.NestedScrollView>

@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/qrCodeShowHolder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="@dimen/spacing_40"
+        android:layout_marginEnd="@dimen/spacing_40"
+        android:background="@color/background"
+        app:cardCornerRadius="@dimen/spacing_32"
+        app:cardElevation="0dp"
+        app:layout_constraintBottom_toTopOf="@id/qrCodeShowSettings"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.4">
+
+        <ImageView
+            android:id="@+id/qrCodeShowCode"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:contentDescription="qrcode.mycode.qr"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:labelFor="@id/qrCodeShowHolder"
+            android:padding="@dimen/spacing_40"
+            tools:src="@drawable/ic_qr_code" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/qrCodeShowLoading"
+            style="@style/XxProgressBarCircularBlue"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:contentDescription="qrcode.mycode.loading"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:labelFor="@id/qrCodeShowHolder" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/qrCodeShowSettings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_40"
+        android:background="@drawable/bg_rounded_top_corners"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/spacing_24"
+        android:paddingTop="@dimen/spacing_24"
+        android:paddingEnd="@dimen/spacing_24"
+        android:paddingBottom="@dimen/spacing_24"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/qrCodeShowSettingsInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Choose the information you’d like to share with UD search"
+            android:textColor="@color/neutral_body"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="1"
+            app:lineHeight="@dimen/text_24" />
+
+        <ImageView
+            android:id="@+id/qrCodeShowSettingsEmailIcon"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:src="@drawable/ic_mail"
+            app:layout_constraintBottom_toBottomOf="@id/qrCodeShowSettingsEmailLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/qrCodeShowSettingsEmailLayout" />
+
+        <LinearLayout
+            android:id="@+id/qrCodeShowSettingsEmailLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toStartOf="@id/qrCodeShowSettingsEmailSwitcher"
+            app:layout_constraintStart_toEndOf="@id/qrCodeShowSettingsEmailIcon"
+            app:layout_constraintTop_toBottomOf="@id/qrCodeShowSettingsInfo">
+
+            <TextView
+                android:id="@+id/qrCodeShowSettingsEmailHeader"
+                style="@style/XxTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="qrcode.mycode.email.title"
+                android:text="Email Address"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:lineHeight="@dimen/text_18" />
+
+            <TextView
+                android:id="@+id/qrCodeShowSettingsEmail"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_5"
+                android:contentDescription="qrcode.mycode.email.text"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:lineHeight="@dimen/text_18"
+                tools:text="billnye@aol.com" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/qrCodeShowSettingsEmailSwitcher"
+            style="@style/XxSwitcherStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="qrcode.mycode.email.switcher"
+            app:layout_constraintBottom_toBottomOf="@id/qrCodeShowSettingsEmailLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/qrCodeShowSettingsEmailLayout"
+            tools:checked="true" />
+
+        <View
+            android:id="@+id/qrCodeShowSettingsEmailSwitchLine"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/line_thin"
+            android:layout_marginTop="@dimen/spacing_14"
+            android:background="@color/neutral_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qrCodeShowSettingsEmailLayout" />
+
+        <ImageView
+            android:id="@+id/qrCodeShowSettingsPhoneIcon"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintBottom_toBottomOf="@id/qrCodeShowSettingsPhoneLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/qrCodeShowSettingsPhoneLayout" />
+
+        <LinearLayout
+            android:id="@+id/qrCodeShowSettingsPhoneLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/qrCodeShowSettingsPhoneSwitcher"
+            app:layout_constraintStart_toEndOf="@id/qrCodeShowSettingsPhoneIcon"
+            app:layout_constraintTop_toBottomOf="@id/qrCodeShowSettingsEmailSwitchLine">
+
+            <TextView
+                android:id="@+id/qrCodeShowSettingsPhoneHeader"
+                style="@style/XxTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="qrcode.mycode.phone.text"
+                android:text="Phone Number"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:lineHeight="@dimen/text_18" />
+
+            <TextView
+                android:id="@+id/qrCodeShowSettingsPhone"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_5"
+                android:contentDescription="qrcode.mycode.phone.text"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:lineHeight="@dimen/text_18"
+                tools:text="+1 555 5555" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/qrCodeShowSettingsPhoneSwitcher"
+            style="@style/XxSwitcherStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="qrcode.mycode.phone.switcher"
+            app:layout_constraintBottom_toBottomOf="@id/qrCodeShowSettingsPhoneLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/qrCodeShowSettingsPhoneLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

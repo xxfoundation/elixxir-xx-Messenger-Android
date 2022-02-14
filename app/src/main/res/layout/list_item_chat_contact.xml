@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/spacing_60"
+    android:paddingStart="@dimen/spacing_16"
+    android:paddingEnd="@dimen/spacing_16"
+    android:orientation="vertical">
+
+    <io.xxlabs.messenger.support.view.SquaredCornerLayout
+        android:id="@id/contactPhotoHolder"
+        android:layout_width="@dimen/spacing_28"
+        android:layout_height="@dimen/spacing_28"
+        android:layout_marginStart="@dimen/spacing_7"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/contactCheckbox"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@id/contactPhoto"
+            android:src="@drawable/placeholder_beach"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+    </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+
+    <androidx.appcompat.widget.AppCompatCheckBox
+        android:id="@id/contactCheckbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_16"
+        android:button="@drawable/bg_checkbox_circular"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@id/contactName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_26"
+        android:textColor="@color/tealThemeColor"
+        android:textSize="@dimen/text_14"
+        app:layout_constraintBottom_toBottomOf="@id/contactPhotoHolder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0"
+        app:layout_constraintStart_toEndOf="@id/contactPhotoHolder"
+        app:layout_constraintTop_toTopOf="@id/contactPhotoHolder"
+        tools:text="\@username" />
+
+    <View
+        android:id="@id/contactDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/lightThemeBg"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />`
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogController" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/createGroupDialogRoot"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/bottom_sheet_dialog_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/action_dialog_title"
+                android:text="@string/create_group_info_dialog_title"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/action_dialog_body"
+                style="@style/dialog_title"/>
+
+            <TextView
+                android:id="@+id/action_dialog_body"
+                android:text="@{ui.body}"
+                tools:text="@string/group_create_dialog_body"
+                android:layout_marginTop="@dimen/registration_body_vertical_margin"
+                android:drawablePadding="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:onClick="@{() -> ui.infoClick.invoke()}"
+                app:layout_constraintTop_toBottomOf="@id/action_dialog_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:drawableBottomCompat="@drawable/ic_outline_info_24"
+                style="@style/dialog_body" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_group_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+                app:errorEnabled="true"
+                app:error="@{ui.nameError}"
+                app:layout_constraintTop_toBottomOf="@id/action_dialog_body"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/registration_text_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp"
+                    android:hint="@string/group_create_dialog_name_hint"
+                    android:text="@={ui.name}"
+                    android:maxLength="@{ui.maxGroupNameLength}"
+                    style="@style/registration_text_input_edittext" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/create_group_description"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:errorEnabled="true"
+                app:error="@{ui.descriptionError}"
+                app:layout_constraintTop_toBottomOf="@id/create_group_name"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/registration_text_input">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/group_create_dialog_description_hint"
+                    android:padding="12dp"
+                    android:gravity="top|start"
+                    android:lines="4"
+                    android:singleLine="false"
+                    android:text="@={ui.description}"
+                    android:maxLength="@{ui.maxDescriptionLength}"
+                    style="@style/registration_text_input_edittext"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/action_dialog_button"
+                android:layout_width="0dp"
+                android:layout_marginTop="48dp"
+                android:text="@string/group_create_dialog_button"
+                android:backgroundTint="@color/brand_default"
+                android:enabled="@{ui.createButtonEnabled}"
+                app:layout_constraintTop_toBottomOf="@id/create_group_description"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                style="@style/confirm_dialog_button" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

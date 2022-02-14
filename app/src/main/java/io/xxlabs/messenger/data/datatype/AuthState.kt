@@ -1,0 +1,24 @@
+package io.xxlabs.messenger.data.datatype
+
+enum class AuthState {
+    //Default state
+    NONE,
+
+    //Server
+    CONNECTION_ERROR,
+    UNRECOVERABLE_ERROR,
+    TIMEOUT,
+    SERVER_ERROR,
+    GATEWAY_ERROR,
+    VERSIONS_INCOMPATIBLE,
+
+    USERNAME_GENERATION_SUCCESS,
+    USERNAME_GENERATION_ERROR,
+    USERNAME_ALREADY_TAKEN,
+
+    WRONG_PASSWORD,
+
+    //UD
+    UD_ERROR_ADD_YOURSELF,
+    UD_ERROR_ALREADY_SHARED
+}

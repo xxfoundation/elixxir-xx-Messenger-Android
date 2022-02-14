@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/contactProfileBackground">
+
+    <io.github.florent37.shapeofview.shapes.ArcView
+        android:id="@+id/contactSuccessTopBgHolder"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactSuccessTopBar"
+        app:shape_arc_height="100dp"
+        app:shape_arc_position="bottom">
+
+        <ImageView
+            android:id="@+id/contactSuccessTopBgLayer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@color/mainTealLightTheme"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="@color/contactProfileArcBackground" />
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:paddingBottom="@dimen/spacing_72">
+
+            <ImageView
+                android:id="@+id/contactSuccessPhoto"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:src="@drawable/ic_avatar_alt"
+                app:layout_constraintBottom_toTopOf="@id/contactSuccessNameInput"
+                app:layout_constraintDimensionRatio="W, 1:1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.3" />
+
+            <EditText
+                android:id="@+id/contactSuccessNameInput"
+                style="@style/XxInputEditText.LightAccent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_40"
+                android:layout_marginTop="@dimen/spacing_18"
+                android:layout_marginEnd="@dimen/spacing_40"
+                android:backgroundTint="@color/background"
+                android:gravity="center"
+                android:hint="Contact's Nickname"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:maxLength="32"
+                android:maxLines="1"
+                android:textColor="@color/textActiveMessageColorWhite"
+                android:textColorHint="@color/textHintMessageColor"
+                android:textSize="@dimen/text_20"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/contactSuccessPhoto" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </io.github.florent37.shapeofview.shapes.ArcView>
+
+    <FrameLayout
+        android:id="@+id/contactSuccessTopBar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/contactProfileArcBackground"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/contactSuccessTopBarInner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/contactSuccessBackBtn"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="@dimen/spacing_20"
+                android:layout_marginStart="@dimen/spacing_24"
+                android:src="@drawable/ic_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/toolbarIconColor" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/contactSuccessBottomTitle"
+        style="@style/XxTextStyle.Bold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_32"
+        android:text="Request Contact"
+        android:textColor="@color/textActiveMessageColorInverse"
+        android:textSize="@dimen/text_25"
+        app:layout_constraintEnd_toEndOf="@id/contactSuccessRegGuideEnd"
+        app:layout_constraintStart_toStartOf="@id/contactSuccessRegGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/contactSuccessTopBgHolder" />
+
+    <TextView
+        android:id="@+id/contactSuccessBottomDescription"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_54"
+        android:layout_marginEnd="@dimen/spacing_54"
+        android:gravity="center_horizontal"
+        android:letterSpacing="0.02"
+        android:lineSpacingExtra="6sp"
+        android:text="Once they&apos;ve accepted your request, you&apos;re ready to message!"
+        android:textColor="@color/mainTextLightTheme"
+        android:textSize="12sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toTopOf="@id/contactSuccessBtnOk"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactSuccessBottomTitle"
+        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <Button
+        android:id="@+id/contactSuccessBtnOk"
+        style="@style/XxButtonStyle.DarkBlue"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_10"
+        android:layout_marginTop="@dimen/spacing_40"
+        android:layout_marginEnd="@dimen/spacing_10"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:text="Request"
+        android:textColor="@color/textActiveMessageColorWhite"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/contactSuccessBottomDescription"
+        app:layout_constraintStart_toStartOf="@id/contactSuccessBottomDescription"
+        app:layout_constraintTop_toBottomOf="@id/contactSuccessBottomDescription"
+        app:layout_constraintVertical_bias="0.5"
+        app:layout_constraintWidth_percent=".6" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/contactSuccessRegGuideEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/contactSuccessRegGuideTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.08" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/contactSuccessRegGuideStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/contactSuccessRegGuideMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".65" />
+</androidx.constraintlayout.widget.ConstraintLayout>

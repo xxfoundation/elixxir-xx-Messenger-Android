@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App Colors -->
+    <color name="bgColor">#00001d</color>
+    <color name="colorPrimary">#00001d</color>
+    <color name="colorPrimaryDark">#ffffff</color>
+    <color name="colorAccent">#6481f7</color>
+    <color name="colorAccentLighter">#00dcff</color>
+    <color name="colorAccentDark">#1d1d42</color>
+    <color name="colorBgDark">#151535</color>
+    <color name="colorTime">#8e9cbb</color>
+    <color name="colorBgRelease">#A45A52</color>
+    <color name="colorLightAccentText">#9fb0f6</color>
+    <color name="colorDarkAccentText">#323958</color>
+    <color name="colorEditTextHint">#8798b7</color>
+    <color name="colorEditTextBackground">#1d1d42</color>
+    <color name="textColorPrimary">#333333</color>
+    <color name="loginPageBackgroundColor">#FFFFFF</color>
+    <color name="productGridBackgroundColor">#FFFFFF</color>
+    <color name="colorControlActivated">#7a62e4</color>
+    <color name="transparent">@android:color/transparent</color>
+
+    <!-- New Light Theme -->
+    <color name="lightThemeBg">#ebeff2</color>
+    <color name="lightThemeBgTransp">#48181c21</color>
+    <color name="tealThemeColor">#3097a1</color>
+    <color name="mainTealLightTheme">#00bcce</color>
+    <color name="tealMainVariationLightTheme">#00bfd1</color>
+    <color name="tealLightThemeTransp">#803097a1</color>
+    <color name="tealTagVariation">#0099a3</color>
+    <color name="yellowLightTheme">#d8c14a</color>
+    <color name="mainTextLightTheme">#696969</color>
+    <color name="mainTextLightThemeTransp">#80696969</color>
+    <color name="textLightTheme">#70828f</color>
+    <color name="textColorSecondary">#2a3543</color>
+    <color name="white">#ffffff</color>
+    <color name="white_50">#80ffffff</color>
+    <color name="grayBgLayer">#8c4a4a4a</color>
+    <color name="paleGray">#f5f7f8</color>
+    <color name="greenLightTheme">#7fbc79</color>
+    <color name="greenLightBg">#76e3ab</color>
+    <color name="darkThemeBg">#181c21</color>
+    <color name="darkThemeBgTransp">#48181c21</color>
+    <color name="redLightBg">#70cc4343</color>
+    <color name="outlineBg">#eaeff2</color>
+    <color name="pictureBgGreenLight">#005158</color>
+
+    <!-- Component Colors -->
+    <color name="modalBg">#fff</color>
+    <color name="btnActiveTeal">#3097a1</color>
+    <color name="btnInactive">#98c6cb</color>
+    <color name="textInputFieldActive">#414141</color>
+    <color name="switchInactive">#bcbcbc</color>
+    <color name="switchInactiveSecondary">#98c6cb</color>
+    <color name="switchActive">#026e78</color>
+    <color name="linkColor">#00d7ff</color>
+    <color name="textHint">#5b5b6c</color>
+    <color name="textGrayB">#424d65</color>
+    <color name="textInactive">#bcbcbc</color>
+    <color name="textInactive50">#80bcbcbc</color>
+    <color name="textLoading">#99a6c3</color>
+    <color name="textGrayedWhite">#a3afca</color>
+    <color name="lineGray">#979797</color>
+    <color name="redTheme">#cc4343</color>
+    <color name="redDarkTheme">#ce5454</color>
+<!--    <color name="redDarkThemeTransp">#64D12D4B</color>-->
+    <color name="redDarkThemeTransp">#D12D4B</color>
+    <color name="redDarkThemeDark">#7d2f19</color>
+    <color name="overlayColor">#80000000</color>
+    <color name="overlayColorDarker">#99000000</color>
+
+    <!-- Toolbar -->
+    <color name="toolbarIconColor">#fff</color>
+    <color name="toolbarBackgroundColor">#00bcce</color>
+    <color name="toolbarBarColor">#EDEDED</color>
+
+    <!-- Settings -->
+    <color name="settingsAccentColorActive">#3097a1</color>
+    <color name="settingsAccentColorInactive">#98c6cb</color>
+    <color name="settingsAccentColorDescription">#13171c</color>
+    <color name="settingsAccentColorDescriptionInactive">#70828f</color>
+
+    <!-- Profile -->
+    <color name="profileTitleColor">#005259</color>
+    <color name="profileDefaultIcon">#fff</color>
+    <color name="profileSubtitleColor">#414141</color>
+    <color name="profileSubtitleSecondColor">#70828f</color>
+
+    <!-- Colors -->
+    <color name="textActiveMessageColor">#414141</color>
+    <color name="textActiveMessageColorActive">#414141</color>
+    <color name="textInactiveMessageColor">#80414141</color>
+    <color name="textActiveMessageColorInverse">#696969</color>
+    <color name="textActiveMessageColorWhite">#fff</color>
+    <color name="textHintMessageColor">#98c6cb</color>
+    <color name="background">#ffffff</color>
+    <color name="backgroundCountry">#effdfe</color>
+    <color name="backgroundSecondary">#ffffff</color>
+    <color name="backgroundSplash">@color/brand_default</color>
+    <color name="backgroundMenu">#ebeff2</color>
+    <color name="backgroundSettings">#ebeff2</color>
+    <color name="backgroundSettingsCell">#ffffff</color>
+
+    <!-- Private Search -->
+    <color name="udSearchButtonTextActive">#3197a1</color>
+    <color name="udSearchButtonBackgroundActive">#006377</color>
+
+    <!-- Contacts -->
+    <color name="contactsAccent">#3097a1</color>
+    <color name="contactsCellHeaderBackground">#eaf4f5</color>
+    <color name="contactProfileBackground">#ebeff2</color>
+    <color name="contactProfileArcBackground">#3097a1</color>
+    <color name="contactPendingNotificationBackground">#3097a1</color>
+    <color name="contactsTextAccent">#fff</color>
+
+    <!-- Menu -->
+    <color name="menuAvatarBackground">#ebeff2</color>
+    <color name="menuAvatarAccent">#00bcce</color>
+    <color name="menuQrCodeAccent">#3097a1</color>
+    <color name="menuAccent">#3097a1</color>
+    <color name="menuAccentSecondary">#3097a1</color>
+    <color name="menuAccentBottomText">#70828f</color>
+    <color name="menuBackground">#00bcce</color>
+
+    <!-- Choose Pic -->
+    <color name="photoSelectorBackground">#13171c</color>
+    <color name="photoSelectorBackgroundSecondary">#5f5f5f</color>
+
+    <!-- Misc -->
+    <color name="statusTextColor">#ffffff</color>
+
+    <color name="black">#000</color>
+    <color name="darkerGray">#585858</color>
+    <color name="red">#f44336</color>
+    <color name="red_lighter">#f36262</color>
+    <color name="blue_tint">#6f8cf8</color>
+    <color name="greenBgLayer">#006872</color>
+
+    <!-- Chats -->
+    <color name="chatsListTitleColor">#696969</color>
+    <color name="chatsPreviewColor">#70828f</color>
+    <color name="chatsAccentColor">#037281</color>
+    <color name="chatBgColorSent">#008292</color>
+    <color name="chatBgColorError">#9dbec1</color>
+    <color name="chatReplyBgColorLight">#eff9fa</color>
+    <color name="chatReplyBgColor">#32b0bf</color>
+    <color name="chatBgColorReceived">#e3ebed</color>
+    <color name="chatReplyBgColorReceived">#32b0bf</color>
+    <color name="chatTimeoutColor">#fff</color>
+    <color name="chatTimeoutReceivedColor">#9d9d9d</color>
+    <color name="chatBubbleColor">#00bcce</color>
+    <color name="chatTextActiveMessageColor">#fff</color>
+    <color name="chatArrowColorInactive">#98c6cb</color>
+    <color name="chatArrowColorActive">#00bcce</color>
+    <color name="chatArrowColorCenter">#fff</color>
+    <color name="chatTextActiveReceivedMessageColor">#414141</color>
+    <color name="chatTextMessageErrorColor">#3097a1</color>
+
+    <!-- Profile Modal -->
+    <color name="profileModalIconBg">#3097a1</color>
+
+    <!-- Tabs -->
+    <color name="menu_icons_black">#151333</color>
+    <color name="menu_icons_gray">#7b7990</color>
+    <color name="blue_darker">#11112d</color>
+    <color name="text_grayed_blue">#8e9cbb</color>
+    <color name="backgroundSearch">#ebeff2</color>
+    <color name="chatBgMessageInput">@null</color>
+
+    <!-- New Theme Colors -->
+    <!-- Brand -->
+    <color name="brand_dark">#0DB9CB</color>
+    <color name="brand_default">#00D3ED</color>
+    <color name="brand_light">@color/brand_default</color>
+    <color name="brand_background">#F6F4F4</color>
+
+    <!-- Neutral -->
+    <color name="neutral_active">#242424</color>
+    <color name="neutral_dark">#373737</color>
+    <color name="neutral_body">#3D3D3D</color>
+    <color name="neutral_weak">#A4A4A4</color>
+    <color name="neutral_disabled">#ADB5BD</color>
+    <color name="neutral_line">#EDEDED</color>
+    <color name="neutral_off_white">#F7F7FC</color>
+    <color name="neutral_white">#FFFFFF</color>
+
+    <!-- Modal -->
+    <color name="modal_overlay">#303338</color>
+
+    <!-- Accent -->
+    <color name="accent_danger">#D12D4B</color>
+    <color name="accent_warning">#FDCF41</color>
+    <color name="accent_success">#2CC069</color>
+    <color name="accent_safe">#FE7751</color>
+
+    <color name="menu_background">#252525</color>
+</resources>

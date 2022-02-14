@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="gone"
+    android:background="@color/photoSelectorBackground">
+
+    <FrameLayout
+        android:id="@+id/photoSelectorToolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
+        app:layout_constraintStart_toStartOf="@id/regGuideStart"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:minHeight="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/photoSelectorBackBtn"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="@dimen/spacing_20"
+                android:contentDescription="photo.selector.btn.cancel"
+                android:src="@drawable/ic_close_20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/toolbarIconColor" />
+
+            <TextView
+                android:id="@+id/photoSelectorEditBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_20"
+                android:text="Edit"
+                android:textColor="@color/toolbarIconColor"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:contentDescription="photo.selector.btn.edit"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/photoSelectorRotateBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_20"
+                android:text="Rotate"
+                android:contentDescription="photo.selector.btn.crop.rotate"
+                android:textColor="@color/toolbarIconColor"
+                android:textSize="@dimen/text_18"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/photoSelectorPhotoCropConfirm"
+                app:layout_constraintHorizontal_bias="1"
+                android:layout_marginEnd="@dimen/spacing_20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/photoSelectorPhotoCropConfirm"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="@dimen/spacing_20"
+                android:src="@drawable/ic_check_icon_01"
+                android:visibility="invisible"
+                android:contentDescription="photo.selector.btn.crop.confirm"
+                app:layout_constraintBottom_toBottomOf="@id/photoSelectorBackBtn"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@id/photoSelectorBackBtn"
+                app:tint="@color/toolbarIconColor" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </FrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/photoSelectorPhotoBg"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_80"
+        android:layout_marginBottom="@dimen/spacing_80"
+        android:background="@color/photoSelectorBackgroundSecondary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/photoSelectorToolbar" />
+
+    <io.xxlabs.messenger.support.view.RoundedCornerLayout
+        android:id="@+id/photoSelectorPhotoHolder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="photo.selector.image.holder"
+        app:layout_constraintBottom_toBottomOf="@id/photoSelectorPhotoBg"
+        app:layout_constraintDimensionRatio="H, 1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/photoSelectorPhotoBg">
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/photoSelectorPhoto"
+            android:contentDescription="photo.selector.image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true" />
+    </io.xxlabs.messenger.support.view.RoundedCornerLayout>
+
+    <com.canhub.cropper.CropImageView
+        android:id="@+id/photoSelectorPhotoCrop"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="invisible"
+        android:contentDescription="photo.selector.crop.editor"
+        app:layout_constraintBottom_toBottomOf="@id/photoSelectorPhotoBg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/photoSelectorPhotoBg" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.065" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent=".6" />
+</androidx.constraintlayout.widget.ConstraintLayout>

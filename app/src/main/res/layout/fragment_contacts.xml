@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/contactsRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    tools:context=".ui.main.contacts.ContactsFragment">
+
+    <include
+        layout="@layout/component_toolbar_generic"
+        tools:visibility="gone" />
+
+    <include
+        layout="@layout/component_network_error_banner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbarGeneric" />
+
+    <io.xxlabs.messenger.support.view.TextInputLayoutXx
+        android:id="@+id/contactsSearchBarLayout"
+        style="@style/InputLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_24"
+        app:endIconMode="clear_text"
+        app:hintEnabled="false"
+        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
+        app:layout_constraintStart_toEndOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/networkStatusLayout"
+        app:layout_constraintVertical_chainStyle="packed">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/contactsSearchBar"
+            style="@style/InputEditText.Search"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/spacing_40"
+            android:layout_gravity="center"
+            android:contentDescription="contacts.input.search"
+            android:hint="@string/search_contacts"
+            android:imeOptions="actionDone"
+            android:inputType="textFilter"
+            android:maxHeight="@dimen/spacing_40" />
+    </io.xxlabs.messenger.support.view.TextInputLayoutXx>
+
+    <TextView
+        android:id="@+id/contactsNewGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/connections_new_group"
+        android:textColor="@color/brand_default"
+        android:textSize="@dimen/text_16"
+        android:drawablePadding="@dimen/spacing_12"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/contactsSearchBarLayout"
+        app:drawableTint="@color/brand_default"
+        app:drawableLeftCompat="@drawable/ic_create_group_24"/>
+
+    <View
+        android:id="@+id/contactsGroupRequestsDivider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/spacing_12"
+        android:background="@color/neutral_line"
+        app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
+        app:layout_constraintStart_toStartOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/contactsNewGroup" />
+
+    <TextView
+        android:id="@+id/contactsRequests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/contacts_requests"
+        android:textColor="@color/brand_default"
+        android:textSize="@dimen/text_16"
+        android:drawablePadding="@dimen/spacing_12"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:clickable="true"
+        android:focusable="true"
+        app:layout_constraintStart_toStartOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/contactsGroupRequestsDivider"
+        app:drawableTint="@color/brand_default"
+        app:drawableLeftCompat="@drawable/ic_mail" />
+
+    <TextView
+        android:id="@+id/contactRequestsCount"
+        android:layout_width="@dimen/spacing_30"
+        android:layout_height="@dimen/spacing_24"
+        android:background="@drawable/bg_btn_white"
+        tools:text="2"
+        android:backgroundTint="@color/brand_default"
+        android:textSize="@dimen/text_16"
+        android:textColor="@color/neutral_white"
+        android:layout_marginStart="@dimen/spacing_12"
+        android:gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        app:layout_constraintStart_toEndOf="@id/contactsRequests"
+        app:layout_constraintBottom_toBottomOf="@id/contactsRequests"
+        app:layout_constraintTop_toTopOf="@id/contactsRequests" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contactsGroupRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingStart="@dimen/spacing_5"
+        android:paddingEnd="@dimen/spacing_5"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:orientation="horizontal"
+        android:scrollbarAlwaysDrawHorizontalTrack="true"
+        android:scrollbarSize="5dp"
+        android:scrollbarStyle="outsideInset"
+        android:scrollbars="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactsRequests"
+        tools:itemCount="7"
+        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        tools:listitem="@layout/list_item_member"
+        tools:orientation="horizontal" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/contactsRecyclerView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_10"
+        android:background="@color/neutral_white"
+        android:padding="@dimen/spacing_10"
+        android:paddingBottom="@dimen/spacing_10"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactsGroupRecyclerView"
+        app:layout_constraintVertical_bias="0"
+        tools:itemCount="15"
+        tools:listitem="@layout/list_item_contact" />
+
+    <TextView
+        android:id="@+id/contactsEmptyTitle"
+        style="@style/XxTextStyle.Bold"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:contentDescription="contacts.empty.text"
+        android:gravity="center"
+        android:paddingStart="@dimen/spacing_20"
+        android:paddingEnd="@dimen/spacing_20"
+        android:text="Add a contact to start messaging"
+        android:textColor="@color/neutral_active"
+        android:textSize="@dimen/text_24"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/contactsAddContactBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactsGroupRecyclerView"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:lineHeight="@dimen/text_28"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/contactsAddContactBtn"
+        style="@style/ButtonStyle.Secondary"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_24"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:layout_marginEnd="@dimen/spacing_24"
+        android:layout_marginBottom="@dimen/spacing_40"
+        android:contentDescription="contacts.btn.add.contact"
+        android:paddingTop="@dimen/spacing_18"
+        android:paddingBottom="@dimen/spacing_18"
+        android:text="Add Contact"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/contactsEmptyTitle"
+        app:layout_constraintVertical_bias="0"
+        tools:visibility="visible" />
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".95" />
+</androidx.constraintlayout.widget.ConstraintLayout>

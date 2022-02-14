@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- disabled state -->
+    <item android:drawable="@drawable/ic_btn_send_inactive" android:state_enabled="false" />
+    <item android:drawable="@drawable/ic_btn_send_light" />
+</selector>

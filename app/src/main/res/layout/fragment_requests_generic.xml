@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/requestsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintVertical_bias="0"
+        tools:itemCount="10"
+        tools:listitem="@layout/list_item_requests" />
+
+    <TextView
+        android:id="@+id/requestsEmptyTitle"
+        style="@style/XxTextStyle.Bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="@dimen/spacing_24"
+        android:contentDescription="requests.empty.text"
+        android:gravity="center"
+        android:paddingStart="@dimen/spacing_20"
+        android:paddingEnd="@dimen/spacing_20"
+        android:text="You have no requests"
+        android:textColor="@color/neutral_active"
+        android:textSize="@dimen/text_24"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/requestsAddContactBtn"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:lineHeight="@dimen/text_28"
+        tools:visibility="visible" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/requestsAddContactBtn"
+        style="@style/ButtonStyle.Secondary"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_24"
+        android:layout_marginTop="@dimen/spacing_20"
+        android:layout_marginEnd="@dimen/spacing_24"
+        android:layout_marginBottom="@dimen/spacing_40"
+        android:contentDescription="requests.empty.btn"
+        android:paddingTop="@dimen/spacing_18"
+        android:paddingBottom="@dimen/spacing_18"
+        android:text="Add Contact"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/requestsEmptyTitle"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:visibility="visible" />
+</androidx.constraintlayout.widget.ConstraintLayout>

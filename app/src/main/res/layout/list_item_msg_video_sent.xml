@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View" />
+        <variable
+            name="listener"
+            type="io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener" />
+        <variable
+            name="message"
+            type="io.xxlabs.messenger.data.room.model.PrivateMessage" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:hapticFeedbackEnabled="true">
+
+        <include
+            layout="@layout/list_item_msg_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/spacing_8"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/itemMsgSentCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:button="@drawable/bg_checkbox_circular"
+            android:clickable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/itemMsgSentHolder"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/itemMsgSentHolder" />
+
+        <ImageView
+            android:id="@+id/itemMsgSentReplyIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_12"
+            android:clickable="false"
+            android:src="@drawable/ic_reply_cell"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/itemMsgSentHolder"
+            app:layout_constraintEnd_toStartOf="@id/itemMsgSentTimestamp"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/itemMsgSentCheckbox"
+            app:layout_constraintTop_toTopOf="@id/itemMsgSentHolder" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/itemMsgSentHolder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/itemMsgHeader"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginTop="@dimen/spacing_14"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:clickable="true"
+            android:descendantFocusability="beforeDescendants"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:longClickable="true"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/itemMsgSentCheckbox"
+            app:layout_constraintTop_toBottomOf="@id/itemMsgHeaderHolder">
+
+            <ImageView
+                android:id="@+id/itemMsgSentReplyIconMsg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="@dimen/spacing_10"
+                android:clickable="false"
+                android:src="@drawable/ic_reply_arrow"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/itemMsgSentFrontBarrier"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1" />
+
+            <androidx.constraintlayout.widget.Barrier
+                android:id="@+id/itemMsgSentFrontBarrier"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:barrierDirection="start"
+                app:constraint_referenced_ids="itemMsgSentUrlLayout, itemMsgSentLayout" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/itemMsgSentLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toTopOf="@id/itemMsgSentUrlLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1"
+                app:layout_constraintStart_toEndOf="@id/itemMsgSentFrontBarrier"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <LinearLayout
+                    android:id="@+id/itemMsgSentReplyLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_10"
+                    android:layout_marginTop="@dimen/spacing_10"
+                    android:layout_marginEnd="@dimen/spacing_10"
+                    android:background="@drawable/component_msg_reply"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toTopOf="@id/videoCardView"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintWidth_min="wrap">
+
+                    <View
+                        android:layout_width="4dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/component_msg_reply"
+                        android:backgroundTint="@color/white" />
+
+                    <LinearLayout
+                        android:id="@+id/itemMsgSentReplyHolder"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/itemMsgSentReplyUsername"
+                            style="@style/XxTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_14"
+                            android:layout_marginTop="@dimen/spacing_12"
+                            android:layout_marginEnd="@dimen/spacing_14"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:textColor="@color/neutral_white"
+                            android:textSize="@dimen/text_10"
+                            tools:text="Devo Mizuhara" />
+
+                        <TextView
+                            android:id="@+id/itemMsgSentReplyText"
+                            style="@style/XxTextStyle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/spacing_14"
+                            android:layout_marginTop="@dimen/spacing_5"
+                            android:layout_marginEnd="@dimen/spacing_14"
+                            android:layout_marginBottom="@dimen/spacing_12"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textColor="@color/neutral_white"
+                            android:textSize="@dimen/text_14"
+                            tools:text="Hk adaadsasdads dffdffdfffdfddfdffddffddffddf dffdfd" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/itemMsgReplyUrlPreviewIcon"
+                        android:layout_width="29dp"
+                        android:layout_height="29dp"
+                        android:layout_marginStart="@dimen/spacing_8"
+                        android:layout_marginEnd="@dimen/spacing_8"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/placeholder_beach"
+                        android:visibility="gone" />
+                </LinearLayout>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/videoCardView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:cardElevation="0dp"
+                    app:cardCornerRadius="@dimen/spacing_16" >
+
+                    <VideoView
+                        android:id="@+id/videoPlayer"
+                        android:layout_width="400dp"
+                        android:layout_height="300dp"
+                        android:clickable="true"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"/>
+
+                    <com.google.android.material.progressindicator.LinearProgressIndicator
+                        android:id="@+id/uploadProgress"
+                        android:layout_width="400dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:progressTint="@color/white"
+                        android:visibility="gone" />
+                </androidx.cardview.widget.CardView>
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/itemMsgSent"
+                    style="@style/XxTextStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_5"
+                    android:layout_marginBottom="@dimen/spacing_7"
+                    android:autoLink="web"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:linksClickable="true"
+                    android:minWidth="@dimen/spacing_30"
+                    android:textColor="@color/chatTextActiveMessageColor"
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toTopOf="@id/itemMsgSentBottomBarrier"
+                    app:layout_constraintEnd_toEndOf="@id/itemMsgSentIcon"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgSentReplyLayout"
+                    app:layout_goneMarginEnd="@dimen/spacing_14"
+                    tools:text="beachth" />
+
+                <TextView
+                    android:id="@+id/itemMsgSentTimestamp"
+                    style="@style/XxTextStyle.SemiBold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/spacing_14"
+                    android:layout_marginEnd="@dimen/spacing_10"
+                    android:layout_marginBottom="@dimen/spacing_10"
+                    android:alpha="0.49"
+                    android:gravity="bottom"
+                    android:textColor="@color/chatTimeoutColor"
+                    android:textSize="@dimen/text_10"
+                    app:layout_constraintBottom_toTopOf="@id/itemMsgSentErrorText"
+                    app:layout_constraintEnd_toStartOf="@id/itemMsgSentIcon"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintWidth_max="wrap"
+                    app:layout_constraintWidth_min="wrap"
+                    app:layout_goneMarginEnd="@dimen/spacing_14"
+                    tools:text="16:45" />
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/itemMsgSentIcon"
+                    android:layout_width="12dp"
+                    android:layout_height="@dimen/spacing_12"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:src="@drawable/ic_lock_white"
+                    app:layout_constraintBottom_toBottomOf="@id/itemMsgSentTimestamp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/itemMsgSentTimestamp" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/itemMsgSentErrorText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_14"
+                    android:layout_marginEnd="@dimen/spacing_14"
+                    android:layout_marginBottom="@dimen/spacing_7"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:text="Message failed. Tap to resend"
+                    android:textColor="@color/brand_dark"
+                    android:textSize="@dimen/text_14"
+                    android:visibility="gone"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="@id/itemMsgSentLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/itemMsgSentBottomBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="top"
+                    app:constraint_referenced_ids="itemMsgSentTimestamp, itemMsgSentIcon" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/itemMsgSentUrlLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_1"
+                android:layout_marginEnd="@dimen/spacing_16"
+                android:background="@drawable/component_msg_sent"
+                android:visibility="gone"
+                app:layout_constrainedWidth="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/itemMsgSentLayout"
+                app:layout_constraintStart_toStartOf="@id/itemMsgSentFrontBarrier"
+                app:layout_constraintTop_toBottomOf="@id/itemMsgSentLayout">
+
+                <TextView
+                    android:id="@+id/itemMsgSentPreviewTitle"
+                    style="@style/XxTextStyle.Bold"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:textColor="@color/chatTextActiveMessageColor"
+                    android:textSize="@dimen/text_12"
+                    app:layout_constraintEnd_toStartOf="@id/itemMsgSentPreviewIcon"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="FunTimes - Awesome Beach Getaways Etc" />
+
+                <TextView
+                    android:id="@+id/itemMsgSentDescription"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/itemMsgSentPreviewTitle"
+                    android:layout_marginStart="@dimen/spacing_12"
+                    android:layout_marginTop="@dimen/spacing_5"
+                    android:layout_marginEnd="@dimen/spacing_12"
+                    android:layout_marginBottom="@dimen/spacing_16"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textColor="@color/chatTextActiveMessageColor"
+                    android:textSize="@dimen/text_12"
+                    app:layout_constrainedWidth="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/itemMsgSentPreviewBarrier"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/itemMsgSentPreviewTitle"
+                    app:layout_constraintVertical_chainStyle="packed"
+                    tools:text="Page description ad ddssa dsdsd dssdsdddsdssadds ddsdsdssdds" />
+
+                <ImageView
+                    android:id="@+id/itemMsgSentPreviewIcon"
+                    android:layout_width="30dp"
+                    android:layout_height="0dp"
+                    android:layout_marginEnd="@dimen/spacing_8"
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgSentPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:src="@drawable/placeholder_beach" />
+
+                <androidx.core.widget.ContentLoadingProgressBar
+                    android:id="@+id/itemMsgSentPreviewLoading"
+                    style="?android:attr/progressBarStyleSmall"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginEnd="@dimen/spacing_8"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerInside"
+                    android:visibility="gone"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgSentPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.constraintlayout.widget.Barrier
+                    android:id="@+id/itemMsgSentPreviewBarrier"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:barrierDirection="left"
+                    app:constraint_referenced_ids="itemMsgSentPreviewIcon, itemMsgSentPreviewLoading"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintDimensionRatio="H, 1:1"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1"
+                    app:layout_constraintStart_toEndOf="@id/itemMsgSentPreviewTitle"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

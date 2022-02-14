@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/component_toolbar_generic" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/profileRegistrationDialogRoot"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:descendantFocusability="beforeDescendants"
+        android:focusable="false"
+        android:focusableInTouchMode="false">
+
+        <ImageView
+            android:id="@+id/profileRegistrationDialogIcon"
+            android:layout_width="@dimen/spacing_80"
+            android:layout_height="@dimen/spacing_80"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/spacing_40"
+            android:background="@drawable/bg_rectangle_rounded_corners"
+            android:backgroundTint="@color/brand_default"
+            android:src="@drawable/ic_mail_circle"
+            android:contentDescription="ud.profile.dialog.icon"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationDialogTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0"
+            app:layout_constraintVertical_chainStyle="packed"/>
+
+        <TextView
+            android:id="@+id/profileRegistrationDialogTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_28"
+            android:contentDescription="ud.profile.dialog.title"
+            android:gravity="center_horizontal"
+            android:textColor="@color/neutral_active"
+            android:textSize="25sp"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationDialogSubtitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileRegistrationDialogIcon"
+            app:layout_goneMarginTop="@dimen/spacing_12"
+            tools:text="Add Email" />
+
+        <TextView
+            android:id="@+id/profileRegistrationDialogSubtitle"
+            style="@style/XxTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_54"
+            android:layout_marginTop="@dimen/spacing_10"
+            android:layout_marginEnd="@dimen/spacing_54"
+            android:contentDescription="ud.profile.dialog.title.description"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/neutral_body"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationFactInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileRegistrationDialogTitle"
+            app:layout_goneMarginTop="@dimen/spacing_12"
+            app:lineHeight="@dimen/text_18"
+            tools:text="Add your email address"
+            tools:visibility="gone" />
+
+        <TextView
+            android:id="@+id/profileRegistrationFactInputHint"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:layout_marginBottom="@dimen/spacing_10"
+            android:contentDescription="ud.profile.dialog.text.hint"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.027"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationFactInputLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Email"
+            tools:visibility="gone" />
+
+        <io.xxlabs.messenger.support.view.TextInputLayoutXx
+            android:id="@+id/profileRegistrationFactInputLayout"
+            style="@style/InputLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_8"
+            android:layout_marginTop="@dimen/spacing_64"
+            android:layout_marginEnd="@dimen/spacing_24"
+            app:endIconMode="clear_text"
+            app:hintEnabled="false"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationResendBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/profileRegistrationPhoneCode"
+            app:layout_constraintTop_toBottomOf="@id/profileRegistrationDialogSubtitle"
+            app:layout_goneMarginStart="@dimen/spacing_24"
+            app:layout_goneMarginTop="@dimen/spacing_80">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/profileRegistrationFactInput"
+                style="@style/InputEditText"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_40"
+                android:contentDescription="ud.profile.dialog.input"
+                android:focusable="true"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:lines="1"
+                android:maxHeight="@dimen/spacing_40"
+                android:maxLines="1"
+                android:textSize="@dimen/text_17"
+                tools:hint="Email address" />
+        </io.xxlabs.messenger.support.view.TextInputLayoutXx>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/profileRegistrationPhoneCode"
+            style="@style/InputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="ud.profile.dialog.input.dial.code"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="🇺🇸 +1"
+            android:maxLength="10"
+            android:minEms="4"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/profileRegistrationFactInputLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/profileRegistrationFactInputLayout"
+            app:layout_constraintVertical_bias="0.0"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/profileRegistrationResendBtn"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.027"
+            android:lineSpacingExtra="6sp"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toTopOf="@id/profileRegistrationDialogPositiveBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileRegistrationFactInputLayout"
+            app:layout_goneMarginTop="@dimen/spacing_20"
+            tools:text="Resend Code (59 secs)" />
+
+        <Button
+            android:id="@+id/profileRegistrationDialogPositiveBtn"
+            style="@style/ButtonStyle.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/registration_horizontal_margin"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/registration_horizontal_margin"
+            android:layout_marginBottom="@dimen/registration_vertical_margin"
+            android:contentDescription="ud.profile.dialog.btn.confirm"
+            android:enabled="false"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_20"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_goneMarginTop="@dimen/spacing_50"
+            tools:text="Next" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

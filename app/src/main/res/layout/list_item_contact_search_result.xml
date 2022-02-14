@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/background"
+    android:minHeight="@dimen/spacing_64"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:paddingTop="@dimen/spacing_16"
+        android:paddingBottom="@dimen/spacing_16"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <io.xxlabs.messenger.support.view.SquaredCornerLayout
+            android:id="@+id/udSearchResultPhotoBg"
+            android:layout_width="@dimen/spacing_42"
+            android:layout_height="@dimen/spacing_42"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/udSearchResultPhotoText"
+                style="@style/XxTextStyle.Bold"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerInParent="true"
+                android:gravity="center"
+                android:textColor="@color/neutral_white"
+                android:textSize="@dimen/text_14" />
+
+            <ImageView
+                android:id="@+id/udSearchResultPhoto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop" />
+        </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:layout_toEndOf="@id/udSearchResultPhotoBg"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/udSearchResultNameText"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:lineHeight="@dimen/spacing_20"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintBottom_toBottomOf="@id/contactPhotoHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/contactPhotoHolder"
+                app:layout_constraintTop_toTopOf="@id/contactPhotoHolder"
+                tools:text="Name" />
+
+            <TextView
+                android:id="@+id/udSearchResultUsernameText"
+                style="@style/XxTextStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:textColor="@color/neutral_disabled"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintBottom_toBottomOf="@id/contactPhotoHolder"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0"
+                app:layout_constraintStart_toEndOf="@id/contactPhotoHolder"
+                app:layout_constraintTop_toTopOf="@id/contactPhotoHolder"
+                tools:text="email@email.com" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/udSearchResultDivider"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:layout_alignBottom="@id/udSearchResultPhotoBg"
+        android:layout_marginStart="@dimen/spacing_26"
+        android:layout_marginEnd="@dimen/spacing_26"
+        android:background="@color/neutral_line" />
+</LinearLayout>

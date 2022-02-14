@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideMiddle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".95" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideTop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.05" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/regGuideStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent=".05" />
+
+    <ImageView
+        android:id="@+id/networkMapImage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_32"
+        android:layout_marginBottom="@dimen/spacing_54"
+        android:adjustViewBounds="true"
+        android:scaleType="fitXY"
+        android:src="@drawable/map"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintBottom_toTopOf="@id/networkMapBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addContactDesc" />
+
+    <TextView
+        android:id="@+id/addContactDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="11dp"
+        android:text="@string/network_description"
+        android:textColor="@color/colorTime"
+        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
+        app:layout_constraintStart_toEndOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/networkTitle" />
+
+    <TextView
+        android:id="@+id/networkTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/network_title"
+        android:textAlignment="textStart"
+        android:textSize="34sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
+        app:layout_constraintStart_toEndOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/regGuideTop" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/networkMapBtn"
+        style="@style/XxButtonStyle.Teal"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="@string/dashboard_btn_description"
+        android:layout_marginBottom="@dimen/spacing_32"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
+        app:layout_constraintStart_toEndOf="@id/regGuideStart"
+        app:layout_constraintTop_toBottomOf="@id/networkMapImage" />
+</androidx.constraintlayout.widget.ConstraintLayout>

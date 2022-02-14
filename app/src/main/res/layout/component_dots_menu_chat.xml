@@ -1,0 +1,158 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menuChatPopup"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_rounded_top_edges_short_dark"
+    android:backgroundTint="@color/background"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:padding="@dimen/spacing_16"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:id="@+id/menuChatPopupViewContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:contentDescription="chat.menu.dots.view"
+        android:paddingTop="@dimen/spacing_5"
+        android:paddingBottom="@dimen/spacing_5">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_14"
+            android:layout_height="wrap_content"
+            app:tint="@color/neutral_active"
+            android:src="@drawable/ic_contact_light" />
+
+        <TextView
+            android:id="@+id/menuChatPopupViewContactTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="View Contact"
+            android:textColor="@color/neutral_body"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuChatPopupSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_5"
+        android:paddingBottom="@dimen/spacing_5"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_10"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_search_mini" />
+
+        <TextView
+            android:id="@+id/menuChatPopupSearchTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Chat search"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuChatPopupMute"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_5"
+        android:paddingBottom="@dimen/spacing_5"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_10"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_mute" />
+
+        <TextView
+            android:id="@+id/menuChatPopupMuteTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Mute"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuChatPopupClearChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:contentDescription="chat.menu.dots.clear"
+        android:paddingTop="@dimen/spacing_5"
+        android:paddingBottom="@dimen/spacing_5">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_14"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_chat"
+            app:tint="@color/neutral_active" />
+
+        <TextView
+            android:id="@+id/menuChatPopupClearChatTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Clear chat"
+            android:textColor="@color/tealThemeColor"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/menuChatPopupDeleteContact"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_5"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/spacing_5"
+        android:paddingBottom="@dimen/spacing_5"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="@dimen/spacing_14"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_delete_contact" />
+
+        <TextView
+            android:id="@+id/menuChatPopupDeleteContactTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_36"
+            android:text="Delete contact"
+            android:textColor="@color/redTheme"
+            android:textSize="@dimen/text_16"
+            app:lineHeight="@dimen/text_18" />
+    </LinearLayout>
+</LinearLayout>

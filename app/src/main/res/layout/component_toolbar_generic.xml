@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbarGeneric"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/transparent"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
+    tools:showIn="@layout/component_country_fullscreen">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbarGenericInner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:minHeight="?attr/actionBarSize"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/toolbarGenericBackBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_5"
+            android:contentDescription="toolbar.btn.back"
+            android:minWidth="@dimen/spacing_24"
+            android:minHeight="@dimen/spacing_24"
+            android:padding="@dimen/spacing_12"
+            android:src="@drawable/ic_back_24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/neutral_active" />
+
+        <TextView
+            android:id="@+id/toolbarGenericTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:contentDescription="toolbar.title"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/toolbarGenericSubtitle"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/toolbarGenericBackBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Title" />
+
+        <TextView
+            android:id="@+id/toolbarGenericSubtitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_8"
+            android:layout_marginEnd="@dimen/spacing_18"
+            android:contentDescription="toolbar.title"
+            android:textColor="@color/neutral_disabled"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/toolbarGenericActionText"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/toolbarGenericTitle"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="(1/11)" />
+
+        <TextView
+            android:id="@+id/toolbarGenericActionText"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_10"
+            android:contentDescription="toolbar.btn.text"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:padding="@dimen/spacing_10"
+            android:textColor="@color/selector_btn_default"
+            android:textSize="@dimen/text_16"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Skip"
+            tools:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/toolbarGenericActionBtnLeft"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:contentDescription="toolbar.btn.image"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/toolbarGenericActionBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_contact_light"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/toolbarGenericActionBtn"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_20"
+            android:contentDescription="toolbar.btn.image"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_contact_light"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/toolbarGenericLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</FrameLayout>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/qrCodeRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/neutral_active">
+
+    <ImageView
+        android:id="@+id/qrCodeBackBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/spacing_10"
+        android:layout_marginTop="@dimen/spacing_38"
+        android:contentDescription="qrcode.btn.back"
+        android:padding="@dimen/spacing_12"
+        android:src="@drawable/ic_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="@dimen/spacing_16"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qrCodeBackBtn">
+
+        <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/qrCodeAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:elevation="0dp">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/qrCodeTabs"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                app:tabGravity="center"
+                app:tabIndicatorFullWidth="false"
+                app:tabIndicatorHeight="@dimen/spacing_5"
+                app:tabInlineLabel="true"
+                app:tabMaxWidth="0dp"
+                app:tabMode="fixed"
+                app:tabPaddingBottom="@dimen/spacing_5"
+                app:tabPaddingEnd="@dimen/spacing_24"
+                app:tabPaddingStart="@dimen/spacing_24"
+                app:tabTextAppearance="@style/TabTextStyle"
+                app:tabIndicatorGravity="top"/>
+        </com.google.android.material.appbar.AppBarLayout>
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/qrCodeViewPager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

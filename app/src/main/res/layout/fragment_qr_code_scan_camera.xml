@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/cameraRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.camera.view.PreviewView
+        android:id="@+id/cameraPreview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:scaleType="fitCenter" />
+
+    <io.xxlabs.messenger.ui.main.qrcode.zxing.ViewFinderOverlay
+        android:id="@+id/cameraOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/cameraNoPermission"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="Camera permission is required in order to use this feature. Please, click here to change your settings."
+        android:textColor="@color/background"
+        android:textStyle="bold" />
+
+    <ImageView
+        android:id="@+id/cameraFlashControl"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal|top"
+        android:layout_margin="@dimen/spacing_18"
+        android:background="@drawable/component_flash_bg"
+        android:contentDescription="qrcode.scan.flash"
+        android:padding="12dp"
+        android:src="@drawable/ic_flash_on" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center"
+        android:layout_marginBottom="@dimen/spacing_16"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/XxTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="Sending as"
+            android:textColor="@color/background"
+            android:textSize="@dimen/text_16" />
+
+        <TextView
+            android:id="@+id/cameraUsername"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:contentDescription="qrcode.scan.username.text"
+            android:gravity="center"
+            android:textColor="@color/background"
+            android:textSize="@dimen/text_28"
+            tools:text="UserA" />
+    </LinearLayout>
+</FrameLayout>

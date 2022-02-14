@@ -1,0 +1,145 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menuItemLayout"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="top"
+    android:orientation="horizontal">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/menuItemBg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/component_menu_bubble"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/menuItemResend"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_26"
+                    android:layout_height="@dimen/spacing_26"
+                    android:layout_marginLeft="@dimen/spacing_16"
+                    android:layout_marginRight="@dimen/spacing_16"
+                    android:src="@drawable/ic_refresh_black_24dp"
+                    app:tint="?attr/colorAccent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_16"
+                    android:text="Resend"
+                    android:textColor="@color/background"
+                    android:textSize="@dimen/text_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/menuItemReply"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_26"
+                    android:layout_height="@dimen/spacing_26"
+                    android:layout_marginLeft="@dimen/spacing_16"
+                    android:layout_marginRight="@dimen/spacing_16"
+                    android:src="@drawable/ic_reply"
+                    app:tint="?attr/colorAccent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_16"
+                    android:text="Reply to"
+                    android:textColor="@color/background"
+                    android:textSize="@dimen/text_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/menuItemCopy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_24"
+                    android:layout_height="@dimen/spacing_24"
+                    android:layout_marginLeft="@dimen/spacing_16"
+                    android:layout_marginRight="@dimen/spacing_16"
+                    android:src="@drawable/ic_content_copy_black_24dp"
+                    app:tint="?attr/colorAccent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_16"
+                    android:text="Copy"
+                    android:textColor="@color/background"
+                    android:textSize="@dimen/text_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/menuItemDelete"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="9dp"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp">
+
+                <ImageView
+                    android:layout_width="@dimen/spacing_26"
+                    android:layout_height="@dimen/spacing_26"
+                    android:layout_marginLeft="@dimen/spacing_16"
+                    android:layout_marginRight="@dimen/spacing_16"
+                    android:src="@drawable/ic_delete_chat"
+                    app:tint="?attr/colorAccent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/spacing_16"
+                    android:layout_marginEnd="@dimen/spacing_16"
+                    android:text="Delete"
+                    android:textColor="@color/background"
+                    android:textSize="@dimen/text_16" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

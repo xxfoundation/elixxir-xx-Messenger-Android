@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/udSearch"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true">
+
+        <include layout="@layout/component_toolbar_generic" />
+
+        <LinearLayout
+            android:id="@+id/udSearchUsernameLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:contentDescription="ud.search.selection.username"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_12"
+            app:layout_constraintEnd_toStartOf="@id/udSearchEmailLayout"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toStartOf="@id/udSearchGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/toolbarGeneric">
+
+            <ImageView
+                android:id="@+id/udSearchUsernameIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="@dimen/spacing_20"
+                android:src="@drawable/ic_contact_light" />
+
+            <TextView
+                android:id="@+id/udSearchUsernameText"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_8"
+                android:text="Username"
+                android:textColor="@color/neutral_dark"
+                android:textSize="@dimen/text_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/udSearchEmailLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:gravity="center_horizontal"
+            android:contentDescription="ud.search.selection.email"
+            android:orientation="horizontal"
+            android:padding="@dimen/spacing_12"
+            app:layout_constraintEnd_toStartOf="@id/udSearchPhoneLayout"
+            app:layout_constraintStart_toEndOf="@id/udSearchUsernameLayout"
+            app:layout_constraintTop_toTopOf="@id/udSearchUsernameLayout">
+
+            <ImageView
+                android:id="@+id/udSearchEmailIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_mail"
+                app:tint="@color/neutral_dark" />
+
+            <TextView
+                android:id="@+id/udSearchEmailText"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_8"
+                android:text="Email"
+                android:textColor="@color/neutral_dark"
+                android:textSize="@dimen/text_14" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/udSearchPhoneLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:contentDescription="ud.search.selection.phone"
+            android:padding="@dimen/spacing_12"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintStart_toEndOf="@id/udSearchEmailLayout"
+            app:layout_constraintTop_toTopOf="@id/udSearchEmailLayout">
+
+            <ImageView
+                android:id="@+id/udSearchPhoneIcon"
+                android:layout_width="@dimen/spacing_20"
+                android:layout_height="@dimen/spacing_20"
+                android:src="@drawable/ic_phone"
+                app:tint="@color/neutral_dark" />
+
+            <TextView
+                android:id="@+id/udSearchPhoneText"
+                style="@style/XxTextStyle.SemiBold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_8"
+                android:text="Phone"
+                android:textColor="@color/neutral_dark"
+                android:textSize="@dimen/text_14" />
+        </LinearLayout>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/udSearchInput"
+            style="@style/InputEditText.Search.Squared"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/spacing_40"
+            android:contentDescription="ud.search.input.default"
+            android:layout_marginStart="@dimen/spacing_8"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:hint="@string/search_hint"
+            android:imeOptions="actionSearch"
+            android:inputType="textNoSuggestions"
+            android:lines="1"
+            android:maxHeight="@dimen/spacing_40"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintStart_toEndOf="@id/udSearchInputPhoneCode"
+            app:layout_constraintTop_toBottomOf="@id/udSearchBarrier"/>
+
+        <androidx.appcompat.widget.AppCompatEditText
+            android:id="@+id/udSearchInputPhoneCode"
+            style="@style/InputEditText"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:contentDescription="ud.search.input.dial.code"
+            android:cursorVisible="false"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:hint="🇺🇸 +1"
+            android:maxLength="10"
+            android:minEms="4"
+            android:textColor="@color/textInputFieldActive"
+            android:textSize="@dimen/text_14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/udSearchInput"
+            app:layout_constraintStart_toStartOf="@id/udSearchGuideStart"
+            app:layout_constraintTop_toTopOf="@id/udSearchInput" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/udSearchLoading"
+            style="@style/XxProgressBarCircularBlue"
+            android:layout_width="@dimen/spacing_20"
+            android:layout_height="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_16"
+            app:layout_constraintBottom_toBottomOf="@id/udSearchInput"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintTop_toTopOf="@id/udSearchInput" />
+
+        <TextView
+            android:id="@+id/udSearchResultsTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:paddingStart="@dimen/spacing_24"
+            android:paddingTop="@dimen/spacing_5"
+            android:paddingEnd="@dimen/spacing_24"
+            android:paddingBottom="@dimen/spacing_5"
+            android:text="Users"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_24"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/udSearchResultsRecyclerView"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintStart_toStartOf="@id/udSearchGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udSearchInput"
+            app:layout_constraintVertical_bias="0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/udSearchResultsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_34"
+            android:layout_marginBottom="@dimen/spacing_16"
+            android:background="@color/backgroundSecondary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/udSearchResultsTitle"
+            app:layout_constraintVertical_bias="0"
+            tools:itemCount="2"
+            tools:listitem="@layout/list_item_contact_search_result" />
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/udSearchBarrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="udSearchUsernameLayout, udSearchEmailLayout, udSearchPhoneLayout"
+            tools:layout_editor_absoluteY="121dp" />
+
+
+        <TextView
+            android:id="@+id/udSearchInputMiddleMessage"
+            style="@style/XxTextStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/spacing_34"
+            android:layout_marginTop="156dp"
+            android:clickable="true"
+            android:contentDescription="ud.search.empty.text"
+            android:drawableBottom="@drawable/ic_outline_info_24"
+            android:focusable="true"
+            android:gravity="center_horizontal"
+            android:letterSpacing="0.01"
+            android:text="@string/search_placeholder_text"
+            android:textColor="@color/neutral_body"
+            android:textSize="@dimen/text_18"
+            android:textStyle="normal"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintStart_toStartOf="@id/udSearchGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udSearchInput" />
+
+        <TextView
+            android:id="@+id/udSearchInputEmptyMessage"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_50"
+            android:gravity="center"
+            android:letterSpacing="0.01"
+            android:textColor="@color/neutral_body"
+            android:textSize="@dimen/text_14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/udSearchGuideEnd"
+            app:layout_constraintStart_toStartOf="@id/udSearchGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/udSearchInput"
+            app:layout_constraintVertical_bias="0.2"
+            tools:text="Abcdef" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udSearchGuideStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udSearchGuideMiddle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/udSearchGuideEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".95" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>
