@@ -87,6 +87,3 @@ crashlytics-build.properties
 fabric.properties
 /config/
 /lint/
-
-# Certificates
-*.crt

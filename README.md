@@ -4,12 +4,32 @@
 ***Device Orientation:*** Portrait<br>
 ***API Target:*** Android 26+ (Oreo)
 
+## Setup
+Clone this repository and import into **Android Studio**
+```bash
+git clone git@git.xx.network:elixxir/client-android.git
+```
+
 ## Build variants
 Use the Android Studio *Build Variants* button to choose between **local-ndf**,**mock-env**, **prod-ndf** and **betanet** flavors combined with debug and release build types.
 - `mainNet:` Production build on MainNet
 - `mainNetDebug:` Debuggable build for use during development on MainNet
 - `releaseNet:` Debuggable build for use during development on the ReleaseNet network
 - `mock:` Mock environment to test UI only
+
+## Manual Deploy
+### Android Studio
+1. The app currently has a dependency on Firebase Crashlytics and Firebase Cloud Messaging. You will have to either set up your
+own Firebase Project [here](https://firebase.google.com/docs/android/setup) or remove Firebase
+from the project by follow the steps below.
+2. In Android Studio Menu, click Build > Generate Signed Bundle/APK to create an APK you can deploy on an Android device. Create a new keystore if necessary.
+
+### Removing Firebase dependency
+1. Remove id("com.google.gms.google-services") from build.gradle.kts
+2. Remove all Firebase references from build.gradle.kts
+3. In Android Studio Menu, click Build > Make Project. The build will fail, as Firebase
+references no longer compile. You may remove each reference that is found in Build Output.
+
 
 ## Architecture
 1. This app uses [MVVM architecture](https://developer.android.com/jetpack/guide) with dependency injection via [Dagger2](https://github.com/google/dagger)
