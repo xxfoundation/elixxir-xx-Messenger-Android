@@ -55,7 +55,8 @@ interface BaseRepository {
     //  Callbacks ============================================================================
     fun registerAuthCallback(
         onContactReceived: ((contact: ByteArray) -> Unit),
-        onConfirmationReceived: ((contact: ByteArray) -> Unit)
+        onConfirmationReceived: ((contact: ByteArray) -> Unit),
+        onResetReceived: ((contact: ByteArray) -> Unit)
     ): Single<Boolean>
 
     fun registerNetworkHealthCb(networkHealthCallback: NetworkHealthCallback): Single<Boolean>

@@ -85,7 +85,8 @@ class RegistrationWelcomeFragment : Fragment(), Injectable {
     }
 
     private fun displayWelcomeInfoDialog() {
-        InfoDialog(ui.welcomeDialogUI).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui.welcomeDialogUI)
+            .show(requireActivity().supportFragmentManager, null)
         ui.onWelcomeInfoHandled()
     }
 

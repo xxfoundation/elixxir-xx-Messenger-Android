@@ -39,12 +39,17 @@ data class ContactData(
         get() = if (nickname.isNotEmpty()) nickname else username
 
     override val initials: String
-        get() = if (nickname.isNotEmpty()) {
-            val splitName = nickname.split(" ")
-            if (splitName.size > 1) splitName[0][0].uppercase() + splitName[1][0].uppercase()
-            else nickname.substring(0, 2).uppercase()
-        } else {
-            username.substring(0, 2).uppercase()
+        get() = displayName.let {
+            try {
+                val splitName = it.split(" ")
+                if (splitName.size > 1) {
+                    splitName[0][0].uppercase() + splitName[1][0].uppercase()
+                } else {
+                    it.substring(0, 2).uppercase()
+                }
+            } catch(e: Exception) {
+                "??"
+            }
         }
 
     override fun equals(other: Any?): Boolean {

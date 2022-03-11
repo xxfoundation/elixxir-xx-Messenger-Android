@@ -160,7 +160,8 @@ class ClientMockRepository(
     //  Callbacks ============================================================================
     override fun registerAuthCallback(
         onContactReceived: (contact: ByteArray) -> Unit,
-        onConfirmationReceived: (contact: ByteArray) -> Unit
+        onConfirmationReceived: (contact: ByteArray) -> Unit,
+        onResetReceived: (contact: ByteArray) -> Unit
     ): Single<Boolean> {
         return Single.create {
             it.onSuccess(true)

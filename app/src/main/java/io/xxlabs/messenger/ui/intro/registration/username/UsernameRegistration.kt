@@ -16,6 +16,7 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.dialog.info.SpanConfig
 import javax.inject.Inject
+import kotlin.random.Random.Default.nextInt
 
 /**
  * Encapsulates username registration logic.
@@ -30,6 +31,14 @@ class UsernameRegistration @Inject constructor(
     override val usernameTitle: Spanned = getSpannableTitle()
     override val username = MutableLiveData("")
     override val maxUsernameLength: Int = MAX_USERNAME_LENGTH
+    // Required by Play Store for Google app review
+    private val demoAccount: String
+        get() {
+            return (1..MAX_USERNAME_LENGTH)
+                .map { nextInt(0, DEMO_ACCT_CHARS.size) }
+                .map(DEMO_ACCT_CHARS::get)
+                .joinToString("")
+        }
 
     override val usernameError: LiveData<String?> get() = error
     private val error = MutableLiveData<String?>(null)
@@ -71,6 +80,9 @@ class UsernameRegistration @Inject constructor(
     override val usernameNavigateNextStep: LiveData<String?> get() = navigateNextStep
     private val navigateNextStep = MutableLiveData<String?>(null)
 
+    override val usernameNavigateDemo: LiveData<Boolean> get() = navigateDemoAcct
+    private val navigateDemoAcct = MutableLiveData(false)
+
     override val usernameFilters: Array<InputFilter> get() =
         arrayOf(
             InputFilter { source, start, end, _, _, _ ->
@@ -90,9 +102,12 @@ class UsernameRegistration @Inject constructor(
 
     override fun onUsernameNextClicked() {
         disableUI()
-        username.value?.let {
-            if (it.isValidUsername()) registerUsername(it)
-            else enableUI()
+        username.value?.apply {
+            when {
+                isPlayStoreDemoAccount() -> registerUsername(demoAccount, true)
+                isValidUsername() -> registerUsername(this)
+                else -> enableUI()
+            }
         } ?: enableUI()
     }
 
@@ -108,7 +123,11 @@ class UsernameRegistration @Inject constructor(
     override fun onUsernameNavigateHandled() {
         username.value = null
         navigateNextStep.value = null
+        navigateDemoAcct.value = false
     }
+
+    private fun String?.isPlayStoreDemoAccount(): Boolean =
+        this.equals(PLAY_STORE_DEMO_USERNAME, true)
 
     private fun String?.isValidUsername(): Boolean {
         if (isNullOrEmpty() || !isMinimumLength()) {
@@ -135,7 +154,7 @@ class UsernameRegistration @Inject constructor(
         error.value = application.getString(R.string.registration_error_username_invalid)
     }
 
-    private fun registerUsername(username: String) {
+    private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
         repo.registerUdUsername(username)
             .subscribeOn(scheduler.single)
             .observeOn(scheduler.main)
@@ -145,7 +164,7 @@ class UsernameRegistration @Inject constructor(
                 }
                 enableUI()
             }.doOnSuccess {
-                onSuccessfulRegistration(username)
+                onSuccessfulRegistration(username, isDemoAcct)
             }.subscribe()
     }
 
@@ -153,10 +172,11 @@ class UsernameRegistration @Inject constructor(
         error.postValue(bindingsErrorMessage(Exception(errorMsg)))
     }
 
-    private fun onSuccessfulRegistration(username: String) {
+    private fun onSuccessfulRegistration(username: String, isDemoAcct: Boolean) {
         preferences.name = username
         enableUI()
-        navigateNextStep.value = username
+        if (isDemoAcct) navigateDemoAcct.value = true
+        else navigateNextStep.value = username
     }
 
     private fun getSpannableTitle(): Spanned {
@@ -179,6 +199,8 @@ class UsernameRegistration @Inject constructor(
         private const val MAX_USERNAME_LENGTH = 32
         private const val USERNAME_FILTER_REGEX = "[^a-zA-Z0-9_\\-+@.#]*\$"
         private const val USERNAME_VALIDATION_REGEX = "^[a-zA-Z0-9][a-zA-Z0-9_\\-+@.#]*[a-zA-Z0-9]\$"
+        private const val PLAY_STORE_DEMO_USERNAME = "GPlayStoreDemoAcc"
+        private val DEMO_ACCT_CHARS: List<Char> = ('a'..'z') + ('0'..'9')
     }
 }
 

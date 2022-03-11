@@ -203,7 +203,8 @@ abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
 
     private fun showWebViewDialog(url: String) {
         val ui = WebViewDialogUI.create(url, null)
-        WebViewDialog(ui).show(requireActivity().supportFragmentManager, null)
+        WebViewDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
         uiController.onShowMixHandled()
     }
 

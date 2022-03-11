@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.google.firebase.crashlytics.ktx.crashlytics
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ChatMessage
@@ -45,6 +47,10 @@ class PrivateMessagesFragment :
     IKSEditText.IKSEditTextListener
 {
 
+    private val contactId: ByteArray by lazy {
+        requireArguments().getByteArray("contact_id")!!
+    }
+
     /* ViewModels */
 
     @Inject
@@ -53,7 +59,7 @@ class PrivateMessagesFragment :
     private val chatViewModel: PrivateMessagesViewModel by viewModels {
         PrivateMessagesViewModel.provideFactory(
             chatViewModelFactory,
-            requireArguments().getByteArray("contact_id")!!
+            contactId
         )
     }
     override val uiController: ChatMessagesUIController<PrivateMessage>
@@ -243,8 +249,8 @@ class PrivateMessagesFragment :
     override fun newMessageArrivedInOtherChat(lastMessage: ChatMessage): Boolean {
         return if (lastMessage.unread) {
             (lastMessage as? PrivateMessage)?.let {
-                !it.sender.contentEquals(chatViewModel.contact.userId)
-                        && !it.receiver.contentEquals(chatViewModel.contact.userId)
+                !it.sender.contentEquals(contactId)
+                        && !it.receiver.contentEquals(contactId)
             } ?: true
         } else false
     }
@@ -307,9 +313,13 @@ class PrivateMessagesFragment :
     }
 
     private fun releaseMediaRecorder() {
-        mediaRecorder?.stop()
-        mediaRecorder?.release()
-        mediaRecorder = null
+        try {
+            mediaRecorder?.stop()
+            mediaRecorder?.release()
+            mediaRecorder = null
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
     }
 
     private fun initPreviewPlayer() {
@@ -342,8 +352,8 @@ class PrivateMessagesFragment :
     }
 
     private fun menuActionOpenContactProfile() {
-        Timber.v("Sending contact id ${chatViewModel.contact.userId} || ${chatViewModel.contact.userId.toBase64String()}")
-        val bundle = bundleOf("contact_id" to chatViewModel.contact.userId)
+        Timber.v("Sending contact id ${contactId} || ${contactId.toBase64String()}")
+        val bundle = bundleOf("contact_id" to contactId)
 
         if (findNavController().isFragmentInBackStack(R.id.contactDetailsFragment)) {
             findNavController().navigateUp()

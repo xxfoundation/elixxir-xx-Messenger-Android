@@ -7,17 +7,21 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentCreateGroupDialogBinding
 
-class CreateGroupDialog(
-    private val dialogUI: CreateGroupDialogUI
-) : BottomSheetDialogFragment(),
-    CreateGroupDialogUI by dialogUI,
-    CreateGroupDialogController {
-
+class CreateGroupDialog :
+    BottomSheetDialogFragment(),
+    CreateGroupDialogController
+{
     private lateinit var binding: ComponentCreateGroupDialogBinding
+    private val dialogUI: CreateGroupDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as CreateGroupDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,13 +37,18 @@ class CreateGroupDialog(
         binding.ui = this
         binding.actionDialogButton.apply {
             setOnClickListener {
-                dialogUI.buttonClick(name, dialogUI.description)
+                dialogUI.buttonClick(name, description)
                 dismiss()
             }
         }
 
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
     }
 
     override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
@@ -55,6 +64,11 @@ class CreateGroupDialog(
             field = value
         }
 
+    override var description: String? = null
+    override val buttonClick get() = dialogUI.buttonClick
+    override val infoClick get() = dialogUI.infoClick
+    override val body get() = dialogUI.body
+
     override val nameError: LiveData<String?> get() = _nameError
     private val _nameError = MutableLiveData<String>()
 
@@ -67,5 +81,13 @@ class CreateGroupDialog(
     companion object {
         private const val MAX_GROUP_NAME_LENGTH = 20
         private const val MAX_DESCRIPTION_LENGTH = 64
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: CreateGroupDialogUI): CreateGroupDialog =
+            CreateGroupDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

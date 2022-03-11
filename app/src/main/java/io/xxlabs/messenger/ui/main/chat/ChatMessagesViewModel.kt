@@ -12,6 +12,7 @@ import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.data.ReplyWrapper
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.data.room.model.GroupMessage
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
@@ -21,6 +22,7 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.ALL_MESSAGES
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.MAX_REPLY_PREVIEW_LENGTH
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import kotlin.NoSuchElementException
@@ -202,7 +204,6 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
      */
     override val recordingDuration: LiveData<Int> get() = _recordingDuration
     protected abstract val _recordingDuration: MutableLiveData<Int>
-    protected var recordingTimer: Timer? = null
     protected val verifyingMsgs = HashMap<ByteArray, Boolean>()
 
     override fun onStartRecording() {
@@ -485,6 +486,18 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
         )
     }
 
+    override fun verifyUnsentMessages(list: List<T>) {
+        viewModelScope.launch {
+            val unsent = list.filter { it.failedDelivery }
+            unsent.forEach { waitForMessageDelivery(it) }
+        }
+    }
+
+    /**
+     * Returns true if the ChatMessage [T] was not successfully delivered.
+     */
+    abstract val T.failedDelivery: Boolean
+
     /**
      * Clear the current displayed error.
      */
@@ -532,6 +545,6 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
     }
 
     companion object {
-        private const val DELIVERY_TIMEOUT_MS = 30_000L
+        const val DELIVERY_TIMEOUT_MS = 30_000L
     }
 }

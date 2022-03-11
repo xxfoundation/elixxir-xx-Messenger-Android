@@ -35,7 +35,7 @@ tasks {
 }
 
 dependencies {
-    implementation("com.google.protobuf:protobuf-javalite:3.15.3")
+    implementation("com.google.protobuf:protobuf-javalite:3.17.3")
     implementation("io.grpc:grpc-okhttp:1.36.0")
     implementation("io.grpc:grpc-protobuf-lite:1.36.0")
     implementation("io.grpc:grpc-stub:1.36.0")
@@ -46,12 +46,12 @@ protobuf {
     generatedFilesBaseDir = "$projectDir/src/generated"
 
     protoc {
-        artifact = "com.google.protobuf:protoc:3.15.1"
+        artifact = "com.google.protobuf:protoc:3.19.2"
     }
 
     plugins {
         id("grpc") {
-            artifact = "io.grpc:protoc-gen-grpc-java:1.36.0"
+            artifact = "io.grpc:protoc-gen-grpc-java:1.44.0"
         }
         id("grpckt") {
             artifact =

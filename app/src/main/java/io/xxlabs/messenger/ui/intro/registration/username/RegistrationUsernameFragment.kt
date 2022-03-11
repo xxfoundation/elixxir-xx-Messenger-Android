@@ -76,16 +76,28 @@ class RegistrationUsernameFragment : Fragment(), Injectable {
         ui.usernameNavigateNextStep.observe(viewLifecycleOwner) { username ->
             username?.let { navigateNextStep(it) }
         }
+
+        ui.usernameNavigateDemo.observe(viewLifecycleOwner) { isDemoAcct ->
+            if (isDemoAcct) navigateDemo()
+        }
     }
 
     private fun displayUsernameInfoDialog() {
-        InfoDialog(ui.usernameDialogUI).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui.usernameDialogUI)
+            .show(requireActivity().supportFragmentManager, null)
         ui.onUsernameInfoHandled()
     }
 
     private fun navigateNextStep(username: String) {
         val directions = RegistrationUsernameFragmentDirections
             .actionRegistrationUsernameFragmentToRegistrationWelcomeFragment(username)
+        findNavController().navigate(directions)
+        ui.onUsernameNavigateHandled()
+    }
+
+    private fun navigateDemo() {
+        val directions = RegistrationUsernameFragmentDirections
+            .actionGlobalChats()
         findNavController().navigate(directions)
         ui.onUsernameNavigateHandled()
     }

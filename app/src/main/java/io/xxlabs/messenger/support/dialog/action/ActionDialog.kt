@@ -6,13 +6,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentNewActionDialogBinding
 
-class ActionDialog(private val dialogUI: ActionDialogUI) : BottomSheetDialogFragment() {
+class ActionDialog : BottomSheetDialogFragment() {
 
     private lateinit var binding: ComponentNewActionDialogBinding
+    private val dialogUI: ActionDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as ActionDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,10 +41,26 @@ class ActionDialog(private val dialogUI: ActionDialogUI) : BottomSheetDialogFrag
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
     override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
         super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: ActionDialogUI): ActionDialog =
+            ActionDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

@@ -30,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/neutral_body"
+            android:paddingHorizontal="16dp"
             android:paddingBottom="@dimen/spacing_24"
             app:layout_constraintTop_toBottomOf="@id/toolbarBG">
 
@@ -85,7 +86,7 @@
                 android:layout_marginTop="@dimen/spacing_26"
                 android:contentDescription="contact.details.name"
                 android:letterSpacing="0.01"
-                android:orientation="horizontal"
+                android:gravity="center"
                 android:textColor="@color/neutral_white"
                 android:textSize="@dimen/text_24"
                 app:layout_constraintEnd_toEndOf="parent"

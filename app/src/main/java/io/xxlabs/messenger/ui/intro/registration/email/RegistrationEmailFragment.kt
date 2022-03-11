@@ -81,7 +81,8 @@ class RegistrationEmailFragment : Fragment(), Injectable {
     }
 
     private fun displayUsernameInfoDialog() {
-        InfoDialog(ui.emailDialogUI).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui.emailDialogUI)
+            .show(requireActivity().supportFragmentManager, null)
         ui.onEmailInfoHandled()
     }
 

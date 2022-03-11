@@ -11,16 +11,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTwoButtonDialogBinding
 import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 
-class TwoButtonInfoDialog(
-    private val dialogUI: TwoButtonInfoDialogUI
-) : BottomSheetDialogFragment() {
+class TwoButtonInfoDialog : BottomSheetDialogFragment() {
 
     private lateinit var binding: ComponentTwoButtonDialogBinding
+    private val dialogUI: TwoButtonInfoDialogUI by lazy {
+        requireArguments().get(ARG_UI) as TwoButtonInfoDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,6 +47,11 @@ class TwoButtonInfoDialog(
         initClickListeners()
         binding.ui = dialogUI
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun initClickListeners() {
@@ -92,5 +100,16 @@ class TwoButtonInfoDialog(
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
         super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: TwoButtonInfoDialogUI): TwoButtonInfoDialog =
+            TwoButtonInfoDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

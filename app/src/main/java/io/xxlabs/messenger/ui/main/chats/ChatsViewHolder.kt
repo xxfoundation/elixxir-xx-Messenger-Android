@@ -100,7 +100,7 @@ class ChatsViewHolder(
 
     fun setPreviewHighlight(text: String, lastSearch: String) {
         val stringBuilder = SpannableStringBuilder(text)
-        val p = Pattern.compile(lastSearch, Pattern.CASE_INSENSITIVE)
+        val p = Pattern.compile(lastSearch, Pattern.CASE_INSENSITIVE or Pattern.LITERAL)
         val m = p.matcher(text)
         while (m.find()) {
             stringBuilder.setSpan(

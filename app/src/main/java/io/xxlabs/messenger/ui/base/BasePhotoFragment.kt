@@ -23,6 +23,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.toast
@@ -102,8 +103,12 @@ abstract class BasePhotoFragment(val layout: Int = R.layout.fragment_contact_det
         }
 
         override fun onLoadCleared(placeholder: Drawable?) {
-            Glide.with(requireContext()).clear(view)
-            view.setImageDrawable(null)
+            try {
+                Glide.with(this@BasePhotoFragment).clear(view)
+                view.setImageDrawable(null)
+            } catch (e: Exception) {
+                FirebaseCrashlytics.getInstance().recordException(e)
+            }
         }
     }
 

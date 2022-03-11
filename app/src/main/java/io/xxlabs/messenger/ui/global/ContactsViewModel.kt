@@ -23,12 +23,12 @@ import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.support.extensions.combineWith
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class ContactsViewModel @Inject constructor(
@@ -90,30 +90,46 @@ class ContactsViewModel @Inject constructor(
             Timber.v("[MAIN] nor initialized, initializing network callback...")
             subscriptions.add(
                 repo.registerAuthCallback(
-                    onContactReceived = { contact ->
-                        //
-                        val id = getBindingsContactId(contact)
-                        Timber.v("Request received from: ${id.toBase64String()}")
-                        newRequest(contact)
-                    }
-                ) { contact ->
-                    val id = getBindingsContactId(contact)
-                    Timber.v("Request feedback received from: ${id.toBase64String()}")
-                    newConfirmationRequestReceived.postValue(SimpleRequestState.Success(contact))
-                    confirmRequest(contact)
+                    ::onRequestReceived,
+                    ::onConfirmationReceived,
+                    ::onResetReceived
+                ).doOnSuccess {
+                    setAuthCallbackRegistered()
+                    Timber.v("Successfully registered AuthCallback")
+                }.doOnError { err ->
+                    Timber.e("Error registering AuthCallback: ${err.localizedMessage}}")
                 }
-                    .doOnSuccess {
-                        setAuthCallbackRegistered()
-                        Timber.v("Successfully registered AuthCallback")
-                    }
-                    .doOnError { err ->
-                        Timber.e("Error registering AuthCallback: ${err.localizedMessage}}")
-                    }
                     .subscribeOn(schedulers.io)
                     .subscribe()
             )
         } else {
             Timber.v("[MAIN] Authcallback is already initialized...")
+        }
+    }
+
+    private fun onRequestReceived(contact: ByteArray) {
+        val id = getBindingsContactId(contact)
+        Timber.v("Request received from: ${id.toBase64String()}")
+        newRequest(contact)
+    }
+
+    private fun onConfirmationReceived(contact: ByteArray) {
+        val id = getBindingsContactId(contact)
+        Timber.v("Request feedback received from: ${id.toBase64String()}")
+        newConfirmationRequestReceived.postValue(SimpleRequestState.Success(contact))
+        confirmRequest(contact)
+    }
+
+    private fun onResetReceived(contact: ByteArray) {
+        Timber.v("Reset connection received from ${getBindingsContactId(contact)}")
+        try {
+            ClientRepository.clientWrapper.client.resetSession(
+                contact,
+                repo.getMashalledUser(),
+                ""
+            )
+        } catch (e: Exception) {
+            Timber.d("onResetReceived failed: ${e.message}")
         }
     }
 
@@ -279,8 +295,6 @@ class ContactsViewModel @Inject constructor(
     }
 
     private fun newRequest(marshalledData: ByteArray) {
-        newIncomingRequestReceived.postValue(SimpleRequestState.Success(marshalledData))
-
         Timber.v("[RECEIVED REQUEST] Confirming contact...")
         val newContact = generateContact(marshalledData)
         Timber.v("[RECEIVED REQUEST] Generated contact: $newContact")
@@ -324,6 +338,7 @@ class ContactsViewModel @Inject constructor(
                     onSuccess = {
                         addRequestCount()
                         Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
+                        newIncomingRequestReceived.postValue(SimpleRequestState.Success(marshalledData))
                         verifyNewRequest(contact)
                     })
         )

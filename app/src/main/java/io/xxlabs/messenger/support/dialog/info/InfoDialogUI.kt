@@ -1,8 +1,9 @@
 package io.xxlabs.messenger.support.dialog.info
 
 import io.xxlabs.messenger.R
+import java.io.Serializable
 
-interface InfoDialogUI {
+interface InfoDialogUI : Serializable {
     val title: String
     val body: String
     val spans: List<SpanConfig>?
@@ -25,7 +26,7 @@ interface InfoDialogUI {
     }
 }
 
-interface SpanConfig {
+interface SpanConfig : Serializable {
     val text: String
     val color: Int
     val url: String?

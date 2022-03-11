@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.ui.main.groups.create
 
-interface CreateGroupDialogUI {
+import java.io.Serializable
+
+interface CreateGroupDialogUI : Serializable {
     val body: String
     var name: String?
     var description: String?

@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.ui.main.chat.viewholders
 
-interface WebViewDialogUI {
+import java.io.Serializable
+
+interface WebViewDialogUI : Serializable {
     val url: String
     val onDismissed: (() -> Unit)?
 

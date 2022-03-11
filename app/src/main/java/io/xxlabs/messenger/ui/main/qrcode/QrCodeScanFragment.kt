@@ -55,6 +55,8 @@ class QrCodeScanFragment : BaseFragment() {
 
     private var currAnalysis: ImageAnalysis? = null
     private var currProvider: ProcessCameraProvider? = null
+    private val hasCamera: Boolean
+        get() = requireContext().packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_ANY)
 
     override fun onDestroy() {
         unbindAnalysis(currAnalysis, currProvider, unbindAnalysis = true, unbindCamera = true)
@@ -93,8 +95,20 @@ class QrCodeScanFragment : BaseFragment() {
                 marginsParams.bottomMargin
             )
         }
-        startScanning()
-        observeScanningResult()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (hasCamera) {
+            startScanning()
+            observeScanningResult()
+        }
+        else noCameraFound()
+    }
+
+    private fun noCameraFound() {
+        showError("A camera is required to use this feature.")
     }
 
     private fun bindPreview(cameraProvider: ProcessCameraProvider?) {

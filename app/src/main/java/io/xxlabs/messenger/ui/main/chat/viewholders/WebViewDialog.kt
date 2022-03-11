@@ -17,9 +17,12 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentWebviewDialogBinding
 import io.xxlabs.messenger.support.extensions.setInsets
 
-class WebViewDialog(private val dialogUI: WebViewDialogUI) : DialogFragment() {
+class WebViewDialog : DialogFragment() {
 
     private lateinit var binding: ComponentWebviewDialogBinding
+    private val dialogUI: WebViewDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as WebViewDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,16 +68,20 @@ class WebViewDialog(private val dialogUI: WebViewDialogUI) : DialogFragment() {
         }
         return dialog
     }
-//
-//    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        super.onViewCreated(view, savedInstanceState)
-//        binding.webViewToolbar.toolbarGeneric.setInsets(
-//            topMask = WindowInsetsCompat.Type.systemBars()
-//        )
-//    }
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
         super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: WebViewDialogUI): WebViewDialog =
+            WebViewDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

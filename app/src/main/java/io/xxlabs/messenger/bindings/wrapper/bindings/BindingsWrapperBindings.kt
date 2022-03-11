@@ -157,8 +157,13 @@ class BindingsWrapperBindings {
 
 fun bindingsErrorMessage(exception: Throwable): String {
     val bindingsErrorMsg = Bindings.errorStringToUserFriendlyMessage(exception.localizedMessage)
-    return if (bindingsErrorMsg.startsWith("UR")) {
-        FirebaseCrashlytics.getInstance().recordException(exception)
-        "Unexpected error. Please try again."
-    } else bindingsErrorMsg
+    return when {
+        exception is NodeErrorException ->
+            "Establishing secure connection. Please try again in a moment."
+        bindingsErrorMsg.startsWith("UR") -> {
+            FirebaseCrashlytics.getInstance().recordException(exception)
+            "Unexpected error. Please try again."
+        }
+        else -> bindingsErrorMsg
+    }
 }

@@ -66,6 +66,7 @@ class MainActivity : MediaProviderActivity() {
 
     override fun onStart() {
         super.onStart()
+        watchObservables()
         mainViewModel.checkIsLoggedInReturn()
     }
 
@@ -120,7 +121,6 @@ class MainActivity : MediaProviderActivity() {
         activeInstances++
         setWindowSettings()
         bindControllers()
-        watchObservables()
         setupMenu()
         initNetworkWatcher()
 
@@ -360,11 +360,10 @@ class MainActivity : MediaProviderActivity() {
                 is SimpleRequestState.Success -> {
                     createSnackMessage("One of your contact requests was successfully sent!")
                     contactsViewModel.newAuthRequestSent.postValue(SimpleRequestState.Completed())
-                    contactsViewModel.addRequestCount()
                 }
                 is SimpleRequestState.Error -> {
                     createSnackMessage("One of your requests has failed!")
-                    contactsViewModel.addRequestCount()
+//                    contactsViewModel.addRequestCount()
                 }
                 else -> {
                     Timber.v("Completed new auth request")
@@ -377,7 +376,7 @@ class MainActivity : MediaProviderActivity() {
             when (result) {
                 is DataRequestState.Error -> {
                     createSnackMessage("One of your requests has failed!")
-                    contactsViewModel.addRequestCount()
+//                    contactsViewModel.addRequestCount()
                 }
 
                 is DataRequestState.Success -> {
@@ -571,10 +570,6 @@ class MainActivity : MediaProviderActivity() {
                             !mainNavController.popBackStack() -> finish()
                         }
                     }
-                    return
-                }
-
-                R.id.registrationFragment -> {
                     return
                 }
 
