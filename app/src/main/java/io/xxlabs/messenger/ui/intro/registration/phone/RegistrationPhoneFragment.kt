@@ -109,7 +109,8 @@ class RegistrationPhoneFragment : Fragment(), Injectable {
     }
 
     private fun displayPhoneInfoDialog() {
-        InfoDialog(ui.phoneDialogUI).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui.phoneDialogUI)
+            .show(requireActivity().supportFragmentManager, null)
         ui.onPhoneInfoHandled()
     }
 
@@ -127,7 +128,9 @@ class RegistrationPhoneFragment : Fragment(), Injectable {
     }
 
     private fun selectCountry() {
-        dialogShown = true
-        countryDialog.show(childFragmentManager, "countryCodeDialog")
+        if (!countryDialog.isAdded) {
+            dialogShown = true
+            countryDialog.show(childFragmentManager, "countryCodeDialog")
+        }
     }
 }

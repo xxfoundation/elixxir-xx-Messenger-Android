@@ -33,6 +33,7 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.support.extensions.toBase64String
+import kotlinx.coroutines.launch
 
 class GroupMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -224,13 +225,17 @@ class GroupMessagesViewModel @AssistedInject constructor(
     override fun getMessages(chatId: ByteArray) {
         Timber.v("Subscribing to conversation id: %s", chatId.toBase64String())
         val groupMessages = daoRepo.getGroupMessages(chatId)
-        _chatData = groupMessages.toLiveData(
-            Config(
-                pageSize = 50,
-                prefetchDistance = 100,
-                enablePlaceholders = true
-            )
-        ) as LiveData<PagedList<GroupMessage>>
+        _chatData = groupMessages
+//            .mapByPage {
+//                it.apply { verifyUnsentMessages(this) }
+//            }
+            .toLiveData(
+                Config(
+                    pageSize = 50,
+                    prefetchDistance = 100,
+                    enablePlaceholders = true
+                )
+            ) as LiveData<PagedList<GroupMessage>>
     }
 
     override fun sendMessage(msg: GroupMessage) {
@@ -427,16 +432,12 @@ class GroupMessagesViewModel @AssistedInject constructor(
 
     override fun onRemoveAttachmentClicked(uri: Uri) {}
 
-    override fun verifyUnsentMessages(list: List<GroupMessage>) {
-        val unsent = list.filter { msg ->
-            msg.status == MessageStatus.PENDING.value
+    override val GroupMessage.failedDelivery: Boolean
+        get() {
+            return if (status == MessageStatus.PENDING.value) {
+                (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
+            } else false
         }
-
-        Timber.v("[INDIVIDUAL CHATS] Unsent msgs size: ${unsent.size}")
-        unsent.forEach { msg ->
-            waitForMessageDelivery(msg)
-        }
-    }
 
     override fun onSendMessage() {
         if (!areNodesReady()) return

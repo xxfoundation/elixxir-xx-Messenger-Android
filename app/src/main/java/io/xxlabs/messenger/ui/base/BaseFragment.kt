@@ -166,7 +166,8 @@ abstract class BaseFragment : Fragment(), Injectable {
             body = getString(body),
             spans = spans,
         )
-        InfoDialog(ui).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     protected fun showTwoButtonInfoDialog(
@@ -199,7 +200,8 @@ abstract class BaseFragment : Fragment(), Injectable {
             positiveClick,
             negativeClick
         )
-        TwoButtonInfoDialog(twoButtonUI).show(requireActivity().supportFragmentManager, null)
+        TwoButtonInfoDialog.newInstance(twoButtonUI)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     protected fun showConfirmDialog(
@@ -219,7 +221,8 @@ abstract class BaseFragment : Fragment(), Injectable {
             buttonText = getString(button),
             buttonOnClick = action
         )
-        ConfirmDialog(ui).show(requireActivity().supportFragmentManager, null)
+        ConfirmDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     protected fun showConfirmDialog(
@@ -239,7 +242,8 @@ abstract class BaseFragment : Fragment(), Injectable {
             buttonText = button,
             buttonOnClick = action
         )
-        ConfirmDialog(ui).show(requireActivity().supportFragmentManager, null)
+        ConfirmDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     protected fun showActionDialog(
@@ -258,7 +262,8 @@ abstract class BaseFragment : Fragment(), Injectable {
                 buttonOnClick = action
             )
         )
-        ActionDialog(ui).show(requireActivity().supportFragmentManager, null)
+        ActionDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     protected fun openSettings() {

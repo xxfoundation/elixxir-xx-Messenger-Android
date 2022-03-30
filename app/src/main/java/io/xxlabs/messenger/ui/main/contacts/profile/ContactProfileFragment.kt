@@ -135,7 +135,7 @@ class ContactProfileFragment: BaseContactDetailsFragment() {
             confirmDialogUI,
             ::onDeleteConnectionInfoClicked
         )
-        DeleteConnectionDialog(deleteConnectionUI)
+        DeleteConnectionDialog.newInstance(deleteConnectionUI)
             .show(requireActivity().supportFragmentManager, null)
     }
 

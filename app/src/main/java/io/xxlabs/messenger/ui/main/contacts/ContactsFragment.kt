@@ -256,7 +256,8 @@ class ContactsFragment : BaseFragment() {
             ::onCreateGroupClicked,
             ::showGroupInfoDialog
         )
-        CreateGroupDialog(ui).show(requireActivity().supportFragmentManager, null)
+        CreateGroupDialog.newInstance(ui)
+            .show(requireActivity().supportFragmentManager, null)
     }
 
     private fun onCreateGroupClicked(name: String?, description: String?) {

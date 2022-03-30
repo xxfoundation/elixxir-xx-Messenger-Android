@@ -39,6 +39,9 @@ import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.XxMessengerApplication
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import java.util.concurrent.TimeUnit
 
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -120,7 +123,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     override fun onCreateReply(message: PrivateMessage) {
-        if (message.isTextMessage()) super.onCreateReply(message)
+        if (message.canBeReplied()) super.onCreateReply(message)
     }
 
     private fun PrivateMessage.isTextMessage(): Boolean = fileType.isNullOrEmpty()
@@ -384,25 +387,23 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         _attachButtonEnabled.value = false
     }
 
+    private var timerJob: Job? = null
+
     private fun startTimer() {
-        recordingTimer = Timer().apply {
-            scheduleAtFixedRate(object: TimerTask() {
-                override fun run() {
-                    _recordingDuration.value?.let { durationMs ->
-                        if (durationMs >= 59_000) {
-                            Handler(Looper.getMainLooper()).post { onStopRecordingClicked() }
-                        }
-                        else _recordingDuration.postValue(durationMs + 1000)
-                    }
-                }
-            }, 0, 1000)
+        timerJob?.cancel()
+        timerJob = viewModelScope.launch(Dispatchers.Main) {
+            val totalSeconds = 60
+            for (second in 0 until totalSeconds) {
+                _recordingDuration.value = second * 1000
+                delay(1000)
+            }
+            onStopRecordingClicked()
         }
     }
 
     private fun stopTimer() {
-        recordingTimer?.cancel()
-        recordingTimer = null
-        _recordingDuration.postValue(0)
+        timerJob?.cancel()
+        _recordingDuration.value = 0
     }
 
     override fun onAttachFileButtonClicked() {
@@ -468,14 +469,19 @@ class PrivateMessagesViewModel @AssistedInject constructor(
             "[INDIVIDUAL CHATS] Subscribing to conversation id: %s",
             chatId.toBase64String()
         )
+
         val msgs = daoRepo.getMessagesLiveData(chatId)
-        _chatData = msgs.toLiveData(
-            Config(
-                pageSize = 50,
-                prefetchDistance = 100,
-                enablePlaceholders = true
-            )
-        ) as LiveData<PagedList<PrivateMessage>>
+        _chatData = msgs
+//            .mapByPage {
+//                it.apply { verifyUnsentMessages(this) }
+//            }
+            .toLiveData(
+                Config(
+                    pageSize = 50,
+                    prefetchDistance = 100,
+                    enablePlaceholders = true
+                )
+            ) as LiveData<PagedList<PrivateMessage>>
     }
 
     private fun getContactInfo(contactId: ByteArray) {
@@ -858,17 +864,12 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         onMessageSent()
     }
 
-    override fun verifyUnsentMessages(list: List<PrivateMessage>) {
-        val unsent = list.filter { msg ->
-            // TODO: Resend failed attachments.
-            msg.status == MessageStatus.PENDING.value && msg.fileType.isNullOrEmpty()
+    override val PrivateMessage.failedDelivery: Boolean
+        get() {
+            return if (status == MessageStatus.PENDING.value && fileType.isNullOrEmpty()) {
+                (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
+            } else false
         }
-
-        Timber.v("[INDIVIDUAL CHATS] Unsent msgs size: ${unsent.size}")
-        unsent.forEach { msg ->
-            waitForMessageDelivery(msg)
-        }
-    }
 
     override fun deleteMessagesById(messageIds: List<Long>) {
         subscriptions.add(daoRepo.deleteAllMessages(messageIds)

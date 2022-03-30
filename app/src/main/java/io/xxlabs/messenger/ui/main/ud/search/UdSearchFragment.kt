@@ -178,7 +178,9 @@ class UdSearchFragment : BaseFragment() {
         }
 
         udSearchInputPhoneCode.setOnClickListener {
-            phoneDialog.show(childFragmentManager, "emailRegistrationDialog")
+            if (!phoneDialog.isAdded) {
+                phoneDialog.show(childFragmentManager, "emailRegistrationDialog")
+            }
         }
 
         udSearchInputMiddleMessage.setOnClickListener {
@@ -196,12 +198,7 @@ class UdSearchFragment : BaseFragment() {
     private fun String.isValidQuery(): Boolean {
         if (isNullOrBlank()) return false
 
-        return when {
-            contentEquals(preferences.name) -> false
-            contentEquals(ClientRepository.userWrapper.getEmailFact()) -> false
-            ClientRepository.userWrapper.getPhoneFact().contains(this) -> false
-            else -> true
-        }
+        return !preferences.userData.contains(this, true)
     }
 
     private fun search() {

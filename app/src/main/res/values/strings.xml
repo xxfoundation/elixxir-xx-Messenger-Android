@@ -442,4 +442,5 @@
     <string name="confirm_leave_group_dialog_button">Leave Group</string>
     <string name="group_invitation_pending">You will not be able to send messages until you have accepted the invitation.</string>
     <string name="settings_delete_account_username_error">Username does not match.</string>
+    <string name="advanced_settings_title">Advanced Settings</string>
 </resources>

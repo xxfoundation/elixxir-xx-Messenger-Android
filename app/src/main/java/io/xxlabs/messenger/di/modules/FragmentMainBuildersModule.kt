@@ -3,7 +3,6 @@ package io.xxlabs.messenger.di.modules
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.xxlabs.messenger.media.FullScreenImageFragment
-import io.xxlabs.messenger.ui.intro.registration.RegistrationFragment
 import io.xxlabs.messenger.ui.intro.registration.added.RegistrationAddedFragment
 import io.xxlabs.messenger.ui.intro.registration.email.RegistrationEmailFragment
 import io.xxlabs.messenger.ui.intro.registration.phone.RegistrationPhoneFragment
@@ -36,9 +35,6 @@ import io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment
 abstract class FragmentMainBuildersModule {
     @ContributesAndroidInjector
     abstract fun contributeTransitionScreen(): TransitionMainScreen
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationFragment(): RegistrationFragment
 
     @ContributesAndroidInjector
     abstract fun contributeUdSearchFragment(): UdSearchFragment

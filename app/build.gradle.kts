@@ -33,8 +33,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 459
-        versionName = "2.0"
+        versionCode = 483
+        versionName = "2.02"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -59,7 +59,7 @@ android {
         buildConfigField(
             "double",
             "APP_VERSION",
-            android.defaultConfig.versionName?.substringBefore(".") ?: "1.0"
+            android.defaultConfig.versionName ?: "1.0"
         )
     }
 
@@ -226,8 +226,8 @@ dependencies {
     implementation("androidx.security:security-crypto:1.1.0-alpha01")
 
     // Room
-    implementation("androidx.room:room-runtime:2.3.0")
-    kapt("androidx.room:room-compiler:2.3.0")
+    implementation("androidx.room:room-runtime:2.4.1")
+    kapt("androidx.room:room-compiler:2.4.1")
 
     // Image Handling
     implementation("com.github.CanHub:Android-Image-Cropper:3.2.1")

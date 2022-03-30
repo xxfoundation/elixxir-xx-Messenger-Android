@@ -69,7 +69,7 @@ class SettingsAdvancedFragment : BaseFragment() {
 
     private fun setupToolbar() {
         toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
-        toolbarGenericTitle.text = "Settings Advanced"
+        toolbarGenericTitle.text = getString(R.string.advanced_settings_title)
         toolbarGenericBackBtn.setOnClickListener {
             findNavController().navigateUp()
         }

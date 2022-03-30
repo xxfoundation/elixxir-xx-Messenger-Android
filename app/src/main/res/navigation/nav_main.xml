@@ -6,23 +6,6 @@
     app:startDestination="@id/transitionMainScreen">
 
     <fragment
-        android:id="@+id/registrationFragment"
-        android:name="io.xxlabs.messenger.ui.intro.registration.RegistrationFragment"
-        android:label="Registration #Permissioning"
-        tools:layout="@layout/fragment_register">
-
-        <action
-            android:id="@+id/action_registration_to_chats"
-            app:destination="@id/chatsFragment"
-            app:enterAnim="@anim/slide_in_right"
-            app:exitAnim="@anim/slide_out_left"
-            app:popEnterAnim="@anim/slide_in_left"
-            app:popExitAnim="@anim/slide_out_right"
-            app:popUpTo="@id/transitionMainScreen"
-            app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
         android:id="@+id/contactsFragment"
         android:name="io.xxlabs.messenger.ui.main.contacts.ContactsFragment"
         android:label="Contacts"
@@ -366,12 +349,6 @@
         app:popExitAnim="@anim/slide_out_right" />
 
     <action
-        android:id="@+id/action_global_registration"
-        app:destination="@id/registrationFragment"
-        app:enterAnim="@anim/slide_in_left"
-        app:exitAnim="@anim/slide_out_right" />
-
-    <action
         android:id="@+id/action_global_chats"
         app:destination="@id/chatsFragment"
         app:enterAnim="@anim/slide_in_left"
@@ -383,12 +360,6 @@
         android:name="io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment"
         android:label="PhotoSelectorFragment"
         tools:layout="@layout/fragment_photo_selection" />
-
-    <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="io.xxlabs.messenger.ui.main.dashboard.WebViewDialog"
-        android:label="DashboardFragment"
-        tools:layout="@layout/component_webview" />
 
     <!-- Menu -->
     <action
@@ -422,14 +393,6 @@
         app:exitAnim="@anim/slide_out_right"
         app:popUpTo="@id/contactsFragment"
         app:popUpToInclusive="true" />
-
-    <action
-        android:id="@+id/action_global_dashboard"
-        app:destination="@id/dashboardFragment"
-        app:enterAnim="@anim/slide_in_right"
-        app:exitAnim="@anim/slide_out_left"
-        app:popEnterAnim="@anim/slide_in_left"
-        app:popExitAnim="@anim/slide_out_right" />
 
     <action
         android:id="@+id/action_menu_pop_to_settings"

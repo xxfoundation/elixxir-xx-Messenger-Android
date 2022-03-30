@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.NetworkHealthCallback
+import io.reactivex.Single
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportMock
@@ -47,10 +48,9 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
 
     override fun registerAuthCallback(
         registerAuthCallback: (contact: ByteArray) -> Unit,
-        authConfirmCallback: ((contact: ByteArray) -> Unit)
-    ) {
-
-    }
+        authConfirmCallback: (contact: ByteArray) -> Unit,
+        authResetCallback: (contact: ByteArray) -> Unit
+    ) {}
 
     override fun sendUnsafe(
         recipientId: ByteArray,

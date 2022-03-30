@@ -11,13 +11,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentInfoDialogBinding
 
-class InfoDialog(private val dialogUI: InfoDialogUI) : BottomSheetDialogFragment() {
+class InfoDialog : BottomSheetDialogFragment() {
 
     private lateinit var binding: ComponentInfoDialogBinding
+    private val dialogUI: InfoDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as InfoDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,6 +46,11 @@ class InfoDialog(private val dialogUI: InfoDialogUI) : BottomSheetDialogFragment
         binding.ui = dialogUI
         binding.infoDialogButton.setOnClickListener { dismiss() }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun getSpannableBody(dialogUI: InfoDialogUI): Spannable {
@@ -77,5 +87,16 @@ class InfoDialog(private val dialogUI: InfoDialogUI) : BottomSheetDialogFragment
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
         super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: InfoDialogUI): InfoDialog =
+            InfoDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

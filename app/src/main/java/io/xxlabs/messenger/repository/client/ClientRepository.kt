@@ -206,8 +206,8 @@ class ClientRepository @Inject constructor(
     override fun newUserDiscovery(): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                udWrapperBindings =
-                    BindingsWrapperBindings.newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
+                udWrapperBindings = BindingsWrapperBindings
+                    .newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -347,11 +347,14 @@ class ClientRepository @Inject constructor(
     //  Callbacks ============================================================================
     override fun registerAuthCallback(
         onContactReceived: (contact: ByteArray) -> Unit,
-        onConfirmationReceived: ((contact: ByteArray) -> Unit)
+        onConfirmationReceived: (contact: ByteArray) -> Unit,
+        onResetReceived: (contact: ByteArray) -> Unit
     ): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                clientWrapper.registerAuthCallback(onContactReceived, onConfirmationReceived)
+                clientWrapper.registerAuthCallback(
+                    onContactReceived, onConfirmationReceived, onResetReceived
+                )
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -461,7 +464,7 @@ class ClientRepository @Inject constructor(
     }
 
     private fun throwNodeError(): Throwable {
-        return Exception("[NODE_ERROR]")
+        return NodeErrorException()
     }
 
     override fun searchUd(
@@ -948,9 +951,14 @@ class ClientRepository @Inject constructor(
 
     override fun enableDummyTraffic(enabled: Boolean) = clientWrapper.enableDummyTraffic(enabled)
 
+    private var shouldReplay = true
+
     override fun replayRequests() {
         try {
-            clientWrapper.client.replayRequests()
+            if (shouldReplay) {
+                clientWrapper.client.replayRequests()
+                shouldReplay = false
+            }
         } catch (e: Exception) {
             Timber.d(e)
         }
@@ -960,7 +968,7 @@ class ClientRepository @Inject constructor(
         @Volatile
         private var instance: ClientRepository? = null
         private const val NODES_READY_POLL_INTERVAL = 1_000L
-        private const val NODES_READY_MAX_RETRIES = 10
+        private const val NODES_READY_MAX_RETRIES = 20
         private const val NODES_READY_MINIMUM_RATE = 0.70
 
         lateinit var clientWrapper: ClientWrapperBindings
@@ -1010,3 +1018,6 @@ class ClientRepository @Inject constructor(
         }
     }
 }
+
+
+class NodeErrorException : Exception()

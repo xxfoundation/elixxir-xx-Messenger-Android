@@ -90,7 +90,8 @@ class RegistrationTfaFragment : Fragment(), Injectable {
     }
 
     private fun displayTfaInfoDialog() {
-        InfoDialog(ui.tfaDialogUI).show(requireActivity().supportFragmentManager, null)
+        InfoDialog.newInstance(ui.tfaDialogUI)
+            .show(requireActivity().supportFragmentManager, null)
         ui.onTfaInfoHandled()
     }
 

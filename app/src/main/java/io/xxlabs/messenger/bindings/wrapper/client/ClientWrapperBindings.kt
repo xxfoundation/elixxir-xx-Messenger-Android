@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.*
+import io.reactivex.Single
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
@@ -11,7 +12,6 @@ import io.xxlabs.messenger.bindings.wrapper.user.UserBindings
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
-import kotlin.jvm.Throws
 
 class ClientWrapperBindings(
     var client: Client
@@ -70,11 +70,13 @@ class ClientWrapperBindings(
 
     override fun registerAuthCallback(
         registerAuthCallback: (contact: ByteArray) -> Unit,
-        authConfirmCallback: ((contact: ByteArray) -> Unit)
+        authConfirmCallback: ((contact: ByteArray) -> Unit),
+        authResetCallback: ((contact: ByteArray) -> Unit)
     ) {
         client.registerAuthCallbacks(
             { contact -> registerAuthCallback.invoke(contact.marshal()) },
-            { contact -> authConfirmCallback.invoke(contact.marshal()) }
+            { contact -> authConfirmCallback.invoke(contact.marshal()) },
+            { contact -> authResetCallback(contact.marshal())}
         )
     }
 

@@ -1,19 +1,23 @@
 package io.xxlabs.messenger.support.dialog.confirm
 
-
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentConfirmDialogBinding
 
-class ConfirmDialog(private val dialogUI: ConfirmDialogUI) : BottomSheetDialogFragment() {
+class ConfirmDialog : BottomSheetDialogFragment() {
 
     private lateinit var binding: ComponentConfirmDialogBinding
+    private val dialogUI: ConfirmDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as ConfirmDialogUI
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,10 +41,26 @@ class ConfirmDialog(private val dialogUI: ConfirmDialogUI) : BottomSheetDialogFr
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
     override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
         super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: ConfirmDialogUI): ConfirmDialog =
+            ConfirmDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
     }
 }

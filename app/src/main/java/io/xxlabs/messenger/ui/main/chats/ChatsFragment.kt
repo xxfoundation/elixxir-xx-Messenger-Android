@@ -112,9 +112,13 @@ class ChatsFragment : BaseFragment() {
 
         setListeners()
         bindRecyclerView()
-        watchForObservables()
         resetSearchBar()
         showNotificationDialog()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        watchForObservables()
     }
 
     private fun showNotificationDialog() {
@@ -396,19 +400,19 @@ class ChatsFragment : BaseFragment() {
 
     private fun disableEnableMenuBtn(items: Int) {
         if (items == 0) {
-            chatsBottomMenuPin.alpha = 0.5f
-            chatsBottomMenuMute.alpha = 0.5f
-            chatsBottomMenuDelete.alpha = 0.5f
-            chatsBottomMenuPin.isClickable = false
-            chatsBottomMenuMute.isClickable = false
-            chatsBottomMenuDelete.isClickable = false
+            chatsBottomMenuPin?.alpha = 0.5f
+            chatsBottomMenuMute?.alpha = 0.5f
+            chatsBottomMenuDelete?.alpha = 0.5f
+            chatsBottomMenuPin?.isClickable = false
+            chatsBottomMenuMute?.isClickable = false
+            chatsBottomMenuDelete?.isClickable = false
         } else {
-            chatsBottomMenuPin.alpha = 1.0f
-            chatsBottomMenuMute.alpha = 1.0f
-            chatsBottomMenuDelete.alpha = 1.0f
-            chatsBottomMenuPin.isClickable = true
-            chatsBottomMenuMute.isClickable = true
-            chatsBottomMenuDelete.isClickable = true
+            chatsBottomMenuPin?.alpha = 1.0f
+            chatsBottomMenuMute?.alpha = 1.0f
+            chatsBottomMenuDelete?.alpha = 1.0f
+            chatsBottomMenuPin?.isClickable = true
+            chatsBottomMenuMute?.isClickable = true
+            chatsBottomMenuDelete?.isClickable = true
         }
     }
 
