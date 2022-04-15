@@ -6,11 +6,11 @@
     <data>
         <import type="io.xxlabs.messenger.data.datatype.FactType"/>
         <variable
-            name="factType"
-            type="io.xxlabs.messenger.data.datatype.FactType" />
+            name="step"
+            type="io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep" />
         <variable
             name="ui"
-            type="io.xxlabs.messenger.ui.intro.registration.added.AddedRegistrationUI" />
+            type="io.xxlabs.messenger.ui.intro.registration.success.CompletedRegistrationStepUI" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -19,7 +19,7 @@
         android:background="@drawable/bg_brand_gradient">
 
         <ImageView
-            android:id="@+id/registration_added_image"
+            android:id="@+id/registration_completed_step_image"
             android:layout_width="86dp"
             android:layout_height="86dp"
             android:background="@drawable/bg_rectangle_rounded_corners_big_radius"
@@ -32,24 +32,39 @@
             android:layout_marginTop="@dimen/registration_vertical_margin" />
 
         <TextView
-            android:id="@+id/registration_added_title_text"
-            android:text="@{ui.getAddedTitle(factType)}"
+            android:id="@+id/registration_completed_step_title_text"
+            android:text="@{ui.getCompletedStepTitle(step)}"
             android:layout_marginTop="@dimen/registration_body_vertical_margin"
             android:textColor="@color/neutral_white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registration_added_image"
+            app:layout_constraintTop_toBottomOf="@id/registration_completed_step_image"
             app:layout_constraintEnd_toEndOf="parent"
             style="@style/bold_title"
             tools:text="@string/registration_successfully_added_title" />
 
+        <TextView
+            android:id="@+id/registration_completed_step_body_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/neutral_white"
+            android:layout_marginTop="32dp"
+            android:layout_marginStart="@dimen/registration_horizontal_margin"
+            android:layout_marginEnd="@dimen/registration_horizontal_margin"
+            android:text="@{ui.completedStepDescription}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration_completed_step_title_text"
+            tools:text="@string/backup_restore_successful_description"
+            style="@style/dialog_body"/>
+
         <Button
-            android:id="@+id/registration_added_done_btn"
-            android:text="@{ui.getNextButtonText(factType)}"
+            android:id="@+id/registration_completed_step_button"
+            android:text="@{ui.getNextButtonText(step)}"
             tools:text="@string/registration_flow_done"
             android:backgroundTint="@color/neutral_white"
             android:textColor="@color/brand_default"
-            android:onClick="@{()-> ui.onAddedNextClicked(factType)}"
-            android:enabled="@{ui.isAddedNextButtonEnabled(factType)}"
+            android:onClick="@{()-> ui.onCompletedStepNextClicked(step)}"
+            android:enabled="@{ui.isCompletedStepNextEnabled(step)}"
             android:layout_marginBottom="@dimen/registration_vertical_margin"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

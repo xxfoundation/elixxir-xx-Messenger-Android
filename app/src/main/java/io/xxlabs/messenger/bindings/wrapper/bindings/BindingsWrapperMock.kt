@@ -31,6 +31,14 @@ class BindingsWrapperMock {
             return UserDiscoveryWrapperMock(clientWrapper.getUser().getContact() as ContactWrapperMock)
         }
 
+        override fun newUserDiscoveryFromBackup(
+            clientWrapper: ClientWrapperBase,
+            emailStringified: String?,
+            phoneStringified: String?
+        ): UserDiscoveryWrapperBase {
+            return UserDiscoveryWrapperMock(clientWrapper.getUser().getContact() as ContactWrapperMock)
+        }
+
         override fun createSessionFolder(context: Context): File? {
             val sessionFolder = getSessionFolder(context)
             if (sessionFolder?.exists() == true) {

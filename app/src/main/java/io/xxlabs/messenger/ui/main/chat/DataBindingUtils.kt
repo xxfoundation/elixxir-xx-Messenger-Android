@@ -2,11 +2,13 @@ package io.xxlabs.messenger.ui.main.chat
 
 import android.graphics.Bitmap
 import android.text.InputType
+import android.text.format.Formatter
 import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.databinding.BindingAdapter
@@ -14,9 +16,12 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.model.BackupProgress
 import io.xxlabs.messenger.support.extensions.disableWithAlpha
 import io.xxlabs.messenger.support.extensions.enable
 import io.xxlabs.messenger.support.extensions.incognito
+import java.text.DateFormat
+import java.util.*
 
 @BindingAdapter("android:visibility")
 fun View.setVisibility(visible: Boolean) {
@@ -94,6 +99,15 @@ fun ImageView.loadImage(bitmap: Bitmap?) {
     }
 }
 
+@BindingAdapter("resourceId")
+fun ImageView.loadImage(resourceId: Int?) {
+    resourceId?.let {
+        Glide.with(context)
+            .load(it)
+            .into(this)
+    } ?: Glide.with(context).clear(this)
+}
+
 @BindingAdapter("elapsedTime")
 fun TextView.elapsedTime(ms: Int?) {
     ms?.let {
@@ -109,7 +123,38 @@ fun TextView.fileSize(kb: Long?) {
     }
 }
 
-@BindingAdapter("android:visibility")
-fun EditText.setVisibility(visible: Boolean) {
-    visibility = if (visible) View.VISIBLE else View.INVISIBLE
+@BindingAdapter("invisible")
+fun View.setInvisible(invisible: Boolean) {
+    visibility = if (invisible) View.INVISIBLE else View.VISIBLE
+}
+
+@BindingAdapter("date")
+fun TextView.formatDate(timestamp: Long?) {
+    text = when (timestamp) {
+        null -> "Never"
+        else -> DateFormat.getDateTimeInstance().format(Date(timestamp))
+    }
+}
+
+@BindingAdapter("fileSize")
+fun TextView.formatFileSize(bytes: Long) {
+    text = Formatter.formatShortFileSize(context, bytes)
+}
+
+@BindingAdapter("backupProgress")
+fun ProgressBar.setProgress(task: BackupProgress?) {
+    task?.run {
+        progress = (bytesTransferred / bytesTotal).toInt()
+    }
+}
+
+@BindingAdapter("backupProgress")
+fun TextView.setProgress(task: BackupProgress?) {
+    task?.run {
+        text = when {
+            bytesTransferred == bytesTotal -> "Restore complete!"
+            null != error -> error?.message
+            else -> "Restore in progress"
+        }
+    }
 }

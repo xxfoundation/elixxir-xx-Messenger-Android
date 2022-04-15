@@ -192,6 +192,9 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     private fun NotificationForMeReport.shouldNotify(): Boolean =
         forMe() && (!isDefault() && !isSilent())
 
+    private fun NotificationForMeReport.isReset(): Boolean =
+        type().equals("reset", true)
+
     private fun NotificationForMeReport.isGroup(): Boolean =
         type().equals("group", true)
 
@@ -224,6 +227,7 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
             isE2E() -> getString(R.string.notification_e2e_text)
             isGroup() -> getString(R.string.notification_group_text)
             isEndFT() -> getString(R.string.notification_endft_text)
+            isReset() -> getString(R.string.notification_reset_text)
             else -> "New activity" // Other types should not be displayed in the first place.
         }
 
@@ -261,6 +265,7 @@ private class NotificationState {
         "confirm" to false,
         "e2e" to false,
         "endFT" to false,
+        "reset" to false,
     )
 
     fun sent(type: String) {

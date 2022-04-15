@@ -2,14 +2,10 @@ package io.xxlabs.messenger.di.modules
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import io.xxlabs.messenger.backup.ui.list.BackupListFragment
+import io.xxlabs.messenger.backup.ui.save.BackupDetailFragment
+import io.xxlabs.messenger.backup.ui.save.BackupSettingsFragment
 import io.xxlabs.messenger.media.FullScreenImageFragment
-import io.xxlabs.messenger.ui.intro.registration.added.RegistrationAddedFragment
-import io.xxlabs.messenger.ui.intro.registration.email.RegistrationEmailFragment
-import io.xxlabs.messenger.ui.intro.registration.phone.RegistrationPhoneFragment
-import io.xxlabs.messenger.ui.intro.registration.tfa.RegistrationTfaFragment
-import io.xxlabs.messenger.ui.intro.registration.username.RegistrationUsernameFragment
-import io.xxlabs.messenger.ui.intro.registration.welcome.RegistrationWelcomeFragment
-import io.xxlabs.messenger.ui.main.TransitionMainScreen
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
 import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
@@ -33,8 +29,6 @@ import io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment
 @Suppress("unused")
 @Module
 abstract class FragmentMainBuildersModule {
-    @ContributesAndroidInjector
-    abstract fun contributeTransitionScreen(): TransitionMainScreen
 
     @ContributesAndroidInjector
     abstract fun contributeUdSearchFragment(): UdSearchFragment
@@ -91,26 +85,17 @@ abstract class FragmentMainBuildersModule {
     abstract fun contributeSettingsAdvancedFragment(): SettingsAdvancedFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeRegistrationUsernameFragment(): RegistrationUsernameFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationWelcomeFragment(): RegistrationWelcomeFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationEmailFragment(): RegistrationEmailFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationPhoneFragment(): RegistrationPhoneFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationAddedFragment(): RegistrationAddedFragment
-
-    @ContributesAndroidInjector
-    abstract fun contributeRegistrationTfaFragment(): RegistrationTfaFragment
-
-    @ContributesAndroidInjector
     abstract fun contributeDeleteAccountFragment(): DeleteAccountFragment
 
     @ContributesAndroidInjector
     abstract fun contributeFullScreenImageFragment(): FullScreenImageFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeBackupSetupFragment(): BackupListFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeBackupDetailFragment(): BackupDetailFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeBackupSettingsFragment(): BackupSettingsFragment
 }

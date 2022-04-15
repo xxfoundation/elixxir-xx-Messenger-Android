@@ -177,7 +177,10 @@ class FileTransferManager(repo: BaseRepository) : FileTransferRepository {
     )
 
     @Throws(Exception::class)
-    override fun resend(transferId: TransferId) = manager.resend(transferId.tid)
+    override fun resend(transferId: TransferId) {
+        // Removed from latest bindings
+//        manager.resend(transferId.tid)
+    }
 
     @Throws(Exception::class)
     override fun closeSend(transferId: TransferId) = manager.closeSend(transferId.tid)

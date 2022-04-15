@@ -45,7 +45,7 @@
                 android:id="@+id/info_dialog_ok_button"
                 style="@style/dialog_button"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"
-                android:text="@string/enable"
+                android:text="@{ui.positiveLabel}"
                 android:textColor="@color/neutral_white"
                 android:background="@drawable/bg_btn_white"
                 android:backgroundTint="@color/brand_default"
@@ -58,7 +58,7 @@
 
             <Button
                 android:id="@+id/info_dialog_cancel_button"
-                android:text="@string/not_now"
+                android:text="@{ui.negativeLabel}"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"
                 android:layout_marginEnd="@dimen/registration_horizontal_margin"
                 android:layout_marginStart="0dp"

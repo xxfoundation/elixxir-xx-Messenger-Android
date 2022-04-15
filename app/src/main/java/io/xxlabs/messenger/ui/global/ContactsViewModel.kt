@@ -122,14 +122,28 @@ class ContactsViewModel @Inject constructor(
 
     private fun onResetReceived(contact: ByteArray) {
         Timber.v("Reset connection received from ${getBindingsContactId(contact)}")
+    }
+
+    fun resetSession(contact: ContactData) {
         try {
-            ClientRepository.clientWrapper.client.resetSession(
-                contact,
+            val roundId = ClientRepository.clientWrapper.client.resetSession(
+                contact.marshaled,
                 repo.getMashalledUser(),
                 ""
             )
+            if (roundId > 0) {
+                updateContactStatus(contact.userId, RequestStatus.RESET_SENT)
+                preferences.removeContactRequests(contact.userId)
+                preferences.addContactRequest(
+                    contact.userId,
+                    contact.username,
+                    roundId,
+                    true
+                )
+
+            }
         } catch (e: Exception) {
-            Timber.d("onResetReceived failed: ${e.message}")
+            Timber.d("Failed to reset session: ${e.message}")
         }
     }
 

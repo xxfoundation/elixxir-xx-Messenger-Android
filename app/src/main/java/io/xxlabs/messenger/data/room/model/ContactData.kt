@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
+import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
@@ -75,6 +77,19 @@ data class ContactData(
     }
 
     companion object : Comparator<Any> {
+        fun from(
+            contactWrapper: ContactWrapperBase,
+            requestStatus: RequestStatus = RequestStatus.SENT
+        ): ContactData = ContactData(
+            marshaled = contactWrapper.marshal(),
+            userId = contactWrapper.getId(),
+            username = contactWrapper.getUsernameFact(),
+            nickname = contactWrapper.getNameFact() ?: "",
+            email = contactWrapper.getEmailFact() ?: "",
+            phone = contactWrapper.getPhoneFact() ?: "",
+            status = requestStatus.value
+        )
+
         override fun compare(item: Any, anotherItem: Any): Int {
             val first = if (item is ContactData) {
                 item.displayName

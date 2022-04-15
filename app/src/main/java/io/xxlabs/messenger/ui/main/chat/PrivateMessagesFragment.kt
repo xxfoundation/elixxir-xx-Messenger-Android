@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.crashlytics.ktx.crashlytics
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ChatMessage
@@ -25,7 +24,6 @@ import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.media.*
 import io.xxlabs.messenger.support.dialog.BottomSheetPopup
 import io.xxlabs.messenger.support.dialog.MenuChatDialog
-import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.touch.MessageSwipeController
 import io.xxlabs.messenger.support.touch.SwipeActions

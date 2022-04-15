@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.backup.ui.save.SettingsOption" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> ui.onClick()}">
+
+        <ImageView
+            android:id="@+id/backup_location_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:resourceId="@{ui.icon}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:src="@drawable/ic_google_drive" />
+
+        <TextView
+            android:id="@+id/backup_location_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.name}"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:textStyle="bold"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/registration_body_text_size"
+            style="@style/xx_font"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/backup_location_icon"
+            app:layout_constraintEnd_toStartOf="@id/backup_enabled_switch"
+            tools:text="@string/backup_service_google_drive" />
+
+        <ImageView
+            android:id="@+id/backup_location_arrow"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:src="@drawable/ic_arrow_right"
+            android:visibility="@{!ui.currentLocation}"
+            app:layout_constraintTop_toTopOf="@id/backup_location_name"
+            app:layout_constraintBottom_toBottomOf="@id/backup_location_name"
+            app:layout_constraintStart_toStartOf="@id/backup_enabled_switch"
+            app:layout_constraintEnd_toEndOf="@id/backup_enabled_switch"  />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/backup_enabled_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="16dp"
+            android:checked="@{ui.enabled}"
+            android:onCheckedChanged="@{(_, bool)-> ui.onEnableToggled(bool)}"
+            app:invisible="@{!ui.currentLocation}"
+            app:layout_constraintTop_toTopOf="@id/backup_location_name"
+            app:layout_constraintBottom_toBottomOf="@id/backup_location_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:visibility="invisible"/>
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/backup_enabled_switch"
+            app:layout_constraintStart_toStartOf="@id/backup_location_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

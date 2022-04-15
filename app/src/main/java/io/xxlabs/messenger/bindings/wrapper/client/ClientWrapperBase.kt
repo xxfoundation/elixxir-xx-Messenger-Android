@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
+import bindings.Client
 import bindings.NetworkHealthCallback
 import io.reactivex.Single
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
@@ -10,6 +11,8 @@ import io.xxlabs.messenger.data.datatype.MsgType
 import java.lang.Exception
 
 interface ClientWrapperBase {
+    val client: Client
+
     //Network
     fun startNetworkFollower()
     fun stopNetworkFollower()

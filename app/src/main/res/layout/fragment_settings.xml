@@ -587,63 +587,60 @@
             android:id="@+id/settingsBackupProfile"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_40"
             android:background="@color/backgroundSettingsCell"
             android:orientation="vertical"
-            android:paddingStart="@dimen/spacing_36"
-            android:paddingTop="@dimen/spacing_14"
-            android:paddingEnd="@dimen/spacing_36"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingTop="@dimen/spacing_24"
+            android:paddingEnd="@dimen/spacing_20"
             android:paddingBottom="@dimen/spacing_14"
-            android:visibility="gone">
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/settingsBackupProfileIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_download"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
                 android:id="@+id/settingsBackupProfileTitle"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/spacing_10"
                 android:layout_marginEnd="@dimen/spacing_24"
                 android:text="Backup Profile"
-                android:textColor="@color/selector_settings_cell"
+                android:textColor="@color/neutral_active"
                 android:textSize="@dimen/text_14"
-                android:textStyle="bold"
-                app:layout_constraintEnd_toStartOf="@id/settingsBackupProfileDownload"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/settingsBackupProfileIcon"
+                app:layout_constraintEnd_toStartOf="@id/settingsBackupProfileArrow"
                 app:layout_constraintTop_toTopOf="parent"
-                app:lineHeight="@dimen/text_18" />
-
-            <ImageView
-                android:id="@+id/settingsBackupProfileDownload"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_download"
-                app:layout_constraintBottom_toBottomOf="@id/settingsBackupProfileTitle"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/settingsBackupProfileTitle"
-                app:tint="@color/selector_settings_cell" />
-
-            <View
-                android:id="@+id/settingsBackupProfileLine"
-                android:layout_width="0dp"
-                android:layout_height="@dimen/line_thin"
-                android:layout_marginTop="@dimen/spacing_14"
-                android:background="@color/menuAvatarAccent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settingsBackupProfileTitle" />
+                app:layout_constraintBottom_toTopOf="@id/settingsBackupProfileDescription"
+                app:lineHeight="@dimen/text_18"/>
 
             <TextView
                 android:id="@+id/settingsBackupProfileDescription"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_8"
-                android:text="Save a your session file  to use account on another device or as a backup?"
-                android:textColor="@color/settingsAccentColorDescription"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="Back up your account for transfer to another device."
+                android:textColor="@color/neutral_weak"
                 android:textSize="@dimen/text_12"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/settingsBackupProfileLine"
-                app:layout_constraintTop_toBottomOf="@id/settingsBackupProfileLine"
+                app:layout_constraintEnd_toStartOf="@id/settingsBackupProfileArrow"
+                app:layout_constraintStart_toStartOf="@id/settingsBackupProfileTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsBackupProfileTitle"
                 app:lineHeight="@dimen/text_18" />
+
+            <ImageView
+                android:id="@+id/settingsBackupProfileArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_arrow_right"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout

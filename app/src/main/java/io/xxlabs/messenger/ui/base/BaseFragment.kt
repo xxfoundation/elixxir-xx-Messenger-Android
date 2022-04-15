@@ -28,6 +28,7 @@ import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.dialog.info.SpanConfig
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.util.DialogUtils
+import io.xxlabs.messenger.ui.ConfirmDialogLauncher
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialog
 import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
@@ -46,6 +47,10 @@ abstract class BaseFragment : Fragment(), Injectable {
             preferences,
             biometricContainerCallback
         )
+    }
+
+    private val confirmDialogLauncher: ConfirmDialogLauncher by lazy {
+        ConfirmDialogLauncher(requireActivity().supportFragmentManager)
     }
 
     private val biometricContainerCallback by lazy {
@@ -197,8 +202,8 @@ abstract class BaseFragment : Fragment(), Injectable {
         )
         val twoButtonUI = TwoButtonInfoDialogUI.create(
             infoDialogUI,
-            positiveClick,
-            negativeClick
+            onPositiveClick = positiveClick,
+            onNegativeClick = negativeClick
         )
         TwoButtonInfoDialog.newInstance(twoButtonUI)
             .show(requireActivity().supportFragmentManager, null)
@@ -211,18 +216,7 @@ abstract class BaseFragment : Fragment(), Injectable {
         action: () -> Unit,
         onDismiss: () -> Unit = {}
     ) {
-        val ui = ConfirmDialogUI.create(
-            infoDialogUI = InfoDialogUI.create(
-                title = getString(title),
-                body = getString(body),
-                null,
-                onDismiss
-            ),
-            buttonText = getString(button),
-            buttonOnClick = action
-        )
-        ConfirmDialog.newInstance(ui)
-            .show(requireActivity().supportFragmentManager, null)
+        confirmDialogLauncher.showConfirmDialog(title, body, button, action, onDismiss)
     }
 
     protected fun showConfirmDialog(
@@ -232,18 +226,7 @@ abstract class BaseFragment : Fragment(), Injectable {
         action: () -> Unit,
         onDismiss: () -> Unit = {}
     ) {
-        val ui = ConfirmDialogUI.create(
-            infoDialogUI = InfoDialogUI.create(
-                title = title,
-                body = body,
-                null,
-                onDismiss
-            ),
-            buttonText = button,
-            buttonOnClick = action
-        )
-        ConfirmDialog.newInstance(ui)
-            .show(requireActivity().supportFragmentManager, null)
+        confirmDialogLauncher.showConfirmDialog(title, body, button, action, onDismiss)
     }
 
     protected fun showActionDialog(

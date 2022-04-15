@@ -45,14 +45,13 @@ class RequestGenericFragment : BaseFragment() {
 
     private var currentAddButton: View? = null
     private var currentContact: ContactData? = null
-    private var lastClickTime = 0L
 
     private var selectionListener = object : RequestsListener {
         override fun onResend(v: View, contact: ContactData) {
             v.disableWithAlpha()
             currentAddButton = v
-            when (contact.status) {
-                RequestStatus.SEND_FAIL.value, RequestStatus.SENT.value -> {
+            when (RequestStatus.from(contact.status)) {
+                RequestStatus.SEND_FAIL, RequestStatus.SENT -> {
                     Timber.v("Resending request auth channel...")
                     contactsViewModel.updateAndRequestAuthChannel(contact.marshaled!!)
                     (requireActivity() as MainActivity).createSnackMessage(
@@ -60,7 +59,7 @@ class RequestGenericFragment : BaseFragment() {
                         true
                     )
                 }
-                RequestStatus.CONFIRM_FAIL.value -> {
+                RequestStatus.CONFIRM_FAIL -> {
                     Timber.v("Resending confirm auth channel...")
                     contactsViewModel.confirmAuthenticatedChannel(contact)
 
@@ -69,9 +68,10 @@ class RequestGenericFragment : BaseFragment() {
                         true
                     )
                 }
-                else -> {
-
+                RequestStatus.RESET_SENT, RequestStatus.RESET_FAIL -> {
+                    contactsViewModel.resetSession(contact)
                 }
+                else -> { }
             }
         }
 
@@ -300,6 +300,7 @@ class RequestGenericFragment : BaseFragment() {
             val requestsList = contacts.filter {
                 it.status == RequestStatus.SEND_FAIL.value
                         || it.status == RequestStatus.CONFIRM_FAIL.value
+                        || it.status == RequestStatus.RESET_FAIL.value
             }
 
             if (requestsList.isEmpty()) showEmptyMsg(filter)
@@ -313,6 +314,7 @@ class RequestGenericFragment : BaseFragment() {
         contactsViewModel.contactsData.observe(viewLifecycleOwner) { contacts ->
             val requestsList = contacts.filter {
                 it.status == RequestStatus.SENT.value
+                        || it.status == RequestStatus.RESET_SENT.value
             }
 
             if (requestsList.isEmpty()) showEmptyMsg(filter)

@@ -8,7 +8,9 @@ enum class RequestStatus(val value: Int) {
     SEND_FAIL(3),
     CONFIRM_FAIL(4),
     UNVERIFIED(5),
-    VERIFYING(6);
+    VERIFYING(6),
+    RESET_SENT(7),
+    RESET_FAIL(8);
 
     companion object {
         fun from(value: Int) = values().first { it.value == value }

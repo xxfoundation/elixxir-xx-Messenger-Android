@@ -2,6 +2,7 @@ package io.xxlabs.messenger.ui.intro.registration.tfa
 
 import android.text.Spanned
 import androidx.lifecycle.LiveData
+import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 
 interface TfaRegistrationUI {
     val maxTfaInputLength: Int
@@ -16,4 +17,13 @@ interface TfaRegistrationUI {
     fun isResendEnabled(tfaCredentials: TwoFactorAuthCredentials): LiveData<Boolean>
     fun onResendClicked(tfaCredentials: TwoFactorAuthCredentials)
     fun onTfaInfoClicked()
+}
+
+interface TfaRegistrationController : TfaRegistrationUI {
+    val tfaDialogUI: InfoDialogUI
+    val tfaInfoClicked: LiveData<Boolean>
+    val tfaRetryClicked: LiveData<Boolean>
+    fun onTfaInfoHandled()
+    fun onTfaNavigateNextStep(tfaCredentials: TwoFactorAuthCredentials): LiveData<Boolean>
+    fun onTfaNavigateHandled(tfaCredentials: TwoFactorAuthCredentials)
 }

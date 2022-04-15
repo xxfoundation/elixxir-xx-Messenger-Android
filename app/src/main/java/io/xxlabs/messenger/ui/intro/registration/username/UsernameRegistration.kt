@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.ui.intro.registration.username
 
 import android.app.Application
+import android.content.Context
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.widget.EditText
@@ -8,29 +9,46 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.dialog.info.SpanConfig
-import javax.inject.Inject
+import io.xxlabs.messenger.ui.global.NetworkViewModel
+import kotlinx.coroutines.*
 import kotlin.random.Random.Default.nextInt
 
 /**
  * Encapsulates username registration logic.
  */
-class UsernameRegistration @Inject constructor(
+class UsernameRegistration @AssistedInject constructor(
     private val repo: BaseRepository,
     private val scheduler: SchedulerProvider,
     private val preferences: PreferencesRepository,
-    private val application: Application
+    private val application: Application,
+    @Assisted private val sessionPassword: ByteArray,
+    @Assisted private val networking: NetworkViewModel
 ) : UsernameRegistrationController {
 
+    private val scope = CoroutineScope(
+        CoroutineName("UsernameRegistration")
+            + Job()
+            + Dispatchers.Default
+    )
+
+    private val loggedIn get() = repo.isLoggedIn().blockingGet()
+
+    private val username = MutableLiveData<String?>(null)
     override val usernameTitle: Spanned = getSpannableTitle()
-    override val username = MutableLiveData("")
     override val maxUsernameLength: Int = MAX_USERNAME_LENGTH
+
     // Required by Play Store for Google app review
     private val demoAccount: String
         get() {
@@ -83,6 +101,9 @@ class UsernameRegistration @Inject constructor(
     override val usernameNavigateDemo: LiveData<Boolean> get() = navigateDemoAcct
     private val navigateDemoAcct = MutableLiveData(false)
 
+    override val usernameNavigateRestore: LiveData<Boolean> get() = navigateRestore
+    private val navigateRestore = MutableLiveData(false)
+
     override val usernameFilters: Array<InputFilter> get() =
         arrayOf(
             InputFilter { source, start, end, _, _, _ ->
@@ -111,6 +132,11 @@ class UsernameRegistration @Inject constructor(
         } ?: enableUI()
     }
 
+    override fun onUsernameInput(text: Editable) {
+        error.postValue(null)
+        username.value = text.toString()
+    }
+
     private fun disableUI() {
         inputEnabled.value = false
         error.value = null
@@ -121,9 +147,10 @@ class UsernameRegistration @Inject constructor(
     }
 
     override fun onUsernameNavigateHandled() {
-        username.value = null
+        username.postValue(null)
         navigateNextStep.value = null
         navigateDemoAcct.value = false
+        navigateRestore.value = false
     }
 
     private fun String?.isPlayStoreDemoAccount(): Boolean =
@@ -155,21 +182,51 @@ class UsernameRegistration @Inject constructor(
     }
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
-        repo.registerUdUsername(username)
-            .subscribeOn(scheduler.single)
-            .observeOn(scheduler.main)
-            .doOnError {
-                it.message?.let { error ->
-                    displayError(error)
+        scope.launch {
+            with (repo) {
+                if (!loggedIn) {
+                    getOrCreateSession()
+                    return@launch
                 }
-                enableUI()
-            }.doOnSuccess {
-                onSuccessfulRegistration(username, isDemoAcct)
-            }.subscribe()
+
+                registerUdUsername(username)
+                    .subscribeOn(scheduler.single)
+                    .observeOn(scheduler.main)
+                    .doOnError {
+                        it.message?.let { error ->
+                            displayError(error)
+                        }
+                        enableUI()
+                    }.doOnSuccess {
+                        onSuccessfulRegistration(username, isDemoAcct)
+                    }.subscribe()
+            }
+        }
     }
 
     private fun displayError(errorMsg: String) {
         error.postValue(bindingsErrorMessage(Exception(errorMsg)))
+    }
+
+    private suspend fun getOrCreateSession(context: Context = appContext()) {
+        withContext(scope.coroutineContext) {
+            val appFolder = repo.createSessionFolder(context)
+            try {
+                repo.newClient(appFolder, sessionPassword)
+                preferences.lastAppVersion = BuildConfig.VERSION_CODE
+                connectToCmix()
+            } catch (err: Exception) {
+                err.printStackTrace()
+                displayError(err.toString())
+            }
+        }
+    }
+
+    private fun connectToCmix() {
+        with (networking) {
+            checkRegisterNetworkCallback()
+            tryStartNetworkFollower { onUsernameNextClicked() }
+        }
     }
 
     private fun onSuccessfulRegistration(username: String, isDemoAcct: Boolean) {
@@ -182,16 +239,21 @@ class UsernameRegistration @Inject constructor(
     private fun getSpannableTitle(): Spanned {
         val highlight = application.getColor(R.color.brand_default)
         val title = application.getString(R.string.registration_username_title)
-        val startIndex = title.indexOf("username", ignoreCase = true)
+        val span = application.getString(R.string.registration_username_title_span)
+        val startIndex = title.indexOf(span, ignoreCase = true)
 
         return SpannableString(title).apply {
             setSpan(
                 ForegroundColorSpan(highlight),
                 startIndex,
-                title.length-1,
+                startIndex + span.length,
                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
             )
         }
+    }
+
+    override fun onRestoreAccountClicked() {
+        navigateRestore.value = true
     }
 
     companion object {
@@ -201,10 +263,23 @@ class UsernameRegistration @Inject constructor(
         private const val USERNAME_VALIDATION_REGEX = "^[a-zA-Z0-9][a-zA-Z0-9_\\-+@.#]*[a-zA-Z0-9]\$"
         private const val PLAY_STORE_DEMO_USERNAME = "GPlayStoreDemoAcc"
         private val DEMO_ACCT_CHARS: List<Char> = ('a'..'z') + ('0'..'9')
+
+        fun provideFactory(
+            assistedFactory: UsernameRegistrationFactory,
+            sessionPassword: ByteArray,
+            networking: NetworkViewModel,
+        ): UsernameRegistration {
+            return assistedFactory.create(sessionPassword, networking)
+        }
     }
 }
 
 @BindingAdapter("inputFilters")
 fun EditText.setInputFilters(filters: Array<InputFilter>) {
     this.filters = filters
+}
+
+@AssistedFactory
+interface UsernameRegistrationFactory {
+    fun create(sessionPassword: ByteArray, networking: NetworkViewModel): UsernameRegistration
 }

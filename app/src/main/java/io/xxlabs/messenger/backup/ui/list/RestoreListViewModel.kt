@@ -1,0 +1,84 @@
+package io.xxlabs.messenger.backup.ui.list
+
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.auth.CloudAuthentication
+import io.xxlabs.messenger.backup.data.BackupDataSource
+import io.xxlabs.messenger.backup.model.BackupLocation
+import io.xxlabs.messenger.backup.model.RestoreOption
+import io.xxlabs.messenger.support.appContext
+
+class RestoreListViewModel @AssistedInject constructor(
+    dataSource: BackupDataSource<RestoreOption>,
+    @Assisted cloudAuthSource: CloudAuthentication,
+) : BackupLocationsViewModel<RestoreOption>(dataSource, cloudAuthSource) {
+
+    override val backupLocationsTitle: Spanned = getSpannableTitle()
+    override val backupLocationsDescription: Spanned = getSpannableDescription()
+
+    private fun getSpannableTitle(): Spanned {
+        val title = appContext().getString(R.string.backup_restore_title)
+        return SpannableString(title)
+    }
+
+    private fun getSpannableDescription(): Spanned {
+        val highlight = appContext().getColor(R.color.brand_default)
+        val description = appContext().getString(R.string.backup_restore_description)
+        val highlightedText = appContext().getString(R.string.backup_restore_description_span_text)
+        val startIndex = description.indexOf(highlightedText, ignoreCase = true)
+
+        return SpannableStringBuilder(description).apply {
+            setSpan(
+                ForegroundColorSpan(highlight),
+                startIndex,
+                startIndex + highlightedText.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }.append(appContext().getString(R.string.backup_restore_description_hint))
+    }
+
+    override fun onLocationSelected(backupLocation: BackupLocation) {
+        with(backupLocation) {
+            signOut()
+            super.onLocationSelected(this)
+        }
+    }
+
+    override fun onAuthSuccess(backupLocation: BackupLocation) {
+        if (getAccountBackup(backupLocation).hasBackup()) {
+            navigateToDetail(backupLocation)
+        } else {
+            setError(appContext().getString(R.string.backup_restore_error_no_backup_found))
+        }
+    }
+
+    private fun RestoreOption.hasBackup(): Boolean =
+        lastBackup.value?.run {
+            sizeBytes > 0
+        } ?: false
+
+    companion object {
+        fun provideFactory(
+            assistedFactory: RestoreListViewModelFactory,
+            cloudAuthSource: CloudAuthentication
+        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+                return assistedFactory.create(cloudAuthSource) as T
+            }
+        }
+    }
+}
+
+@AssistedFactory
+interface RestoreListViewModelFactory {
+    fun create(cloudAuthSource: CloudAuthentication): RestoreListViewModel
+}

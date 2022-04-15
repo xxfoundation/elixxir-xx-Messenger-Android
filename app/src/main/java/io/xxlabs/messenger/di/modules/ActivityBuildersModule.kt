@@ -2,6 +2,8 @@ package io.xxlabs.messenger.di.modules
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
+import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowActivity
+import io.xxlabs.messenger.ui.intro.registration.RegistrationModule
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenLoadingActivity
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
@@ -9,7 +11,9 @@ import io.xxlabs.messenger.ui.main.MainActivity
 @Suppress("unused")
 @Module
 abstract class ActivityBuildersModule {
-    @ContributesAndroidInjector(modules = [FragmentMainBuildersModule::class, FragmentSharedBuildersModule::class])
+    @ContributesAndroidInjector(
+        modules = [FragmentMainBuildersModule::class, FragmentSharedBuildersModule::class]
+    )
     abstract fun contributeMainActivity(): MainActivity
 
     @ContributesAndroidInjector
@@ -17,4 +21,7 @@ abstract class ActivityBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeSplashScreenLoading(): SplashScreenLoadingActivity
+
+    @ContributesAndroidInjector(modules = [RegistrationModule::class])
+    abstract fun contributeRegistrationFlow(): RegistrationFlowActivity
 }

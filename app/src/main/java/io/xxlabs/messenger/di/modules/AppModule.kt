@@ -7,6 +7,9 @@ import dagger.Provides
 import io.xxlabs.messenger.application.AppDatabase
 import io.xxlabs.messenger.application.AppRxSchedulers
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.backup.BackupModule
+import io.xxlabs.messenger.backup.bindings.BindingsBackupMediator
+import io.xxlabs.messenger.backup.data.BackupRepository
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
@@ -14,11 +17,14 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.repository.mock.ClientMockRepository
 import io.xxlabs.messenger.support.isMockVersion
-import io.xxlabs.messenger.ui.intro.registration.RegistrationModule
 import io.xxlabs.messenger.ui.main.settings.SettingsModule
 import javax.inject.Singleton
 
-@Module(includes = [ViewModelModule::class, RegistrationModule::class, SettingsModule::class])
+@Module(includes = [
+    ViewModelModule::class,
+    SettingsModule::class,
+    BackupModule::class,
+])
 class AppModule {
     @Provides
     @Singleton
@@ -40,7 +46,8 @@ class AppModule {
         schedulers: SchedulerProvider,
         daoRepo: DaoRepository,
         preferencesRepository: PreferencesRepository,
-        messageReceivedListener: MessageReceivedListener
+        messageReceivedListener: MessageReceivedListener,
+        backupService: BackupRepository
     ): BaseRepository {
         return if (isMockVersion()) {
             ClientMockRepository(preferencesRepository)
@@ -49,7 +56,8 @@ class AppModule {
                 schedulers,
                 daoRepo,
                 preferencesRepository,
-                messageReceivedListener
+                messageReceivedListener,
+                backupService
             )
         }
     }

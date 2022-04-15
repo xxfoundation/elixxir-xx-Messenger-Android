@@ -86,4 +86,12 @@ data class UserDiscoveryWrapperMock(
     ) {
         TODO("Not yet implemented")
     }
+
+    override fun setAlternativeUD(ipAddress: ByteArray, cert: ByteArray, contactFile: ByteArray) {
+        TODO("Not yet implemented")
+    }
+
+    override fun restoreNormalUD() {
+        TODO("Not yet implemented")
+    }
 }

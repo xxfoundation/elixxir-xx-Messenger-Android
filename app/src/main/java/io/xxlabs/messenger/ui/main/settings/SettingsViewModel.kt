@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.ui.main.settings
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import io.reactivex.Single
@@ -197,6 +198,24 @@ class SettingsViewModel @Inject constructor(
                     }
                 )
         )
+    }
+
+    /* Account backup & restore navigation handling */
+
+    val navigateToBackupSettings: LiveData<Boolean> by ::_navigateToBackupSettings
+    private val _navigateToBackupSettings = MutableLiveData(false)
+
+    val navigateToBackupSetup: LiveData<Boolean> by ::_navigateToBackupSetup
+    private val _navigateToBackupSetup = MutableLiveData(false)
+
+    fun onBackupClicked() {
+        if (preferencesRepository.backupLocation == null) _navigateToBackupSetup.value = true
+        else _navigateToBackupSettings.value = true
+    }
+
+    fun onBackupNavigationHandled() {
+        _navigateToBackupSettings.value = false
+        _navigateToBackupSetup.value = false
     }
 
     override fun onCleared() {

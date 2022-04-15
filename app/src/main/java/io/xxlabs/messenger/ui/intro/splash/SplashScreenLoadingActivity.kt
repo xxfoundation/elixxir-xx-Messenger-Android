@@ -15,10 +15,8 @@ import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.getTransition
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
-import io.xxlabs.messenger.ui.main.MainActivity
-import kotlinx.android.synthetic.main.activity_splash.*
+import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowActivity
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class SplashScreenLoadingActivity : BaseKeystoreActivity() {
@@ -45,8 +43,13 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
+    override fun onStart() {
+        super.onStart()
+        loadAndGenerateKeys()
+    }
+
     private fun loadAndGenerateKeys() {
-        splashScreenViewModel.onRegisterSession.observe(this, { registered ->
+        splashScreenViewModel.onRegisterSession.observe(this) { registered ->
             if (registered) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     navigateNext()
@@ -54,20 +57,20 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
             } else {
                 createKeysGenerationErrorPopup()
             }
-        })
+        }
 
         deletePreviousKeys()
         if (checkGenerateKeys()) {
             if (isHardwareBackedKeyStore()) {
                 Timber.v("OS is hardware-backed")
                 generatePassword {
-                    registerUser()
+                    onKeysGenerated()
                 }
             } else {
                 Timber.e("OS is not hardware-backed, showing popup")
                 if (isMockVersion()) {
                     generatePassword {
-                        registerUser()
+                        onKeysGenerated()
                     }
                 } else {
                     createEnvironmentErrorPopup()
@@ -79,28 +82,23 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        loadAndGenerateKeys()
+    private fun onKeysGenerated() {
+        try {
+            navigateNext()
+        } catch (err: Exception) {
+            showError(err.localizedMessage ?: "Error, could not create keys, try again.")
+        }
     }
 
     private fun navigateNext() {
         val activity = Intent(
             this@SplashScreenLoadingActivity,
-            MainActivity::class.java
+            RegistrationFlowActivity::class.java
         )
 
         val options = getTransition(R.anim.fade_in, R.anim.fade_out)
         startActivity(activity, options)
         ActivityCompat.finishAfterTransition(this)
-    }
-
-    private fun registerUser() {
-        try {
-            splashScreenViewModel.registerUser(this, rsaDecryptPwd())
-        } catch (err: Exception) {
-            showError(err.localizedMessage ?: "Error, could not create keys, try again.")
-        }
     }
 
     fun createKeysGenerationErrorPopup() {
@@ -125,7 +123,7 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
             positiveBtnText = "Proceed Anyways",
             onClickPositive = {
                 generatePassword {
-                    registerUser()
+                    onKeysGenerated()
                 }
             },
             negativeBtnText = "Do not generate",

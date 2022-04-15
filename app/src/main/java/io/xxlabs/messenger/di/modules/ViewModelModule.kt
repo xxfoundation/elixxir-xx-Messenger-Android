@@ -10,7 +10,6 @@ import io.xxlabs.messenger.di.utils.ViewModelKey
 import io.xxlabs.messenger.ui.base.ContactDetailsViewModel
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
-import io.xxlabs.messenger.ui.intro.registration.RegistrationViewModel
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
@@ -70,11 +69,6 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ChatsViewModel::class)
     abstract fun bindConversationsViewModel(chatsViewModel: ChatsViewModel): ViewModel
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(RegistrationViewModel::class)
-    abstract fun bindRegistrationViewModel(registrationViewModel: RegistrationViewModel): ViewModel
 
     @Binds
     @IntoMap
