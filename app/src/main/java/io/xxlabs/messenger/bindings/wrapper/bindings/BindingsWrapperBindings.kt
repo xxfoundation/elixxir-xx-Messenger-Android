@@ -7,6 +7,8 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Single
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.application.XxMessengerApplication
+import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings.Companion.development
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
@@ -15,11 +17,13 @@ import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBindings
 import io.xxlabs.messenger.data.datatype.Environment
+import io.xxlabs.messenger.repository.client.NodeErrorException
 import io.xxlabs.messenger.support.appContext
 import timber.log.Timber
 import java.io.File
 import java.lang.UnsupportedOperationException
-import java.net.URL
+
+private val devUserDiscoveryIp = "18.198.117.203:11420".encodeToByteArray()
 
 class BindingsWrapperBindings {
 
@@ -92,7 +96,41 @@ class BindingsWrapperBindings {
             return UserDiscoveryWrapperBindings(
                 Bindings.newUserDiscovery((clientWrapper as ClientWrapperBindings).client),
                 clientWrapper.getUser().getContact() as ContactWrapperBindings
-            )
+            ).apply { onUdInitialized() }
+        }
+
+        override fun newUserDiscoveryFromBackup(
+            clientWrapper: ClientWrapperBase,
+            emailStringified: String?,
+            phoneStringified: String?
+        ): UserDiscoveryWrapperBase {
+            return UserDiscoveryWrapperBindings(Bindings.newUserDiscoveryFromBackup(
+                (clientWrapper as ClientWrapperBindings).client, emailStringified, phoneStringified,),
+                clientWrapper.getUser().getContact() as ContactWrapperBindings
+            ).apply { onUdInitialized() }
+        }
+
+        private fun UserDiscoveryWrapperBindings.onUdInitialized() {
+            XxMessengerApplication.isUserDiscoveryRunning = true
+            development(BuildConfig.DEBUG)
+        }
+
+        private fun UserDiscoveryWrapperBindings.development(enabled: Boolean) {
+            if (enabled) {
+                setAlternativeUD(
+                    devUserDiscoveryIp,
+                    rawBytes(R.raw.ud_elixxir_io),
+                    rawBytes(R.raw.ud_contact_test)
+                )
+            } else {
+                restoreNormalUD()
+            }
+        }
+
+        private fun rawBytes(resourceId: Int): ByteArray {
+            return appContext().resources
+                .openRawResource(resourceId)
+                .use { it.readBytes() }
         }
 
         override fun createSessionFolder(context: Context): File =

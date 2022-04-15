@@ -14,7 +14,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
 
 class ClientWrapperBindings(
-    var client: Client
+    override var client: Client
 ) : ClientWrapperBase {
 
     private val dummyTrafficManager: DummyTraffic = Bindings.newDummyTrafficManager(

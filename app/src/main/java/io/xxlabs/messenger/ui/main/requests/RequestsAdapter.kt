@@ -119,7 +119,9 @@ class RequestsAdapter(private val requestsListener: RequestsListener) :
             RequestStatus.RECEIVED -> updateUiForReceived(holder, item)
             RequestStatus.UNVERIFIED -> updateUiForUnverified(holder, item)
             RequestStatus.VERIFYING -> updateUiForVerifying(holder, item)
-            RequestStatus.SENT -> updateUiForSent(holder, item)
+            RequestStatus.SENT, RequestStatus.RESET_SENT, RequestStatus.RESET_FAIL -> {
+                updateUiForSent(holder, item)
+            }
             else -> {
                 holder.usernameTime.visibility = View.GONE
                 holder.confirmationLayout.visibility = View.GONE

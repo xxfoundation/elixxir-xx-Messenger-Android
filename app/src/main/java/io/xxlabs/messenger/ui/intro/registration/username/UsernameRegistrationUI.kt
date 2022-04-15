@@ -1,13 +1,14 @@
 package io.xxlabs.messenger.ui.intro.registration.username
 
+import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 
 interface UsernameRegistrationUI {
     val usernameTitle: Spanned
-    val username: MutableLiveData<String?>
     val maxUsernameLength: Int
     val usernameError: LiveData<String?>
     val usernameNextButtonEnabled: LiveData<Boolean>
@@ -15,4 +16,16 @@ interface UsernameRegistrationUI {
     val usernameFilters: Array<InputFilter>
     fun onUsernameInfoClicked()
     fun onUsernameNextClicked()
+    fun onRestoreAccountClicked()
+    fun onUsernameInput(text: Editable)
+}
+
+interface UsernameRegistrationController : UsernameRegistrationUI {
+    val usernameDialogUI: InfoDialogUI
+    val usernameInfoClicked: LiveData<Boolean>
+    val usernameNavigateNextStep: LiveData<String?>
+    val usernameNavigateDemo: LiveData<Boolean>
+    val usernameNavigateRestore: LiveData<Boolean>
+    fun onUsernameInfoHandled()
+    fun onUsernameNavigateHandled()
 }

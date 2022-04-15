@@ -21,7 +21,6 @@ import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
@@ -37,6 +36,7 @@ import io.xxlabs.messenger.support.misc.DebugLogger
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
+import io.xxlabs.messenger.support.view.SnackBarActivity
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.BaseInstance
 import io.xxlabs.messenger.ui.global.ContactsViewModel
@@ -49,7 +49,7 @@ import kotlinx.android.synthetic.main.component_menu.*
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : MediaProviderActivity() {
+class MainActivity : MediaProviderActivity(), SnackBarActivity {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -449,8 +449,10 @@ class MainActivity : MediaProviderActivity() {
             menuProfilePhotoDefault?.visibility = View.GONE
         } else {
             menuProfilePhoto?.visibility = View.GONE
-            menuProfilePhotoDefault?.text = name.substring(0, 2).uppercase()
-            menuProfilePhotoDefault?.visibility = View.VISIBLE
+            if (name.length >= 2) {
+                menuProfilePhotoDefault?.text = name.substring(0, 2).uppercase()
+                menuProfilePhotoDefault?.visibility = View.VISIBLE
+            }
         }
     }
 
@@ -605,7 +607,7 @@ class MainActivity : MediaProviderActivity() {
         return true
     }
 
-    fun createSnackMessage(msg: String, forceMessage: Boolean = false): Snackbar? {
+    override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar? {
         if (preferences.areInAppNotificationsOn || forceMessage) {
             val snack = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_LONG).setAction("OK") {}
             snack.view.translationZ = 10f

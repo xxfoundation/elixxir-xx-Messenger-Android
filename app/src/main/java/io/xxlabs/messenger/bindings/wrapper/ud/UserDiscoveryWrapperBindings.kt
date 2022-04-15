@@ -183,4 +183,20 @@ data class UserDiscoveryWrapperBindings(
             callback.invoke(contactBaseList, idsList, error)
         }, 30000)
     }
+
+    override fun setAlternativeUD(ipAddress: ByteArray, cert: ByteArray, contactFile: ByteArray) {
+        try {
+            userDiscovery.setAlternativeUserDiscovery(ipAddress, cert, contactFile)
+        } catch (e: Exception) {
+            Timber.d("Failed to set dev UD: ${e.message}")
+        }
+    }
+
+    override fun restoreNormalUD() {
+        try {
+            userDiscovery.unsetAlternativeUserDiscovery()
+        } catch (e: Exception) {
+            Timber.d("Failed to restore UD: ${e.message}")
+        }
+    }
 }

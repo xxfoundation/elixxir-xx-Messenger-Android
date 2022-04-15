@@ -91,7 +91,6 @@ class SettingsFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        showFirstTimeSettings()
         initComponents(view)
         bindPredictiveText()
         bindEnterToSend()
@@ -102,17 +101,7 @@ class SettingsFragment : BaseFragment() {
         bindCoverTrafficSwitcher()
         bindBiometricsSwitcher()
         bindDeleteAccount()
-    }
-
-    private fun showFirstTimeSettings() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstTimeSettings) {
-            showInfoDialog(
-                title = R.string.settings_account_recovery_dialog_title,
-                body = R.string.settings_account_recovery_dialog_body,
-                null
-            )
-            preferences.isFirstTimeSettings = false
-        }
+        bindBackupProfile()
     }
 
     fun initComponents(root: View) {
@@ -320,13 +309,13 @@ class SettingsFragment : BaseFragment() {
             settingsBiometricSwitch.isChecked = areBiometricsEnabled()
 
             val biometricsNotificationSwitcher =
-                CompoundButton.OnCheckedChangeListener { switcher, isEnabled ->
+                CompoundButton.OnCheckedChangeListener { _, isEnabled ->
                     switchBiometrics(isEnabled)
                 }
 
             settingsBiometricSwitch.setOnCheckedChangeListener(biometricsNotificationSwitcher)
 
-            settingsViewModel.enableBiometrics.observe(viewLifecycleOwner, { result ->
+            settingsViewModel.enableBiometrics.observe(viewLifecycleOwner) { result ->
                 if (result is SimpleRequestState.Success) {
                     settingsBiometricSwitch.isChecked = result.value
                     settingsBiometricSwitch.setOnCheckedChangeListener(
@@ -334,7 +323,7 @@ class SettingsFragment : BaseFragment() {
                     )
                     settingsViewModel.enableBiometrics.value = SimpleRequestState.Completed()
                 }
-            })
+            }
         } else {
             settingsBiometricSwitch.isChecked = false
             settingsBiometricSwitch.isEnabled = false
@@ -358,28 +347,36 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun bindBackupProfile() {
-//        settingsBackupProfile.setOnClickListener {
-//            FileUtils.checkPermissionDo(
-//                this,
-//                REQUEST_CODE_WRITE_EXTERNAL_STORAGE
-//            ) { onWriteGranted() }
-//        }
+        settingsBackupProfile.setOnClickListener {
+            settingsViewModel.onBackupClicked()
+        }
     }
 
-    private fun backupProfile() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT_TREE)
-        intent.addCategory(Intent.CATEGORY_DEFAULT)
-        intent.putExtra("android.content.extra.SHOW_ADVANCED", true)
-        intent.putExtra("android.content.extra.FANCY", true)
-        intent.addFlags(
-            Intent.FLAG_GRANT_READ_URI_PERMISSION
-                    or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-        )
+    override fun onStart() {
+        super.onStart()
+        observeUi()
+    }
 
-        startActivityForResult(
-            Intent.createChooser(intent, "Choose a directory"),
-            REQUEST_CODE_SELECT_FOLDER
-        )
+    private fun observeUi() {
+        settingsViewModel.navigateToBackupSetup.observe(viewLifecycleOwner) { navigate ->
+            if (navigate) navigateToBackupSetup()
+        }
+
+        settingsViewModel.navigateToBackupSettings.observe(viewLifecycleOwner) { navigate ->
+            if (navigate) navigateToBackupSettings()
+        }
+    }
+
+    private fun navigateToBackupSettings() {
+        val directions = SettingsFragmentDirections.actionSettingsToBackupSettings()
+        findNavController().navigate(directions)
+        settingsViewModel.onBackupNavigationHandled()
+    }
+
+    private fun navigateToBackupSetup() {
+        val directions = SettingsFragmentDirections.actionSettingsToBackupSetup()
+        findNavController().navigate(directions)
+        settingsViewModel.onBackupNavigationHandled()
     }
 
     private fun navigateToDeleteAccount() {
@@ -393,7 +390,7 @@ class SettingsFragment : BaseFragment() {
             navigateToDeleteAccount()
         }
 
-        settingsViewModel.deleteUser.observe(viewLifecycleOwner, { result ->
+        settingsViewModel.deleteUser.observe(viewLifecycleOwner) { result ->
             when (result) {
                 is DataRequestState.Start -> {
                     loadingProgress.show()
@@ -414,7 +411,7 @@ class SettingsFragment : BaseFragment() {
                     loadingProgress.dismiss()
                 }
             }
-        })
+        }
     }
 
     private fun onDeleteSuccess() {
@@ -428,25 +425,6 @@ class SettingsFragment : BaseFragment() {
                 Runtime.getRuntime().exit(0)
             }
         }, 500)
-    }
-
-    private fun onWriteGranted() {
-        backupProfile()
-    }
-
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
-    ) {
-        if (requestCode == REQUEST_CODE_WRITE_EXTERNAL_STORAGE) {
-            if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
-                onWriteGranted()
-            } else {
-                showError("This permission is required in order to activate this feature.")
-            }
-            return
-        }
     }
 
     companion object {

@@ -492,7 +492,7 @@
             android:textColor="@color/neutral_active"
             android:textColorHint="@color/neutral_disabled"
             android:textSize="@dimen/text_14"
-            android:visibility="@{chatViewModel.messageInputVisible}"
+            app:invisible="@{!chatViewModel.messageInputVisible}"
             app:enterToSend="@{chatViewModel.enterToSend}"
             app:incognito="@{chatViewModel.incognitoKeyboard}"
             app:layout_constraintBottom_toTopOf="@id/galleryButton"

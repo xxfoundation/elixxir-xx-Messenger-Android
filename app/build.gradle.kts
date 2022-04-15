@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -33,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 483
-        versionName = "2.02"
+        versionCode = 521
+        versionName = "2.03"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -61,6 +63,14 @@ android {
             "APP_VERSION",
             android.defaultConfig.versionName ?: "1.0"
         )
+
+        // Dropbox API
+        val properties = gradleLocalProperties(rootDir)
+        val dropboxKey = properties["DROPBOX_KEY"] ?: ""
+        val dropboxAccessToken = properties["DROPBOX_ACCESS_TOKEN"] ?: ""
+        buildConfigField("String", "DROPBOX_KEY", "\"$dropboxKey\"")
+        buildConfigField("String", "DROPBOX_ACCESS_TOKEN", "\"$dropboxAccessToken\"")
+        manifestPlaceholders["dropboxKey"] = dropboxKey
     }
 
     buildTypes {
@@ -160,7 +170,7 @@ android {
 
     lint {
         lintConfig = file("lint_config.xml")
-        disable("MissingTranslation")
+//        disable("MissingTranslation")
     }
 
     packagingOptions.excludes.addAll(
@@ -171,6 +181,7 @@ android {
             "META-INF/licenses/**",
             "META-INF/AL2.0",
             "META-INF/LGPL2.1",
+            "META-INF/DEPENDENCIES"
         )
     )
 
@@ -227,6 +238,7 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-runtime:2.4.1")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
     kapt("androidx.room:room-compiler:2.4.1")
 
     // Image Handling
@@ -316,10 +328,8 @@ dependencies {
     androidTestImplementation("com.linkedin.dexmaker:dexmaker-mockito:2.28.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
 
-    // Testing code should not be included in the main code.
-    // Once https://issuetracker.google.com/128612536 is fixed this can be fixed.
     androidTestImplementation("androidx.fragment:fragment-testing:1.3.6")
-    implementation("androidx.test:core:1.4.0")
+    testImplementation("androidx.test:core:1.4.0")
 
     // AndroidX Test - JVM testing
     testImplementation("androidx.test.ext:junit-ktx:1.1.3")
@@ -330,6 +340,20 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt")
+
+    // Google Sign-In (required for Google Drive)
+    implementation("com.google.android.gms:play-services-auth:20.1.0")
+
+    // Google Drive
+    implementation("com.google.api-client:google-api-client-android:1.23.0") {
+        exclude("org.apache.httpcomponents", "guava-jdk5")
+    }
+    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
+        exclude("org.apache.httpcomponents", "guava-jdk5")
+    }
+
+    // Dropbox
+    implementation("com.dropbox.core:dropbox-core-sdk:4.0.1")
 }
 
 fun getNdf(): String {

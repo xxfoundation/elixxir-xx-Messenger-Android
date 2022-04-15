@@ -7,6 +7,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
@@ -45,7 +46,8 @@ class ClientRepository @Inject constructor(
     val schedulers: SchedulerProvider,
     val daoRepo: DaoRepository,
     private val preferences: BasePreferences,
-    private val messageReceivedListener: MessageReceivedListener
+    private val messageReceivedListener: MessageReceivedListener,
+    private val backupService: BackupService
 ) : BaseRepository {
 
     // Initialization ========================================================================
@@ -68,6 +70,11 @@ class ClientRepository @Inject constructor(
     override fun newClient(storageDir: String, password: ByteArray) {
         BindingsWrapperBindings.newClient(storageDir, password)
         login(storageDir, password)
+        initializeNewAccountBackup()
+    }
+
+    private fun initializeNewAccountBackup() {
+        backupService.initializeBackup()
     }
 
     override fun login(storageDir: String, password: ByteArray): ByteArray {
@@ -180,11 +187,19 @@ class ClientRepository @Inject constructor(
     override fun startNetworkFollower(): Single<Boolean> {
         return Single.create { emitter ->
             try {
+                resumeBackup()
                 clientWrapper.startNetworkFollower()
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
+        }
+    }
+
+    private fun resumeBackup() {
+        if (preferences.isBackupEnabled) {
+            backupService.resumeBackup()
+            backupService.backupUserFacts(userWrapper)
         }
     }
 
@@ -200,6 +215,7 @@ class ClientRepository @Inject constructor(
     }
 
     override fun getNetworkFollowerStatus(): NetworkFollowerStatus {
+        if (!::fileRepository.isInitialized) initFileTransferManager()
         return NetworkFollowerStatus.from(clientWrapper.getNetworkFollowerStatus())
     }
 
@@ -598,14 +614,10 @@ class ClientRepository @Inject constructor(
                     return@create
                 }
 
-                val removed = udWrapperBindings.removeFact(factType)
-                if (removed) {
-                    removeFactFromUser(factType)
-                    exportUserContact()
-                    emitter.onSuccess(true)
-                } else {
-                    emitter.onSuccess(false)
-                }
+                udWrapperBindings.removeFact(factType)
+                removeFactFromUser(factType)
+                exportUserContact()
+                emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
@@ -615,7 +627,9 @@ class ClientRepository @Inject constructor(
     private fun removeFactFromUser(factType: FactType) {
         val userContact = getBaseUser()
         val factsHash = importUserFactsHash()
-        factsHash.remove(factType)
+        if (factsHash.containsKey(factType)) {
+            factsHash.remove(factType)
+        }
 
         factsHash[FactType.USERNAME]?.let { username ->
             userContact.addUsername(username)
@@ -878,8 +892,13 @@ class ClientRepository @Inject constructor(
     private fun exportUserContact() {
         val facts = userWrapper.getStringifiedFacts()
         Timber.d("[CLIENT REPO] exporting user facts: $facts")
-        preferences.userData = facts
+        if (wereFactsModified(facts, preferences.userData)) {
+            preferences.userData = facts
+            backupService.backupUserFacts(userWrapper)
+        }
     }
+
+    private fun wereFactsModified(original: String, new: String) = original != new
 
     private fun importUserContact(): List<String>? {
         //Stringified Facts: Uemu8,Ebbbb@bbb.com,P2109135060NZ;
@@ -967,9 +986,9 @@ class ClientRepository @Inject constructor(
     companion object {
         @Volatile
         private var instance: ClientRepository? = null
-        private const val NODES_READY_POLL_INTERVAL = 1_000L
-        private const val NODES_READY_MAX_RETRIES = 20
-        private const val NODES_READY_MINIMUM_RATE = 0.70
+        const val NODES_READY_POLL_INTERVAL = 1_000L
+        const val NODES_READY_MAX_RETRIES = Int.MAX_VALUE
+        const val NODES_READY_MINIMUM_RATE = 0.70
 
         lateinit var clientWrapper: ClientWrapperBindings
         lateinit var userWrapper: ContactWrapperBindings
@@ -1003,14 +1022,16 @@ class ClientRepository @Inject constructor(
             schedulers: SchedulerProvider,
             daoRepo: DaoRepository,
             preferencesRepository: PreferencesRepository,
-            messageReceivedListener: MessageReceivedListener
+            messageReceivedListener: MessageReceivedListener,
+            backupService: BackupService
         ): ClientRepository {
             return instance ?: synchronized(this) {
                 val client = ClientRepository(
                     schedulers,
                     daoRepo,
                     preferencesRepository,
-                    messageReceivedListener
+                    messageReceivedListener,
+                    backupService
                 )
                 instance = client
                 return client

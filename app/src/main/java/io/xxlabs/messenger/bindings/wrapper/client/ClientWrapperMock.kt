@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
+import bindings.Client
 import bindings.NetworkHealthCallback
 import io.reactivex.Single
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
@@ -16,6 +17,8 @@ import timber.log.Timber
 import kotlin.random.Random
 
 class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
+    override val client: Client = Client()
+
     //Network
     override fun startNetworkFollower() {
         Timber.v("Starting Network Follower....")

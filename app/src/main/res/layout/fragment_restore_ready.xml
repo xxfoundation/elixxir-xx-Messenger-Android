@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".backup.ui.restore.RestoreStateFragment">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.backup.ui.restore.RestoreReady" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <Button
+            android:id="@+id/restore_status_restore_account"
+            android:layout_marginTop="24dp"
+            android:text="@string/backup_found_restore_account"
+            android:onClick="@{()-> ui.onNextClicked.invoke()}"
+            app:layout_constraintBottom_toTopOf="@id/restore_status_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+
+        <Button
+            android:id="@+id/restore_status_cancel"
+            android:text="@android:string/cancel"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="48dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:onClick="@{()-> ui.onCancelClicked.invoke()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/restore_status_restore_account"
+            app:layout_constraintStart_toStartOf="@id/restore_status_restore_account"
+            style="@style/registration_borderless_text_button" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

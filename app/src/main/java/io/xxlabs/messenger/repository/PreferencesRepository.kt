@@ -212,21 +212,19 @@ class PreferencesRepository @Inject constructor(context: Context) : BasePreferen
             preferences.edit().putBoolean("is_first_time_cover_messages", value).apply()
         }
 
-    override var isFirstTimeSettings: Boolean
-        get() = preferences.getBoolean("is_first_time_settings", true)
-        set(value) {
-            preferences.edit().putBoolean("is_first_time_settings", value).apply()
-        }
-
     override var preImages: String
         get() = preferences.getString("preimages", "")!!
         set(value) {
             preferences.edit().putString("preimages", value).apply()
         }
 
-    override var userData: String
+    override var userData: String = preferences.getString("user_data", "")!!
         get() = preferences.getString("user_data", "")!!
         set(value) {
+            if (field != value) {
+                isUserProfileBackedUp = false
+                field = value
+            }
             preferences.edit().putString("user_data", value).apply()
         }
 
@@ -300,6 +298,69 @@ class PreferencesRepository @Inject constructor(context: Context) : BasePreferen
         set(stringSet) {
             field = stringSet
             preferences.edit().putStringSet("timeoutChats", stringSet).apply()
+        }
+
+    override var isBackupEnabled: Boolean = preferences.getBoolean("backup_enabled", false)
+        get() = preferences.getBoolean("backup_enabled", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("backup_enabled", value).apply()
+        }
+
+    override var isGoogleDriveEnabled: Boolean = preferences.getBoolean("drive_enabled", false)
+        get() = preferences.getBoolean("drive_enabled", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("drive_enabled", value).apply()
+        }
+
+    override var isDropboxEnabled: Boolean = preferences.getBoolean("dropbox_enabled", false)
+        get() = preferences.getBoolean("dropbox_enabled", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("dropbox_enabled", value).apply()
+        }
+
+    override var backupPassword: String? = preferences.getString("backup_pw", null)
+        get() = preferences.getString("backup_pw", null)
+        set(value) {
+            field = value
+            preferences.edit().putString("backup_pw", value).apply()
+        }
+
+    override var autoBackup: Boolean = preferences.getBoolean("auto_backup", false)
+        get() = preferences.getBoolean("auto_backup", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("auto_backup", value).apply()
+
+        }
+    override var wiFiOnlyBackup: Boolean = preferences.getBoolean("wifi_only_backup", false)
+        get() = preferences.getBoolean("wifi_only_backup", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("wifi_only_backup", value).apply()
+        }
+
+    override var backupLocation: String? = preferences.getString("backup_location", null)
+        get() = preferences.getString("backup_location", null)
+        set(value) {
+            field = value
+            preferences.edit().putString("backup_location", value).apply()
+        }
+
+    override var dbxCredential: String? = preferences.getString("dbx_credential", null)
+        get() = preferences.getString("dbx_credential", null)
+        set(value) {
+            field = value
+            preferences.edit().putString("dbx_credential", value).apply()
+        }
+
+    override var isUserProfileBackedUp: Boolean = preferences.getBoolean("user_backed_up", false)
+        get() = preferences.getBoolean("user_backed_up", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("user_backed_up", value).apply()
         }
 
     override var areDebugLogsOn: Boolean = preferences.getBoolean("show_debug_logs", true)

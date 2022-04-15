@@ -5,29 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.databinding.FragmentRegistration2faBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.global.NetworkViewModel
-import io.xxlabs.messenger.ui.intro.registration.RegistrationViewModel
-import io.xxlabs.messenger.ui.main.ud.registration.UdRegistrationViewModel
-import javax.inject.Inject
+import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
+import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
 
-class RegistrationTfaFragment : Fragment(), Injectable {
-
-    /* ViewModels */
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var registrationViewModel: RegistrationViewModel
-    private lateinit var networkViewModel: NetworkViewModel
-    private lateinit var udProfileRegistrationViewModel: UdRegistrationViewModel
+class RegistrationTfaFragment : RegistrationFlowFragment(), Injectable {
 
     /* UI */
 
@@ -63,13 +50,6 @@ class RegistrationTfaFragment : Fragment(), Injectable {
     }
 
     private fun initViewModels() {
-        registrationViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[RegistrationViewModel::class.java]
-        networkViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[NetworkViewModel::class.java]
-        udProfileRegistrationViewModel =
-            ViewModelProvider(this, viewModelFactory)[UdRegistrationViewModel::class.java]
-
         binding.tfaCredentials = tfaCredentials
         binding.ui = registrationViewModel
     }
@@ -96,8 +76,12 @@ class RegistrationTfaFragment : Fragment(), Injectable {
     }
 
     private fun navigateNextStep() {
+        val step = when (factType) {
+            FactType.EMAIL -> RegistrationStep.EMAIL
+            else -> RegistrationStep.PHONE
+        }
         val directions = RegistrationTfaFragmentDirections
-            .actionRegistrationTfaFragmentToRegistrationAddedFragment(factType)
+            .actionRegistrationTfaFragmentToRegistrationCompletedStepFragment(step)
         findNavController().navigate(directions)
         ui.onTfaNavigateHandled(tfaCredentials)
     }

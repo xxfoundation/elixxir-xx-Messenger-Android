@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".backup.ui.save.BackupSettingsFragment">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.backup.ui.save.BackupSettingsUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/backup_settings_title"
+            style="@style/dialog_title"
+            android:text="@string/backup_settings_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/backup_settings_description"
+            style="@style/dialog_body"
+            android:layout_marginTop="24dp"
+            android:text="@string/backup_settings_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backup_settings_title" />
+
+        <Button
+            android:id="@+id/backup_settings_backup_now"
+            style="@style/registration_step_next_button"
+            android:layout_marginTop="24dp"
+            android:enabled="@{ui.isEnabled}"
+            android:onClick="@{() -> ui.backup.backupNow()}"
+            android:text="@string/backup_settings_backup_now"
+            app:invisible="@{ui.backupInProgress}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backup_settings_description" />
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/backup_progressbar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="@{ui.backupInProgress}"
+            app:backupProgress="@{ui.backup.progress}"
+            app:layout_constraintEnd_toEndOf="@id/backup_settings_backup_now"
+            app:layout_constraintStart_toStartOf="@id/backup_settings_backup_now"
+            app:layout_constraintTop_toTopOf="@id/backup_settings_backup_now"
+            app:layout_constraintBottom_toTopOf="@id/restore_progress_text"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/restore_progress_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Uploading..."
+            android:visibility="@{ui.backupInProgress}"
+            app:layout_constraintEnd_toEndOf="@id/backup_progressbar"
+            app:layout_constraintStart_toStartOf="@id/backup_progressbar"
+            app:layout_constraintTop_toBottomOf="@id/backup_progressbar"
+            app:layout_constraintBottom_toBottomOf="@id/backup_settings_backup_now"
+            tools:visibility="visible" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:background="@color/neutral_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backup_settings_backup_now" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/backup_locations_list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/registration_horizontal_margin"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="@dimen/registration_horizontal_margin"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/separator"
+            tools:itemCount="3"
+            tools:listitem="@layout/list_item_backup_location" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

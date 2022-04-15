@@ -19,7 +19,6 @@ abstract class BasePreferences {
     //User
     abstract var isFirstTimeNotifications: Boolean
     abstract var isFirstTimeCoverMessages: Boolean
-    abstract var isFirstTimeSettings: Boolean
     abstract var preImages: String
     abstract var userData: String
     abstract var userPicture: String
@@ -51,4 +50,15 @@ abstract class BasePreferences {
 
     //Other
     abstract var contactRoundRequests: MutableSet<String>
+
+    //Account Backup
+    abstract val isBackupEnabled: Boolean
+    abstract val isGoogleDriveEnabled: Boolean
+    abstract val isDropboxEnabled: Boolean
+    abstract var backupPassword: String?
+    abstract var autoBackup: Boolean
+    abstract var wiFiOnlyBackup: Boolean
+    abstract var backupLocation: String?
+    abstract var dbxCredential: String?
+    abstract var isUserProfileBackedUp: Boolean
 }

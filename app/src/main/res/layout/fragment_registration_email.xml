@@ -10,9 +10,7 @@
             type="io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationUI" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/registration_flow_root_view">
 
         <TextView
             android:id="@+id/registration_email_title_text"

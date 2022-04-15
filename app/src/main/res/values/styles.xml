@@ -496,6 +496,7 @@
         <item name="fontFamily">@font/mulish_regular</item>
     </style>
 
+    <!-- xx_title -->
     <style name="bold_title" parent="XxTextStyle.Bold">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -506,6 +507,7 @@
         <item name="android:textColor">@color/neutral_active</item>
     </style>
 
+    <!-- xx_subtitle -->
     <style name="dialog_title" parent="xx_font">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -517,6 +519,7 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <!-- xx_body_text -->
     <style name="dialog_body" parent="xx_font">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -529,6 +532,7 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <!-- xx_outlined_text_input -->
     <style name="registration_text_input" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
@@ -540,6 +544,7 @@
         <item name="fontFamily">@font/mulish_regular</item>
     </style>
 
+    <!-- xx_button_filled -->
     <style name="registration_step_next_button" parent="xx_font">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/registration_button_height</item>
@@ -552,6 +557,7 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <!-- xx_button_outlined -->
     <style name="dialog_button" parent="xx_font">
         <item name="android:layout_width">@dimen/registration_dialog_button_width</item>
         <item name="android:layout_height">@dimen/registration_button_height</item>
@@ -563,6 +569,7 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <!-- xx_button_filled -->
     <style name="confirm_dialog_button" parent="dialog_button">
         <item name="android:layout_width">0dp</item>
         <item name="android:background">@drawable/bg_rectangle_rounded_corners_big_radius</item>
@@ -570,6 +577,7 @@
         <item name="android:textColor">@color/neutral_off_white</item>
     </style>
 
+    <!-- xx_borderless_button -->
     <style name="registration_borderless_text_button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_width">wrap_content</item>
@@ -596,6 +604,7 @@
         <item name="android:tint">@color/neutral_weak</item>
     </style>
 
+    <!-- xx_text_input_edittext -->
     <style name="registration_text_input_edittext" parent="xx_font">
         <item name="android:singleLine">true</item>
     </style>
@@ -609,5 +618,11 @@
 
     <style name="BottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <style name="registration_flow_root_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/background</item>
     </style>
 </resources>

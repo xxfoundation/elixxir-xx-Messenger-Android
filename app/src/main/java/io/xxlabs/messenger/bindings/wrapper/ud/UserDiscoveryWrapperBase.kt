@@ -24,4 +24,6 @@ interface UserDiscoveryWrapperBase {
     fun deleteUser(username: String)
     fun userLookup(userId: ByteArray, callback: (ContactWrapperBase?, String?) -> Unit)
     fun multiLookup(ids: List<ByteArray>, callback: (List<ContactWrapperBase>?, ids: IdListBase, String?) -> Unit)
+    fun setAlternativeUD(ipAddress: ByteArray, cert: ByteArray, contactFile: ByteArray)
+    fun restoreNormalUD()
 }

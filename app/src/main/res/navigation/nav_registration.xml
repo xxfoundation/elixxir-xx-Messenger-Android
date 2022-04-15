@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_registration"
+    app:startDestination="@id/registrationUsernameFragment">
+
+    <fragment
+        android:id="@+id/registrationUsernameFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.username.RegistrationUsernameFragment"
+        android:label="Username Registration"
+        tools:layout="@layout/fragment_registration_username">
+        <action
+            android:id="@+id/action_registrationUsernameFragment_to_registrationWelcomeFragment"
+            app:destination="@id/registrationWelcomeFragment"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_registrationUsernameFragment_to_restoreAccountFragment"
+            app:destination="@id/restoreAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationWelcomeFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.welcome.RegistrationWelcomeFragment"
+        android:label="RegistrationWelcomeFragment"
+        tools:layout="@layout/fragment_registration_welcome">
+        <action
+            android:id="@+id/action_registrationWelcomeFragment_to_registrationEmailFragment"
+            app:destination="@id/registrationEmailFragment" />
+        <argument
+            android:name="username"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationPhoneFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.phone.RegistrationPhoneFragment"
+        android:label="RegistrationPhoneFragment"
+        tools:layout="@layout/fragment_registration_phone">
+        <action
+            android:id="@+id/action_registrationPhoneFragment_to_registrationTfaFragment"
+            app:destination="@id/registrationTfaFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationEmailFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.email.RegistrationEmailFragment"
+        android:label="RegistrationEmailFragment"
+        tools:layout="@layout/fragment_registration_email">
+        <action
+            android:id="@+id/action_registrationEmailFragment_to_registrationTfaFragment"
+            app:destination="@id/registrationTfaFragment" />
+        <action
+            android:id="@+id/action_registrationEmailFragment_to_registrationPhoneFragment"
+            app:destination="@id/registrationPhoneFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationCompletedStepFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.success.RegistrationCompletedStepFragment"
+        android:label="RegistrationCompletedStep"
+        tools:layout="@layout/fragment_registration_completed_step">
+        <argument
+            android:name="step"
+            app:argType="io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep" />
+        <action
+            android:id="@+id/action_registrationCompletedStepFragment_to_registrationPhoneFragment"
+            app:destination="@id/registrationPhoneFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/registrationTfaFragment"
+        android:name="io.xxlabs.messenger.ui.intro.registration.tfa.RegistrationTfaFragment"
+        android:label="RegistrationTfaFragment"
+        tools:layout="@layout/fragment_registration_2fa" >
+        <action
+            android:id="@+id/action_registrationTfaFragment_to_registrationCompletedStepFragment"
+            app:destination="@id/registrationCompletedStepFragment" />
+        <argument
+            android:name="tfaCredentials"
+            app:argType="io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/restoreAccountFragment"
+        android:name="io.xxlabs.messenger.backup.ui.list.RestoreListFragment"
+        android:label="RestoreAccountFragment"
+        tools:layout="@layout/fragment_backup_locations" >
+        <action
+            android:id="@+id/action_restoreList_to_restoreDetail"
+            app:destination="@id/restoreDetailFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/restoreDetailFragment"
+        android:name="io.xxlabs.messenger.backup.ui.restore.RestoreDetailFragment"
+        android:label="fragment_backup_found"
+        tools:layout="@layout/fragment_restore_detail" >
+        <argument
+            android:name="restoreOption"
+            app:argType="io.xxlabs.messenger.backup.model.RestoreOption" />
+        <action
+            android:id="@+id/actionRestoreDetailToRegistrationCompleted"
+            app:destination="@id/registrationCompletedStepFragment" />
+    </fragment>
+</navigation>

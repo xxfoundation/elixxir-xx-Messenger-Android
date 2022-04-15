@@ -10,9 +10,7 @@
             type="io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationUI" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/registration_flow_root_view">
 
         <TextView
             android:id="@+id/registration_username_title_text"
@@ -20,6 +18,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/registration_username_body_text"
             style="@style/bold_title"
             tools:text="@string/registration_username_title"/>
 
@@ -29,20 +28,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registration_username_title_text"
+            app:layout_constraintBottom_toTopOf="@id/registration_username_input"
             style="@style/dialog_body" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/registration_username_input"
+            style="@style/registration_text_input"
             android:enabled="@{ui.usernameInputEnabled}"
+            app:endIconDrawable="@drawable/ic_outline_info_24"
+            app:endIconMode="custom"
+            app:endIconOnClickListener="@{() -> ui.onUsernameInfoClicked()}"
+            app:endIconTint="@color/brand_default"
             app:error="@{ui.usernameError}"
+            app:layout_constraintBottom_toTopOf="@id/registration_username_next_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/registration_username_body_text"
-            app:endIconMode="custom"
-            app:endIconDrawable="@drawable/ic_outline_info_24"
-            app:endIconTint="@color/brand_default"
-            app:endIconOnClickListener="@{() -> ui.onUsernameInfoClicked()}"
-            style="@style/registration_text_input">
+            app:layout_constraintTop_toBottomOf="@+id/registration_username_body_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 style="@style/registration_text_input_edittext"
@@ -51,20 +52,63 @@
                 android:hint="@string/registration_choose_username_hint"
                 android:imeOptions="actionDone"
                 android:maxLength="@{ui.maxUsernameLength}"
-                android:text="@={ui.username}"
+                android:afterTextChanged="@{ui::onUsernameInput}"
                 app:inputFilters="@{ui.usernameFilters}" />
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
             android:id="@+id/registration_username_next_btn"
-            android:text="@string/registration_flow_next"
-            android:onClick="@{() -> ui.onUsernameNextClicked()}"
+            style="@style/registration_step_next_button"
+            android:layout_marginTop="24dp"
             android:enabled="@{ui.usernameNextButtonEnabled}"
+            android:onClick="@{() -> ui.onUsernameNextClicked()}"
+            android:text="@string/registration_flow_next"
+            app:layout_constraintBottom_toTopOf="@id/separator"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registration_username_input"/>
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/neutral_line"
+            app:layout_constraintTop_toBottomOf="@id/registration_username_next_btn"
+            app:layout_constraintBottom_toTopOf="@id/registration_username_restore_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/registration_username_restore_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/registration_username_restore_account"
+            android:gravity="center"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="36dp"
+            android:textSize="24sp"
+            app:layout_constraintTop_toBottomOf="@id/separator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/registration_username_restore_btn"
+            style="@style/dialog_title" />
+
+        <Button
+            android:id="@+id/registration_username_restore_btn"
+            android:text="@string/registration_username_restore_button"
+            android:onClick="@{() -> ui.onRestoreAccountClicked()}"
+            android:enabled="@{ui.usernameInputEnabled}"
+            android:layout_width="0dp"
             android:layout_marginBottom="@dimen/registration_vertical_margin"
+            app:layout_constraintTop_toBottomOf="@id/registration_username_restore_text"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/registration_step_next_button" />
+            style="@style/dialog_button" />
 
         <ProgressBar
             android:id="@+id/registration_username_progressbar"

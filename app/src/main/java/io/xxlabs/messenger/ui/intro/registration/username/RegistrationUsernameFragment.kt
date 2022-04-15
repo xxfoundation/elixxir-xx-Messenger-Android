@@ -5,31 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.FragmentRegistrationUsernameBinding
-import io.xxlabs.messenger.di.utils.Injectable
-import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.support.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.RegistrationViewModel
-import io.xxlabs.messenger.ui.main.ud.registration.UdRegistrationViewModel
-import javax.inject.Inject
+import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
 
 /**
  * Username creation screen.
  */
-class RegistrationUsernameFragment : Fragment(), Injectable {
-
-    /* ViewModels */
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
-    private lateinit var registrationViewModel: RegistrationViewModel
-    private lateinit var networkViewModel: NetworkViewModel
-    private lateinit var udProfileRegistrationViewModel: UdRegistrationViewModel
+class RegistrationUsernameFragment : RegistrationFlowFragment() {
 
     /* UI */
 
@@ -54,12 +39,6 @@ class RegistrationUsernameFragment : Fragment(), Injectable {
     }
 
     private fun initViewModels() {
-        registrationViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[RegistrationViewModel::class.java]
-        networkViewModel =
-            ViewModelProvider(requireActivity(), viewModelFactory)[NetworkViewModel::class.java]
-        udProfileRegistrationViewModel =
-            ViewModelProvider(this, viewModelFactory)[UdRegistrationViewModel::class.java]
         binding.ui = registrationViewModel
     }
 
@@ -80,6 +59,10 @@ class RegistrationUsernameFragment : Fragment(), Injectable {
         ui.usernameNavigateDemo.observe(viewLifecycleOwner) { isDemoAcct ->
             if (isDemoAcct) navigateDemo()
         }
+
+        ui.usernameNavigateRestore.observe(viewLifecycleOwner) { restoreAcct ->
+            if (restoreAcct) navigateRestore()
+        }
     }
 
     private fun displayUsernameInfoDialog() {
@@ -96,8 +79,13 @@ class RegistrationUsernameFragment : Fragment(), Injectable {
     }
 
     private fun navigateDemo() {
+        onRegistrationComplete()
+        ui.onUsernameNavigateHandled()
+    }
+
+    private fun navigateRestore() {
         val directions = RegistrationUsernameFragmentDirections
-            .actionGlobalChats()
+            .actionRegistrationUsernameFragmentToRestoreAccountFragment()
         findNavController().navigate(directions)
         ui.onUsernameNavigateHandled()
     }

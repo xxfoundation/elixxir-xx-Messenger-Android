@@ -14,6 +14,11 @@ interface BindingsWrapperBase {
     fun newClient(path: String, password: ByteArray)
     fun login(storageDir: String, password: ByteArray): ClientWrapperBase
     fun newUserDiscovery(clientWrapper: ClientWrapperBase): UserDiscoveryWrapperBase
+    fun newUserDiscoveryFromBackup(
+        clientWrapper: ClientWrapperBase,
+        emailStringified: String? = "",
+        phoneStringified: String? = ""
+    ): UserDiscoveryWrapperBase
     fun createSessionFolder(context: Context): File?
     fun getSessionFolder(context: Context): File?
     fun setTimeSource(kronosFunction: () -> Long)

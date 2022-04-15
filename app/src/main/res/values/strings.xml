@@ -130,6 +130,7 @@
     <string name="notification_e2e_text">New private message</string>
     <string name="notification_group_text">New group message</string>
     <string name="notification_endft_text">New media received</string>
+    <string name="notification_reset_text">One of your contacts has restored their account</string>
 
     <string name="default_notification_channel_label">Other notifications</string>
     <string name="notification_request_channel_label">Received requests</string>
@@ -155,6 +156,7 @@
     <!-- Registration: Username -->
 
     <string name="registration_username_title">Choose your username.</string>
+    <string name="registration_username_title_span">username</string>
     <string name="registration_username_body">
         Your unique username is the first name your contacts
         will see in their searches and contact lists.\n\nThis cannot be changed.</string>
@@ -175,6 +177,8 @@
     <string name="registration_error_username_min_len">
         User name must be at least four characters</string>
     <string name="registration_error_username_taken">Username taken. Try again.</string>
+    <string name="registration_username_restore_account">Already have an account?</string>
+    <string name="registration_username_restore_button">Restore From Backup</string>
 
     <!-- Registration: Welcome -->
 
@@ -227,6 +231,7 @@
         User Discovery Service.</string>
     <string name="registration_phone_info_link_text">User Discovery Service</string>
     <string name="registration_phone_info_link_url">https://links.xx.network/ud</string>
+
     <!-- Registration: 2FA -->
 
     <string name="registration_2fa_title">Please enter the code sent to your %s</string>
@@ -242,6 +247,7 @@
     </string>
 
     <!-- Registration: Email 2FA -->
+
     <string name="registration_email_2fa_title">email.</string>
 
     <!-- Registration: Phone 2FA -->
@@ -369,6 +375,91 @@
         \nSay hello!</string>
     <string name="message_hint">Type your message here...</string>
 
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+
+    <!-- Account backup -->
+
+    <string name="backup_toolbar_title">Account Backup</string>
+
+    <!-- Backup Setup -->
+
+    <string name="backup_setup_title">Setup your backup service.</string>
+    <string name="backup_setup_title_span_text">backup service</string>
+    <string name="backup_setup_description">
+        Back up your account to a cloud storage service, you can restore it along with only your
+        contacts when you reinstall xx Messenger on another device.</string>
+    <string name="backup_setup_description_span_text">ⓘ</string>
+    <string name="backup_service_google_drive">Google Drive</string>
+    <string name="backup_service_icloud">iCloud</string>
+    <string name="backup_service_dropbox">Dropbox</string>
+
+    <!-- Backup Settings -->
+
+    <string name="backup_settings_title">Backup Settings</string>
+    <string name="backup_settings_description">@string/backup_setup_description</string>
+    <string name="backup_settings_description_span_text">
+        @string/backup_setup_description_span_text</string>
+    <string name="backup_settings_backup_now">Backup Now</string>
+    <string name="backup_encryption_warning">
+        Content backed up in %s is not protected by xx Network end-to-end encryption.</string>
+    <string name="backup_latest_backup_label">Latest backup</string>
+    <string name="backup_latest_backup_never">Never</string>
+    <string name="backup_frequency_label">Backup to %s</string>
+    <string name="backup_frequency_automatic">Automatic</string>
+    <string name="backup_frequency_manual">Only when I tap \"Back up\"</string>
+    <string name="backup_network_label">Backup over</string>
+    <string name="backup_network_wifi">Wi-Fi Only</string>
+    <string name="backup_network_any">Wi-Fi or Cellular</string>
+    <string name="backup_complete">Backup Complete!</string>
+    <string name="backup_progress_label">Restoring %1$02d MB of %2$02d MB (%d$3%%)</string>
+    <string name="backup_progress_label_placeholder">Downloading…</string>
+    <string name="backup_generic_error_message">Something went wrong. Please try again.</string>
+
+    <!-- Restore backup -->
+
+    <string name="backup_restore_title">Restore your account.</string>
+    <string name="backup_restore_title_span_text">account</string>
+    <string name="backup_restore_description">
+        Restore your account from a previous backup.
+        You’ll be able to have access to all your contacts.</string>
+    <string name="backup_restore_description_span_text">
+        @string/backup_setup_description_span_text</string>
+    <string name="backup_restore_description_hint">
+        \n\nSelect the cloud storage service you previously used to create a backup.
+    </string>
+
+    <!-- Restore backup: Backup found -->
+
+    <string name="backup_found_title">Backup Found</string>
+    <string name="backup_found_description">Restore your contacts from the following backup.</string>
+    <string name="backup_found_restore_account">Restore Account</string>
+    <string name="backup_found_restore_complete">Account Restore Complete!</string>
+    <string name="backup_date_label">Backup Date</string>
+    <string name="backup_file_size_label">File Size</string>
+
+    <!-- Restore backup: No backup found -->
+
+    <string name="backup_not_found_title">No Backup Found</string>
+    <string name="backup_not_found_description">No account backup was found in %s.</string>
+    <string name="backup_not_found_go_back">Go Back</string>
+
+    <!-- Restore backup: Successful -->
+    <string name="backup_restore_successful_title">Your account has been successfully restored.</string>
+    <string name="backup_restore_successful_title_span_1">account</string>
+    <string name="backup_restore_successful_title_span_2">restored</string>
+    <string name="backup_restore_successful_description">
+        You now have access to all your contacts.</string>
+    <string name="backup_restore_multidevice_warning_dialog_title">Warning</string>
+    <string name="backup_restore_multidevice_warning_dialog_body">
+        xx messenger account can only run on a single device at a time.
+        \n\nUsing the same account on multiple devices may permanently damage your
+        account and make it impossible to converse with your contacts.
+    </string>
+    <string name="backup_restore_multidevice_warning_dialog_button">I understand</string>
+
     <!-- Uncategorized -->
 
     <string name="label_add">Add</string>
@@ -379,12 +470,6 @@
     <string name="settings_biometrics_description">Unlock the app with your device biometrics.</string>
     <string name="settings_predictive_text_description">Allow keyboard to use activity for predictive text in-app.</string>
     <string name="title_activity_intro">IntroActivity</string>
-
-    <!-- Strings used for fragments for navigation -->
-
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="contact_details_nickname">Nickname</string>
@@ -443,4 +528,10 @@
     <string name="group_invitation_pending">You will not be able to send messages until you have accepted the invitation.</string>
     <string name="settings_delete_account_username_error">Username does not match.</string>
     <string name="advanced_settings_title">Advanced Settings</string>
+    <string name="restore_started_warning">This may take up to 5 minutes. Please don’t close the app, put app in background, or turn off your phone\'s screen.</string>
+    <string name="backup_restore_error_no_backup_found">No backup found.</string>
+    <string name="backup_restore_auth_consent_dialog_body">If you don\'t have this cloud provider\'s app installed, your default browser will be launched to complete sign-in.</string>
+    <string name="backup_restore_auth_consent_dialog_title">%s sign in</string>
+    <string name="backup_restore_auth_consent_dialog_positive_button">Continue</string>
+    <string name="backup_restore_auth_consent_dialog_negative_button">Cancel</string>
 </resources>
