@@ -131,7 +131,7 @@ class BindingsRestoreHandler(
     private suspend fun restoreBackup(
         restoreParams: RestoreParams
     ) : BackupReport = withContext(scope.coroutineContext) {
-        log("Parsing backup data.")
+        log("Decrypting backup.")
         with (restoreParams) {
             val jsonBytes = Bindings.newClientFromBackup(
                 ndf, appDirectory, sessionPassword, backupPassword, account.data
@@ -235,7 +235,7 @@ class BindingsRestoreHandler(
             delay(ClientRepository.NODES_READY_POLL_INTERVAL)
             val status = clientWrapper.getNodeRegistrationStatus()
             val rate: Double = ((status.first.toDouble() / status.second))
-            log("[NODE REGISTRATION STATUS]\n\nRegistration rate: $rate")
+            log("[NODE REGISTRATION STATUS]\n\nRegistration rate: ${(rate * 100).toInt()}%")
 
             return if (rate < ClientRepository.NODES_READY_MINIMUM_RATE
                 && retries <= ClientRepository.NODES_READY_MAX_RETRIES

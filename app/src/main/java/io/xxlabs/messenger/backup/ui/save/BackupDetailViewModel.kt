@@ -14,9 +14,9 @@ import io.xxlabs.messenger.backup.model.BackupSettings.*
 import io.xxlabs.messenger.support.appContext
 
 class BackupDetailViewModel @AssistedInject constructor(
-    private val dataSource: BackupDataSource<BackupOption>,
+    dataSource: BackupDataSource<BackupOption>,
     @Assisted override val backup: BackupOption
-) : ViewModel(), BackupDetailController {
+) : BackupViewModel(dataSource), BackupDetailController {
 
     override val settings: LiveData<BackupSettings> by dataSource::settings
 
@@ -29,9 +29,6 @@ class BackupDetailViewModel @AssistedInject constructor(
     override val lastBackupDate: LiveData<Long?> = Transformations.map(backup.lastBackup) {
         it?.date
     }
-
-    override val isEnabled: LiveData<Boolean> by ::_isEnabled
-    private val _isEnabled = MutableLiveData(backup.isEnabled())
 
     override val backupDisclaimer: String
         get() = appContext().getString(
@@ -108,6 +105,10 @@ class BackupDetailViewModel @AssistedInject constructor(
         ) { onNetworkSelected(Network.ANY) }
     }
 
+    override fun getBackupOption(): BackupOption {
+        return backup
+    }
+
     private fun getSpannedDescription(): Spanned {
         return SpannableString("")
     }
@@ -122,11 +123,6 @@ class BackupDetailViewModel @AssistedInject constructor(
 
     override fun onNetworkOptionsHandled() {
         _showNetworkOptions.value = null
-    }
-
-    override fun onEnableToggled(value: Boolean) {
-        dataSource.setEnabled(value, backup)
-        _isEnabled.value = value
     }
 
     override fun onCancelClicked() {

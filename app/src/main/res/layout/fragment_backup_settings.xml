@@ -94,6 +94,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/separator"
             tools:itemCount="3"
-            tools:listitem="@layout/list_item_backup_location" />
+            tools:listitem="@layout/list_item_backup_option" />
+
+        <View
+            android:id="@+id/fade_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.85"
+            android:background="@color/neutral_white"
+            android:visibility="@{!ui.isBackupReady()}"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/backupReadyProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{!ui.isBackupReady()}"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/backupReadyLabel"
+            style="@style/dialog_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/backup_restore_encrypting_backup_text"
+            android:visibility="@{!ui.isBackupReady()}"
+            android:elevation="5dp"
+            android:gravity="center"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/backupReadyProgress"
+            tools:visibility="visible" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -19,7 +19,7 @@ interface BackupService {
      * Called when the backup service is enabled, to set a new [backupPassword], or to force
      * a backup to run.
      */
-    fun initializeBackup(backupPassword: String = "")
+    suspend fun initializeBackup(backupPassword: String = "")
 
     /**
      * Returns true if the backup service is already enabled.

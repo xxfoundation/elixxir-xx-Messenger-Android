@@ -1,9 +1,7 @@
 package io.xxlabs.messenger.backup.ui.save
 
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.*
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -11,26 +9,20 @@ import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.auth.CloudAuthentication
 import io.xxlabs.messenger.backup.data.BackupDataSource
-import io.xxlabs.messenger.backup.model.AuthResultCallback
-import io.xxlabs.messenger.backup.model.BackupLocation
-import io.xxlabs.messenger.backup.model.BackupOption
-import io.xxlabs.messenger.backup.model.BackupSettings
+import io.xxlabs.messenger.backup.model.*
 import io.xxlabs.messenger.backup.ui.list.LocationOption
 import io.xxlabs.messenger.support.appContext
 
 class BackupSettingsViewModel @AssistedInject constructor(
-    private val dataSource: BackupDataSource<BackupOption>,
+    dataSource: BackupDataSource<BackupOption>,
     @Assisted private val cloudAuthSource: CloudAuthentication,
-) : ViewModel(), BackupSettingsController {
+) : BackupViewModel(dataSource), BackupSettingsController {
 
     override val description: Spanned = getSpannedDescription()
     override val backup: BackupOption? get() = dataSource.getActiveOption()
     override val settings: LiveData<BackupSettings> by dataSource::settings
 
     override val backupInProgress: LiveData<Boolean> = isBackupRunning()
-
-    override val isEnabled: LiveData<Boolean> by ::_isEnabled
-    private val _isEnabled = MutableLiveData(backup?.isEnabled() ?: false)
 
     override val locations: List<SettingsOption>
         get() = dataSource.locations.map {
@@ -39,7 +31,7 @@ class BackupSettingsViewModel @AssistedInject constructor(
                     ::onLocationSelected,
                     ::onEnableToggled,
                     backup?.location == it,
-                    it.isEnabled()
+                    isEnabled
                 )
             }
 
@@ -63,11 +55,8 @@ class BackupSettingsViewModel @AssistedInject constructor(
         } ?: MutableLiveData(false)
     }
 
-    private fun onEnableToggled(value: Boolean) {
-        backup?.let {
-            dataSource.setEnabled(value, it)
-            _isEnabled.value = value
-        }
+    override fun getBackupOption(): BackupOption? {
+        return backup
     }
 
     override fun onInfoDialogHandled() {
@@ -83,19 +72,8 @@ class BackupSettingsViewModel @AssistedInject constructor(
     }
 
     private fun getSpannedDescription(): Spanned {
-        val highlight = appContext().getColor(R.color.brand_default)
         val description = appContext().getString(R.string.backup_setup_description)
-        val highlightedText = appContext().getString(R.string.backup_setup_description_span_text)
-        val startIndex = description.indexOf(highlightedText, ignoreCase = true)
-
-        return SpannableString(description).apply {
-            setSpan(
-                ForegroundColorSpan(highlight),
-                startIndex,
-                startIndex + highlightedText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }
+        return SpannableString(description)
     }
 
     private fun onLocationSelected(backupLocation: BackupLocation) {
@@ -140,7 +118,7 @@ interface BackupSettingsViewModelFactory {
 
 interface SettingsOption : LocationOption {
     val isCurrentLocation: Boolean
-    val enabled: Boolean
+    val enabled: LiveData<Boolean>
     fun onEnableToggled(value: Boolean)
 }
 
@@ -148,8 +126,8 @@ private data class BackupSettingsOption(
     private val location: BackupLocation,
     private val _onClick: (BackupLocation) -> Unit,
     private val _onEnableToggled: (Boolean) -> Unit,
-    override val isCurrentLocation: Boolean = false,
-    override val enabled: Boolean = false,
+    override val isCurrentLocation: Boolean,
+    override val enabled: LiveData<Boolean>,
 ) : SettingsOption, BackupLocation by location {
     override fun onClick() = _onClick(location)
     override fun onEnableToggled(value: Boolean) = _onEnableToggled(value)

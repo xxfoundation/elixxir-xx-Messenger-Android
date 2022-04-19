@@ -71,6 +71,10 @@ class BackupDetailFragment : Fragment(), Injectable {
             dialogUI?.let { showNetworkDialog(it) }
         }
 
+        ui.showSetPasswordPrompt.observe(viewLifecycleOwner) { dialogUI ->
+            dialogUI?.let { showSetPasswordDialog(it) }
+        }
+
         ui.backupError.observe(viewLifecycleOwner) { error ->
             error?.message?.let {
                 requireContext().toast(it)
@@ -95,5 +99,11 @@ class BackupDetailFragment : Fragment(), Injectable {
     private fun showRadioButtonDialog(dialogUI: RadioButtonDialogUI) {
         RadioButtonDialog.newInstance(dialogUI)
             .show(childFragmentManager, null)
+    }
+
+    private fun showSetPasswordDialog(dialogUI: EditTextTwoButtonDialogUI) {
+        EditTextTwoButtonInfoDialog.newInstance(dialogUI)
+            .show(childFragmentManager, null)
+        ui.onPasswordPromptHandled()
     }
 }

@@ -35,9 +35,11 @@ class BindingsBackupMediator @Inject constructor(
      */
     override val restoreLogger: RestoreLogger by restoreHandler::restoreLogger
 
-    override fun setListener(callback: BackupTaskCallback) { backupHandler.setListener(callback) }
+    override fun setListener(callback: BackupTaskCallback) {
+        backupHandler.setListener(callback)
+    }
 
-    override fun initializeBackup(backupPassword: String) {
+    override suspend fun initializeBackup(backupPassword: String) {
         backupHandler.initializeBackup(backupPassword)
     }
 

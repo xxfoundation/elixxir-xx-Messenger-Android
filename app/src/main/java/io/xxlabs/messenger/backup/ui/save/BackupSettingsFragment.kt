@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.backup.auth.CloudAuthentication
 import io.xxlabs.messenger.backup.model.BackupOption
-import io.xxlabs.messenger.backup.ui.list.BackupListFragmentDirections
 import io.xxlabs.messenger.databinding.FragmentBackupSettingsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupOptionBinding
 import io.xxlabs.messenger.di.utils.Injectable
@@ -40,7 +40,7 @@ class BackupSettingsFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentBackupSettingsBinding
     private val ui: BackupSettingsController by lazy { backupViewModel }
-    private val backupOptionsAdapter by lazy { BackupOptionsAdapter() }
+    private val backupOptionsAdapter by lazy { BackupOptionsAdapter(viewLifecycleOwner) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,8 +53,8 @@ class BackupSettingsFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentBackupSettingsBinding.inflate(inflater)
-        binding.ui = ui
         binding.lifecycleOwner = this
+        binding.ui = ui
         return binding.root
     }
 
@@ -84,6 +84,10 @@ class BackupSettingsFragment : Fragment(), Injectable {
             if (show) showInfoDialog()
         }
 
+        ui.showSetPasswordPrompt.observe(viewLifecycleOwner) { dialogUI ->
+            dialogUI?.let { showSetPasswordDialog(it) }
+        }
+
         ui.backupError.observe(viewLifecycleOwner) { error ->
             error?.let {
                 showError(it)
@@ -101,6 +105,12 @@ class BackupSettingsFragment : Fragment(), Injectable {
         ui.onInfoDialogHandled()
     }
 
+    private fun showSetPasswordDialog(dialogUI: EditTextTwoButtonDialogUI) {
+        EditTextTwoButtonInfoDialog.newInstance(dialogUI)
+            .show(childFragmentManager, null)
+        ui.onPasswordPromptHandled()
+    }
+
     private fun showError(error: String) {
         (requireActivity() as SnackBarActivity).createSnackMessage(error)
         ui.onErrorHandled()
@@ -114,7 +124,9 @@ class BackupSettingsFragment : Fragment(), Injectable {
     }
 }
 
-private class BackupOptionsAdapter : RecyclerView.Adapter<BackupOptionsAdapter.BackupOptionViewHolder>() {
+private class BackupOptionsAdapter(
+    private val lifecycleOwner: LifecycleOwner
+) : RecyclerView.Adapter<BackupOptionsAdapter.BackupOptionViewHolder>() {
 
     private var locations: List<SettingsOption> = listOf()
 
@@ -124,7 +136,7 @@ private class BackupOptionsAdapter : RecyclerView.Adapter<BackupOptionsAdapter.B
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        BackupOptionViewHolder.create(parent)
+        BackupOptionViewHolder.create(parent, lifecycleOwner)
 
     override fun onBindViewHolder(holder: BackupOptionViewHolder, position: Int) =
         holder.onBind(locations[position])
@@ -132,21 +144,25 @@ private class BackupOptionsAdapter : RecyclerView.Adapter<BackupOptionsAdapter.B
     override fun getItemCount(): Int = locations.size
 
     class BackupOptionViewHolder(
-        private val binding: ListItemBackupOptionBinding
+        private val binding: ListItemBackupOptionBinding,
+        private val lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun onBind(ui: SettingsOption) {
+            binding.lifecycleOwner = lifecycleOwner
             binding.ui = ui
         }
 
         companion object {
-            fun create(parent: ViewGroup) = BackupOptionViewHolder(
-                ListItemBackupOptionBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+            fun create(parent: ViewGroup, lifecycleOwner: LifecycleOwner) =
+                BackupOptionViewHolder(
+                    ListItemBackupOptionBinding.inflate(
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
+                    ),
+                    lifecycleOwner
                 )
-            )
         }
     }
 }

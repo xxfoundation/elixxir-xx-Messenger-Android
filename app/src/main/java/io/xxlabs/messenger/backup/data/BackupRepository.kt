@@ -19,8 +19,11 @@ import javax.inject.Inject
  */
 abstract class AccountBackupRepository<T : AccountBackup>(
     private val preferences: PreferencesRepository,
-    private val backupService: BackupService
-) : BackupDataSource<T> , BackupService by backupService {
+    private val backupService: BackupService,
+    private val backupTaskEventManager: BackupTaskEventManager = BackupTaskEventManager()
+) : BackupDataSource<T>,
+    BackupService by backupService,
+    BackupTaskPublisher by backupTaskEventManager {
 
     private val settingsHandler: BackupPreferences by lazy {
         PreferencesDelegate(preferences, backupService, this)
@@ -35,11 +38,6 @@ abstract class AccountBackupRepository<T : AccountBackup>(
         dropbox.location
     )
 
-    private var currentLocation: BackupLocation? = null
-        set(value) {
-            preferences.backupLocation = value?.name
-            field = value
-        }
     var currentSelection: T? = null
         private set
 
@@ -55,24 +53,26 @@ abstract class AccountBackupRepository<T : AccountBackup>(
         }
 
     init {
-        backupService.setListener(backupScheduler)
+        backupTaskEventManager.subscribe(backupScheduler)
+        backupService.setListener(backupTaskEventManager)
     }
 
     fun getActiveBackupOption() = preferences.backupOption
 
     protected fun saveLocation(service: T): T {
-        currentLocation = service.location
+        preferences.backupLocation = service.location.name
         return service
     }
 
-    protected fun setCurrentSelection(service: T): T {
-        currentSelection = service
-        return service
+    override suspend fun enableBackup(backup: T, password: String) {
+        backupService.initializeBackup(password)
+        saveLocation(backup)
+        settingsHandler.setEnabled(true, backup)
     }
 
-    override fun setEnabled(enabled: Boolean, backup: AccountBackup) {
-        currentSelection?.let { if (enabled) saveLocation(it) }
-        settingsHandler.setEnabled(enabled, backup)
+    override fun disableBackup(backup: AccountBackup) {
+        backupService.stopBackup()
+        settingsHandler.setEnabled(false, backup)
     }
 
     override fun setNetwork(network: BackupSettings.Network) {
@@ -86,7 +86,7 @@ abstract class AccountBackupRepository<T : AccountBackup>(
 
 class BackupRepository @Inject constructor(
     private val preferences: PreferencesRepository,
-    backupService: BackupService,
+    private val backupService: BackupService,
 ) : AccountBackupRepository<BackupOption>(preferences, backupService) {
 
     override fun getActiveOption(): BackupOption? = getActiveBackupOption()
@@ -104,7 +104,7 @@ class BackupRepository @Inject constructor(
             appContext().getString(R.string.backup_service_google_drive) -> googleDrive
             appContext().getString(R.string.backup_service_dropbox) -> dropbox
             else -> throw InvalidParameterException("No service found for selected location.")
-        }.apply { setCurrentSelection(this) }
+        }
     }
 }
 
@@ -180,7 +180,7 @@ private class PreferencesDelegate(
             is Dropbox -> dropboxEnabled(enabled)
         }
         reflectChanges()
-        if (enabled) tryBackup() else backupService.stopBackup()
+        if (enabled) tryBackup()
     }
 
     private fun googleDriveEnabled(enabled: Boolean) {
@@ -212,7 +212,7 @@ private class PreferencesDelegate(
     }
 
     private fun reflectChanges() {
-        _settings.value = backupSettings
+        _settings.postValue(backupSettings)
     }
 
     private fun networkPreferencesMet(): Boolean {

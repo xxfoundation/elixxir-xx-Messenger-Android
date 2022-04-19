@@ -9,6 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
+import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonInfoDialog
 import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toBase64String
@@ -93,6 +95,10 @@ class RestoreDetailFragment : Fragment(), Injectable {
             updateState(state)
         }
 
+        ui.showEnterPasswordPrompt.observe(viewLifecycleOwner) { dialogUI ->
+            dialogUI?.let { showSetPasswordDialog(it) }
+        }
+
         ui.restoreComplete.observe(viewLifecycleOwner) { navigate ->
             if (navigate) navigateToComplete()
         }
@@ -115,6 +121,12 @@ class RestoreDetailFragment : Fragment(), Injectable {
             RestoreStateFragment.newInstance(state),
             state.toString()
         ).commitAllowingStateLoss()
+    }
+
+    private fun showSetPasswordDialog(dialogUI: EditTextTwoButtonDialogUI) {
+        EditTextTwoButtonInfoDialog.newInstance(dialogUI)
+            .show(childFragmentManager, null)
+        ui.onPasswordPromptHandled()
     }
 
     private fun navigateToComplete() {
