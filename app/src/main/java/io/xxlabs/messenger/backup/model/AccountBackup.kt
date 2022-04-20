@@ -21,7 +21,8 @@ interface AccountBackup : Serializable {
  */
 interface RestoreOption : AccountBackup {
     val restoreLog: RestoreLog
-    fun restore(environment: RestoreEnvironment)
+    suspend fun restore(environment: RestoreEnvironment)
+    fun cancelRestore()
 }
 
 /**

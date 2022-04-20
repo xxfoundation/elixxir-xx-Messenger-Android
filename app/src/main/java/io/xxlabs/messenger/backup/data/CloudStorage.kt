@@ -7,10 +7,9 @@ import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.bindings.RestoreParams
 import io.xxlabs.messenger.backup.bindings.RestoreTaskCallback
 import io.xxlabs.messenger.backup.model.*
-import kotlinx.coroutines.CoroutineName
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
+import kotlinx.coroutines.*
+import java.lang.IllegalArgumentException
 
 const val BACKUP_DIRECTORY_NAME = "backup"
 
@@ -73,14 +72,19 @@ abstract class CloudStorage(
 
     private fun onAuthResultFailure(errorMsg: String) = _authResultCallback?.onFailure(errorMsg)
 
-    override fun restore(environment: RestoreEnvironment) {
+    override suspend fun restore(environment: RestoreEnvironment) {
         if (taskStarted) return
         taskStarted = true
         log("Restore started.")
         onRestore(environment)
     }
 
-    abstract fun onRestore(environment: RestoreEnvironment)
+    override fun cancelRestore() {
+        resetCachedProgress()
+        taskStarted = false
+    }
+
+    abstract suspend fun onRestore(environment: RestoreEnvironment)
 
     protected suspend fun AccountArchive.restoreUsing(environment: RestoreEnvironment) {
         backupService.restoreAccount(

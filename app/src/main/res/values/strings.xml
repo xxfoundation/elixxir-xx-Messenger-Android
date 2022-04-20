@@ -530,8 +530,27 @@
     <string name="advanced_settings_title">Advanced Settings</string>
     <string name="restore_started_warning">This may take up to 5 minutes. Please don’t close the app, put app in background, or turn off your phone\'s screen.</string>
     <string name="backup_restore_error_no_backup_found">No backup found.</string>
-    <string name="backup_restore_auth_consent_dialog_body">If you don\'t have this cloud provider\'s app installed, your default browser will be launched to complete sign-in.</string>
+    <string name="backup_restore_auth_consent_dialog_body">
+        If you don\'t have this cloud provider\'s app installed, your default
+        browser will be launched to complete sign-in.</string>
     <string name="backup_restore_auth_consent_dialog_title">%s sign in</string>
     <string name="backup_restore_auth_consent_dialog_positive_button">Continue</string>
     <string name="backup_restore_auth_consent_dialog_negative_button">Cancel</string>
+    <string name="backup_restore_password_prompt_title">Secure your backup</string>
+    <string name="backup_restore_password_prompt_body">
+        Please select a password for your backup.\n\nIf you lose this password, you will
+        not be able to restore your account. Make sure to keep a record somewhere safe.
+        \n\nYour password needs to be at least 8 characters with at least 1 uppercase,
+        1 lowercase, and 1 number.</string>
+    <string name="backup_restore_password_prompt_positive_button">Continue</string>
+    <string name="backup_restore_password_prompt_negative_button">Cancel</string>
+    <string name="backup_restore_password_prompt_hint">Enter new backup password</string>
+    <string name="backup_password_too_short">Password must be at least 8 characters.</string>
+    <string name="backup_password_missing_uppercase">Password must have at least 1 uppercase letter</string>
+    <string name="backup_password_missing_lowercase">Password must have at least 1 lowercase letter</string>
+    <string name="backup_password_missing_digit">Password must have at least 1 number</string>
+    <string name="backup_restore_password_restore_body">Please enter the backup password that was used when the backup was set up.</string>
+    <string name="backup_restore_password_restore_title">Backup password</string>
+    <string name="backup_restore_password_restore_hint">Enter password</string>
+    <string name="backup_restore_encrypting_backup_text">Initializing and securing your backup file will take few seconds, please keep the app open</string>
 </resources>

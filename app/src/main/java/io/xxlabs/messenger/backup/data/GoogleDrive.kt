@@ -86,15 +86,13 @@ class GoogleDrive private constructor(
         .setApplicationName(appContext().getString(R.string.xx_app_name))
         .build()
 
-    override fun onRestore(environment: RestoreEnvironment) {
+    override suspend fun onRestore(environment: RestoreEnvironment) {
         updateProgress(25, 100)
-        scope.launch {
-            driveBackupData?.run {
-                val backupData = fetchBackup(id)
-                if (backupData.isNotEmpty()) {
-                    updateProgress(75, 100)
-                    AccountArchive(backupData).restoreUsing(environment)
-                }
+        driveBackupData?.run {
+            val backupData = fetchBackup(id)
+            if (backupData.isNotEmpty()) {
+                updateProgress(75, 100)
+                AccountArchive(backupData).restoreUsing(environment)
             }
         }
     }

@@ -35,7 +35,8 @@ data class DummyRestoreOption(
     private val accountBackup: AccountBackup
 ): RestoreOption, AccountBackup by accountBackup {
     override val restoreLog: RestoreLog = RestoreLogger()
-    override fun restore(environment: RestoreEnvironment) {}
+    override suspend fun restore(environment: RestoreEnvironment) {}
+    override fun cancelRestore() { }
 }
 
 data class DummyProgress (

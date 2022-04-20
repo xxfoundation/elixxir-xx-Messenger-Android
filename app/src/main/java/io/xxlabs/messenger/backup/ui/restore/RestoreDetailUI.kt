@@ -4,9 +4,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import io.xxlabs.messenger.backup.model.RestoreOption
+import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
 import java.io.Serializable
 
-interface RestoreDetailUI {
+interface RestorePasswordUI {
+    val showEnterPasswordPrompt: LiveData<EditTextTwoButtonDialogUI?>
+    fun onPasswordPromptHandled()
+}
+
+interface RestoreDetailUI : RestorePasswordUI {
     val backup: RestoreOption
     val state: LiveData<RestoreState>
     val isLoading: LiveData<Boolean>

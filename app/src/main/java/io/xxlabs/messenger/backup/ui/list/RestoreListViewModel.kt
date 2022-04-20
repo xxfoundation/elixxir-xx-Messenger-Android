@@ -1,10 +1,8 @@
 package io.xxlabs.messenger.backup.ui.list
 
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import dagger.assisted.Assisted
@@ -31,19 +29,9 @@ class RestoreListViewModel @AssistedInject constructor(
     }
 
     private fun getSpannableDescription(): Spanned {
-        val highlight = appContext().getColor(R.color.brand_default)
         val description = appContext().getString(R.string.backup_restore_description)
-        val highlightedText = appContext().getString(R.string.backup_restore_description_span_text)
-        val startIndex = description.indexOf(highlightedText, ignoreCase = true)
-
-        return SpannableStringBuilder(description).apply {
-            setSpan(
-                ForegroundColorSpan(highlight),
-                startIndex,
-                startIndex + highlightedText.length,
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-        }.append(appContext().getString(R.string.backup_restore_description_hint))
+        return SpannableStringBuilder(description)
+            .append(appContext().getString(R.string.backup_restore_description_hint))
     }
 
     override fun onLocationSelected(backupLocation: BackupLocation) {

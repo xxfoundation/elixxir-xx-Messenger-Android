@@ -5,7 +5,15 @@ import androidx.lifecycle.LiveData
 import io.xxlabs.messenger.backup.model.BackupOption
 import io.xxlabs.messenger.backup.model.BackupSettings
 
-interface BackupDetailUI {
+interface BackupPasswordUI {
+    val isBackupReady: LiveData<Boolean>
+    val isEnabled: LiveData<Boolean>
+    val showSetPasswordPrompt: LiveData<EditTextTwoButtonDialogUI?>
+    fun onEnableToggled(enabled: Boolean)
+    fun onPasswordPromptHandled()
+}
+
+interface BackupDetailUI : BackupPasswordUI {
     val settings: LiveData<BackupSettings>
     val backup: BackupOption
     val description: Spanned // for clickable info button
@@ -13,8 +21,6 @@ interface BackupDetailUI {
     val backupFrequencyLabel: String
     val backupInProgress: LiveData<Boolean>
     val lastBackupDate: LiveData<Long?>
-    val isEnabled: LiveData<Boolean>
-    fun onEnableToggled(value: Boolean)
     fun onCancelClicked()
     fun onFrequencyClicked()
     fun onNetworkClicked()

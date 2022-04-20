@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import io.xxlabs.messenger.backup.data.AccountBackupRepository
 import io.xxlabs.messenger.backup.data.BackupRepository
+import io.xxlabs.messenger.backup.data.BackupTaskListener
 import io.xxlabs.messenger.backup.model.BackupOption
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.support.appContext
@@ -15,14 +16,14 @@ import io.xxlabs.messenger.support.appContext
 class BackupScheduler(
     private val preferences: PreferencesRepository,
     private val backupRepository: AccountBackupRepository<*>
-) : BackupTaskCallback {
+) : BackupTaskListener {
 
     private val network: ConnectivityManager by lazy {
         appContext().getSystemService(Context.CONNECTIVITY_SERVICE)
                 as ConnectivityManager
     }
 
-    override fun onComplete(backupData: AccountArchive) {
+    override fun onComplete() {
         if (preferences.autoBackup && networkPreferencesMet()) {
             backupRepository.getActiveBackupOption()?.backupNow()
         }

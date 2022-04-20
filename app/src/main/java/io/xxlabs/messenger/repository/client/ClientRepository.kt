@@ -70,11 +70,6 @@ class ClientRepository @Inject constructor(
     override fun newClient(storageDir: String, password: ByteArray) {
         BindingsWrapperBindings.newClient(storageDir, password)
         login(storageDir, password)
-        initializeNewAccountBackup()
-    }
-
-    private fun initializeNewAccountBackup() {
-        backupService.initializeBackup()
     }
 
     override fun login(storageDir: String, password: ByteArray): ByteArray {

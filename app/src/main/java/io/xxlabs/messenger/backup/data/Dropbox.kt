@@ -113,16 +113,14 @@ class Dropbox private constructor(
         dbxInstance?.files()?.createFolderV2("/$BACKUP_DIRECTORY_NAME")
     }
 
-    override fun onRestore(environment: RestoreEnvironment) {
+    override suspend fun onRestore(environment: RestoreEnvironment) {
         log("Downloading backup")
         updateProgress(25, 100)
-        scope.launch {
-            dbxBackupData?.run {
-                val backupData = fetchBackup(this)
-                if (backupData.isNotEmpty()) {
-                    updateProgress(75, 100)
-                    AccountArchive(backupData).restoreUsing(environment)
-                }
+        dbxBackupData?.run {
+            val backupData = fetchBackup(this)
+            if (backupData.isNotEmpty()) {
+                updateProgress(75, 100)
+                AccountArchive(backupData).restoreUsing(environment)
             }
         }
     }
