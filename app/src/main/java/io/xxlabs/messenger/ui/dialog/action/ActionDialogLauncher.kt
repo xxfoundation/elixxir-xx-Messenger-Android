@@ -1,7 +1,7 @@
 package io.xxlabs.messenger.ui.dialog.action
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 /**
@@ -15,7 +15,7 @@ fun Fragment.showActionDialog(
     action: () -> Unit
 ) {
     val ui = ActionDialogUI.create(
-        ConfirmDialogUI.create(
+        WarningDialogUI.create(
             infoDialogUI = InfoDialogUI.create(
                 title = getString(title),
                 body = getString(body),

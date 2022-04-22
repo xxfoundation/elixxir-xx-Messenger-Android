@@ -18,7 +18,7 @@ import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesFragment
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
-import io.xxlabs.messenger.ui.dialog.confirm.showConfirmDialog
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import javax.inject.Inject
 
 class GroupMessagesFragment : ChatMessagesFragment<GroupMessage>() {

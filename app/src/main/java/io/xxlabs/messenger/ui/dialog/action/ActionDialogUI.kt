@@ -1,12 +1,12 @@
 package io.xxlabs.messenger.ui.dialog.action
 
-import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 
-interface ActionDialogUI : ConfirmDialogUI {
+interface ActionDialogUI : WarningDialogUI {
     
     companion object Factory {
-        fun create(confirmDialogUI: ConfirmDialogUI) : ActionDialogUI {
-            return object : ActionDialogUI, ConfirmDialogUI by confirmDialogUI {}
+        fun create(warningDialogUI: WarningDialogUI) : ActionDialogUI {
+            return object : ActionDialogUI, WarningDialogUI by warningDialogUI {}
         }
     }
 }

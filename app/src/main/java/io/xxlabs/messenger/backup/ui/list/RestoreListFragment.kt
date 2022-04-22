@@ -6,7 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.data.BackupSource
-import io.xxlabs.messenger.ui.dialog.confirm.showConfirmDialog
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import javax.inject.Inject
 
 /**

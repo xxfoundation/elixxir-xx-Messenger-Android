@@ -1,8 +1,6 @@
-package io.xxlabs.messenger.ui.dialog.confirm
+package io.xxlabs.messenger.ui.dialog.warning
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialog
-import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 /**
@@ -16,7 +14,7 @@ fun Fragment.showConfirmDialog(
     action: () -> Unit,
     onDismiss: () -> Unit = {}
 ) {
-    val ui = ConfirmDialogUI.create(
+    val ui = WarningDialogUI.create(
         infoDialogUI = InfoDialogUI.create(
             title = requireContext().getString(title),
             body = requireContext().getString(body),
@@ -26,7 +24,7 @@ fun Fragment.showConfirmDialog(
         buttonText = requireContext().getString(button),
         buttonOnClick = action
     )
-    ConfirmDialog
+    WarningDialog
         .newInstance(ui)
         .show(parentFragmentManager, null)
 }
@@ -42,7 +40,7 @@ fun Fragment.showConfirmDialog(
     action: () -> Unit,
     onDismiss: () -> Unit = {}
 ) {
-    val ui = ConfirmDialogUI.create(
+    val ui = WarningDialogUI.create(
         infoDialogUI = InfoDialogUI.create(
             title = title,
             body = body,
@@ -52,7 +50,7 @@ fun Fragment.showConfirmDialog(
         buttonText = button,
         buttonOnClick = action
     )
-    ConfirmDialog
+    WarningDialog
         .newInstance(ui)
         .show(parentFragmentManager, null)
 }

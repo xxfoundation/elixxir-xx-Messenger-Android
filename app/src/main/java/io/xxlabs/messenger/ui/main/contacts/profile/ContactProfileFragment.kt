@@ -9,7 +9,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
-import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.ui.base.BaseContactDetailsFragment
@@ -127,7 +127,7 @@ class ContactProfileFragment: BaseContactDetailsFragment() {
             getString(R.string.confirm_delete_connection_dialog_body, currContact.displayName),
             null
         ) { }
-        val confirmDialogUI = ConfirmDialogUI.create(
+        val confirmDialogUI = WarningDialogUI.create(
             infoDialogUI,
             getString(R.string.confirm_delete_connection_dialog_button),
             ::onDeleteConnection
