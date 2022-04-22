@@ -13,8 +13,8 @@ import io.xxlabs.messenger.backup.data.backup.BackupOption
 import io.xxlabs.messenger.backup.data.backup.BackupSettings
 import io.xxlabs.messenger.backup.data.backup.BackupSettings.*
 import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogOption
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogUI
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogOption
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogUI
 import io.xxlabs.messenger.support.appContext
 
 class BackupDetailViewModel @AssistedInject constructor(
