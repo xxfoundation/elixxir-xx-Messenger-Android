@@ -5,7 +5,7 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.ui.ConfirmDialogLauncher
 import javax.inject.Inject
 
@@ -68,9 +68,9 @@ class RestoreListFragment : BackupLocationsFragment() {
 
     }
 
-    override fun navigateToDetail(backup: AccountBackup) {
+    override fun navigateToDetail(source: BackupSource) {
         val directions = RestoreListFragmentDirections
-            .actionRestoreListToRestoreDetail(backup)
+            .actionRestoreListToRestoreDetail(source)
         findNavController().navigate(directions)
     }
 }

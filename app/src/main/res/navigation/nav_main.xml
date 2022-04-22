@@ -435,8 +435,8 @@
         android:label="fragment_backup_settings"
         tools:layout="@layout/fragment_backup_detail" >
         <argument
-            android:name="backup"
-            app:argType="io.xxlabs.messenger.backup.model.AccountBackup" />
+            android:name="source"
+            app:argType="io.xxlabs.messenger.backup.data.BackupSource" />
     </fragment>
     <fragment
         android:id="@+id/backupListFragment"

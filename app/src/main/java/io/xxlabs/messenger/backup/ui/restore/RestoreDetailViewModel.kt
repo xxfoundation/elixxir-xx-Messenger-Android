@@ -6,6 +6,7 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.data.restore.RestoreLog
 import io.xxlabs.messenger.backup.data.restore.RestoreManager
@@ -20,9 +21,11 @@ import kotlinx.coroutines.*
 
 class RestoreDetailViewModel @AssistedInject constructor(
     private val restoreManager: RestoreManager,
-    @Assisted override val backup: AccountBackup,
+    @Assisted private val source: BackupSource,
     @Assisted private val restorePassword: ByteArray,
 ): ViewModel(), RestoreDetailController {
+
+    override val backup: AccountBackup get() = restoreManager.getBackupFrom(source)
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         exception.message?.let {
@@ -149,11 +152,11 @@ class RestoreDetailViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: BackupFoundViewModelFactory,
-            backup: AccountBackup,
+            source: BackupSource,
             restorePassword: ByteArray
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(backup, restorePassword) as T
+                return assistedFactory.create(source, restorePassword) as T
             }
         }
     }
@@ -161,5 +164,5 @@ class RestoreDetailViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface BackupFoundViewModelFactory {
-    fun create(backup: AccountBackup, restorePassword: ByteArray): RestoreDetailViewModel
+    fun create(source: BackupSource, restorePassword: ByteArray): RestoreDetailViewModel
 }

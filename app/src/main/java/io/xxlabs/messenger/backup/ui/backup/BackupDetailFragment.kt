@@ -29,7 +29,7 @@ class BackupDetailFragment : Fragment(), Injectable {
     private val backupViewModel: BackupDetailViewModel by viewModels {
         BackupDetailViewModel.provideFactory(
             viewModelFactory,
-            BackupDetailFragmentArgs.fromBundle(requireArguments()).backup
+            BackupDetailFragmentArgs.fromBundle(requireArguments()).source
         )
     }
 

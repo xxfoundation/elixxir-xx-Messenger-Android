@@ -2,6 +2,7 @@ package io.xxlabs.messenger.backup.ui.backup
 
 import android.text.Spanned
 import androidx.lifecycle.LiveData
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.backup.data.backup.BackupSettings
 import io.xxlabs.messenger.backup.model.AccountBackup
 
@@ -14,7 +15,7 @@ interface BackupSettingsUI : BackupPasswordUI {
 
 interface BackupSettingsController: BackupSettingsUI {
     val locations: List<SettingsOption>
-    val navigateToDetail: LiveData<AccountBackup?>
+    val navigateToDetail: LiveData<BackupSource?>
     val showInfoDialog: LiveData<Boolean>
     val backupError: LiveData<String?>
     fun onInfoDialogHandled()

@@ -17,8 +17,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BackupViewModel(val backupManager: BackupManager)
-    : ViewModel(), BackupPasswordUI, BackupTaskListener {
+abstract class BackupViewModel(
+    val backupManager: BackupManager
+) : ViewModel(), BackupPasswordUI, BackupTaskListener {
 
     abstract fun getBackupOption(): BackupOption?
 

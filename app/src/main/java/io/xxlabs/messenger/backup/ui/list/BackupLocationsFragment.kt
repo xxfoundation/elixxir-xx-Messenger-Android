@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.cloud.CloudAuthentication
-import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.databinding.FragmentBackupLocationsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupLocationBinding
 import io.xxlabs.messenger.di.utils.Injectable
@@ -73,9 +73,9 @@ abstract class BackupLocationsFragment : Fragment(), Injectable {
     }
 
     private fun observeUI() {
-        ui.navigateToDetail.observe(viewLifecycleOwner) { backup ->
-            backup?.let {
-                navigateToDetail(backup)
+        ui.navigateToDetail.observe(viewLifecycleOwner) { source ->
+            source?.let {
+                navigateToDetail(source)
                 ui.onNavigationHandled()
             }
         }
@@ -95,7 +95,7 @@ abstract class BackupLocationsFragment : Fragment(), Injectable {
         }
     }
 
-    protected abstract fun navigateToDetail(backup: AccountBackup)
+    protected abstract fun navigateToDetail(source: BackupSource)
 
     private fun showConsentDialog(dialogUi: TwoButtonInfoDialogUI) {
         TwoButtonInfoDialog.newInstance(dialogUi)

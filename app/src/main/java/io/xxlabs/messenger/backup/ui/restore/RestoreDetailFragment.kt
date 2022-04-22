@@ -28,7 +28,7 @@ class RestoreDetailFragment : Fragment(), Injectable {
     private val restoreViewModel: RestoreDetailViewModel by viewModels {
         RestoreDetailViewModel.provideFactory(
             viewModelFactory,
-            RestoreDetailFragmentArgs.fromBundle(requireArguments()).backup,
+            RestoreDetailFragmentArgs.fromBundle(requireArguments()).source,
             (requireActivity() as BaseKeystoreActivity).rsaDecryptPwd()
         )
     }

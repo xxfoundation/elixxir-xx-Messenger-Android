@@ -2,7 +2,7 @@ package io.xxlabs.messenger.backup.ui.list
 
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.backup.data.BackupSource
 import javax.inject.Inject
 
 /**
@@ -19,9 +19,9 @@ class BackupListFragment : BackupLocationsFragment() {
         )
     }
 
-    override fun navigateToDetail(backup: AccountBackup) {
+    override fun navigateToDetail(source: BackupSource) {
         val directions = BackupListFragmentDirections
-            .actionBackupListToBackupDetail(backup)
+            .actionBackupListToBackupDetail(source)
         findNavController().navigate(directions)
     }
 }

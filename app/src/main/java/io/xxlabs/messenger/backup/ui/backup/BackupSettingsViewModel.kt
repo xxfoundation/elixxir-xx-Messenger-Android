@@ -9,6 +9,7 @@ import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.cloud.AuthResultCallback
 import io.xxlabs.messenger.backup.cloud.CloudAuthentication
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.backup.data.backup.BackupManager
 import io.xxlabs.messenger.backup.data.backup.BackupOption
 import io.xxlabs.messenger.backup.data.backup.BackupSettings
@@ -41,8 +42,8 @@ class BackupSettingsViewModel @AssistedInject constructor(
 
     private val backupLocationsMap: MutableMap<BackupLocation, AccountBackup> = mutableMapOf()
 
-    override val navigateToDetail: LiveData<AccountBackup?> get() = _navigateToDetail
-    private val _navigateToDetail = MutableLiveData<AccountBackup?>(null)
+    override val navigateToDetail: LiveData<BackupSource?> get() = _navigateToDetail
+    private val _navigateToDetail = MutableLiveData<BackupSource?>(null)
 
     private val _showInfoDialog = MutableLiveData(false)
     override val showInfoDialog: LiveData<Boolean> =
@@ -102,7 +103,11 @@ class BackupSettingsViewModel @AssistedInject constructor(
     }
 
     private fun navigateToDetail(backupLocation: BackupLocation) {
-        _navigateToDetail.value = backupLocationsMap[backupLocation]
+        backupLocationsMap[backupLocation]?.let { backup ->
+            backupManager.getSourceFor(backup)?.let { source ->
+                _navigateToDetail.value = source
+            }
+        }
     }
 
     companion object {
