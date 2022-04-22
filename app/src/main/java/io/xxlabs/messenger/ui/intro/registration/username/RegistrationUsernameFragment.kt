@@ -8,7 +8,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.FragmentRegistrationUsernameBinding
-import io.xxlabs.messenger.support.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
 import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
 
 /**

@@ -2,7 +2,7 @@ package io.xxlabs.messenger.backup.ui.dialog
 
 import android.text.Editable
 import androidx.lifecycle.LiveData
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 interface TextInputDialogUI : TwoButtonInfoDialogUI {
     val maxInputLength: Int

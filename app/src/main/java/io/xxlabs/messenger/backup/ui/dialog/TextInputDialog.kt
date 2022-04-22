@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTextinputDialogBinding
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 class TextInputDialog : BottomSheetDialogFragment() {
 

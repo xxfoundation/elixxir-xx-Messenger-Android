@@ -15,8 +15,8 @@ import io.xxlabs.messenger.backup.ui.backup.BackupPassword
 import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import kotlinx.coroutines.*
 
 class RestoreDetailViewModel @AssistedInject constructor(

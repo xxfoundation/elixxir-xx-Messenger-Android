@@ -1,6 +1,6 @@
 package io.xxlabs.messenger.support.dialog.confirm
 
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 interface ConfirmDialogUI : InfoDialogUI {
     val buttonText: String

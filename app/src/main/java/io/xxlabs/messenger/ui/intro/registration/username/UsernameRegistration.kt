@@ -19,8 +19,8 @@ import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.support.dialog.info.SpanConfig
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.SpanConfig
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import kotlinx.coroutines.*
 import kotlin.random.Random.Default.nextInt

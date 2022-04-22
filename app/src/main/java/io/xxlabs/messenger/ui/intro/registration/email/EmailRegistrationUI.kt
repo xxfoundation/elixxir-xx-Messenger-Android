@@ -3,7 +3,7 @@ package io.xxlabs.messenger.ui.intro.registration.email
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 
 interface EmailRegistrationUI {

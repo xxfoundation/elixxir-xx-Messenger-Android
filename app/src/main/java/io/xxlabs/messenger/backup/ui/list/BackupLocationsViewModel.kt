@@ -9,8 +9,8 @@ import io.xxlabs.messenger.backup.cloud.AuthResultCallback
 import io.xxlabs.messenger.backup.data.AccountBackupDataSource
 import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 abstract class BackupLocationsViewModel(
     private val dataSource: AccountBackupDataSource,

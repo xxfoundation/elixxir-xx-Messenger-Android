@@ -25,10 +25,9 @@ import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
 import io.xxlabs.messenger.data.datatype.NetworkState
-import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.ui.base.BaseFragment
-import io.xxlabs.messenger.ui.dialog.showInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog

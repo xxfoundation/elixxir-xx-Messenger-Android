@@ -3,7 +3,7 @@ package io.xxlabs.messenger.backup.ui.list
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import io.xxlabs.messenger.backup.data.BackupSource
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 interface BackupLocationsUI {
     val backupLocationsTitle: Spanned

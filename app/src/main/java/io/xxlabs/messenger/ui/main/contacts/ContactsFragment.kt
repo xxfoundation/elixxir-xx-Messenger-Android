@@ -23,13 +23,12 @@ import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
 import io.xxlabs.messenger.ui.base.BaseFragment
-import io.xxlabs.messenger.ui.dialog.showInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialog
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogUI
-import kotlinx.android.synthetic.main.component_menu.*
 import kotlinx.android.synthetic.main.component_network_error_banner.*
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_contacts.*

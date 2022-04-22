@@ -1,11 +1,6 @@
-package io.xxlabs.messenger.ui.dialog
+package io.xxlabs.messenger.ui.dialog.info
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.support.dialog.info.InfoDialog
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.support.dialog.info.SpanConfig
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialog
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
 
 fun Fragment.showInfoDialog(
     title: Int,

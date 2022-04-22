@@ -15,8 +15,8 @@ import io.xxlabs.messenger.databinding.FragmentBackupLocationsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupLocationBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.view.SnackBarActivity
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialog
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 /**
  * Lists cloud storage services to choose as a backup name.

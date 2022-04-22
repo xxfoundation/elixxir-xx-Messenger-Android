@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.chats
+package io.xxlabs.messenger.ui.dialog.info
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -16,7 +16,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTwoButtonDialogBinding
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 
 class TwoButtonInfoDialog : BottomSheetDialogFragment() {
 
