@@ -4,7 +4,7 @@ import android.text.Spanned
 import androidx.lifecycle.LiveData
 import io.xxlabs.messenger.backup.data.backup.BackupSettings
 import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogUI
 
 interface BackupPasswordUI {

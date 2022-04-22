@@ -12,7 +12,7 @@ import io.xxlabs.messenger.backup.data.restore.RestoreLog
 import io.xxlabs.messenger.backup.data.restore.RestoreManager
 import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.backup.ui.backup.BackupPassword
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI

@@ -5,6 +5,10 @@ import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialog
 import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
+/**
+ * Launches an ConfirmDialog with a positive button.
+ */
+@Deprecated("Fragments should receive the DialogUI from their ViewModel.")
 fun Fragment.showConfirmDialog(
     title: Int,
     body: Int,
@@ -27,6 +31,10 @@ fun Fragment.showConfirmDialog(
         .show(parentFragmentManager, null)
 }
 
+/**
+ * Launches an ConfirmDialog with a positive button.
+ */
+@Deprecated("Fragments should receive the DialogUI from their ViewModel.")
 fun Fragment.showConfirmDialog(
     title: String,
     body: String,

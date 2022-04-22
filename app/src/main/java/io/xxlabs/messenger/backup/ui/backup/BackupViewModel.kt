@@ -9,7 +9,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.data.backup.BackupManager
 import io.xxlabs.messenger.backup.data.backup.BackupOption
 import io.xxlabs.messenger.backup.data.backup.BackupTaskListener
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI

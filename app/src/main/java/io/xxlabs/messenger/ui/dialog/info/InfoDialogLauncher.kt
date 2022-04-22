@@ -2,6 +2,10 @@ package io.xxlabs.messenger.ui.dialog.info
 
 import androidx.fragment.app.Fragment
 
+/**
+ * Launches an InfoDialog with a neutral button.
+ */
+@Deprecated("Fragments should receive the DialogUI from their ViewModel.")
 fun Fragment.showInfoDialog(
     title: Int,
     body: Int,
@@ -27,8 +31,10 @@ fun Fragment.showInfoDialog(
         .show(requireActivity().supportFragmentManager, null)
 }
 
-
-
+/**
+ * Launches an InfoDialog with a positive and negative button.
+ */
+@Deprecated("Fragments should receive the DialogUI from their ViewModel.")
 fun Fragment.showTwoButtonInfoDialog(
     title: Int,
     body: Int,

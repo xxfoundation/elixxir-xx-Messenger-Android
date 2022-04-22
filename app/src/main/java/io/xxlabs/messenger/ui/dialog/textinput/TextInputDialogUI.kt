@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.ui.dialog
+package io.xxlabs.messenger.ui.dialog.textinput
 
 import android.text.Editable
 import androidx.lifecycle.LiveData

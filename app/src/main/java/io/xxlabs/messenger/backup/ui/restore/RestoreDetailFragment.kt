@@ -9,8 +9,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialog
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toast
