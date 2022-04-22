@@ -431,12 +431,12 @@
 
     <fragment
         android:id="@+id/backupDetailFragment"
-        android:name="io.xxlabs.messenger.backup.ui.save.BackupDetailFragment"
+        android:name="io.xxlabs.messenger.backup.ui.backup.BackupDetailFragment"
         android:label="fragment_backup_settings"
         tools:layout="@layout/fragment_backup_detail" >
         <argument
-            android:name="backupOption"
-            app:argType="io.xxlabs.messenger.backup.model.BackupOption" />
+            android:name="backup"
+            app:argType="io.xxlabs.messenger.backup.model.AccountBackup" />
     </fragment>
     <fragment
         android:id="@+id/backupListFragment"
@@ -451,7 +451,7 @@
     </fragment>
     <fragment
         android:id="@+id/backupSettingsFragment"
-        android:name="io.xxlabs.messenger.backup.ui.save.BackupSettingsFragment"
+        android:name="io.xxlabs.messenger.backup.ui.backup.BackupSettingsFragment"
         android:label="fragment_backup_settings"
         tools:layout="@layout/fragment_backup_settings" >
         <action

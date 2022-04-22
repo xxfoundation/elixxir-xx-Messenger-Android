@@ -6,6 +6,7 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.data.data.ContactRoundRequest
 import io.xxlabs.messenger.data.datatype.ContactRequestState
 import io.xxlabs.messenger.repository.base.BasePreferences
@@ -17,7 +18,9 @@ import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 
-class PreferencesRepository @Inject constructor(context: Context) : BasePreferences() {
+class PreferencesRepository @Inject constructor(
+    context: Context
+) : BasePreferences() {
     private val masterKeyAlias = "xx_preferences_key"
     private val preferencesAlias = "xx_preferences"
     private val masterKeySpec = KeyGenParameterSpec.Builder(

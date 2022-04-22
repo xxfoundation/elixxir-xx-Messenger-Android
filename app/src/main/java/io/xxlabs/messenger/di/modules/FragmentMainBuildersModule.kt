@@ -3,8 +3,8 @@ package io.xxlabs.messenger.di.modules
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.xxlabs.messenger.backup.ui.list.BackupListFragment
-import io.xxlabs.messenger.backup.ui.save.BackupDetailFragment
-import io.xxlabs.messenger.backup.ui.save.BackupSettingsFragment
+import io.xxlabs.messenger.backup.ui.backup.BackupDetailFragment
+import io.xxlabs.messenger.backup.ui.backup.BackupSettingsFragment
 import io.xxlabs.messenger.media.FullScreenImageFragment
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
