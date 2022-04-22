@@ -1,8 +1,8 @@
 package io.xxlabs.messenger.ui.dialog
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.support.dialog.action.ActionDialog
-import io.xxlabs.messenger.support.dialog.action.ActionDialogUI
+import io.xxlabs.messenger.ui.dialog.action.ActionDialog
+import io.xxlabs.messenger.ui.dialog.action.ActionDialogUI
 import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
