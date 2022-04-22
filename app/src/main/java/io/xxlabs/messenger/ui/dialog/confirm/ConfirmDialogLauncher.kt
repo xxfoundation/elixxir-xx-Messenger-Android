@@ -1,8 +1,8 @@
-package io.xxlabs.messenger.ui.dialog
+package io.xxlabs.messenger.ui.dialog.confirm
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialog
-import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialog
+import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 fun Fragment.showConfirmDialog(

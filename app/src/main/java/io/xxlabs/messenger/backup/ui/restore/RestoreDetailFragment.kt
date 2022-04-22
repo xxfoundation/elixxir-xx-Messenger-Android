@@ -16,7 +16,7 @@ import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
 import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
-import io.xxlabs.messenger.ui.dialog.showConfirmDialog
+import io.xxlabs.messenger.ui.dialog.confirm.showConfirmDialog
 import javax.inject.Inject
 
 class RestoreDetailFragment : Fragment(), Injectable {

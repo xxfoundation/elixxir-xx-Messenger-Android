@@ -1,6 +1,6 @@
 package io.xxlabs.messenger.ui.dialog.action
 
-import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
 
 interface ActionDialogUI : ConfirmDialogUI {
     

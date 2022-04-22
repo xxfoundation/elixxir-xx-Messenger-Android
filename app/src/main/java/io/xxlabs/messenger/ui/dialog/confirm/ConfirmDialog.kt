@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.support.dialog.confirm
+package io.xxlabs.messenger.ui.dialog.confirm
 
 import android.content.DialogInterface
 import android.os.Bundle

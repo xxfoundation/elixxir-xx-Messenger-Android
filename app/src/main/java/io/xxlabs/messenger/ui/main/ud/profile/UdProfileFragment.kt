@@ -18,7 +18,7 @@ import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.ui.base.BaseProfileRegistrationFragment
-import io.xxlabs.messenger.ui.dialog.showConfirmDialog
+import io.xxlabs.messenger.ui.dialog.confirm.showConfirmDialog
 import kotlinx.android.synthetic.main.fragment_ud_profile.*
 
 /**

@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.support.dialog.confirm
+package io.xxlabs.messenger.ui.dialog.confirm
 
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 

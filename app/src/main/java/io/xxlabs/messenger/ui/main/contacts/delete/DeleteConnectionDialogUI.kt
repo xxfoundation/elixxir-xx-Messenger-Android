@@ -1,6 +1,6 @@
 package io.xxlabs.messenger.ui.main.contacts.delete
 
-import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialogUI
+import io.xxlabs.messenger.ui.dialog.confirm.ConfirmDialogUI
 
 interface DeleteConnectionDialogUI : ConfirmDialogUI {
     val bodyClicked: () -> Unit

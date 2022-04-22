@@ -36,7 +36,7 @@ import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
-import io.xxlabs.messenger.ui.dialog.showConfirmDialog
+import io.xxlabs.messenger.ui.dialog.confirm.showConfirmDialog
 import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import kotlinx.android.synthetic.main.component_bottom_menu_chats.*
 import kotlinx.android.synthetic.main.component_network_error_banner.*
