@@ -14,9 +14,8 @@ import io.xxlabs.messenger.databinding.FragmentDeleteAccountBinding
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.showInfoDialog
 import io.xxlabs.messenger.ui.intro.splash.RegistrationIntroActivity
-import io.xxlabs.messenger.ui.intro.splash.SplashScreenLoadingActivity
-import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import javax.inject.Inject
 

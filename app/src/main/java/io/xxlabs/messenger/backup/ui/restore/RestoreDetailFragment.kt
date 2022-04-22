@@ -14,9 +14,9 @@ import io.xxlabs.messenger.backup.ui.dialog.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toast
-import io.xxlabs.messenger.ui.ConfirmDialogLauncher
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
 import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
+import io.xxlabs.messenger.ui.dialog.showConfirmDialog
 import javax.inject.Inject
 
 class RestoreDetailFragment : Fragment(), Injectable {
@@ -37,9 +37,6 @@ class RestoreDetailFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentRestoreDetailBinding
     private val ui: RestoreDetailController by lazy { restoreViewModel }
-    private val warningLauncher: ConfirmDialogLauncher by lazy {
-        ConfirmDialogLauncher(requireActivity().supportFragmentManager)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -63,16 +60,6 @@ class RestoreDetailFragment : Fragment(), Injectable {
 
     private fun onConfirmButtonClicked() {}
     private fun onConfirmDialogDismissed() {}
-
-    private fun showConfirmDialog(
-        title: Int,
-        body: Int,
-        button: Int,
-        action: () -> Unit,
-        onDismiss: () -> Unit = {}
-    ) {
-        warningLauncher.showConfirmDialog(title, body, button, action, onDismiss)
-    }
 
     private fun showMultiDeviceWarning() {
         showConfirmDialog(

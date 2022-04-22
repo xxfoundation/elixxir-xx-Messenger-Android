@@ -30,6 +30,7 @@ import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.showInfoDialog
 import io.xxlabs.messenger.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_settings.*

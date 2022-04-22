@@ -13,6 +13,7 @@ import io.xxlabs.messenger.support.dialog.confirm.ConfirmDialogUI
 import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.ui.base.BaseContactDetailsFragment
+import io.xxlabs.messenger.ui.dialog.showInfoDialog
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.contacts.delete.DeleteConnectionDialog
 import io.xxlabs.messenger.ui.main.contacts.delete.DeleteConnectionDialogUI

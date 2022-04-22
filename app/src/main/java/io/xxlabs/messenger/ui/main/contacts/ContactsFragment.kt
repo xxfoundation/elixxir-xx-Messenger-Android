@@ -23,6 +23,7 @@ import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainActivity
