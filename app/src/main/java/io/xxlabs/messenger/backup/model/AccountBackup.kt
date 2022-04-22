@@ -1,9 +1,9 @@
 package io.xxlabs.messenger.backup.model
 
-import android.content.Intent
 import androidx.lifecycle.LiveData
-import io.xxlabs.messenger.backup.data.RestoreLog
-import io.xxlabs.messenger.support.extensions.capitalizeWords
+import io.xxlabs.messenger.backup.cloud.AuthHandler
+import io.xxlabs.messenger.backup.cloud.AuthResultCallback
+import kotlinx.coroutines.flow.StateFlow
 import java.io.Serializable
 
 /**
@@ -11,59 +11,12 @@ import java.io.Serializable
  */
 interface AccountBackup : Serializable {
     val location: BackupLocation
+    @Deprecated("Use lastBackupFlow")
     val lastBackup: LiveData<BackupSnapshot?>
+    val lastBackupFlow: StateFlow<BackupSnapshot?>
+    @Deprecated("Use progressFlow")
     val progress: LiveData<BackupProgress?>
-    fun isEnabled(): Boolean
-}
-
-/**
- * Restores an account from an [AccountBackup].
- */
-interface RestoreOption : AccountBackup {
-    val restoreLog: RestoreLog
-    suspend fun restore(environment: RestoreEnvironment)
-    fun cancelRestore()
-}
-
-/**
- * Necessary data to restore an account to a new session on a device.
- */
-data class RestoreEnvironment(
-    val ndf: String,
-    val appDirectory: String,
-    val sessionPassword: ByteArray,
-    val backupPassword: ByteArray,
-)
-
-/**
- * Saves an account to an [AccountBackup].
- */
-interface BackupOption : AccountBackup {
-    fun backupNow()
-}
-
-/**
- * Preferences that determine if and when the backup runs automatically.
- */
-interface BackupSettings {
-    val frequency: Frequency
-    val network: Network
-
-    enum class Frequency {
-        AUTOMATIC, MANUAL;
-
-        override fun toString(): String {
-            return super.toString().capitalizeWords()
-        }
-    }
-    enum class Network {
-        WIFI_ONLY {
-            override fun toString() = "Wi-Fi Only"
-        },
-        ANY {
-            override fun toString() = "Wi-Fi or Cellular"
-        };
-    }
+    val progressFlow: StateFlow<BackupProgress?>
 }
 
 /**
@@ -77,23 +30,6 @@ interface BackupLocation : Serializable {
     fun authBackgroundsApp(): Boolean
     fun createAuthHandler(callback: AuthResultCallback): AuthHandler?
     fun signOut()
-}
-
-/**
- * Handles authentication with a [BackupLocation] that requires sign-in.
- */
-interface AuthHandler {
-    val signInIntent: Intent
-    fun handleSignInResult(data: Intent?)
-    fun signOut()
-}
-
-/**
- * Exposes the result of an [AuthHandler] authentication attempt.
- */
-interface AuthResultCallback {
-    fun onFailure(errorMsg: String)
-    fun onSuccess()
 }
 
 /**

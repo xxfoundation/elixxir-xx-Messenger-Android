@@ -1,6 +1,6 @@
 package io.xxlabs.messenger.backup.bindings
 
-import io.xxlabs.messenger.backup.data.RestoreLogger
+import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 
 interface BackupService {

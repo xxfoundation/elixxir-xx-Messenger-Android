@@ -1,9 +1,10 @@
 package io.xxlabs.messenger.repository.base
 
+import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.data.data.ContactRoundRequest
 import io.xxlabs.messenger.ui.main.requests.RequestsFilter
 
-abstract class BasePreferences {
+abstract class BasePreferences : BackupPreferencesRepository {
     abstract fun addContactRequest(contactRoundRequest: ContactRoundRequest)
     abstract fun addContactRequest(contactId: ByteArray, contactUsername: String, roundId: Long, isSent: Boolean)
     abstract fun removeContactRequest(contactRoundRequest: ContactRoundRequest)
@@ -50,15 +51,4 @@ abstract class BasePreferences {
 
     //Other
     abstract var contactRoundRequests: MutableSet<String>
-
-    //Account Backup
-    abstract val isBackupEnabled: Boolean
-    abstract val isGoogleDriveEnabled: Boolean
-    abstract val isDropboxEnabled: Boolean
-    abstract var backupPassword: String?
-    abstract var autoBackup: Boolean
-    abstract var wiFiOnlyBackup: Boolean
-    abstract var backupLocation: String?
-    abstract var dbxCredential: String?
-    abstract var isUserProfileBackedUp: Boolean
 }

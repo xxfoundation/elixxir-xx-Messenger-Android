@@ -9,11 +9,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonInfoDialog
+import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.backup.ui.dialog.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
-import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.ui.ConfirmDialogLauncher
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
@@ -29,7 +28,7 @@ class RestoreDetailFragment : Fragment(), Injectable {
     private val restoreViewModel: RestoreDetailViewModel by viewModels {
         RestoreDetailViewModel.provideFactory(
             viewModelFactory,
-            RestoreDetailFragmentArgs.fromBundle(requireArguments()).restoreOption,
+            RestoreDetailFragmentArgs.fromBundle(requireArguments()).backup,
             (requireActivity() as BaseKeystoreActivity).rsaDecryptPwd()
         )
     }
@@ -123,8 +122,8 @@ class RestoreDetailFragment : Fragment(), Injectable {
         ).commitAllowingStateLoss()
     }
 
-    private fun showSetPasswordDialog(dialogUI: EditTextTwoButtonDialogUI) {
-        EditTextTwoButtonInfoDialog.newInstance(dialogUI)
+    private fun showSetPasswordDialog(dialogUI: TextInputDialogUI) {
+        TextInputDialog.newInstance(dialogUI)
             .show(childFragmentManager, null)
         ui.onPasswordPromptHandled()
     }
