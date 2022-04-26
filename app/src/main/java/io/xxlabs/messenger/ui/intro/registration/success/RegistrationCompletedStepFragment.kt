@@ -57,7 +57,7 @@ class RegistrationCompletedStepFragment : RegistrationFlowFragment(), Injectable
             if (it) {
                 when (step) {
                     EMAIL -> navigateNextStep()
-                    PHONE -> navigateToChats()
+                    PHONE -> registrationComplete()
                     RESTORE -> restartApp()
                 }
             }
@@ -71,7 +71,7 @@ class RegistrationCompletedStepFragment : RegistrationFlowFragment(), Injectable
         ui.onCompletedStepNavigateHandled(step)
     }
 
-    private fun navigateToChats() {
+    private fun registrationComplete() {
         onRegistrationComplete()
         ui.onCompletedStepNavigateHandled(step)
     }

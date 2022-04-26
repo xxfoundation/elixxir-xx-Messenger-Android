@@ -30,6 +30,7 @@ import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
+import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
@@ -46,6 +47,7 @@ class UdSearchFragment : BaseFragment() {
     lateinit var networkViewModel: NetworkViewModel
     lateinit var contactsViewModel: ContactsViewModel
     lateinit var udSearchViewModel: UdSearchViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var navController: NavController
     private lateinit var resultsAdapter: UdResultAdapter
     private lateinit var snackBar: Snackbar
@@ -85,6 +87,9 @@ class UdSearchFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
 
+        mainViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+
         networkViewModel = ViewModelProvider(requireActivity(), viewModelFactory)
             .get(NetworkViewModel::class.java)
 
@@ -95,6 +100,7 @@ class UdSearchFragment : BaseFragment() {
             .get(UdSearchViewModel::class.java)
 
         initComponents(view)
+        showNewUserPopups()
         watchForChanges()
     }
 
@@ -307,6 +313,62 @@ class UdSearchFragment : BaseFragment() {
 
         udSearchResultsRecyclerView.layoutManager = layoutManager
         udSearchResultsRecyclerView.adapter = resultsAdapter
+    }
+
+    private fun showNewUserPopups() {
+        showNotificationDialog()
+    }
+
+    private fun showNotificationDialog() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstTimeNotifications) {
+            showTwoButtonInfoDialog(
+                title = R.string.settings_push_notifications_dialog_title,
+                body = R.string.settings_push_notifications_dialog_body,
+                linkTextToUrlMap = null,
+                positiveClick = ::enablePushNotifications,
+                negativeClick = null,
+                onDismiss = ::showCoverMessageDialog
+            )
+            preferences.isFirstTimeNotifications = false
+        }
+    }
+
+    private fun enablePushNotifications() {
+        mainViewModel.enableNotifications { error ->
+            error?.let { showError(error) }
+        }
+    }
+
+    private fun showCoverMessageDialog() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstTimeCoverMessages) {
+            showTwoButtonInfoDialog(
+                R.string.settings_cover_traffic_title,
+                R.string.settings_cover_traffic_dialog_body,
+                mapOf(
+                    getString(R.string.settings_cover_traffic_link_text)
+                            to getString(R.string.settings_cover_traffic_link_url)
+                ),
+                ::enableCoverMessages,
+                ::declineCoverMessages,
+            )
+            preferences.isFirstTimeCoverMessages = false
+        }
+    }
+
+    private fun enableCoverMessages() {
+        enableDummyTraffic(true)
+    }
+
+    private fun declineCoverMessages() {
+        enableDummyTraffic(false)
+    }
+
+    private fun enableDummyTraffic(enabled: Boolean) {
+        try {
+            mainViewModel.enableDummyTraffic(enabled)
+        } catch (e: Exception) {
+            showError(e, true)
+        }
     }
 
     private fun watchForChanges() {

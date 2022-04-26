@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.biometrics.BiometricContainerCallback
 import io.xxlabs.messenger.biometrics.BiometricContainerProvider

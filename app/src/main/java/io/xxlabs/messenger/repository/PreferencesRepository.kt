@@ -203,6 +203,12 @@ class PreferencesRepository @Inject constructor(
         registrationStep += 1
     }
 
+    override var isFirstLaunch: Boolean
+        get() = preferences.getBoolean("is_first_launch", true)
+        set(value) {
+            preferences.edit().putBoolean("is_first_launch", value).apply()
+        }
+
     override var isFirstTimeNotifications: Boolean
         get() = preferences.getBoolean("is_first_time_notifications", true)
         set(value) {
