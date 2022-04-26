@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.backup.ui.save.RadioButtonDialogUI" />
+            type="io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogUI" />
     </data>
 
     <androidx.cardview.widget.CardView

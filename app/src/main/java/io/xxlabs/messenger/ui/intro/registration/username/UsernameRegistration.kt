@@ -104,11 +104,13 @@ class UsernameRegistration @AssistedInject constructor(
     override val usernameNavigateRestore: LiveData<Boolean> get() = navigateRestore
     private val navigateRestore = MutableLiveData(false)
 
-    override val usernameFilters: Array<InputFilter> get() =
+    override val usernameFilters: Array<InputFilter> =
         arrayOf(
             InputFilter { source, start, end, _, _, _ ->
-                source?.subSequence(start, end)
+                val input = source?.subSequence(start, end)
+                val filtered = source?.subSequence(start, end)
                     ?.replace(Regex(USERNAME_FILTER_REGEX), "")
+                if (filtered == input) null else filtered
             }
         )
 
@@ -134,7 +136,7 @@ class UsernameRegistration @AssistedInject constructor(
 
     override fun onUsernameInput(text: Editable) {
         error.postValue(null)
-        username.value = text.toString()
+        username.postValue(text.toString())
     }
 
     private fun disableUI() {
