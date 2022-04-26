@@ -2,29 +2,34 @@ package io.xxlabs.messenger.backup.ui.list
 
 import androidx.lifecycle.*
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.auth.CloudAuthentication
-import io.xxlabs.messenger.backup.data.BackupDataSource
+import io.xxlabs.messenger.backup.cloud.CloudAuthentication
 import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.backup.model.BackupLocation
-import io.xxlabs.messenger.backup.model.AuthResultCallback
+import io.xxlabs.messenger.backup.cloud.AuthResultCallback
+import io.xxlabs.messenger.backup.data.AccountBackupDataSource
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
 
-abstract class BackupLocationsViewModel<T: AccountBackup>(
-    private val dataSource: BackupDataSource<T>,
+abstract class BackupLocationsViewModel(
+    dataSource: AccountBackupDataSource,
     private val cloudAuthSource: CloudAuthentication,
-) : ViewModel(), BackupLocationsController<T> {
+) : ViewModel(), BackupLocationsController {
 
     private var backupLocation: BackupLocation? = null
 
     /* UI */
 
-    override val locations: List<LocationOption> =
-        dataSource.locations.map { BackupLocationOption(it, ::onLocationSelected) }
+    private val backupLocationsMap: MutableMap<BackupLocation, AccountBackup> = mutableMapOf()
 
-    override val navigateToDetail: LiveData<T?> by ::_navigateToDetail
-    private val _navigateToDetail = MutableLiveData<T?>(null)
+    override val locations: List<LocationOption> =
+        dataSource.locations.map {
+            backupLocationsMap[it.location] = it
+            BackupLocationOption(it.location, ::onLocationSelected)
+        }
+
+    override val navigateToDetail: LiveData<AccountBackup?> by ::_navigateToDetail
+    private val _navigateToDetail = MutableLiveData<AccountBackup?>(null)
 
     override val authLaunchConsentDialog: LiveData<TwoButtonInfoDialogUI?>
         by ::_authLaunchConsentDialog
@@ -83,7 +88,7 @@ abstract class BackupLocationsViewModel<T: AccountBackup>(
         _authLaunchConsentDialog.value = null
     }
 
-    protected fun signIn(backupLocation: BackupLocation) {
+    private fun signIn(backupLocation: BackupLocation) {
         setLoading(true)
         val authHandler = backupLocation.createAuthHandler(
             object : AuthResultCallback {
@@ -109,11 +114,11 @@ abstract class BackupLocationsViewModel<T: AccountBackup>(
     }
 
     protected fun navigateToDetail(backupLocation: BackupLocation) {
-        _navigateToDetail.value = getAccountBackup(backupLocation)
+        _navigateToDetail.value = backupLocationsMap[backupLocation]
     }
 
-    protected fun getAccountBackup(backupLocation: BackupLocation): T =
-        dataSource.setLocation(backupLocation)
+    protected fun getAccountBackup(backupLocation: BackupLocation): AccountBackup? =
+        backupLocationsMap[backupLocation]
 }
 
 private class AuthLaunchConsentHandler private constructor() {

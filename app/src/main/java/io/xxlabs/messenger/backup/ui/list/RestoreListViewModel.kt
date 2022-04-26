@@ -9,16 +9,16 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.auth.CloudAuthentication
-import io.xxlabs.messenger.backup.data.BackupDataSource
+import io.xxlabs.messenger.backup.cloud.CloudAuthentication
+import io.xxlabs.messenger.backup.data.restore.RestoreManager
+import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.backup.model.BackupLocation
-import io.xxlabs.messenger.backup.model.RestoreOption
 import io.xxlabs.messenger.support.appContext
 
 class RestoreListViewModel @AssistedInject constructor(
-    dataSource: BackupDataSource<RestoreOption>,
+    restoreManager: RestoreManager,
     @Assisted cloudAuthSource: CloudAuthentication,
-) : BackupLocationsViewModel<RestoreOption>(dataSource, cloudAuthSource) {
+) : BackupLocationsViewModel(restoreManager, cloudAuthSource) {
 
     override val backupLocationsTitle: Spanned = getSpannableTitle()
     override val backupLocationsDescription: Spanned = getSpannableDescription()
@@ -42,14 +42,14 @@ class RestoreListViewModel @AssistedInject constructor(
     }
 
     override fun onAuthSuccess(backupLocation: BackupLocation) {
-        if (getAccountBackup(backupLocation).hasBackup()) {
+        if (getAccountBackup(backupLocation)?.hasBackup() == true) {
             navigateToDetail(backupLocation)
         } else {
             setError(appContext().getString(R.string.backup_restore_error_no_backup_found))
         }
     }
 
-    private fun RestoreOption.hasBackup(): Boolean =
+    private fun AccountBackup.hasBackup(): Boolean =
         lastBackup.value?.run {
             sizeBytes > 0
         } ?: false
