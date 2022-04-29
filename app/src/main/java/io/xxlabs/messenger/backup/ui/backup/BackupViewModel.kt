@@ -9,16 +9,17 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.data.backup.BackupManager
 import io.xxlabs.messenger.backup.data.backup.BackupOption
 import io.xxlabs.messenger.backup.data.backup.BackupTaskListener
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-abstract class BackupViewModel(val backupManager: BackupManager)
-    : ViewModel(), BackupPasswordUI, BackupTaskListener {
+abstract class BackupViewModel(
+    val backupManager: BackupManager
+) : ViewModel(), BackupPasswordUI, BackupTaskListener {
 
     abstract fun getBackupOption(): BackupOption?
 

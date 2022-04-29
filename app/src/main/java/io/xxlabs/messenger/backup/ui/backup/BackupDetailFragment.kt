@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialog
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialog
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialog
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogUI
 import io.xxlabs.messenger.databinding.FragmentBackupDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toast
@@ -29,7 +29,7 @@ class BackupDetailFragment : Fragment(), Injectable {
     private val backupViewModel: BackupDetailViewModel by viewModels {
         BackupDetailViewModel.provideFactory(
             viewModelFactory,
-            BackupDetailFragmentArgs.fromBundle(requireArguments()).backup
+            BackupDetailFragmentArgs.fromBundle(requireArguments()).source
         )
     }
 

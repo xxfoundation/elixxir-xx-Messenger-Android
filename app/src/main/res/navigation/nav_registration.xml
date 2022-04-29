@@ -97,8 +97,8 @@
         android:label="fragment_backup_found"
         tools:layout="@layout/fragment_restore_detail" >
         <argument
-            android:name="backup"
-            app:argType="io.xxlabs.messenger.backup.model.AccountBackup" />
+            android:name="source"
+            app:argType="io.xxlabs.messenger.backup.data.BackupSource" />
         <action
             android:id="@+id/actionRestoreDetailToRegistrationCompleted"
             app:destination="@id/registrationCompletedStepFragment" />

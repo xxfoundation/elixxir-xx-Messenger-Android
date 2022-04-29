@@ -11,9 +11,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.backup.cloud.CloudAuthentication
-import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialog
+import io.xxlabs.messenger.backup.data.BackupSource
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentBackupSettingsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupOptionBinding
 import io.xxlabs.messenger.di.utils.Injectable
@@ -118,9 +118,9 @@ class BackupSettingsFragment : Fragment(), Injectable {
         ui.onErrorHandled()
     }
 
-    private fun onNavigateToDetail(backup: AccountBackup) {
+    private fun onNavigateToDetail(source: BackupSource) {
         val directions = BackupSettingsFragmentDirections
-            .actionBackupSettingsToBackupDetail(backup)
+            .actionBackupSettingsToBackupDetail(source)
         findNavController().navigate(directions)
         ui.onNavigationHandled()
     }

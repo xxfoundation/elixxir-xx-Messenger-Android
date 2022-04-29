@@ -1,8 +1,8 @@
-package io.xxlabs.messenger.support.dialog.confirm
+package io.xxlabs.messenger.ui.dialog.warning
 
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
-interface ConfirmDialogUI : InfoDialogUI {
+interface WarningDialogUI : InfoDialogUI {
     val buttonText: String
     val buttonOnClick: () -> Unit
 
@@ -11,8 +11,8 @@ interface ConfirmDialogUI : InfoDialogUI {
             infoDialogUI: InfoDialogUI,
             buttonText: String,
             buttonOnClick: () -> Unit
-        ): ConfirmDialogUI {
-            return object : ConfirmDialogUI, InfoDialogUI by infoDialogUI {
+        ): WarningDialogUI {
+            return object : WarningDialogUI, InfoDialogUI by infoDialogUI {
                 override val buttonText = buttonText
                 override val buttonOnClick = buttonOnClick
             }

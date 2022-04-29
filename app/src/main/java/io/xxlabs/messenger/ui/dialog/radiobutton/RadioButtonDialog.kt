@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.ui.dialog
+package io.xxlabs.messenger.ui.dialog.radiobutton
 
 import android.os.Bundle
 import android.view.LayoutInflater

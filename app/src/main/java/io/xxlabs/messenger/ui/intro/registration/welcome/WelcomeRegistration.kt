@@ -8,8 +8,8 @@ import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.support.dialog.info.SpanConfig
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.SpanConfig
 import javax.inject.Inject
 
 class WelcomeRegistration @Inject constructor(

@@ -32,6 +32,7 @@ import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentListener
 import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentsAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.PrivateMessagesAdapter
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import timber.log.Timber
 import java.io.File
 import java.io.IOException

@@ -1,7 +1,6 @@
-package io.xxlabs.messenger.ui.main.chats
+package io.xxlabs.messenger.ui.dialog.info
 
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
 
 interface TwoButtonInfoDialogUI : InfoDialogUI {
     val positiveLabel: Int

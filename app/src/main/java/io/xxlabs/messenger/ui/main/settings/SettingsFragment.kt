@@ -1,19 +1,14 @@
 package io.xxlabs.messenger.ui.main.settings
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.TextAppearanceSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.CompoundButton
-import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -22,14 +17,13 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.biometrics.BiometricUtils
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.support.dialog.BottomSheetPopup
-import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_settings.*

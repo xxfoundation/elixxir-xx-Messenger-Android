@@ -9,7 +9,7 @@ import java.io.Serializable
 /**
  * An account backup or restore option.
  */
-interface AccountBackup : Serializable {
+interface AccountBackup {
     val location: BackupLocation
     @Deprecated("Use lastBackupFlow")
     val lastBackup: LiveData<BackupSnapshot?>
@@ -22,7 +22,7 @@ interface AccountBackup : Serializable {
 /**
  * Describes the storage location or provider for an [AccountBackup].
  */
-interface BackupLocation : Serializable {
+interface BackupLocation {
     val icon: Int
     val name: String
     fun isEnabled(): Boolean
@@ -35,7 +35,7 @@ interface BackupLocation : Serializable {
 /**
  * Metadata about a backup in a [BackupLocation].
  */
-interface BackupSnapshot : Serializable {
+interface BackupSnapshot {
     val date: Long
     val sizeBytes: Long
 }

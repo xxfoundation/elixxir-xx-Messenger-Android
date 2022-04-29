@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.support.dialog.action
+package io.xxlabs.messenger.ui.dialog.warning
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -10,13 +10,13 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.ComponentNewActionDialogBinding
+import io.xxlabs.messenger.databinding.ComponentWarningDialogBinding
 
-class ActionDialog : BottomSheetDialogFragment() {
+class WarningDialog : BottomSheetDialogFragment() {
 
-    private lateinit var binding: ComponentNewActionDialogBinding
-    private val dialogUI: ActionDialogUI by lazy {
-        requireArguments().getSerializable(ARG_UI) as ActionDialogUI
+    private lateinit var binding: ComponentWarningDialogBinding
+    private val dialogUI: WarningDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as WarningDialogUI
     }
 
     override fun onCreateView(
@@ -26,12 +26,12 @@ class ActionDialog : BottomSheetDialogFragment() {
     ): View {
         binding = DataBindingUtil.inflate(
             inflater,
-            R.layout.component_new_action_dialog,
+            R.layout.component_warning_dialog,
             container,
             false
         )
         binding.ui = dialogUI
-        binding.actionDialogButton.apply {
+        binding.confirmDialogButton.apply {
             setOnClickListener {
                 dialogUI.buttonOnClick()
                 dismiss()
@@ -56,8 +56,8 @@ class ActionDialog : BottomSheetDialogFragment() {
     companion object Factory {
         private const val ARG_UI: String = "ui"
 
-        fun newInstance(dialogUI: ActionDialogUI): ActionDialog =
-            ActionDialog().apply {
+        fun newInstance(dialogUI: WarningDialogUI): WarningDialog =
+            WarningDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_UI, dialogUI)
                 }

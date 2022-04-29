@@ -14,8 +14,8 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.support.dialog.info.SpanConfig
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.SpanConfig
 import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 import javax.inject.Inject
 

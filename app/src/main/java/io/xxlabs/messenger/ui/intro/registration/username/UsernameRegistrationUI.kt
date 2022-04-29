@@ -4,8 +4,7 @@ import android.text.Editable
 import android.text.InputFilter
 import android.text.Spanned
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 interface UsernameRegistrationUI {
     val usernameTitle: Spanned

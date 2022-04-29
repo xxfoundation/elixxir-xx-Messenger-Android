@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.support.dialog.info
+package io.xxlabs.messenger.ui.dialog.info
 
 import io.xxlabs.messenger.R
 import java.io.Serializable

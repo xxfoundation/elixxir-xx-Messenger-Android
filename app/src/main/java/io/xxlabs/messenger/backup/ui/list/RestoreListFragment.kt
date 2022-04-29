@@ -5,8 +5,8 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.ui.ConfirmDialogLauncher
+import io.xxlabs.messenger.backup.data.BackupSource
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import javax.inject.Inject
 
 /**
@@ -27,10 +27,6 @@ class RestoreListFragment : BackupLocationsFragment() {
 
     /* UI */
 
-    private val warningLauncher: ConfirmDialogLauncher by lazy {
-        ConfirmDialogLauncher(requireActivity().supportFragmentManager)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showMultiDeviceWarning()
@@ -49,28 +45,9 @@ class RestoreListFragment : BackupLocationsFragment() {
     private fun onConfirmButtonClicked() {}
     private fun onConfirmDialogDismissed() {}
 
-    private fun showConfirmDialog(
-        title: Int,
-        body: Int,
-        button: Int,
-        action: () -> Unit,
-        onDismiss: () -> Unit = {}
-    ) {
-        warningLauncher.showConfirmDialog(title, body, button, action, onDismiss)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        observeUI()
-    }
-
-    private fun observeUI() {
-
-    }
-
-    override fun navigateToDetail(backup: AccountBackup) {
+    override fun navigateToDetail(source: BackupSource) {
         val directions = RestoreListFragmentDirections
-            .actionRestoreListToRestoreDetail(backup)
+            .actionRestoreListToRestoreDetail(source)
         findNavController().navigate(directions)
     }
 }

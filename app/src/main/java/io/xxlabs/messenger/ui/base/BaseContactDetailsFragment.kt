@@ -18,6 +18,7 @@ import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.util.DialogUtils
+import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainActivity

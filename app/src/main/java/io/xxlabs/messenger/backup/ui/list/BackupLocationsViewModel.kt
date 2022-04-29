@@ -7,12 +7,13 @@ import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.backup.model.BackupLocation
 import io.xxlabs.messenger.backup.cloud.AuthResultCallback
 import io.xxlabs.messenger.backup.data.AccountBackupDataSource
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 abstract class BackupLocationsViewModel(
-    dataSource: AccountBackupDataSource,
+    private val dataSource: AccountBackupDataSource,
     private val cloudAuthSource: CloudAuthentication,
 ) : ViewModel(), BackupLocationsController {
 
@@ -28,8 +29,8 @@ abstract class BackupLocationsViewModel(
             BackupLocationOption(it.location, ::onLocationSelected)
         }
 
-    override val navigateToDetail: LiveData<AccountBackup?> by ::_navigateToDetail
-    private val _navigateToDetail = MutableLiveData<AccountBackup?>(null)
+    override val navigateToDetail: LiveData<BackupSource?> by ::_navigateToDetail
+    private val _navigateToDetail = MutableLiveData<BackupSource?>(null)
 
     override val authLaunchConsentDialog: LiveData<TwoButtonInfoDialogUI?>
         by ::_authLaunchConsentDialog
@@ -114,7 +115,11 @@ abstract class BackupLocationsViewModel(
     }
 
     protected fun navigateToDetail(backupLocation: BackupLocation) {
-        _navigateToDetail.value = backupLocationsMap[backupLocation]
+        backupLocationsMap[backupLocation]?.let { backup ->
+            dataSource.getSourceFor(backup)?.let { source ->
+                _navigateToDetail.value = source
+            }
+        }
     }
 
     protected fun getAccountBackup(backupLocation: BackupLocation): AccountBackup? =

@@ -3,7 +3,7 @@ package io.xxlabs.messenger.backup.ui.restore
 import androidx.lifecycle.LiveData
 import io.xxlabs.messenger.backup.data.restore.RestoreLog
 import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.backup.ui.dialog.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import java.io.Serializable
 
 interface RestorePasswordUI {

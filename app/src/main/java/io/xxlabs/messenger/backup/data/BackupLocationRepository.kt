@@ -18,4 +18,17 @@ abstract class BackupLocationRepository(
         googleDrive,
         dropbox
     )
+
+    override fun getBackupFrom(source: BackupSource): AccountBackup =
+        when (source) {
+            BackupSource.DRIVE -> googleDrive
+            BackupSource.DROPBOX -> dropbox
+        }
+
+    override fun getSourceFor(backup: AccountBackup): BackupSource? =
+        when (backup) {
+            is GoogleDrive -> BackupSource.DRIVE
+            is Dropbox -> BackupSource.DROPBOX
+            else -> null
+        }
 }

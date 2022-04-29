@@ -7,19 +7,22 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.backup.data.backup.BackupManager
 import io.xxlabs.messenger.backup.data.backup.BackupOption
 import io.xxlabs.messenger.backup.data.backup.BackupSettings
 import io.xxlabs.messenger.backup.data.backup.BackupSettings.*
 import io.xxlabs.messenger.backup.model.AccountBackup
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogOption
-import io.xxlabs.messenger.backup.ui.dialog.RadioButtonDialogUI
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogOption
+import io.xxlabs.messenger.ui.dialog.radiobutton.RadioButtonDialogUI
 import io.xxlabs.messenger.support.appContext
 
 class BackupDetailViewModel @AssistedInject constructor(
     backupManager: BackupManager,
-    @Assisted override val backup: AccountBackup
+    @Assisted private val source: BackupSource
 ) : BackupViewModel(backupManager), BackupDetailController {
+
+    override val backup: AccountBackup get() = backupManager.getBackupFrom(source)
 
     override val settings: LiveData<BackupSettings> = backupManager.settings.asLiveData()
 
@@ -151,10 +154,10 @@ class BackupDetailViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: BackupDetailViewModelFactory,
-            backup: AccountBackup
+            source: BackupSource
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(backup) as T
+                return assistedFactory.create(source) as T
             }
         }
     }
@@ -162,5 +165,5 @@ class BackupDetailViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface BackupDetailViewModelFactory {
-    fun create(backup: AccountBackup): BackupDetailViewModel
+    fun create(source: BackupSource): BackupDetailViewModel
 }

@@ -8,7 +8,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import javax.inject.Inject
 
 class TfaRegistration @Inject constructor(
