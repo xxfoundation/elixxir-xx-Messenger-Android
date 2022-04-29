@@ -18,6 +18,7 @@ abstract class BasePreferences : BackupPreferencesRepository {
     abstract fun removeContactRequests(contactId: ByteArray): Int
 
     //User
+    abstract var isFirstLaunch: Boolean
     abstract var isFirstTimeNotifications: Boolean
     abstract var isFirstTimeCoverMessages: Boolean
     abstract var preImages: String
