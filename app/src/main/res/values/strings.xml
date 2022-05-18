@@ -404,7 +404,7 @@
         @string/backup_setup_description_span_text</string>
     <string name="backup_settings_backup_now">Backup Now</string>
     <string name="backup_encryption_warning">
-        Content backed up in %s is not protected by xx Network end-to-end encryption.</string>
+        Content backed up in %s is encrypted with your passphrase in a brute force resistant manner.</string>
     <string name="backup_latest_backup_label">Latest backup</string>
     <string name="backup_latest_backup_never">Never</string>
     <string name="backup_frequency_label">Backup to %s</string>
