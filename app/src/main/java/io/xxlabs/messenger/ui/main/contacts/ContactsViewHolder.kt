@@ -49,7 +49,7 @@ class ContactsViewHolder(
 
     fun setState(friendStatus: Int) {
         contactUsername.alpha = if (friendStatus == RequestStatus.ACCEPTED.value
-            || friendStatus == RequestStatus.RECEIVED.value
+            || friendStatus == RequestStatus.VERIFIED.value
         ) {
             1.0f
         } else {
@@ -57,7 +57,7 @@ class ContactsViewHolder(
         }
 
         contactPhoto.alpha = if (friendStatus == RequestStatus.ACCEPTED.value
-            || friendStatus == RequestStatus.RECEIVED.value
+            || friendStatus == RequestStatus.VERIFIED.value
         ) {
             1.0f
         } else {
@@ -137,7 +137,7 @@ class ContactsViewHolder(
     }
 
     fun setContactUsernameText(text: String) {
-        contactUsername.text = text.capitalizeWords()
+        contactUsername.text = text
     }
 
     fun setOnClick(selectionMode: SelectionMode) {
@@ -220,7 +220,7 @@ class ContactsViewHolder(
     }
 
     private fun navigateFromChat(bundle: Bundle) {
-        if (requestStatus == RequestStatus.RECEIVED) {
+        if (requestStatus == RequestStatus.VERIFIED) {
             Navigation.findNavController(parent)
                 .navigate(R.id.action_contacts_to_invitation, bundle)
         } else {
@@ -235,7 +235,7 @@ class ContactsViewHolder(
     }
 
     private fun navigateFromContacts(bundle: Bundle) {
-        if (requestStatus == RequestStatus.RECEIVED) {
+        if (requestStatus == RequestStatus.VERIFIED) {
             Navigation.findNavController(parent)
                 .navigate(R.id.action_contacts_to_invitation, bundle)
         } else {
@@ -246,7 +246,7 @@ class ContactsViewHolder(
 
     private fun navigateFromContactsSelection(bundle: Bundle) {
         when (requestStatus) {
-            RequestStatus.RECEIVED -> {
+            RequestStatus.VERIFIED -> {
                 Navigation.findNavController(parent)
                     .navigate(R.id.action_contacts_selection_to_invitation, bundle)
             }

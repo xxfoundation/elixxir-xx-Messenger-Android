@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.data.room.model
 
-interface Group {
+import java.io.Serializable
+
+interface Group : Serializable {
     val id: Long
     val groupId: ByteArray
     val name: String

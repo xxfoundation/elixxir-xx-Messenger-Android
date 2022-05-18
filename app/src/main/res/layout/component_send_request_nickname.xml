@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.nickname.SaveNicknameUI" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/requestDetailsDialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/bottom_sheet_dialog_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/close_button_layout"
+                layout="@layout/component_close_button"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:ui="@{ui}" />
+
+            <TextView
+                android:id="@+id/save_nickname_dialog_title"
+                style="@style/request_details_dialog_subtitle"
+                android:text="@string/save_nickname_title"
+                app:layout_constraintBottom_toTopOf="@id/save_nickname_dialog_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_button_layout" />
+
+            <TextView
+                android:id="@+id/save_nickname_dialog_body"
+                style="@style/dialog_body"
+                android:layout_marginVertical="@dimen/registration_body_vertical_margin"
+                android:text="@string/save_nickname_dialog_body"
+                app:layout_constraintBottom_toTopOf="@id/save_nickname_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/save_nickname_dialog_title" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/save_nickname_input"
+                style="@style/registration_text_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/registration_body_vertical_margin"
+                android:error="@{ui.nicknameError}"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_check"
+                app:endIconTint="@color/accent_success"
+                app:layout_constraintTop_toBottomOf="@id/save_nickname_dialog_body"
+                app:layout_constraintBottom_toTopOf="@id/save_nickname_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:hint="janehunt">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/registration_text_input_edittext"
+                    android:hint="@{ui.nicknameHint}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{ui::onNicknameInput}"
+                    android:imeOptions="actionDone"
+                    android:maxLength="@{ui.maxNicknameLength}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <Button
+                android:id="@+id/save_nickname_button"
+                style="@style/request_details_dialog_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="50dp"
+                android:layout_marginHorizontal="@dimen/registration_horizontal_margin"
+                android:text="@string/save_nickname_positive_button"
+                android:textColor="@color/neutral_white"
+                android:background="@drawable/bg_btn_white"
+                android:backgroundTint="@color/brand_default"
+                android:enabled="@{ui.positiveButtonEnabled}"
+                app:layout_constraintTop_toBottomOf="@id/save_nickname_input"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

@@ -79,7 +79,7 @@
                     android:maxLines="1"
                     android:textColor="@color/neutral_weak"
                     android:textSize="@dimen/text_10"
-                    tools:text="2 hours ago" />
+                    tools:text="2 hours ago"/>
             </LinearLayout>
 
             <LinearLayout
@@ -98,7 +98,8 @@
                     android:gravity="end"
                     android:textColor="@color/neutral_weak"
                     android:textSize="@dimen/text_10"
-                    tools:text="2 hours ago" />
+                    tools:text="2 hours ago"
+                    tools:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/itemRequestsResend"

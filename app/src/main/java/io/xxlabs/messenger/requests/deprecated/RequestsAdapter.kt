@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.requests
+package io.xxlabs.messenger.requests.deprecated
 
 import android.graphics.BitmapFactory
 import android.view.LayoutInflater
@@ -52,7 +52,7 @@ class RequestsAdapter(private val requestsListener: RequestsListener) :
         holder.contactPhotoBg.contentDescription = "requests.item.$position.photo.bg"
         holder.contactPhoto.contentDescription = "requests.item.$position.photo"
         holder.contactPhotoText.contentDescription = "requests.item.$position.photo.text"
-        holder.resend.contentDescription = "requests.item.$position.btn.resend"
+        holder.resend.contentDescription = "requests.item.$position.btn.send"
         holder.acceptBtn.contentDescription = "requests.item.$position.btn.accept"
         holder.rejectBtn.contentDescription = "requests.item.$position.btn.reject"
     }
@@ -116,8 +116,8 @@ class RequestsAdapter(private val requestsListener: RequestsListener) :
     ) {
         when(RequestStatus.from(item.status)) {
             RequestStatus.CONFIRM_FAIL, RequestStatus.SEND_FAIL -> updateUiForFailure(holder, item)
-            RequestStatus.RECEIVED -> updateUiForReceived(holder, item)
-            RequestStatus.UNVERIFIED -> updateUiForUnverified(holder, item)
+            RequestStatus.VERIFIED -> updateUiForReceived(holder, item)
+            RequestStatus.VERIFICATION_FAIL -> updateUiForUnverified(holder, item)
             RequestStatus.VERIFYING -> updateUiForVerifying(holder, item)
             RequestStatus.SENT, RequestStatus.RESET_SENT, RequestStatus.RESET_FAIL -> {
                 updateUiForSent(holder, item)

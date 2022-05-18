@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.requests
+package io.xxlabs.messenger.requests.deprecated
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -53,7 +53,7 @@ class RequestGenericFragment : BaseFragment() {
             when (RequestStatus.from(contact.status)) {
                 RequestStatus.SEND_FAIL, RequestStatus.SENT -> {
                     Timber.v("Resending request auth channel...")
-                    contactsViewModel.updateAndRequestAuthChannel(contact.marshaled!!)
+                    contactsViewModel.updateAndRequestAuthChannel(contact)
                     (requireActivity() as MainActivity).createSnackMessage(
                         "Sending a new request",
                         true
@@ -77,7 +77,7 @@ class RequestGenericFragment : BaseFragment() {
 
         override fun onClickUsername(v: View, contact: ContactData) {
             val bundle = bundleOf("contact_id" to contact.userId)
-            if (contact.status == RequestStatus.RECEIVED.value) {
+            if (contact.status == RequestStatus.VERIFIED.value) {
                 navController.navigateSafe(R.id.action_global_contact_invitation, bundle)
             } else {
                 navController.navigateSafe(R.id.action_global_contact_details, bundle)
@@ -144,7 +144,6 @@ class RequestGenericFragment : BaseFragment() {
     }
 
     fun initComponents(root: View) {
-        contactsViewModel.viewAllRequests()
         requestsAddContactBtn.setOnSingleClickListener {
             navController.navigateSafe(R.id.action_requests_to_ud_search)
         }
@@ -229,7 +228,6 @@ class RequestGenericFragment : BaseFragment() {
 
                 is DataRequestState.Success -> {
                     completeInvitation(true)
-                    contactsViewModel.viewSingleRequest()
                     (requireActivity() as MainActivity).createSnackMessage("Group Confirmed!")
                 }
                 else -> {
@@ -276,7 +274,7 @@ class RequestGenericFragment : BaseFragment() {
     }
 
     private fun rejectContact(contact: ContactData) {
-        contactsViewModel.rejectContact(contact.userId)
+        contactsViewModel.rejectContact(contact)
     }
 
     private fun acceptGroup(group: GroupData) {
@@ -332,9 +330,9 @@ class RequestGenericFragment : BaseFragment() {
 
             addSource(contactsViewModel.contactsData) { contacts ->
                 contactRequests = contacts.filter {
-                    it.status == RequestStatus.RECEIVED.value
+                    it.status == RequestStatus.VERIFIED.value
                         || it.status == RequestStatus.VERIFYING.value
-                        || it.status == RequestStatus.UNVERIFIED.value
+                        || it.status == RequestStatus.VERIFICATION_FAIL.value
                 }
                 receivedList = contactRequests + groupInvites
                 value = receivedList

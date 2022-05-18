@@ -2,7 +2,7 @@ package io.xxlabs.messenger.repository.base
 
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.data.data.ContactRoundRequest
-import io.xxlabs.messenger.ui.main.requests.RequestsFilter
+import io.xxlabs.messenger.requests.deprecated.RequestsFilter
 
 abstract class BasePreferences : BackupPreferencesRepository {
     abstract fun addContactRequest(contactRoundRequest: ContactRoundRequest)
@@ -25,8 +25,8 @@ abstract class BasePreferences : BackupPreferencesRepository {
     abstract var userData: String
     abstract var userPicture: String
     abstract var userSecret: String
-    abstract var shouldShareEmailQr: Boolean
-    abstract var shouldSharePhoneQr: Boolean
+    abstract var shareEmailWhenRequesting: Boolean
+    abstract var sharePhoneWhenRequesting: Boolean
     abstract var registrationStep: Int
 
     //General

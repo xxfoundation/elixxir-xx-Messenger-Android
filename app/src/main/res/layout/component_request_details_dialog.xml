@@ -1,0 +1,141 @@
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.details.contact.RequestDetailsUI" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/requestDetailsDialogLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/bottom_sheet_dialog_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                android:id="@+id/close_button_layout"
+                layout="@layout/component_close_button"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:ui="@{ui}" />
+
+            <TextView
+                android:id="@+id/request_details_dialog_title"
+                style="@style/request_details_dialog_title"
+                android:text="@string/request_details_title"
+                app:layout_constraintBottom_toTopOf="@id/request_details_username"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_button_layout" />
+
+            <TextView
+                android:id="@+id/request_details_username"
+                style="@style/request_details_dialog_subtitle"
+                android:layout_marginVertical="24dp"
+                android:layout_marginTop="16dp"
+                android:text="@{ui.username}"
+                app:layout_constraintBottom_toTopOf="@id/request_details_email_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/request_details_dialog_title"
+                tools:text="janehunt" />
+
+            <TextView
+                android:id="@+id/request_details_email_header"
+                style="@style/request_details_section_header"
+                android:layout_marginBottom="12dp"
+                android:visibility="@{ui.email}"
+                android:text="@string/request_details_email_header"
+                app:layout_constraintBottom_toTopOf="@id/request_details_email"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/request_details_email"
+                style="@style/request_details_section_content"
+                android:layout_marginBottom="32dp"
+                android:visibility="@{ui.email}"
+                android:text="@{ui.email}"
+                app:layout_constraintBottom_toTopOf="@id/request_details_phone_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="jane.huntington@gmail.com" />
+
+            <TextView
+                android:id="@+id/request_details_phone_header"
+                style="@style/request_details_section_header"
+                android:layout_marginBottom="12dp"
+                android:visibility="@{ui.phone}"
+                android:text="@string/request_details_phone_header"
+                app:layout_constraintBottom_toTopOf="@id/request_details_phone"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/request_details_phone"
+                style="@style/request_details_section_content"
+                android:layout_marginBottom="32dp"
+                android:visibility="@{ui.phone}"
+                android:text="@{ui.phone}"
+                app:layout_constraintBottom_toTopOf="@id/request_details_nickname_section"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="+1 310-123-4567" />
+
+            <TextView
+                android:id="@+id/request_details_nickname_section"
+                style="@style/request_details_textinput_label"
+                android:layout_marginVertical="@dimen/registration_body_vertical_margin"
+                android:text="@string/request_details_nickname_section"
+                app:layout_constraintBottom_toTopOf="@id/request_details_nickname_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Edit your new contact’s nickname." />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/request_details_nickname_input"
+                style="@style/registration_text_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/registration_body_vertical_margin"
+                android:error="@{ui.nicknameError}"
+                app:endIconMode="custom"
+                app:endIconDrawable="@drawable/ic_check"
+                app:endIconTint="@color/accent_success"
+                app:layout_constraintBottom_toTopOf="@id/dialog_button_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:hint="janehunt">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/registration_text_input_edittext"
+                    android:hint="@{ui.nicknameHint}"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:afterTextChanged="@{ui::onNicknameInput}"
+                    android:imeOptions="actionDone"
+                    android:maxLength="@{ui.maxNicknameLength}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <include
+                android:id="@+id/dialog_button_layout"
+                layout="@layout/component_vertical_positive_negative_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:ui="@{ui}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

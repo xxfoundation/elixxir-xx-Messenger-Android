@@ -6,33 +6,41 @@ import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.os.Bundle
-import android.view.MenuItem
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.os.PersistableBundle
+import android.view.*
 import android.view.inputmethod.InputMethodManager
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.core.view.setPadding
+import androidx.lifecycle.*
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
+import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
+import io.xxlabs.messenger.data.room.model.Contact
+import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
 import io.xxlabs.messenger.notifications.MessagingService
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.callback.NetworkWatcher
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.misc.DebugLogger
+import io.xxlabs.messenger.support.toast.CustomToastActivity
+import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
@@ -46,10 +54,13 @@ import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.component_menu.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
-class MainActivity : MediaProviderActivity(), SnackBarActivity {
+class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActivity {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -66,6 +77,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
 
     override fun onStart() {
         super.onStart()
+        observeUI()
         watchObservables()
         mainViewModel.checkIsLoggedInReturn()
     }
@@ -283,6 +295,39 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
         }
     }
 
+    private fun observeUI() {
+        contactsViewModel.showToast.onEach { toast ->
+            toast?.let {
+                showCustomToast(toast)
+                contactsViewModel.onToastShown()
+            }
+        }.launchIn(lifecycleScope)
+
+        contactsViewModel.navigateToChat.onEach { contact ->
+            contact?.let {
+                openChat(contact)
+                contactsViewModel.onNavigateHandled()
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+
+    private fun openChat(contact: Contact) {
+        val bundle = bundleOf("contact_id" to contact.userId)
+        mainNavController.navigateSafe(R.id.action_global_chat, bundle)
+    }
+
+    private fun requestFailedToast(message: String?) {
+        showCustomToast(
+            ToastUI.create(
+                body = message ?: "One of your requests failed.",
+                leftIcon = R.drawable.ic_danger,
+                backgroundColor = getColor(R.color.accent_danger)
+            )
+        )
+        contactsViewModel.onToastShown()
+    }
+
     private fun watchObservables() {
         mainViewModel.loginStatus.observe(this, Observer { result ->
             Timber.v("[LOGIN] Status - Main")
@@ -362,8 +407,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
                     contactsViewModel.newAuthRequestSent.postValue(SimpleRequestState.Completed())
                 }
                 is SimpleRequestState.Error -> {
-                    createSnackMessage("One of your requests has failed!")
-//                    contactsViewModel.addRequestCount()
+                    requestFailedToast(result.error?.message)
                 }
                 else -> {
                     Timber.v("Completed new auth request")
@@ -375,8 +419,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
             Timber.v("New confirm request - UI - $result")
             when (result) {
                 is DataRequestState.Error -> {
-                    createSnackMessage("One of your requests has failed!")
-//                    contactsViewModel.addRequestCount()
+                    requestFailedToast(result.error.message)
                 }
 
                 is DataRequestState.Success -> {
@@ -402,7 +445,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
                 createSnackMessage("A contact has accepted your private channel request!")
-                contactsViewModel.viewSingleRequest()
                 contactsViewModel.newConfirmationRequestReceived.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
@@ -426,7 +468,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
                 createSnackMessage("Private Group invitation received!")
-                contactsViewModel.addRequestCount()
                 mainViewModel.newGroup.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
@@ -647,5 +688,22 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity {
         override fun isActive(): Boolean {
             return activeInstances > 0
         }
+    }
+
+    override fun showCustomToast(ui: ToastUI) {
+        val snackBar = Snackbar.make(findViewById(R.id.customToastView), "", ui.duration)
+        val binding = ComponentCustomToastBinding.inflate(layoutInflater)
+        binding.ui = ui
+        (snackBar.view as Snackbar.SnackbarLayout).apply {
+            setBackgroundColor(Color.TRANSPARENT)
+            setPadding(48)
+            addView(binding.root, 0)
+
+            val params = layoutParams as CoordinatorLayout.LayoutParams
+            params.gravity = Gravity.TOP
+            layoutParams = params
+        }
+        snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
+        snackBar.show()
     }
 }

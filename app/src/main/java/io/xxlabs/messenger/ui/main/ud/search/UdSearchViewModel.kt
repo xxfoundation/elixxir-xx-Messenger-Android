@@ -8,6 +8,7 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.ContactSearchResult
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.datatype.FactType
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
@@ -22,7 +23,7 @@ class UdSearchViewModel @Inject constructor(
     private val schedulers: SchedulerProvider
 ) : ViewModel() {
     var subscriptions = CompositeDisposable()
-    val searchState = MutableLiveData<DataRequestState<ByteArray>>()
+    val searchState = MutableLiveData<DataRequestState<ContactData>>()
     val contactResult = MutableLiveData<ContactSearchResult>()
 
     //Registration Step State

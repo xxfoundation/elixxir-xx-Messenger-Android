@@ -12,8 +12,10 @@ object BitmapResolver {
         return  BitmapFactory.decodeStream(appContext().contentResolver.openInputStream(fileUri))
     }
 
-    fun getBitmap(array: ByteArray): Bitmap? {
-        return BitmapFactory.decodeByteArray(array, 0, array.size)
+    fun getBitmap(array: ByteArray?): Bitmap? {
+        return array?.let {
+            BitmapFactory.decodeByteArray(array, 0, array.size)
+        }
     }
 
     /**

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.send.SendRequestUI" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/send_request_dialog_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/bottom_sheet_dialog_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <include
+                android:id="@+id/close_button_layout"
+                layout="@layout/component_close_button"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:ui="@{ui}" />
+
+            <TextView
+                android:id="@+id/send_request_dialog_title"
+                style="@style/bold_title"
+                android:text="@string/send_request_dialog_title"
+                android:textSize="26sp"
+                android:layout_marginTop="0dp"
+                android:textColor="@color/neutral_dark"
+                android:fontWeight="800"
+                app:layout_constraintBottom_toTopOf="@id/send_request_dialog_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/close_button_layout"
+                tools:text="Request Contact" />
+
+            <TextView
+                android:id="@+id/send_request_dialog_body"
+                style="@style/dialog_body"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{ui.body}"
+                android:textSize="16sp"
+                app:layout_constraintTop_toBottomOf="@id/send_request_dialog_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/send_request_email_header"
+                tools:text="Share your information with Percyking (percy.king@gmail.com) so they know it’s you." />
+
+            <TextView
+                android:id="@+id/send_request_email_header"
+                style="@style/request_details_section_header"
+                android:layout_marginBottom="12dp"
+                android:text="@string/request_details_email_header"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/send_request_dialog_body"
+                app:layout_constraintBottom_toTopOf="@id/send_request_sender_email"
+                app:layout_constraintEnd_toStartOf="@id/send_request_email_toggle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/send_request_sender_email"
+                style="@style/request_details_section_content"
+                android:layout_marginBottom="32dp"
+                android:text="@{ui.senderEmail}"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/send_request_email_header"
+                app:layout_constraintBottom_toTopOf="@id/send_request_phone_header"
+                app:layout_constraintEnd_toStartOf="@id/send_request_email_toggle"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="jane.huntington@gmail.com" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/send_request_email_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginEnd="@dimen/registration_horizontal_margin"
+                android:enabled="@{ui.emailToggleEnabled}"
+                android:onCheckedChanged="@{(_, bool)-> ui.onEmailToggled(bool)}"
+                app:layout_constraintTop_toTopOf="@id/send_request_email_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/send_request_sender_email"/>
+
+            <TextView
+                android:id="@+id/send_request_phone_header"
+                style="@style/request_details_section_header"
+                android:layout_marginBottom="12dp"
+                android:text="@string/request_details_phone_header"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/send_request_sender_email"
+                app:layout_constraintBottom_toTopOf="@id/send_request_sender_phone"
+                app:layout_constraintEnd_toStartOf="@id/send_request_phone_toggle"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <TextView
+                android:id="@+id/send_request_sender_phone"
+                style="@style/request_details_section_content"
+                android:layout_marginBottom="32dp"
+                android:text="@{ui.senderPhone}"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintTop_toBottomOf="@id/send_request_phone_header"
+                app:layout_constraintBottom_toTopOf="@id/dialog_button_layout"
+                app:layout_constraintEnd_toStartOf="@id/send_request_phone_toggle"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="+1 310-123-4567" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/send_request_phone_toggle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:layout_marginEnd="@dimen/registration_horizontal_margin"
+                android:enabled="@{ui.phoneToggleEnabled}"
+                android:onCheckedChanged="@{(_, bool)-> ui.onPhoneToggled(bool)}"
+                app:layout_constraintTop_toTopOf="@id/send_request_phone_header"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="@id/send_request_sender_phone"/>
+
+            <include
+                android:id="@+id/dialog_button_layout"
+                layout="@layout/component_vertical_positive_negative_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:ui="@{ui}" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

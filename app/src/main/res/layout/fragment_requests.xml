@@ -32,49 +32,28 @@
                 android:background="@color/transparent"
                 app:tabGravity="fill"
                 app:tabIndicatorFullWidth="true"
-                app:tabIndicatorHeight="@dimen/spacing_5"
-                app:tabInlineLabel="true"
+                app:tabIndicatorHeight="@dimen/spacing_3"
+                app:tabInlineLabel="false"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed"
-                app:tabPaddingBottom="@dimen/spacing_5"
                 app:tabPaddingEnd="@dimen/spacing_24"
                 app:tabPaddingStart="@dimen/spacing_24"
                 app:tabTextAppearance="@style/TabTextStyle"
+                app:tabIconTint="@color/selector_qr_code_tab_secondary"
                 app:tabTextColor="@color/selector_qr_code_tab_secondary" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/requestsViewPager"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="horizontal"
-            android:paddingTop="@dimen/spacing_20"
-            android:paddingBottom="@dimen/spacing_20"
+            android:paddingHorizontal="@dimen/spacing_14"
+            android:paddingBottom="@dimen/spacing_14"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/requestsAppBarLayout" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/requestsGuideStart"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".05" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/requestsGuideMiddle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.50" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/requestsGuideEnd"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent=".95" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>

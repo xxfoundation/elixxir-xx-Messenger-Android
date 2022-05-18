@@ -4,44 +4,64 @@ import android.app.Application
 import android.util.Pair
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
+import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperMock
-import io.xxlabs.messenger.data.data.ContactRoundRequest
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.data.datatype.ContactRequestState
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MessageStatus
+import io.xxlabs.messenger.data.datatype.RequestStatus.*
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.repository.client.ClientRepository
+import io.xxlabs.messenger.requests.data.contact.ContactRequestData
+import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
+import io.xxlabs.messenger.requests.data.contact.RequestMigrator
+import io.xxlabs.messenger.requests.data.group.InvitationMigrator
 import io.xxlabs.messenger.support.extensions.combineWith
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
+import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.Utils
+import io.xxlabs.messenger.support.util.value
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 class ContactsViewModel @Inject constructor(
-    val app: Application,
-    val repo: BaseRepository,
-    val daoRepo: DaoRepository,
-    val preferences: PreferencesRepository,
-    val schedulers: SchedulerProvider,
+    private val app: Application,
+    private val repo: BaseRepository,
+    private val daoRepo: DaoRepository,
+    private val preferences: PreferencesRepository,
+    private val schedulers: SchedulerProvider,
+    private val requestsDataSource: ContactRequestsRepository
 ) : ViewModel() {
+
+    val showToast: Flow<ToastUI?> by ::_showToast
+    private val _showToast = MutableStateFlow<ToastUI?>(null)
+
+    val navigateToChat: Flow<Contact?> by ::_navigateToChat
+    private val _navigateToChat = MutableStateFlow<Contact?>(null)
+
     var subscriptions = CompositeDisposable()
     var newAuthRequestSent = MutableLiveData<SimpleRequestState<Any>>()
     var newConfirmRequestSent = MutableLiveData<DataRequestState<Any>>()
-    var newIncomingRequestReceived = MutableLiveData<SimpleRequestState<ByteArray>>()
+    var newIncomingRequestReceived = MutableLiveData<SimpleRequestState<ByteArray?>>()
     var newConfirmationRequestReceived = MutableLiveData<SimpleRequestState<ByteArray>>()
     var newGroupRequestSent = MutableLiveData<DataRequestState<Boolean>>()
     var acceptGroupRequest = MutableLiveData<DataRequestState<GroupData>>()
@@ -49,39 +69,29 @@ class ContactsViewModel @Inject constructor(
 
     val contactsData = daoRepo.getAllContactsLive()
     val groupsData = daoRepo.getAllGroupsLive()
-    val requestsCount = MutableLiveData<Int>()
+    val requestsCount = requestsDataSource.unreadCount.asLiveData()
     val combinedContactGroupsData = contactsData.combineWith(groupsData) { contacts, groups ->
         Pair(contacts ?: listOf(), groups ?: listOf())
     }
 
     init {
         Timber.v("isAuthCallbackRegistered: ${isAuthCallbackRegistered()}")
-        requestsCount.value = preferences.contactsCount
+        migrateOldRequests()
+        if (BuildConfig.DEBUG) listContacts()
     }
 
-    fun addRequestCount() {
-        val currVal = preferences.contactsCount
-        Timber.v("Current requests val $currVal")
-        preferences.contactsCount = currVal + 1
-        requestsCount.postValue(preferences.contactsCount)
-    }
-
-    fun viewAllRequests() {
-        val currVal = preferences.contactsCount
-        Timber.v("Current val $currVal")
-        preferences.contactsCount = 0
-        requestsCount.value = 0
-    }
-
-    fun viewSingleRequest() {
-        val currVal = preferences.contactsCount
-        Timber.v("Current val $currVal")
-        if (currVal > 0) {
-            preferences.contactsCount = currVal - 1
-        } else {
-            preferences.contactsCount = 0
+    private fun listContacts() {
+        viewModelScope.launch {
+            daoRepo.getAllContacts().value().forEach { contactData ->
+                Timber.d("Found contact: ${contactData.displayName}/${contactData.userId.toBase64String()}")
+            }
         }
-        requestsCount.value = preferences.contactsCount
+    }
+
+    private fun migrateOldRequests() {
+        viewModelScope.launch {
+            RequestMigrator.performMigration(preferences, requestsDataSource, daoRepo)
+        }
     }
 
     fun registerAuthCallback() {
@@ -116,7 +126,6 @@ class ContactsViewModel @Inject constructor(
     private fun onConfirmationReceived(contact: ByteArray) {
         val id = getBindingsContactId(contact)
         Timber.v("Request feedback received from: ${id.toBase64String()}")
-        newConfirmationRequestReceived.postValue(SimpleRequestState.Success(contact))
         confirmRequest(contact)
     }
 
@@ -132,76 +141,67 @@ class ContactsViewModel @Inject constructor(
                 ""
             )
             if (roundId > 0) {
-                updateContactStatus(contact.userId, RequestStatus.RESET_SENT)
-                preferences.removeContactRequests(contact.userId)
-                preferences.addContactRequest(
-                    contact.userId,
-                    contact.username,
-                    roundId,
-                    true
-                )
-
+                updateContactStatus(contact.userId, RESET_SENT)
+                saveRequest(contact)
             }
         } catch (e: Exception) {
             Timber.d("Failed to reset session: ${e.message}")
         }
     }
 
-    fun updateAndRequestAuthChannel(contact: ByteArray) {
+    fun updateAndRequestAuthChannel(contact: ContactData) {
         if (isMockVersion()) {
             newAuthRequestSent.postValue(SimpleRequestState.Success(Any()))
             return
         }
-
         requestAuthenticatedChannel(contact)
     }
 
-    fun requestAuthenticatedChannel(contact: ByteArray) {
-        val contactWrapper = repo.unmarshallContact(contact)
+    private fun requestAuthenticatedChannel(contact: ContactData) {
+        val contactWrapper = repo.unmarshallContact(contact.marshaled!!)
         val bindingsId = contactWrapper!!.getId()
         subscriptions.add(
-            repo.requestAuthenticatedChannel(contact)
+            repo.requestAuthenticatedChannel(contact.marshaled!!)
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.io)
                 .doOnSuccess { roundId ->
                     if (isMockVersion()) {
                         updateContactMock(bindingsId, contactWrapper)
-                        Timber.v("${contact.toBase64String()} became ${(contactWrapper as ContactWrapperMock).contact.status}!")
+                        Timber.v("${contact.displayName} became ${(contactWrapper as ContactWrapperMock).contact.status}!")
                         newAuthRequestSent.postValue(SimpleRequestState.Success(Any()))
                     } else {
                         Timber.v("contact request sent to: ${bindingsId.toBase64String()}")
 
-                        updateContactStatus(
-                            bindingsId,
-                            RequestStatus.SENT
-                        )
-
-                        val request = preferences.getContactRequest(bindingsId)
-                        if (request != null && request.isSent) {
-                            preferences.removeContactRequest(request)
-                        }
-
-                        val username = contactWrapper.getUsernameFact()
-                        preferences.addContactRequest(
-                            bindingsId,
-                            username,
-                            roundId,
-                            true
-                        )
-
-                        preferences.getContactRequest(bindingsId)?.apply {
-                            completeRound(this)
-                        }
-//                        waitForRoundCompletion(bindingsId, roundId)
+                        saveContact(contact, SENT)
+                        saveRequest(contact)
                         newAuthRequestSent.postValue(SimpleRequestState.Success(Any()))
                     }
                 }
                 .doOnError { err ->
                     Timber.e("Request error for ${bindingsId.toBase64String()}: ${err.localizedMessage}")
-                    newAuthRequestSent.postValue(SimpleRequestState.Error())
+                    newAuthRequestSent.postValue(SimpleRequestState.Error(
+                        Exception("Your contact request to ${contact.displayName} has failed.")
+                    ))
                     handleRequestAuthChannelError(err, contactWrapper)
                 }.subscribe()
         )
+    }
+
+    private fun saveContact(contact: ContactData, status: RequestStatus) {
+        viewModelScope.launch {
+            try {
+                if (daoRepo.getContactByUserId(contact.userId).value() == null) {
+                    val rowId = daoRepo.addNewContact(contact.copy(status = status.value)).value()
+                    Timber.d("Saved ${contact.displayName} to row $rowId in DB.")
+                } else {
+                    updateContactStatus(contact.userId, status) {
+                        Timber.d("Updated ${contact.displayName} with status $status in DB.")
+                    }
+                }
+            } catch (e: Exception) {
+                Timber.d("Exception saving ${contact.displayName}: ${e.message}")
+            }
+        }
     }
 
     fun confirmAuthenticatedChannel(contact: ContactData) {
@@ -210,13 +210,11 @@ class ContactsViewModel @Inject constructor(
         val bindingsId = getBindingsContactId(contactWrapper.marshal())
         Timber.v("Confirming authentication channel with ${bindingsId.toBase64String()}")
         newConfirmRequestSent.postValue(DataRequestState.Start())
-        var roundId: Long = -1L
         subscriptions.add(
             repo.confirmAuthenticatedChannel(contactWrapper.marshal())
                 .subscribeOn(schedulers.single)
                 .observeOn(schedulers.io)
-                .flatMap { newRoundId ->
-                    roundId = newRoundId
+                .flatMap { roundId ->
                     daoRepo.updateContact(contact)
                 }
                 .observeOn(schedulers.main)
@@ -225,7 +223,7 @@ class ContactsViewModel @Inject constructor(
                         Timber.v("Authentication channel confirm sent! wait for its round to complete...")
                         updateContactStatus(
                             contactWrapper.getId(),
-                            requestStatus = RequestStatus.ACCEPTED
+                            requestStatus = ACCEPTED
                         )
                         newConfirmRequestSent.postValue(DataRequestState.Success(contact))
                         return@doOnSuccess
@@ -233,27 +231,16 @@ class ContactsViewModel @Inject constructor(
 
                     Timber.v("Authentication channel confirm sent! wait for its round to complete...")
                     newConfirmRequestSent.postValue(DataRequestState.Success(Any()))
-
-                    preferences.removeContactRequests(contact.userId)
-
-                    preferences.addContactRequest(
-                        bindingsId,
-                        contactWrapper.getUsernameFact(),
-                        roundId,
-                        false
-                    )
-
-                    preferences.getContactRequest(bindingsId)?.apply {
-                        completeRound(this)
-                    }
+                    deleteRequest(contact)
                 }.doOnError { err ->
                     Timber.e("Request error for ${bindingsId.toBase64String()}: ${err.localizedMessage}")
                     updateContactStatus(
                         contactWrapper.getId(),
-                        RequestStatus.CONFIRM_FAIL
+                        CONFIRM_FAIL
                     )
-                    roundRequestFail(contactWrapper)
-                    newConfirmRequestSent.postValue(DataRequestState.Error(err))
+                    newConfirmRequestSent.postValue(DataRequestState.Error(
+                        Exception("Failed to accept contact request from ${contactWrapper.getUsernameFact()}")
+                    ))
                 }.subscribe()
         )
     }
@@ -264,47 +251,27 @@ class ContactsViewModel @Inject constructor(
                 Timber.e("Request is still open")
                 updateContactStatus(
                     contactWrapper.getId(),
-                    RequestStatus.SENT
+                    SENT
                 )
             }
             err.localizedMessage?.contains("timed out") == true -> {
                 Timber.e("Request timed out!")
                 updateContactStatus(
                     contactWrapper.getId(),
-                    RequestStatus.SEND_FAIL
+                    SEND_FAIL
                 )
-                roundRequestFail(contactWrapper)
             }
             err.localizedMessage?.contains("Cannot request authenticated channel") == true -> {
                 Timber.e("Request failed!")
                 updateContactStatus(
                     contactWrapper.getId(),
-                    RequestStatus.SEND_FAIL
+                    SEND_FAIL
                 )
-                roundRequestFail(contactWrapper)
             }
 
             err.localizedMessage?.contains("Request is still open") == true -> {
                 Timber.e("Request is still open...")
             }
-        }
-    }
-
-    private fun roundRequestFail(contactWrapper: ContactWrapperBase) {
-        val contactRequest = preferences.getContactRequest(contactWrapper.getId())
-        if (contactRequest != null) {
-            contactRequest.verifyState = ContactRequestState.FAILED
-            preferences.updateContactRequest(contactRequest)
-        } else {
-            val newContactRequest = ContactRoundRequest(
-                contactId = contactWrapper.getId(),
-                contactUsername = contactWrapper.getUsernameFact(),
-                roundId = -1,
-                isSent = true,
-                verifyState = ContactRequestState.FAILED
-            )
-            Timber.e("Round request not found for ${contactWrapper.getId().toBase64String()}!")
-            preferences.addContactRequest(newContactRequest)
         }
     }
 
@@ -326,8 +293,8 @@ class ContactsViewModel @Inject constructor(
         Timber.v("Username is $contactUsername")
         Timber.v("Getting name...")
         val contactName = unmarshalledContact.getNameFact() ?: contactUsername
-        val contactEmail = unmarshalledContact.getEmailFact() ?: ""
-        val contactPhone = unmarshalledContact.getPhoneFact() ?: ""
+        val contactEmail = unmarshalledContact.getEmailFact(true) ?: ""
+        val contactPhone = unmarshalledContact.getPhoneFact(true) ?: ""
         Timber.v("Name is $contactName")
 
         val contact =  ContactData(
@@ -337,7 +304,7 @@ class ContactsViewModel @Inject constructor(
             marshaled = marshalledData,
             email = contactEmail,
             phone = contactPhone,
-            status = RequestStatus.UNVERIFIED.value
+            status = VERIFYING.value
         )
 
         subscriptions.add(
@@ -350,9 +317,7 @@ class ContactsViewModel @Inject constructor(
                         Timber.v("Couldn't save contact: already exists")
                     },
                     onSuccess = {
-                        addRequestCount()
                         Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
-                        newIncomingRequestReceived.postValue(SimpleRequestState.Success(marshalledData))
                         verifyNewRequest(contact)
                     })
         )
@@ -360,27 +325,51 @@ class ContactsViewModel @Inject constructor(
         return contact
     }
 
-    fun confirmRequest(marshalledContact: ByteArray) {
-        val contact = repo.unmarshallContact(marshalledContact)
-        val bindingsId = contact!!.getId()
-        Timber.v("Trying to update the contact $bindingsId...")
-        preferences.removeContactRequests(contact.getId())
-        updateContactStatus(bindingsId, RequestStatus.ACCEPTED)
+    private fun saveRequest(contact: ContactData, unread: Boolean = false) {
+        val contactRequest = ContactRequestData(contact, unread)
+        requestsDataSource.save(contactRequest)
     }
 
-    private fun addReceivedContactRequest(
-        contact: ContactWrapperBase
-    ) {
-        val contactRoundRequest = ContactRoundRequest(
-            contactId = contact.getId(),
-            contactUsername = contact.getUsernameFact(),
-            roundId = -1,
-            isSent = false,
-            verifyState = ContactRequestState.RECEIVED
-        )
+    fun confirmRequest(marshalledContact: ByteArray) {
+        viewModelScope.launch {
+            val contactBindings = repo.unmarshallContact(marshalledContact)
+            contactBindings?.let {
+                Timber.v("Trying to update the contact ${contactBindings.getId()}...")
+                getContact(contactBindings.getId())?.let {
+                    updateContactStatus(it.userId, ACCEPTED) {
+                        deleteRequest(it)
+                        showRequestAccepted(it)
+                    }
+                }
+            }
+        }
+    }
 
-        preferences.removeContactRequests(contact.getId())
-        preferences.addContactRequest(contactRoundRequest)
+    private suspend fun getContact(userId: ByteArray): Contact? =
+        daoRepo.getContactByUserId(userId).value()
+
+    private fun showRequestAccepted(contact: Contact) {
+        val requestAccepted = ToastUI.create(
+            header = contact.displayName,
+            body = "Accepted your request",
+            leftIcon = R.drawable.ic_check,
+            iconTint = R.color.accent_success,
+            actionText = "Send message",
+            actionClick = { navigateToChat(contact) }
+        )
+        _showToast.value = requestAccepted
+    }
+
+    fun onToastShown() {
+        _showToast.value = null
+    }
+
+    private fun navigateToChat(contact: Contact) {
+        _navigateToChat.value = contact
+    }
+
+    fun onNavigateHandled() {
+        _navigateToChat.value = null
     }
 
     private fun getBindingsContactId(data: ByteArray): ByteArray {
@@ -392,27 +381,12 @@ class ContactsViewModel @Inject constructor(
     fun verifyNewRequest(
         contact: ContactData
     ) {
-        updateContactStatus(contact.userId, RequestStatus.VERIFYING)
-        addVerifyingContactRequest(contact)
         Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
         if (contact.hasFacts()) { //UD Search
             verifyContactViaSearch(contact)
         } else { // UD Lookup
             verifyContactViaLookup(contact)
         }
-    }
-
-    private fun addVerifyingContactRequest(contact: ContactData) {
-        val contactRoundRequest = ContactRoundRequest(
-            contactId = contact.userId,
-            contactUsername = contact.username,
-            roundId = -1,
-            isSent = false,
-            verifyState = ContactRequestState.VERIFYING
-        )
-
-        preferences.removeContactRequests(contact.userId)
-        preferences.addContactRequest(contactRoundRequest)
     }
 
     private fun verifyContactViaSearch(contact: ContactData) {
@@ -442,11 +416,14 @@ class ContactsViewModel @Inject constructor(
     private fun verifyContactViaLookup(contact: ContactData) {
         Timber.v("[RECEIVED REQUEST] User does not have facts - UD Lookup")
         repo.userLookup(contact.userId) { newContact, error ->
-            if (newContact == null) { //Fraudulent
+            if (!error.isNullOrEmpty()) {
                 Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is UNVERIFIED")
-                onContactUnverified(contact)
-            } else {
-                if (newContact.getId().contentEquals(contact.userId)) { //Verified
+                onFailedToVerify(contact)
+                return@userLookup
+            }
+
+            if (newContact != null) {
+                if (newContact.getId().contentEquals(contact.userId)) { // Verifying
                     Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
                     verifyContact(contact, newContact)
                 } else { //Fraudulent
@@ -466,42 +443,49 @@ class ContactsViewModel @Inject constructor(
     }
 
     private fun onContactVerified(contact: ContactData) {
-        updateContactStatus(contact.userId, RequestStatus.RECEIVED) {
-            addReceivedContactRequest(ContactWrapperBase.from(contact))
-            Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
-        }
+        saveContact(contact, VERIFIED)
+        saveRequest(contact, true)
+        Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
+        newIncomingRequestReceived.postValue(SimpleRequestState.Success(contact.marshaled))
     }
 
-    private fun onContactUnverified(contact: ContactData) {
-        updateContactStatus(contact.userId, RequestStatus.UNVERIFIED)
+    private fun onFailedToVerify(contact: ContactData) {
+        saveContact(contact, VERIFICATION_FAIL)
     }
 
     private fun deleteFraudulentContact(contact: ContactData) {
-        viewSingleRequest()
+        updateToDeleting(contact)
+
         subscriptions.add(
             daoRepo.deleteContact(contact)
                 .subscribeOn(schedulers.io)
                 .observeOn(schedulers.io)
                 .doOnError { Timber.v("[RECEIVED REQUEST] Error deleting Fraudulent contact ${contact.userId.toBase64String()}") }
-                .doOnSuccess { Timber.v("[RECEIVED REQUEST] Fraudulent contact has been deleted!") }
+                .doOnSuccess {
+                    Timber.v("[RECEIVED REQUEST] Fraudulent contact has been deleted!")
+                    deleteRequest(contact)
+                }
                 .subscribe()
         )
     }
 
-    fun rejectContact(contactId: ByteArray) {
-        deleteContact(contactId)
+    private fun deleteRequest(contact: Contact) {
+        val contactRequest = ContactRequestData(contact, true)
+        requestsDataSource.delete(contactRequest)
     }
 
-    private fun deleteContact(contactId: ByteArray) {
-        val request = preferences.getContactRequest(contactId)
-        request?.let { preferences.removeContactRequest(it) }
+    private fun updateToDeleting(contact: ContactData) {
+        updateContactStatus(contact.userId, DELETING)
+    }
 
-        subscriptions.add(
-            daoRepo.deleteContactFromDb(contactId)
-                .subscribeOn(schedulers.io)
-                .observeOn(schedulers.io)
-                .subscribe()
-        )
+    fun rejectContact(contact: ContactData) {
+        hideRequest(contact)
+    }
+
+    private fun hideRequest(contact: ContactData) {
+        updateContactStatus(contact.userId, HIDDEN) {
+            requestsDataSource.reject(ContactRequestData(contact))
+        }
     }
 
     private fun updateContactStatus(
@@ -542,68 +526,6 @@ class ContactsViewModel @Inject constructor(
         )
     }
 
-
-    private fun waitForRoundCompletion(contactId: ByteArray, searchRoundId: Long) {
-        Timber.v("Waiting for round $searchRoundId | contact ${contactId.toBase64String()}...")
-        subscriptions.add(
-            repo.waitForRoundCompletion(
-                searchRoundId,
-                onRoundCompletionCallback = { roundId, isSuccessful, timedOut ->
-                    Timber.v("RoundCompletionCallback ($roundId): successful $isSuccessful timedOut $timedOut")
-                    val request = preferences.getContactRequest(contactId, roundId)
-                    if (request != null) {
-                        if (isSuccessful) completeRound(request)
-                        else failRound(request)
-                    }
-                },
-                timeoutMillis = 15000
-            )
-                .subscribeOn(schedulers.io)
-                .subscribe()
-        )
-    }
-
-    private fun completeRound(roundRequest: ContactRoundRequest) {
-        Timber.v("Contact round request tracker for ${roundRequest.contactId.toBase64String()} was removed")
-        roundRequest.verifyState = ContactRequestState.SUCCESS
-        preferences.updateContactRequest(roundRequest)
-        if (roundRequest.isSent) {
-            updateContactStatus(roundRequest.contactId, RequestStatus.SENT)
-        } else {
-            updateContactStatus(roundRequest.contactId, RequestStatus.ACCEPTED)
-        }
-    }
-
-    private fun failRound(roundRequest: ContactRoundRequest) {
-        roundRequest.verifyState = ContactRequestState.FAILED
-        preferences.updateContactRequest(roundRequest)
-        Timber.v("Contact round request tracker for ${roundRequest.contactId.toBase64String()} was updated")
-
-        if (roundRequest.isSent) {
-            updateContactStatus(roundRequest.contactId, RequestStatus.SEND_FAIL)
-        } else {
-            updateContactStatus(roundRequest.contactId, RequestStatus.CONFIRM_FAIL)
-        }
-    }
-
-    private fun checkWaitForRounds() {
-        val requests = ContactRoundRequest.toRoundRequestsSet(preferences.contactRoundRequests)
-        for (contactRequest in requests) {
-            Timber.v("Round request waiting: $contactRequest")
-            contactRequest.apply {
-                when (verifyState) {
-                    ContactRequestState.SUCCESS -> {
-                        preferences.removeContactRequest(this)
-                    }
-                    ContactRequestState.VERIFYING -> {
-                        updateContactStatus(contactRequest.contactId, RequestStatus.UNVERIFIED)
-                        requests.remove(this)
-                    }
-                }
-            }
-        }
-    }
-
     private fun isAuthCallbackRegistered(): Boolean {
         return XxMessengerApplication.isAuthCallbackRegistered
     }
@@ -615,15 +537,6 @@ class ContactsViewModel @Inject constructor(
     override fun onCleared() {
         subscriptions.clear()
         super.onCleared()
-    }
-
-    fun updateContactName(temporaryContact: ContactData) {
-        subscriptions.add(
-            daoRepo.updateContactName(temporaryContact)
-                .subscribeOn(schedulers.io)
-                .observeOn(schedulers.main)
-                .subscribe()
-        )
     }
 
     fun createGroup(name: String, initialMsg: String?, contactsList: List<ContactData>) {
@@ -706,7 +619,9 @@ class ContactsViewModel @Inject constructor(
                 .observeOn(schedulers.main)
                 .doOnError { err ->
                     Timber.e("[GROUP ACCEPT] Error on accepting group: ${err.localizedMessage}")
-                    acceptGroupRequest.value = DataRequestState.Error(err)
+                    acceptGroupRequest.postValue(DataRequestState.Error(
+                        Exception("Failed to join group ${group.name}")
+                    ))
                 }
                 .doOnSuccess {
                     Timber.v("[GROUP ACCEPT] Finished with success!")

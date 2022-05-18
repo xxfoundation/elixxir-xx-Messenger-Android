@@ -6,7 +6,7 @@ interface TwoButtonInfoDialogUI : InfoDialogUI {
     val positiveLabel: Int
     val negativeLabel: Int
     val onPositiveClick: () -> Unit
-    val onNegativeClick: (() -> Unit)
+    val onNegativeClick: () -> Unit
 
     companion object Factory {
         fun create(

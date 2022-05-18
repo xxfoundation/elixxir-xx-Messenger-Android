@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.data.room.model.GroupMessage
 import io.xxlabs.messenger.support.dialog.MenuChatDialog
 import io.xxlabs.messenger.support.extensions.*
@@ -23,6 +24,19 @@ import javax.inject.Inject
 
 class GroupMessagesFragment : ChatMessagesFragment<GroupMessage>() {
 
+    private val groupId: ByteArray by lazy {
+        GroupMessagesFragmentArgs
+            .fromBundle(requireArguments())
+            .groupId
+            ?.fromBase64toByteArray()
+            ?: requireArguments().getByteArray("group_id")!!
+    }
+    private val group: GroupData? by lazy {
+        GroupMessagesFragmentArgs
+        .fromBundle(requireArguments())
+        .group
+    }
+
     /* ViewModels */
 
     @Inject
@@ -31,7 +45,8 @@ class GroupMessagesFragment : ChatMessagesFragment<GroupMessage>() {
     private val chatViewModel: GroupMessagesViewModel by viewModels {
         GroupMessagesViewModel.provideFactory(
             chatViewModelFactory,
-            requireArguments().getByteArray("group_id")!!
+            groupId,
+            group
         )
     }
     override val uiController: ChatMessagesUIController<GroupMessage>

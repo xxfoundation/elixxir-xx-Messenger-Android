@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="request_details_dialog_subtitle" parent="request_details_dialog_title">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:fontWeight">800</item>
+        <item name="android:lineHeight">32.63sp</item>
+    </style>
+</resources>

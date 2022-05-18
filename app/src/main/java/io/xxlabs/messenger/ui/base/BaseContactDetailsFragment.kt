@@ -15,6 +15,8 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.formattedEmail
+import io.xxlabs.messenger.data.room.model.formattedPhone
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.util.DialogUtils
@@ -118,7 +120,7 @@ abstract class BaseContactDetailsFragment : BasePhotoFragment() {
                 when (currContact.status) {
                     RequestStatus.SEND_FAIL.value -> {
                         Timber.v("Resending request auth channel...")
-                        contactsViewModel.updateAndRequestAuthChannel(currContact.marshaled!!)
+                        contactsViewModel.updateAndRequestAuthChannel(currContact)
                         if (preferences.areInAppNotificationsOn) {
                             (requireActivity() as MainActivity).createSnackMessage("Sending a new request")
                         }
@@ -251,8 +253,8 @@ abstract class BaseContactDetailsFragment : BasePhotoFragment() {
 
     private fun setData(contactBindings: ContactWrapperBase) {
         val username = contactBindings.getUsernameFact()
-        val email = contactBindings.getEmailFact()
-        val phone = contactBindings.getPhoneFact()
+        val email = contactBindings.getEmailFact(true)
+        val phone = contactBindings.getPhoneFact(true)
 
         if (username.isNotBlank()) {
             contactDetailsUsername.text = username
@@ -293,8 +295,8 @@ abstract class BaseContactDetailsFragment : BasePhotoFragment() {
 
     private fun setData(contact: ContactData) {
         val username = contact.username
-        val email = contact.email
-        val phone = contact.phone
+        val email = contact.formattedEmail()
+        val phone = contact.formattedPhone(true)
 
         if (username.isNotBlank()) {
             contactDetailsUsername.text = username
@@ -303,14 +305,14 @@ abstract class BaseContactDetailsFragment : BasePhotoFragment() {
             contactDetailsUsername.visibility = View.GONE
         }
 
-        if (email.isNotBlank()) {
+        if (!email.isNullOrBlank()) {
             contactDetailsEmail.text = email
         } else {
             contactDetailsEmailHeader.visibility = View.GONE
             contactDetailsEmail.visibility = View.GONE
         }
 
-        if (phone.isNotBlank()) {
+        if (!phone.isNullOrBlank()) {
             contactDetailsPhone.text = phone
         } else {
             contactDetailsPhoneHeader.visibility = View.GONE
