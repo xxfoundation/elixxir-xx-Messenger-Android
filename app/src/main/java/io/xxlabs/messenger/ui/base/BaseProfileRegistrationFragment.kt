@@ -356,7 +356,7 @@ abstract class BaseProfileRegistrationFragment(val isRegistration: Boolean = fal
                 }
                 val text = SpannableStringBuilder("Resend code ").append("($remainingSeconds secs)")
                 textView?.text = text
-                textView?.contentDescription = "ud.profile.dialog.resend.counting"
+                textView?.contentDescription = "ud.profile.dialog.send.counting"
                 Timber.v("[VERIFICATION CODE]Remaining seconds: $remainingSeconds")
             }
 
@@ -369,7 +369,7 @@ abstract class BaseProfileRegistrationFragment(val isRegistration: Boolean = fal
                         )
                     )
                 }
-                textView?.contentDescription = "ud.profile.dialog.resend.ready"
+                textView?.contentDescription = "ud.profile.dialog.send.ready"
                 textView?.text = "Resend Code"
                 textView?.enable()
             }

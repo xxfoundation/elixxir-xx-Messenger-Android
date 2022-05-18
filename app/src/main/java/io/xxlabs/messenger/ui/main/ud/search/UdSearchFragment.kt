@@ -14,7 +14,11 @@ import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,9 +29,15 @@ import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
 import io.xxlabs.messenger.data.datatype.NetworkState
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.requests.ui.RequestsViewModel
+import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
+import io.xxlabs.messenger.requests.ui.send.OutgoingRequest
+import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
@@ -35,6 +45,9 @@ import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_private_search.*
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -49,6 +62,10 @@ class UdSearchFragment : BaseFragment() {
     lateinit var udSearchViewModel: UdSearchViewModel
     private lateinit var mainViewModel: MainViewModel
     private lateinit var navController: NavController
+    private val requestsViewModel: RequestsViewModel by viewModels(
+        factoryProducer = { viewModelFactory }
+    )
+
     private lateinit var resultsAdapter: UdResultAdapter
     private lateinit var snackBar: Snackbar
 
@@ -61,21 +78,50 @@ class UdSearchFragment : BaseFragment() {
 
     private var udSelectionListener = object : UdSelectionListener {
         override fun onItemSelected(v: View, contactWrapper: ContactWrapperBase) {
-            v.disableWithAlpha()
-            currentAddButton = v
-            val contactString = contactWrapper.marshal().toString(Charsets.ISO_8859_1)
-            Timber.v("Marshalled String: $contactString")
-            val bundle =
-                bundleOf("contact" to contactString)
-            navController.navigateSafe(R.id.action_ud_search_to_contact_success, bundle)
+            showSendRequestDialog(contactWrapper)
         }
+    }
+
+    private fun showSendRequestDialog(user: ContactWrapperBase) {
+        SendRequestDialog
+            .newInstance(ContactData.from(user))
+            .show(childFragmentManager, null)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeUI()
+            }
+
+        }
         return inflater.inflate(R.layout.fragment_private_search, container, false)
+    }
+
+    private fun observeUI() {
+        requestsViewModel.sendContactRequest.onEach { toUser ->
+            toUser?.let {
+                contactsViewModel.updateAndRequestAuthChannel(toUser)
+                requestsViewModel.onSendRequestHandled()
+            }
+        }.launchIn(lifecycleScope)
+
+        requestsViewModel.showCreateNickname.onEach { outgoingRequest ->
+            outgoingRequest?.let {
+                showSaveNicknameDialog(it)
+                requestsViewModel.onShowCreateNicknameHandled()
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun showSaveNicknameDialog(outgoingRequest: OutgoingRequest) {
+        SaveNicknameDialog
+            .newInstance(outgoingRequest)
+            .show(childFragmentManager, null)
     }
 
     override fun onDetach() {

@@ -6,6 +6,7 @@ import io.xxlabs.messenger.backup.ui.list.BackupListFragment
 import io.xxlabs.messenger.backup.ui.backup.BackupDetailFragment
 import io.xxlabs.messenger.backup.ui.backup.BackupSettingsFragment
 import io.xxlabs.messenger.media.FullScreenImageFragment
+import io.xxlabs.messenger.requests.deprecated.RequestGenericFragment
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
 import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
@@ -18,8 +19,16 @@ import io.xxlabs.messenger.ui.main.groups.GroupMessagesFragment
 import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
 import io.xxlabs.messenger.ui.main.qrcode.QrCodeScanFragment
 import io.xxlabs.messenger.ui.main.qrcode.QrCodeShowFragment
-import io.xxlabs.messenger.ui.main.requests.RequestGenericFragment
-import io.xxlabs.messenger.ui.main.requests.RequestsFragment
+import io.xxlabs.messenger.requests.ui.RequestsFragment
+import io.xxlabs.messenger.requests.ui.accepted.contact.RequestAcceptedDialog
+import io.xxlabs.messenger.requests.ui.accepted.group.InvitationAcceptedDialog
+import io.xxlabs.messenger.requests.ui.details.contact.RequestDetailsDialog
+import io.xxlabs.messenger.requests.ui.details.group.InvitationDetailsDialog
+import io.xxlabs.messenger.requests.ui.list.FailedRequestsFragment
+import io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment
+import io.xxlabs.messenger.requests.ui.list.SentRequestsFragment
+import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
+import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.ui.main.settings.DeleteAccountFragment
 import io.xxlabs.messenger.ui.main.settings.SettingsFragment
 import io.xxlabs.messenger.ui.main.settings.SettingsAdvancedFragment
@@ -98,4 +107,31 @@ abstract class FragmentMainBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeBackupSettingsFragment(): BackupSettingsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeSentRequestsFragment(): SentRequestsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeReceivedRequestsFragment(): ReceivedRequestsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeFailedRequestsFragment(): FailedRequestsFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeRequestDetailsDialog(): RequestDetailsDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeRequestAcceptedDialog(): RequestAcceptedDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeInvitationDetailsDialog(): InvitationDetailsDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeSendRequestDialog(): SendRequestDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeSaveNicknameDialog(): SaveNicknameDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeInvitationAcceptedDialog(): InvitationAcceptedDialog
 }

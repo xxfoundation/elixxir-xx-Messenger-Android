@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.requests
+package io.xxlabs.messenger.requests
 //
 //import android.content.Context
 //import com.google.common.truth.Truth.assertThat

@@ -24,6 +24,7 @@ import java.io.File
 import java.lang.UnsupportedOperationException
 
 private val devUserDiscoveryIp = "18.198.117.203:11420".encodeToByteArray()
+private const val NDF_MAX_RETRIES = 2
 
 class BindingsWrapperBindings {
 
@@ -33,8 +34,10 @@ class BindingsWrapperBindings {
         private const val NDF_URL_RELEASE =
             "https://elixxir-bins.s3.us-west-1.amazonaws.com/ndf/release.json"
 
-        override fun getNdf(): String {
-            return when (BuildConfig.ENVIRONMENT) {
+        override fun getNdf(): String = recursiveGetNdf()
+
+        private fun recursiveGetNdf(retries: Int = 0): String {
+            val ndf = when (BuildConfig.ENVIRONMENT) {
                 Environment.MAIN_NET -> {
                     downloadAndVerifySignedNdfWithUrl(
                         NDF_URL_MAINNET,
@@ -48,6 +51,12 @@ class BindingsWrapperBindings {
                     )
                 }
                 else -> getLocalNdf()
+            }
+
+            return if (ndf.isEmpty() && retries <= NDF_MAX_RETRIES) {
+                recursiveGetNdf(retries + 1)
+            } else {
+                ndf
             }
         }
 

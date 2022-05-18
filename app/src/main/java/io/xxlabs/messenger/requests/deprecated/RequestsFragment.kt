@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.requests
+package io.xxlabs.messenger.requests.deprecated
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -49,7 +49,8 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     schedulers: SchedulerProvider,
     preferences: PreferencesRepository,
     application: Application,
-    @Assisted private val contactId: ByteArray
+    @Assisted private val contactId: ByteArray,
+    @Assisted private val cachedContact: ContactData? = null
 ) : ChatMessagesViewModel<PrivateMessage>(
         repo, daoRepo, schedulers, preferences, application, contactId
 ) {
@@ -99,7 +100,13 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     private val contactData: MutableLiveData<ContactData> = MutableLiveData()
 
     init {
-        startSubscription(contactId)
+        cachedContact?.let {
+            this.contact = it
+            contactData.value = it
+            getMessages(it.userId)
+        } ?: run {
+            startSubscription(contactId)
+        }
     }
 
     /* UI */
@@ -944,10 +951,11 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: PrivateMessagesViewModelFactory,
-            contactId: ByteArray
+            contactId: ByteArray,
+            cachedContact: ContactData? = null
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(contactId) as T
+                return assistedFactory.create(contactId, cachedContact) as T
             }
         }
     }
@@ -955,5 +963,5 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface PrivateMessagesViewModelFactory {
-    fun create(contactId: ByteArray): PrivateMessagesViewModel
+    fun create(contactId: ByteArray, cachedContact: ContactData? = null): PrivateMessagesViewModel
 }

@@ -2,6 +2,7 @@ package io.xxlabs.messenger.ui.base
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
@@ -25,6 +26,10 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.media.CameraProvider
+import io.xxlabs.messenger.media.DeviceStorageProvider
+import io.xxlabs.messenger.media.MediaCallback
+import io.xxlabs.messenger.media.MicrophoneProvider
 import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.support.util.FileUtils
@@ -34,13 +39,29 @@ import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
+import java.lang.ClassCastException
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class BasePhotoFragment(val layout: Int = R.layout.fragment_contact_details) :
-    BaseFragment() {
+abstract class BasePhotoFragment(
+    val layout: Int = R.layout.fragment_contact_details
+) : BaseFragment(), MediaCallback {
     protected lateinit var root: View
     lateinit var currentPhotoPath: String
+
+    /* Camera and gallery access */
+
+    private lateinit var cameraProvider: CameraProvider
+    private lateinit var galleryProvider: DeviceStorageProvider
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        cameraProvider = context as? CameraProvider
+            ?: throw ClassCastException("Activity must implement CameraProvider!")
+        galleryProvider = context as? DeviceStorageProvider
+            ?: throw ClassCastException("Activity must implement DeviceStorageProvider!")
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -173,17 +194,26 @@ abstract class BasePhotoFragment(val layout: Int = R.layout.fragment_contact_det
     }
 
     protected fun requestPermissionChoosePhoto() {
-        FileUtils.checkPermissionDo(
-            this,
-            REQUEST_CODE_WRITE_EXTERNAL_STORAGE,
-            { openGallery() })
+        galleryProvider.selectFiles(
+            callback = this,
+            mimeTypes = listOf("image/*"),
+            multipleSelections = false
+        )
+    }
+
+    override fun onFilesSelected(uriList: List<Uri>) {
+        if (uriList.isNotEmpty()) {
+            try {
+                val bitmap = BitmapResolver.getBitmap(uriList.first())
+                loadBitmap(bitmap)
+            } catch (e: Exception) {
+                showError("An error occurred, please try again.")
+            }
+        }
     }
 
     protected fun requestPermissionTakePhoto() {
-        FileUtils.checkPermissionDo(
-            this,
-            REQUEST_CODE_CAMERA, { takePhoto() }, true
-        )
+        cameraProvider.startCamera(this, false)
     }
 
     @Throws(IOException::class)

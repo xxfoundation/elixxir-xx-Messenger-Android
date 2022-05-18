@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/thumbnailLayout"
+        android:layout_width="@dimen/spacing_42"
+        android:layout_height="@dimen/spacing_42"
+        android:backgroundTint="@color/brand_default"
+        app:cardPreventCornerOverlap="false"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp">
+
+        <TextView
+            android:id="@+id/thumbnailText"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textColor="@color/neutral_white"
+            android:visibility="@{ui.itemInitials}"
+            android:text="@{ui.itemInitials}"
+            tools:text="BP"
+            tools:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/thumbnailImage"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:visibility="@{ui.itemPhoto != null || ui.itemIconRes != null}"
+            app:thumbnailBitmap="@{ui.itemPhoto}"
+            app:thumbnailIcon="@{ui.itemIconRes}"
+            tools:srcCompat="@drawable/ic_group_chat"/>
+    </androidx.cardview.widget.CardView>
+</layout>

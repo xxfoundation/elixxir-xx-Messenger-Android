@@ -3,6 +3,7 @@ package io.xxlabs.messenger.ui.main
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -17,22 +18,29 @@ import io.xxlabs.messenger.data.data.SimpleRequestState
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.data.room.model.GroupMessageData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.data.group.GroupInvitationData
+import io.xxlabs.messenger.requests.data.group.GroupRequestsRepository
+import io.xxlabs.messenger.requests.data.group.InvitationMigrator
+import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import javax.inject.Inject
 
 class MainViewModel @Inject constructor(
-    val repo: BaseRepository,
-    val daoRepo: DaoRepository,
-    val preferences: PreferencesRepository,
-    val schedulers: SchedulerProvider
+    private val repo: BaseRepository,
+    private val daoRepo: DaoRepository,
+    private val preferences: PreferencesRepository,
+    private val schedulers: SchedulerProvider,
+    private val invitationsDataSource: GroupRequestsRepository
 ) : ViewModel() {
     var isMenuOpened = MutableLiveData<Boolean>()
     var subscriptions = CompositeDisposable()
@@ -48,6 +56,16 @@ class MainViewModel @Inject constructor(
 
     @Volatile
     var wasLoggedIn = false
+
+    init {
+        migrateOldInvitations()
+    }
+
+    private fun migrateOldInvitations() {
+        viewModelScope.launch {
+            InvitationMigrator.performMigration(invitationsDataSource, daoRepo)
+        }
+    }
 
     fun checkIsLoggedInReturn() {
         subscriptions.add(
@@ -223,7 +241,8 @@ class MainViewModel @Inject constructor(
             "[GROUP REQUEST] Group name is ${group.getName().decodeToString()}"
         )
 
-        subscriptions.add(daoRepo.createUserGroup(group, RequestStatus.RECEIVED)
+        val status = RequestStatus.VERIFIED
+        subscriptions.add(daoRepo.createUserGroup(group, status)
             .flatMap {
                 daoRepo.insertGroupMemberShip(
                     group.getID(),
@@ -261,6 +280,12 @@ class MainViewModel @Inject constructor(
             .doOnError { err -> Timber.e(err) }
             .doOnSuccess {
                 newGroup.value = SimpleRequestState.Success(it)
+                invitationsDataSource.save(
+                    GroupInvitationData(
+                        model = GroupData.from(group, status),
+                        unread = true
+                    )
+                )
             }
             .subscribe())
     }

@@ -28,6 +28,12 @@ interface GroupsDao {
     @Query("SELECT * FROM Groups WHERE status == 2")
     fun getAllAcceptedGroupsLive(): LiveData<List<GroupData>>
 
+    @Query("SELECT * FROM Groups WHERE status != 2")
+    suspend fun getAllGroupRequests(): List<GroupData>
+
     @Query("UPDATE Groups SET status = 2 WHERE groupId == :groupId")
     fun acceptGroup(groupId: ByteArray): Single<Int>
+
+    @Query("UPDATE Groups SET status = :status WHERE groupId = :groupId")
+    fun updateContactState(groupId: ByteArray, status: Int): Single<Int>
 }
