@@ -45,6 +45,7 @@ import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_private_search.*
+import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
