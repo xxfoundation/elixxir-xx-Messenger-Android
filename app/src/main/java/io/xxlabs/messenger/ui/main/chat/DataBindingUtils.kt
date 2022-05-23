@@ -10,7 +10,11 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
+import androidx.annotation.IdRes
 import androidx.core.content.ContextCompat
+import androidx.core.view.setPadding
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -20,8 +24,10 @@ import io.xxlabs.messenger.backup.model.BackupProgress
 import io.xxlabs.messenger.support.extensions.disableWithAlpha
 import io.xxlabs.messenger.support.extensions.enable
 import io.xxlabs.messenger.support.extensions.incognito
+import io.xxlabs.messenger.support.extensions.setTint
 import java.text.DateFormat
 import java.util.*
+
 
 @BindingAdapter("android:visibility")
 fun View.setVisibility(visible: Boolean) {
@@ -156,5 +162,70 @@ fun TextView.setProgress(task: BackupProgress?) {
             null != error -> error?.message
             else -> "Restore in progress"
         }
+    }
+}
+
+@BindingAdapter("backgroundTint")
+fun View.backgroundTint(color: Int?) {
+    color?.let { background.setTint(it) }
+}
+
+@BindingAdapter("actionIcon", "iconPosition", "iconColor", requireAll = true)
+fun TextView.addDrawable(
+    @DrawableRes iconRes: Int?,
+    position: DrawablePosition,
+    @ColorRes colorRes: Int?
+) {
+    iconRes?.let {
+        when (position) {
+            DrawablePosition.TOP -> setCompoundDrawablesWithIntrinsicBounds(0, iconRes, 0, 0)
+            DrawablePosition.BOTTOM -> setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, iconRes)
+            DrawablePosition.START -> setCompoundDrawablesWithIntrinsicBounds(iconRes, 0, 0, 0)
+            DrawablePosition.END -> setCompoundDrawablesWithIntrinsicBounds(0, 0, iconRes, 0)
+        }
+        compoundDrawablePadding = 6
+        for (drawable in compoundDrawables) {
+            drawable?.setTint(resources.getColor(colorRes ?: currentTextColor, null))
+        }
+    }
+}
+
+enum class DrawablePosition {
+    TOP, START, END, BOTTOM
+}
+
+@BindingAdapter("thumbnailBitmap", "thumbnailIcon", requireAll = true)
+fun ImageView.thumbnail(bitmap: Bitmap?, @IdRes icon: Int?) {
+    bitmap?.let {
+        visibility = View.VISIBLE
+        setPadding(0)
+        Glide.with(context)
+            .asBitmap()
+            .diskCacheStrategy(DiskCacheStrategy.DATA)
+            .apply(RequestOptions().override(50, 50))
+            .centerCrop()
+            .load(it)
+            .into(this)
+    } ?: icon?.let {
+        setImageResource(it)
+    } ?: run {
+        Glide.with(context).clear(this)
+    }
+}
+
+@BindingAdapter("actionIcon")
+fun ImageView.icon(@IdRes icon: Int?) {
+    icon?.let { setImageResource(it) }
+}
+
+@BindingAdapter("actionIconTint")
+fun ImageView.actionIconTint(@ColorRes color: Int?) {
+    color?.let { setTint(it) }
+}
+
+@BindingAdapter("customStyle")
+fun TextView.setStyle(@IdRes id: Int?) {
+    id?.let {
+        setTextAppearance(it)
     }
 }

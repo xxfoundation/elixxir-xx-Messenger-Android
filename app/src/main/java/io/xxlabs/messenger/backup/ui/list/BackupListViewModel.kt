@@ -10,15 +10,14 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.auth.CloudAuthentication
-import io.xxlabs.messenger.backup.data.BackupDataSource
-import io.xxlabs.messenger.backup.model.BackupOption
+import io.xxlabs.messenger.backup.cloud.CloudAuthentication
+import io.xxlabs.messenger.backup.data.backup.BackupManager
 import io.xxlabs.messenger.support.appContext
 
 class BackupListViewModel @AssistedInject constructor(
-    dataSource: BackupDataSource<BackupOption>,
+    backupManager: BackupManager,
     @Assisted cloudAuthSource: CloudAuthentication
-) : BackupLocationsViewModel<BackupOption>(dataSource, cloudAuthSource) {
+) : BackupLocationsViewModel(backupManager, cloudAuthSource) {
 
     override val backupLocationsTitle: Spanned = getSpannableTitle()
     override val backupLocationsDescription: Spanned = getSpannableDescription()

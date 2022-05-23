@@ -14,7 +14,11 @@ import io.xxlabs.messenger.support.util.Utils
 class SquaredCornerLayout : FrameLayout {
     private val path = Path()
     private var rectF: RectF? = null
-    private val cornerRadius = Utils.dpToPx(32)
+    private var cornerRadius = Utils.dpToPx(32)
+
+    fun setCornerRadius(dp: Int) {
+        cornerRadius = Utils.dpToPx(dp)
+    }
 
     constructor(context: Context?) : super(context!!) {
         defineBg()

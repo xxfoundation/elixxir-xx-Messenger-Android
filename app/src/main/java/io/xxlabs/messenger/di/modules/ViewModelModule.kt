@@ -7,6 +7,7 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import io.xxlabs.messenger.di.utils.DaggerViewModelFactory
 import io.xxlabs.messenger.di.utils.ViewModelKey
+import io.xxlabs.messenger.requests.ui.RequestsViewModel
 import io.xxlabs.messenger.ui.base.ContactDetailsViewModel
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
@@ -84,6 +85,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(QrCodeViewModel::class)
     abstract fun bindQrCodeViewModel(qrCodeViewModel: QrCodeViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(RequestsViewModel::class)
+    abstract fun bindRequestsViewModel(requestsViewModel: RequestsViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory

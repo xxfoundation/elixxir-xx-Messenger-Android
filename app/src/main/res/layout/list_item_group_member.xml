@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.details.group.adapter.MemberItem" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <include
+            layout="@layout/component_item_thumbnail"
+            android:id="@+id/thumbnail_layout"
+            app:ui="@{ui}"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+            android:id="@+id/member_name"
+            style="@style/request_item_header"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.name}"
+            app:layout_constraintStart_toEndOf="@id/thumbnail_layout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/member_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Almayra Zamzamy" />
+
+        <TextView
+            android:id="@+id/member_description"
+            style="@style/request_item_subheader"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.description}"
+            android:textColor="@{ui.descriptionTextColor}"
+            app:layout_constraintTop_toBottomOf="@id/member_name"
+            app:layout_constraintStart_toEndOf="@id/thumbnail_layout"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Creator"
+            tools:textColor="@color/accent_safe"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.support.dialog.action.ActionDialogUI" />
+            type="io.xxlabs.messenger.ui.dialog.action.ActionDialogUI" />
     </data>
 
     <androidx.cardview.widget.CardView

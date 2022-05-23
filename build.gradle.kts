@@ -14,7 +14,7 @@ buildscript {
         classpath("org.jacoco:org.jacoco.core:0.8.7")
         classpath("com.android.tools.build:gradle:7.1.2")
         classpath("com.google.protobuf:protobuf-gradle-plugin:0.8.18")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21")
         classpath("com.google.gms:google-services:4.3.10")
         classpath("com.google.firebase:firebase-crashlytics-gradle:2.7.1")
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.4.1")

@@ -19,8 +19,8 @@ import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.support.dialog.info.SpanConfig
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.SpanConfig
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import kotlinx.coroutines.*
 import kotlin.random.Random.Default.nextInt
@@ -104,11 +104,13 @@ class UsernameRegistration @AssistedInject constructor(
     override val usernameNavigateRestore: LiveData<Boolean> get() = navigateRestore
     private val navigateRestore = MutableLiveData(false)
 
-    override val usernameFilters: Array<InputFilter> get() =
+    override val usernameFilters: Array<InputFilter> =
         arrayOf(
             InputFilter { source, start, end, _, _, _ ->
-                source?.subSequence(start, end)
+                val input = source?.subSequence(start, end)
+                val filtered = source?.subSequence(start, end)
                     ?.replace(Regex(USERNAME_FILTER_REGEX), "")
+                if (filtered == input) null else filtered
             }
         )
 
@@ -134,7 +136,7 @@ class UsernameRegistration @AssistedInject constructor(
 
     override fun onUsernameInput(text: Editable) {
         error.postValue(null)
-        username.value = text.toString()
+        username.postValue(text.toString())
     }
 
     private fun disableUI() {

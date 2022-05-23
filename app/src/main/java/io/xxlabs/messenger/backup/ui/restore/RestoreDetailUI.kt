@@ -1,19 +1,18 @@
 package io.xxlabs.messenger.backup.ui.restore
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import io.xxlabs.messenger.backup.model.RestoreOption
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
+import io.xxlabs.messenger.backup.data.restore.RestoreLog
+import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import java.io.Serializable
 
 interface RestorePasswordUI {
-    val showEnterPasswordPrompt: LiveData<EditTextTwoButtonDialogUI?>
+    val showEnterPasswordPrompt: LiveData<TextInputDialogUI?>
     fun onPasswordPromptHandled()
 }
 
 interface RestoreDetailUI : RestorePasswordUI {
-    val backup: RestoreOption
+    val backup: AccountBackup
     val state: LiveData<RestoreState>
     val isLoading: LiveData<Boolean>
 }
@@ -41,7 +40,8 @@ interface RestoreReady : RestoreState {
 }
 
 interface RestoreStarted: RestoreState {
-    val restore: RestoreOption
+    val accountBackup: AccountBackup
+    val restoreLog: RestoreLog?
 }
 
 interface RestoreSuccess : RestoreState {

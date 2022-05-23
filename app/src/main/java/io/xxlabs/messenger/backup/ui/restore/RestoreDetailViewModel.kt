@@ -6,23 +6,26 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.data.BackupDataSource
-import io.xxlabs.messenger.backup.model.RestoreEnvironment
-import io.xxlabs.messenger.backup.model.RestoreOption
-import io.xxlabs.messenger.backup.ui.save.BackupPassword
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
+import io.xxlabs.messenger.backup.data.BackupSource
+import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
+import io.xxlabs.messenger.backup.data.restore.RestoreLog
+import io.xxlabs.messenger.backup.data.restore.RestoreManager
+import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.backup.ui.backup.BackupPassword
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import kotlinx.coroutines.*
-import java.lang.IllegalArgumentException
 
 class RestoreDetailViewModel @AssistedInject constructor(
-    private val dataSource: BackupDataSource<RestoreOption>,
-    @Assisted override val backup: RestoreOption,
+    private val restoreManager: RestoreManager,
+    @Assisted private val source: BackupSource,
     @Assisted private val restorePassword: ByteArray,
 ): ViewModel(), RestoreDetailController {
+
+    override val backup: AccountBackup get() = restoreManager.getBackupFrom(source)
 
     private val exceptionHandler = CoroutineExceptionHandler { _, exception ->
         exception.message?.let {
@@ -31,7 +34,7 @@ class RestoreDetailViewModel @AssistedInject constructor(
                 else it
             _restoreError.postValue(errorMessage)
         }
-        backup.cancelRestore()
+        restoreManager.cancelRestore(backup)
     }
 
     override val restoreComplete: LiveData<Boolean> by ::_restoreComplete
@@ -63,7 +66,9 @@ class RestoreDetailViewModel @AssistedInject constructor(
         )
 
     private val startedState: RestoreStarted = object : RestoreStarted {
-        override val restore: RestoreOption = backup
+        override val accountBackup: AccountBackup = backup
+        override val restoreLog: RestoreLog?
+            get() = restoreManager.getRestoreLog(backup)
     }
 
     private val success: RestoreSuccess get() =
@@ -75,14 +80,14 @@ class RestoreDetailViewModel @AssistedInject constructor(
         _isLoading.value = loading
     }
 
-    override val showEnterPasswordPrompt: LiveData<EditTextTwoButtonDialogUI?> by ::_showEnterPasswordPrompt
-    private val _showEnterPasswordPrompt = MutableLiveData<EditTextTwoButtonDialogUI?>(null)
+    override val showEnterPasswordPrompt: LiveData<TextInputDialogUI?> by ::_showEnterPasswordPrompt
+    private val _showEnterPasswordPrompt = MutableLiveData<TextInputDialogUI?>(null)
 
     private val passwordInputError = MutableLiveData<String?>(null)
     private val passwordPromptPositiveButtonEnabled = MutableLiveData(true)
 
-    private val passwordPromptUI: EditTextTwoButtonDialogUI by lazy {
-        EditTextTwoButtonDialogUI.create(
+    private val passwordPromptUI: TextInputDialogUI by lazy {
+        TextInputDialogUI.create(
             BackupPassword.MAX_LENGTH,
             R.string.backup_restore_password_restore_hint,
             passwordInputError,
@@ -122,7 +127,7 @@ class RestoreDetailViewModel @AssistedInject constructor(
         setLoading(true)
         restoreTask?.let { return@let }
         restoreTask = viewModelScope.launch(exceptionHandler) {
-            backup.restore(restoreEnvironment)
+            restoreManager.restore(backup, restoreEnvironment)
         }
     }
 
@@ -147,11 +152,11 @@ class RestoreDetailViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: BackupFoundViewModelFactory,
-            backup: RestoreOption,
+            source: BackupSource,
             restorePassword: ByteArray
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(backup, restorePassword) as T
+                return assistedFactory.create(source, restorePassword) as T
             }
         }
     }
@@ -159,5 +164,5 @@ class RestoreDetailViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface BackupFoundViewModelFactory {
-    fun create(backup: RestoreOption, restorePassword: ByteArray): RestoreDetailViewModel
+    fun create(source: BackupSource, restorePassword: ByteArray): RestoreDetailViewModel
 }

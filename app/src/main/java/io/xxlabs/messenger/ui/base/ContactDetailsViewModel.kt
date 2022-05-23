@@ -25,7 +25,7 @@ class ContactDetailsViewModel @Inject constructor(
     val contactData = MutableLiveData<ContactData?>()
     val deletedChat = MutableLiveData<DataRequestState<Boolean>>()
     val deletedContact = MutableLiveData<DataRequestState<Boolean>>()
-    var searchState = MutableLiveData<DataRequestState<ByteArray>>()
+    var searchState = MutableLiveData<DataRequestState<ContactData>>()
 
     private var subscriptions = CompositeDisposable()
     var currContact: ContactData? = null
@@ -176,7 +176,7 @@ class ContactDetailsViewModel @Inject constructor(
                     onSuccess = { id ->
                         contact.id = id
                         Timber.v("Successfully requested authenticated channel")
-                        searchState.postValue(DataRequestState.Success(marshalledContact))
+                        searchState.postValue(DataRequestState.Success(contact))
                     })
         )
     }

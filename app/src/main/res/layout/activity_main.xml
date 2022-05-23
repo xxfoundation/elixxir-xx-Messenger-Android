@@ -27,6 +27,11 @@
             app:cardPreventCornerOverlap="false"
             app:cardUseCompatPadding="false">
 
+            <FrameLayout
+                android:id="@+id/customToastView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
             <fragment
                 android:id="@+id/mainNavHost"
                 android:name="androidx.navigation.fragment.NavHostFragment"

@@ -2,7 +2,7 @@ package io.xxlabs.messenger.ui.intro.registration.tfa
 
 import android.text.Spanned
 import androidx.lifecycle.LiveData
-import io.xxlabs.messenger.support.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 interface TfaRegistrationUI {
     val maxTfaInputLength: Int

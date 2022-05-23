@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBase
 import io.xxlabs.messenger.data.datatype.RequestStatus
 
 @Entity(
@@ -44,5 +45,16 @@ data class GroupData(
         result = 31 * result + serial.contentHashCode()
         result = 31 * result + status.hashCode()
         return result
+    }
+
+    companion object {
+        fun from(groupBindings: GroupBase, status: RequestStatus): GroupData =
+            GroupData(
+                groupId = groupBindings.getID(),
+                name = groupBindings.getName().decodeToString(),
+                leader = groupBindings.getMembership()[0].getID(),
+                serial = groupBindings.serialize(),
+                status = status.value
+            )
     }
 }
