@@ -1,0 +1,66 @@
+package io.xxlabs.messenger.ui.dialog.warning
+
+import android.content.DialogInterface
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import io.xxlabs.messenger.R
+import io.xxlabs.messenger.databinding.ComponentWarningDialogBinding
+
+class WarningDialog : BottomSheetDialogFragment() {
+
+    private lateinit var binding: ComponentWarningDialogBinding
+    private val dialogUI: WarningDialogUI by lazy {
+        requireArguments().getSerializable(ARG_UI) as WarningDialogUI
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.component_warning_dialog,
+            container,
+            false
+        )
+        binding.ui = dialogUI
+        binding.confirmDialogButton.apply {
+            setOnClickListener {
+                dialogUI.buttonOnClick()
+                dismiss()
+            }
+        }
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
+    }
+
+    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
+
+    override fun onDismiss(dialog: DialogInterface) {
+        dialogUI.onDismissed?.invoke()
+        super.onDismiss(dialog)
+    }
+
+    companion object Factory {
+        private const val ARG_UI: String = "ui"
+
+        fun newInstance(dialogUI: WarningDialogUI): WarningDialog =
+            WarningDialog().apply {
+                arguments = Bundle().apply {
+                    putSerializable(ARG_UI, dialogUI)
+                }
+            }
+    }
+}

@@ -83,7 +83,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".backup.auth.DropboxAuthActivity" />
+        <activity android:name=".backup.cloud.dropbox.DropboxAuthActivity" />
 
         <meta-data
             android:name="QUERY_LOG"

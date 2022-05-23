@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 530
-        versionName = "2.04"
+        versionCode = 550
+        versionName = "2.1"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -237,9 +237,14 @@ dependencies {
     implementation("androidx.security:security-crypto:1.1.0-alpha01")
 
     // Room
-    implementation("androidx.room:room-runtime:2.4.1")
+    val roomVersion = "2.4.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    kapt("androidx.room:room-compiler:2.4.1")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
 
     // Image Handling
     implementation("com.github.CanHub:Android-Image-Cropper:3.2.1")
@@ -253,6 +258,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
     implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
 
     //Time Source
     implementation("com.lyft.kronos:kronos-android:0.0.1-alpha10")

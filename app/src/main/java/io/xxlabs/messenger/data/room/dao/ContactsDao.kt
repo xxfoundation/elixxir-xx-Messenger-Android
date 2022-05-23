@@ -6,6 +6,7 @@ import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.xxlabs.messenger.data.room.model.ContactData
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ContactsDao {
@@ -63,6 +64,9 @@ interface ContactsDao {
     @Query("SELECT * FROM Contacts WHERE userId = :userId LIMIT 1")
     fun queryContactByUserIdForce(userId: ByteArray): Single<ContactData>
 
+    @Query("SELECT * FROM Contacts WHERE userId = :userId LIMIT 1")
+    fun getContactFlow(userId: ByteArray): Flow<ContactData>
+
     @Query("SELECT * FROM Contacts WHERE id = :id LIMIT 1")
     fun queryContactById(id: Long): Maybe<ContactData>
 
@@ -71,6 +75,9 @@ interface ContactsDao {
 
     @Query("UPDATE Contacts SET name = :name WHERE id = :id")
     fun updateContactName(id: Long, name: String): Single<Int>
+
+    @Query("UPDATE Contacts SET name = :nickname WHERE userId = :userId")
+    suspend fun updateContactNickname(userId: ByteArray, nickname: String): Int
 
     @Query("UPDATE Contacts SET username = :username WHERE id = :id")
     fun updateContactUsername(id: Long, username: String): Single<Int>

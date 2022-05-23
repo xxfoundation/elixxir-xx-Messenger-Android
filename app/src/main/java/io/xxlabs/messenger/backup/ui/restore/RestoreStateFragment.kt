@@ -6,14 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.ViewDataBinding
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.data.RestoreLog
+import io.xxlabs.messenger.backup.data.restore.RestoreLog
 import io.xxlabs.messenger.databinding.FragmentRestoreReadyBinding
 import io.xxlabs.messenger.databinding.FragmentRestoreStartedBinding
 import io.xxlabs.messenger.databinding.FragmentRestoreSuccessBinding
-import kotlinx.android.synthetic.main.list_item_event.view.*
 
 open class RestoreStateFragment : Fragment() {
 
@@ -61,8 +57,8 @@ class RestoreStartedFragment : RestoreStateFragment() {
     private val ui: FragmentRestoreStartedBinding by lazy {
         binding as FragmentRestoreStartedBinding
     }
-    private val restoreLog: RestoreLog by lazy {
-        (state as RestoreStarted).restore.restoreLog
+    private val restoreLog: RestoreLog? by lazy {
+        (state as RestoreStarted).restoreLog
     }
 
     override fun onStart() {
@@ -71,7 +67,7 @@ class RestoreStartedFragment : RestoreStateFragment() {
     }
 
     private fun observeProgress() {
-        restoreLog.data.observe(viewLifecycleOwner) { events ->
+        restoreLog?.data?.observe(viewLifecycleOwner) { events ->
             if (events.isNotEmpty()) ui.restoreProgressText.text = events[events.size-1]
         }
     }

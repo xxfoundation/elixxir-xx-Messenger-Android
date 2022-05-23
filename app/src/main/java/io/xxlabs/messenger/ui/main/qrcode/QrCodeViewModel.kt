@@ -130,19 +130,19 @@ class QrCodeViewModel @Inject constructor(
     }
 
     fun shouldShareQrCodeEmail(): Boolean {
-        return preferences.shouldShareEmailQr
+        return preferences.shareEmailWhenRequesting
     }
 
     fun shouldShareQrCodePhone(): Boolean {
-        return preferences.shouldSharePhoneQr
+        return preferences.sharePhoneWhenRequesting
     }
 
     fun setShareQrCodeEmail(checked: Boolean) {
-        preferences.shouldShareEmailQr = checked
+        preferences.shareEmailWhenRequesting = checked
     }
 
     fun setShareQrCodePhone(checked: Boolean) {
-        preferences.shouldSharePhoneQr = checked
+        preferences.sharePhoneWhenRequesting = checked
     }
 
     fun handleAnalysis(

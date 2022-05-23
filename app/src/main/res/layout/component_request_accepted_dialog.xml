@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.accepted.RequestAcceptedUI" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/requestAcceptedLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="@dimen/bottom_sheet_dialog_corner_radius">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include
+                layout="@layout/component_close_button"
+                android:id="@+id/close_button_layout"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                app:ui="@{ui}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/request_accepted_title"
+                android:text="@{ui.title}"
+                android:textColor="@color/accent_success"
+                app:drawableLeftCompat="@drawable/ic_check"
+                app:drawableTint="@color/accent_success"
+                android:drawablePadding="12dp"
+                app:layout_constraintTop_toBottomOf="@id/close_button_layout"
+                app:layout_constraintBottom_toTopOf="@id/request_accepted_subtitle"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                style="@style/request_details_dialog_title"
+                tools:text="new connection" />
+
+            <TextView
+                android:id="@+id/request_accepted_subtitle"
+                style="@style/request_details_dialog_subtitle"
+                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{ui.subtitle}"
+                app:layout_constraintTop_toBottomOf="@id/request_accepted_title"
+                app:layout_constraintBottom_toTopOf="@id/request_accepted_body"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Jane Huntington" />
+
+            <TextView
+                android:id="@+id/request_accepted_body"
+                style="@style/dialog_body"
+                android:layout_marginVertical="16dp"
+                android:layout_marginTop="16dp"
+                android:text="@{ui.body}"
+                app:layout_constraintTop_toBottomOf="@id/request_accepted_subtitle"
+                app:layout_constraintBottom_toTopOf="@id/dialog_button_layout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="Is now a connection, would you like to send a message?" />
+
+            <include
+                layout="@layout/component_vertical_positive_negative_button"
+                android:id="@+id/dialog_button_layout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                app:ui="@{ui}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

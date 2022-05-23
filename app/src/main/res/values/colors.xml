@@ -139,7 +139,7 @@
     <!-- Chats -->
     <color name="chatsListTitleColor">#696969</color>
     <color name="chatsPreviewColor">#70828f</color>
-    <color name="chatsAccentColor">#037281</color>
+    <color name="chatsAccentColor">@color/brand_default</color>
     <color name="chatBgColorSent">#008292</color>
     <color name="chatBgColorError">#9dbec1</color>
     <color name="chatReplyBgColorLight">#eff9fa</color>
@@ -176,6 +176,7 @@
 
     <!-- Neutral -->
     <color name="neutral_active">#242424</color>
+    <color name="neutral_secondary">#727578</color>
     <color name="neutral_dark">#373737</color>
     <color name="neutral_body">#3D3D3D</color>
     <color name="neutral_weak">#A4A4A4</color>

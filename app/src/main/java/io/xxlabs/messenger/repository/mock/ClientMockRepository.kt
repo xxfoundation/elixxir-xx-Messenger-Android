@@ -271,7 +271,7 @@ class ClientMockRepository(
                 }
                 input.contains("_RECEIVED") -> {
                     cleanInput = input.substringBefore("_RECEIVED")
-                    RequestStatus.RECEIVED
+                    RequestStatus.VERIFIED
                 }
                 input.contains("_FAILED") -> {
                     cleanInput = input.substringBefore("_FAILED")
@@ -337,7 +337,7 @@ class ClientMockRepository(
 
             input.contains("_RECEIVED") -> {
                 cleanInput = input.substringBefore("_RECEIVED")
-                RequestStatus.RECEIVED
+                RequestStatus.VERIFIED
             }
 
             input.contains("_FAILED") -> {

@@ -335,13 +335,13 @@ class ClientRepository @Inject constructor(
         userContact.addUsername(factsHash[FactType.USERNAME] ?: "")
         Timber.d("[CLIENT REPO] Facts: ${userContact.getStringifiedFacts()}")
 
-        if (preferences.shouldShareEmailQr) {
+        if (preferences.shareEmailWhenRequesting) {
             factsHash[FactType.EMAIL]?.let { email ->
                 userContact.addEmail(email)
             }
         }
 
-        if (preferences.shouldSharePhoneQr) {
+        if (preferences.sharePhoneWhenRequesting) {
             factsHash[FactType.PHONE]?.let { phone ->
                 userContact.addPhone(phone)
             }

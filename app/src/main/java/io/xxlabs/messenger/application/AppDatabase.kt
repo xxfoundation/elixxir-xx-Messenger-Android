@@ -20,9 +20,15 @@ import net.sqlcipher.database.SupportFactory
 
 @TypeConverters(DateConverter::class, DateTimeConverter::class, SentStatusConverter::class)
 @Database(
-    entities = [ContactData::class, PrivateMessageData::class, GroupMember::class,
-        GroupData::class, GroupMessageData::class],
-    version = 1,
+    entities = [
+        ContactData::class,
+        PrivateMessageData::class,
+        GroupMember::class,
+        GroupData::class,
+        GroupMessageData::class,
+        RequestData::class
+    ],
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -31,6 +37,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun groupsDao(): GroupsDao
     abstract fun groupMembersDao(): GroupMembersDao
     abstract fun groupMessagesDao(): GroupMessagesDao
+    abstract fun requestsDao(): RequestsDao
 
     companion object {
         @Volatile

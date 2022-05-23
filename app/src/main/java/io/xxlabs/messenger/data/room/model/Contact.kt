@@ -1,6 +1,9 @@
 package io.xxlabs.messenger.data.room.model
 
-interface Contact {
+import io.xxlabs.messenger.data.data.Country
+import java.io.Serializable
+
+interface Contact : Serializable {
     val id: Long
     val userId: ByteArray
     val username: String
@@ -18,3 +21,11 @@ interface Contact {
     override fun hashCode(): Int
     fun hasFacts(): Boolean
 }
+
+fun Contact.formattedEmail(): String? =
+    if (email.isNotBlank()) email.substring(1)
+    else null
+
+fun Contact.formattedPhone(flagEmoji: Boolean = false): String? =
+    if (phone.isNotBlank()) Country.toFormattedNumber(phone, flagEmoji)
+    else null

@@ -5,10 +5,10 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
-import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
+import java.io.Serializable
 import java.util.*
 
 @Entity(

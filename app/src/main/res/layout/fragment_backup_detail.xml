@@ -3,12 +3,12 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".backup.ui.save.BackupDetailFragment">
+    tools:context=".backup.ui.backup.BackupDetailFragment">
 
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.backup.ui.save.BackupDetailUI" />
+            type="io.xxlabs.messenger.backup.ui.backup.BackupDetailUI" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,7 +37,7 @@
             style="@style/registration_step_next_button"
             android:layout_marginTop="24dp"
             android:enabled="@{ui.isEnabled}"
-            android:onClick="@{() -> ui.backup.backupNow()}"
+            android:onClick="@{() -> ui.backupNow()}"
             android:text="@string/backup_settings_backup_now"
             app:invisible="@{ui.backupInProgress}"
             app:layout_constraintEnd_toEndOf="parent"

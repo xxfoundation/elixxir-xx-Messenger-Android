@@ -9,15 +9,14 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonDialogUI
-import io.xxlabs.messenger.backup.ui.save.EditTextTwoButtonInfoDialog
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
-import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.extensions.toast
-import io.xxlabs.messenger.ui.ConfirmDialogLauncher
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
 import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import javax.inject.Inject
 
 class RestoreDetailFragment : Fragment(), Injectable {
@@ -29,7 +28,7 @@ class RestoreDetailFragment : Fragment(), Injectable {
     private val restoreViewModel: RestoreDetailViewModel by viewModels {
         RestoreDetailViewModel.provideFactory(
             viewModelFactory,
-            RestoreDetailFragmentArgs.fromBundle(requireArguments()).restoreOption,
+            RestoreDetailFragmentArgs.fromBundle(requireArguments()).source,
             (requireActivity() as BaseKeystoreActivity).rsaDecryptPwd()
         )
     }
@@ -38,9 +37,6 @@ class RestoreDetailFragment : Fragment(), Injectable {
 
     private lateinit var binding: FragmentRestoreDetailBinding
     private val ui: RestoreDetailController by lazy { restoreViewModel }
-    private val warningLauncher: ConfirmDialogLauncher by lazy {
-        ConfirmDialogLauncher(requireActivity().supportFragmentManager)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,16 +60,6 @@ class RestoreDetailFragment : Fragment(), Injectable {
 
     private fun onConfirmButtonClicked() {}
     private fun onConfirmDialogDismissed() {}
-
-    private fun showConfirmDialog(
-        title: Int,
-        body: Int,
-        button: Int,
-        action: () -> Unit,
-        onDismiss: () -> Unit = {}
-    ) {
-        warningLauncher.showConfirmDialog(title, body, button, action, onDismiss)
-    }
 
     private fun showMultiDeviceWarning() {
         showConfirmDialog(
@@ -123,8 +109,8 @@ class RestoreDetailFragment : Fragment(), Injectable {
         ).commitAllowingStateLoss()
     }
 
-    private fun showSetPasswordDialog(dialogUI: EditTextTwoButtonDialogUI) {
-        EditTextTwoButtonInfoDialog.newInstance(dialogUI)
+    private fun showSetPasswordDialog(dialogUI: TextInputDialogUI) {
+        TextInputDialog.newInstance(dialogUI)
             .show(childFragmentManager, null)
         ui.onPasswordPromptHandled()
     }

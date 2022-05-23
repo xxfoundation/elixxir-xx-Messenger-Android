@@ -4,7 +4,7 @@ import bindings.Backup
 import bindings.Bindings
 import bindings.Client
 import bindings.UpdateBackupFunc
-import io.xxlabs.messenger.backup.data.ExtrasJson
+import io.xxlabs.messenger.backup.data.restore.ExtrasJson
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.repository.PreferencesRepository

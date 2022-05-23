@@ -14,7 +14,11 @@ import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.core.widget.doAfterTextChanged
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,15 +29,26 @@ import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
 import io.xxlabs.messenger.data.datatype.NetworkState
-import io.xxlabs.messenger.repository.client.ClientRepository
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.requests.ui.RequestsViewModel
+import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
+import io.xxlabs.messenger.requests.ui.send.OutgoingRequest
+import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
+import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_private_search.*
+import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
@@ -46,7 +61,12 @@ class UdSearchFragment : BaseFragment() {
     lateinit var networkViewModel: NetworkViewModel
     lateinit var contactsViewModel: ContactsViewModel
     lateinit var udSearchViewModel: UdSearchViewModel
+    private lateinit var mainViewModel: MainViewModel
     private lateinit var navController: NavController
+    private val requestsViewModel: RequestsViewModel by viewModels(
+        factoryProducer = { viewModelFactory }
+    )
+
     private lateinit var resultsAdapter: UdResultAdapter
     private lateinit var snackBar: Snackbar
 
@@ -59,21 +79,50 @@ class UdSearchFragment : BaseFragment() {
 
     private var udSelectionListener = object : UdSelectionListener {
         override fun onItemSelected(v: View, contactWrapper: ContactWrapperBase) {
-            v.disableWithAlpha()
-            currentAddButton = v
-            val contactString = contactWrapper.marshal().toString(Charsets.ISO_8859_1)
-            Timber.v("Marshalled String: $contactString")
-            val bundle =
-                bundleOf("contact" to contactString)
-            navController.navigateSafe(R.id.action_ud_search_to_contact_success, bundle)
+            showSendRequestDialog(contactWrapper)
         }
+    }
+
+    private fun showSendRequestDialog(user: ContactWrapperBase) {
+        SendRequestDialog
+            .newInstance(ContactData.from(user))
+            .show(childFragmentManager, null)
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeUI()
+            }
+
+        }
         return inflater.inflate(R.layout.fragment_private_search, container, false)
+    }
+
+    private fun observeUI() {
+        requestsViewModel.sendContactRequest.onEach { toUser ->
+            toUser?.let {
+                contactsViewModel.updateAndRequestAuthChannel(toUser)
+                requestsViewModel.onSendRequestHandled()
+            }
+        }.launchIn(lifecycleScope)
+
+        requestsViewModel.showCreateNickname.onEach { outgoingRequest ->
+            outgoingRequest?.let {
+                showSaveNicknameDialog(it)
+                requestsViewModel.onShowCreateNicknameHandled()
+            }
+        }.launchIn(lifecycleScope)
+    }
+
+    private fun showSaveNicknameDialog(outgoingRequest: OutgoingRequest) {
+        SaveNicknameDialog
+            .newInstance(outgoingRequest)
+            .show(childFragmentManager, null)
     }
 
     override fun onDetach() {
@@ -85,6 +134,9 @@ class UdSearchFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         navController = findNavController()
 
+        mainViewModel =
+            ViewModelProvider(requireActivity(), viewModelFactory).get(MainViewModel::class.java)
+
         networkViewModel = ViewModelProvider(requireActivity(), viewModelFactory)
             .get(NetworkViewModel::class.java)
 
@@ -95,6 +147,7 @@ class UdSearchFragment : BaseFragment() {
             .get(UdSearchViewModel::class.java)
 
         initComponents(view)
+        showNewUserPopups()
         watchForChanges()
     }
 
@@ -307,6 +360,62 @@ class UdSearchFragment : BaseFragment() {
 
         udSearchResultsRecyclerView.layoutManager = layoutManager
         udSearchResultsRecyclerView.adapter = resultsAdapter
+    }
+
+    private fun showNewUserPopups() {
+        showNotificationDialog()
+    }
+
+    private fun showNotificationDialog() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstTimeNotifications) {
+            showTwoButtonInfoDialog(
+                title = R.string.settings_push_notifications_dialog_title,
+                body = R.string.settings_push_notifications_dialog_body,
+                linkTextToUrlMap = null,
+                positiveClick = ::enablePushNotifications,
+                negativeClick = null,
+                onDismiss = ::showCoverMessageDialog
+            )
+            preferences.isFirstTimeNotifications = false
+        }
+    }
+
+    private fun enablePushNotifications() {
+        mainViewModel.enableNotifications { error ->
+            error?.let { showError(error) }
+        }
+    }
+
+    private fun showCoverMessageDialog() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstTimeCoverMessages) {
+            showTwoButtonInfoDialog(
+                R.string.settings_cover_traffic_title,
+                R.string.settings_cover_traffic_dialog_body,
+                mapOf(
+                    getString(R.string.settings_cover_traffic_link_text)
+                            to getString(R.string.settings_cover_traffic_link_url)
+                ),
+                ::enableCoverMessages,
+                ::declineCoverMessages,
+            )
+            preferences.isFirstTimeCoverMessages = false
+        }
+    }
+
+    private fun enableCoverMessages() {
+        enableDummyTraffic(true)
+    }
+
+    private fun declineCoverMessages() {
+        enableDummyTraffic(false)
+    }
+
+    private fun enableDummyTraffic(enabled: Boolean) {
+        try {
+            mainViewModel.enableDummyTraffic(enabled)
+        } catch (e: Exception) {
+            showError(e, true)
+        }
     }
 
     private fun watchForChanges() {

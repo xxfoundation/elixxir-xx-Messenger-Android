@@ -404,7 +404,7 @@
         @string/backup_setup_description_span_text</string>
     <string name="backup_settings_backup_now">Backup Now</string>
     <string name="backup_encryption_warning">
-        Content backed up in %s is not protected by xx Network end-to-end encryption.</string>
+        Content backed up in %s is encrypted with your passphrase in a brute force resistant manner.</string>
     <string name="backup_latest_backup_label">Latest backup</string>
     <string name="backup_latest_backup_never">Never</string>
     <string name="backup_frequency_label">Backup to %s</string>
@@ -472,7 +472,7 @@
     <string name="title_activity_intro">IntroActivity</string>
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="contact_details_nickname">Nickname</string>
+    <string name="contact_details_nickname">Nick name</string>
     <string name="menu_join_xx_network">Join xx network</string>
     <string name="profile_none_provided">None provided</string>
     <string name="contacts_max_members_msg">You have reached the maximum amount of members.</string>
@@ -553,4 +553,39 @@
     <string name="backup_restore_password_restore_title">Backup password</string>
     <string name="backup_restore_password_restore_hint">Enter password</string>
     <string name="backup_restore_encrypting_backup_text">Initializing and securing your backup file will take few seconds, please keep the app open</string>
+    <string name="request_details_title">Request from</string>
+    <string name="request_details_email_header">Email address</string>
+    <string name="request_details_phone_header">Phone number</string>
+    <string name="request_details_nickname_section">Edit your new contact\'s nick name.</string>
+    <string name="group_invitation_title">Group chat request</string>
+    <string name="request_details_positive_button">Accept and save</string>
+    <string name="request_details_negative_button">Hide request</string>
+    <string name="request_accepted_title">New Connection</string>
+    <string name="request_accepted_body">Is now a connection, would you like to send a message?</string>
+    <string name="contact_accepted_positive_button">Send a message</string>
+    <string name="contact_accepted_negative_button">Later</string>
+    <string name="invitation_details_positive_button">Accept</string>
+    <string name="invitation_details_negative_button">Hide request</string>
+    <string name="group_member_creator">Creator</string>
+    <string name="group_member_not_connection">Not a connection</string>
+    <string name="group_member_is_connection">Is a connection</string>
+    <string name="invitation_accepted_title">Accepted</string>
+    <string name="invitation_accepted_body">You are now part of the group chat. Would you like to check it out?</string>
+    <string name="invitation_accepted_positive_button">Go to chat</string>
+    <string name="requests_empty_placeholder_failed">No recent failed requests</string>
+    <string name="requests_empty_placeholder_sent">No recent sent requests</string>
+    <string name="requests_empty_placeholder_received">No recent requests received</string>
+    <string name="requests_empty_placeholder_hidden">No recent hidden requests</string>
+    <string name="send_request_positive_button">Send Contact Request</string>
+    <string name="send_request_negative_button">Cancel</string>
+    <string name="send_request_body">"Share your information with <annotation tag="receiverName">%1$s</annotation><annotation tag="receiverFact">%2$s</annotation>so they know it’s you.</string>
+    <string name="send_request_dialog_title">Request Contact</string>
+    <string name="send_request_fact_placeholder">@string/profile_none_provided</string>
+    <string name="save_nickname_title">Add a nickname</string>
+    <string name="save_nickname_positive_button">Save</string>
+    <string name="save_nickname_dialog_body">Edit your new contact’s nickname so you know who they are.</string>
+    <string name="request_item_action_retry">Resend</string>
+    <string name="request_item_action_resent">Resent</string>
+    <string name="request_item_action_verifying">Verifying</string>
+    <string name="request_item_action_failed_verification">Failed to\nverify</string>
 </resources>

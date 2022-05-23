@@ -20,6 +20,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.media.*
 import io.xxlabs.messenger.support.dialog.BottomSheetPopup
@@ -32,6 +33,7 @@ import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentListener
 import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentsAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.PrivateMessagesAdapter
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -46,7 +48,16 @@ class PrivateMessagesFragment :
 {
 
     private val contactId: ByteArray by lazy {
-        requireArguments().getByteArray("contact_id")!!
+        PrivateMessagesFragmentArgs
+            .fromBundle(requireArguments())
+            .contactId
+            ?.encodeToByteArray()
+            ?: requireArguments().getByteArray("contact_id") !!
+    }
+    private val cachedContact: ContactData? by lazy {
+        PrivateMessagesFragmentArgs
+            .fromBundle(requireArguments())
+            .contact
     }
 
     /* ViewModels */
@@ -57,7 +68,8 @@ class PrivateMessagesFragment :
     private val chatViewModel: PrivateMessagesViewModel by viewModels {
         PrivateMessagesViewModel.provideFactory(
             chatViewModelFactory,
-            contactId
+            contactId,
+            cachedContact
         )
     }
     override val uiController: ChatMessagesUIController<PrivateMessage>

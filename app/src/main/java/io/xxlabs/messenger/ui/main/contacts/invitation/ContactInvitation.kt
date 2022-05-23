@@ -71,7 +71,7 @@ class ContactInvitation : BaseContactDetailsFragment() {
         }
 
         contactDetailsBtnReject.setOnSingleClickListener {
-            contactsViewModel.rejectContact(contact.marshaled!!)
+            contactsViewModel.rejectContact(contact)
         }
     }
 

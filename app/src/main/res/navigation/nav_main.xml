@@ -133,6 +133,16 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/chatsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="groupId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="group"
+            app:argType="io.xxlabs.messenger.data.room.model.GroupData"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
 
     <fragment
@@ -202,6 +212,17 @@
             app:popExitAnim="@anim/slide_out_right"
             app:popUpTo="@id/chatsFragment"
             app:popUpToInclusive="true" />
+
+        <argument
+            android:name="contactId"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null"/>
+        <argument
+            android:name="contact"
+            app:argType="io.xxlabs.messenger.data.room.model.ContactData"
+            app:nullable="true"
+            android:defaultValue="@null"/>
     </fragment>
 
     <fragment
@@ -291,7 +312,7 @@
 
     <fragment
         android:id="@+id/requestsFragment"
-        android:name="io.xxlabs.messenger.ui.main.requests.RequestsFragment"
+        android:name="io.xxlabs.messenger.requests.ui.RequestsFragment"
         android:label="RequestsFragment"
         tools:layout="@layout/fragment_requests">
 
@@ -300,6 +321,12 @@
             android:defaultValue="0"
             app:argType="integer" />
 
+        <action
+            android:id="@+id/action_requests_to_privateMessages"
+            app:destination="@id/chatFragment" />
+        <action
+            android:id="@+id/action_requests_to_groupMessages"
+            app:destination="@id/groupsChatFragment" />
         <action
             android:id="@+id/action_requests_to_ud_search"
             app:destination="@id/udPrivateSearchFragment"
@@ -431,12 +458,12 @@
 
     <fragment
         android:id="@+id/backupDetailFragment"
-        android:name="io.xxlabs.messenger.backup.ui.save.BackupDetailFragment"
+        android:name="io.xxlabs.messenger.backup.ui.backup.BackupDetailFragment"
         android:label="fragment_backup_settings"
         tools:layout="@layout/fragment_backup_detail" >
         <argument
-            android:name="backupOption"
-            app:argType="io.xxlabs.messenger.backup.model.BackupOption" />
+            android:name="source"
+            app:argType="io.xxlabs.messenger.backup.data.BackupSource" />
     </fragment>
     <fragment
         android:id="@+id/backupListFragment"
@@ -451,12 +478,17 @@
     </fragment>
     <fragment
         android:id="@+id/backupSettingsFragment"
-        android:name="io.xxlabs.messenger.backup.ui.save.BackupSettingsFragment"
+        android:name="io.xxlabs.messenger.backup.ui.backup.BackupSettingsFragment"
         android:label="fragment_backup_settings"
         tools:layout="@layout/fragment_backup_settings" >
         <action
             android:id="@+id/action_backup_settings_to_backup_detail"
             app:destination="@id/backupDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/receivedRequestsFragment"
+        android:name="io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment"
+        android:label="ReceivedRequestsFragment" >
     </fragment>
 
 </navigation>

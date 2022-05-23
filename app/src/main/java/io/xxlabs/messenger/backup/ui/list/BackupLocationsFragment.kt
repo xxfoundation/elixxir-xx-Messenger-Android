@@ -9,29 +9,29 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.backup.auth.CloudAuthentication
-import io.xxlabs.messenger.backup.model.AccountBackup
+import io.xxlabs.messenger.backup.cloud.CloudAuthentication
+import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.databinding.FragmentBackupLocationsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupLocationBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.view.SnackBarActivity
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialog
-import io.xxlabs.messenger.ui.main.chats.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 
 /**
  * Lists cloud storage services to choose as a backup name.
  */
-abstract class BackupLocationsFragment<T: AccountBackup> : Fragment(), Injectable {
+abstract class BackupLocationsFragment : Fragment(), Injectable {
 
     /* ViewModels */
 
-    abstract val backupViewModel: BackupLocationsViewModel<T>
+    abstract val backupViewModel: BackupLocationsViewModel
     protected lateinit var cloudAuthentication: CloudAuthentication
 
     /* UI */
 
     private lateinit var binding: FragmentBackupLocationsBinding
-    private val ui: BackupLocationsController<T> by lazy { backupViewModel }
+    private val ui: BackupLocationsController by lazy { backupViewModel }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -73,9 +73,9 @@ abstract class BackupLocationsFragment<T: AccountBackup> : Fragment(), Injectabl
     }
 
     private fun observeUI() {
-        ui.navigateToDetail.observe(viewLifecycleOwner) { backup ->
-            backup?.let {
-                navigateToDetail(backup)
+        ui.navigateToDetail.observe(viewLifecycleOwner) { source ->
+            source?.let {
+                navigateToDetail(source)
                 ui.onNavigationHandled()
             }
         }
@@ -95,7 +95,7 @@ abstract class BackupLocationsFragment<T: AccountBackup> : Fragment(), Injectabl
         }
     }
 
-    protected abstract fun navigateToDetail(backup: T)
+    protected abstract fun navigateToDetail(source: BackupSource)
 
     private fun showConsentDialog(dialogUi: TwoButtonInfoDialogUI) {
         TwoButtonInfoDialog.newInstance(dialogUi)

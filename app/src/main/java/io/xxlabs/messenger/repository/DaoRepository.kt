@@ -5,6 +5,7 @@ import androidx.paging.Config
 import androidx.paging.DataSource
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.airbnb.lottie.L
 import io.reactivex.Flowable
 import io.reactivex.Maybe
 import io.reactivex.Notification
@@ -19,6 +20,7 @@ import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.support.isMockVersion
+import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -223,6 +225,10 @@ class DaoRepository @Inject constructor(
         return contactsDao.updateContactName(temporaryContact.id, temporaryContact.nickname)
     }
 
+    suspend fun updateContactNickname(contact: ContactData): Int =
+        contactsDao.updateContactNickname(contact.userId, contact.nickname)
+
+
     fun searchContactByUsernameLikeness(username: String): Single<List<ContactData>> {
         return contactsDao.queryAllContactsUsername(username)
     }
@@ -239,6 +245,10 @@ class DaoRepository @Inject constructor(
         return contactsDao.updateContactState(userId, requestStatus.value)
     }
 
+    fun updateGroupState(groupId: ByteArray, requestStatus: RequestStatus): Single<Int> {
+        return groupsDao.updateContactState(groupId, requestStatus.value)
+    }
+
     fun getContactById(id: Long): Maybe<ContactData> {
         return contactsDao.queryContactById(id)
     }
@@ -250,6 +260,9 @@ class DaoRepository @Inject constructor(
     fun getContactByUserId(userId: ByteArray): Maybe<ContactData> {
         return contactsDao.queryContactByUserId(userId)
     }
+
+    fun getContactFlow(userId: ByteArray): Flow<ContactData> =
+        contactsDao.getContactFlow(userId)
 
     fun getContactByUsername(username: String): Maybe<ContactData> {
         return contactsDao.queryContactByUsername(username)
@@ -325,7 +338,7 @@ class DaoRepository @Inject constructor(
                     name = group.getName().decodeToString(),
                     leader = group.getMembership()[1].getID(),
                     serial = group.serialize(),
-                    status = RequestStatus.RECEIVED.value
+                    status = RequestStatus.VERIFIED.value
                 )
             } else {
                 GroupData(
@@ -459,7 +472,7 @@ class DaoRepository @Inject constructor(
         return groupsDao.deleteGroup(groupData)
     }
 
-    fun acceptGroup(group: GroupData): Single<Int> {
+    fun acceptGroup(group: Group): Single<Int> {
         return groupsDao.acceptGroup(group.groupId)
     }
 
@@ -474,6 +487,8 @@ class DaoRepository @Inject constructor(
     fun getAllAcceptedGroupsLive(): LiveData<List<GroupData>> {
         return groupsDao.getAllAcceptedGroupsLive()
     }
+
+    suspend fun getAllGroupRequests() = groupsDao.getAllGroupRequests()
 
     fun deleteAllGroupMessages(): Single<Int> {
         return groupMessagesDao.deleteAllMessages()

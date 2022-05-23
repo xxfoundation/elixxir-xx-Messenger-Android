@@ -115,7 +115,7 @@ class ContactsListAdapter(
         if (isSelectionMode) {
             holder.setOnClick(SelectionMode.CONTACT_ACCESS)
         } else {
-            holder.setOnClick(SelectionMode.PROFILE_ACCESS)
+            holder.setOnClick(SelectionMode.CHAT_ACCESS)
         }
 
         holder.showDivider(position != 0 && position != composedItemsList.size - 1)

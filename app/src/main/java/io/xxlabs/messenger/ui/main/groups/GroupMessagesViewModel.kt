@@ -41,7 +41,8 @@ class GroupMessagesViewModel @AssistedInject constructor(
     schedulers: SchedulerProvider,
     preferences: PreferencesRepository,
     application: Application,
-    @Assisted val groupId: ByteArray
+    @Assisted val groupId: ByteArray,
+    @Assisted val cachedGroup: GroupData? = null
 ) : ChatMessagesViewModel<GroupMessage>(
     repo, daoRepo, schedulers, preferences, application, groupId
 ) {
@@ -61,7 +62,13 @@ class GroupMessagesViewModel @AssistedInject constructor(
     /* UI */
 
     init {
-        startSubscription(groupId)
+        cachedGroup?.let {
+            groupData.postValue(it)
+            getGroupMembers(it.groupId)
+            getMessages(it.groupId)
+        } ?: run {
+            startSubscription(groupId)
+        }
     }
 
     override fun startSubscription(chatId: ByteArray) {
@@ -368,10 +375,11 @@ class GroupMessagesViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: GroupMessagesViewModelFactory,
-            groupId: ByteArray
+            groupId: ByteArray,
+            group: GroupData? = null
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(groupId) as T
+                return assistedFactory.create(groupId, group) as T
             }
         }
     }
@@ -561,5 +569,5 @@ value class UserIdToUsernameMap(private val value: MutableMap<UserId, Username>)
 
 @AssistedFactory
 interface GroupMessagesViewModelFactory {
-    fun create(groupId: ByteArray): GroupMessagesViewModel
+    fun create(groupId: ByteArray, groupData: GroupData? = null): GroupMessagesViewModel
 }

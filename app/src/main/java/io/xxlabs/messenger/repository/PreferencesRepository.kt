@@ -12,12 +12,14 @@ import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.Utils
-import io.xxlabs.messenger.ui.main.requests.RequestsFilter
+import io.xxlabs.messenger.requests.deprecated.RequestsFilter
 import timber.log.Timber
 import java.security.KeyStore
 import javax.inject.Inject
 
-class PreferencesRepository @Inject constructor(context: Context) : BasePreferences() {
+class PreferencesRepository @Inject constructor(
+    context: Context
+) : BasePreferences() {
     private val masterKeyAlias = "xx_preferences_key"
     private val preferencesAlias = "xx_preferences"
     private val masterKeySpec = KeyGenParameterSpec.Builder(
@@ -200,6 +202,12 @@ class PreferencesRepository @Inject constructor(context: Context) : BasePreferen
         registrationStep += 1
     }
 
+    override var isFirstLaunch: Boolean
+        get() = preferences.getBoolean("is_first_launch", true)
+        set(value) {
+            preferences.edit().putBoolean("is_first_launch", value).apply()
+        }
+
     override var isFirstTimeNotifications: Boolean
         get() = preferences.getBoolean("is_first_time_notifications", true)
         set(value) {
@@ -246,13 +254,13 @@ class PreferencesRepository @Inject constructor(context: Context) : BasePreferen
             preferences.edit().putInt("registration_step", value).apply()
         }
 
-    override var shouldShareEmailQr: Boolean
+    override var shareEmailWhenRequesting: Boolean
         get() = preferences.getBoolean("should_share_email_qr", false)
         set(value) {
             preferences.edit().putBoolean("should_share_email_qr", value).apply()
         }
 
-    override var shouldSharePhoneQr: Boolean
+    override var sharePhoneWhenRequesting: Boolean
         get() = preferences.getBoolean("should_share_phone_qr", false)
         set(value) {
             preferences.edit().putBoolean("should_share_phone_qr", value).apply()
