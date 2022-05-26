@@ -51,7 +51,7 @@ class PrivateMessagesFragment :
         PrivateMessagesFragmentArgs
             .fromBundle(requireArguments())
             .contactId
-            ?.encodeToByteArray()
+            ?.fromBase64toByteArray()
             ?: requireArguments().getByteArray("contact_id") !!
     }
     private val cachedContact: ContactData? by lazy {

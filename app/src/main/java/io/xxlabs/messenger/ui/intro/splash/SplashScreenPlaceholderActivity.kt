@@ -19,8 +19,8 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
@@ -115,8 +115,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
         return gson.fromJson(db, JsonObject::class.java)
     }
 
-    private fun navigateMain() {
-        val activity = Intent(
+    private fun navigateMain(intent: Intent? = null) {
+        val activity = intent ?: Intent(
             this@SplashScreenPlaceholderActivity,
             MainActivity::class.java
         )
@@ -158,5 +158,22 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
             },
             isCancellable = true
         ).show()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        val mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+            Intent(
+                this@SplashScreenPlaceholderActivity,
+                MainActivity::class.java
+            ).apply {
+                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
+            }
+        }
+        navigateMain(mainIntent)
     }
 }

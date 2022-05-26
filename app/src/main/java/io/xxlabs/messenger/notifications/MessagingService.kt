@@ -6,6 +6,7 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Build
+import android.os.Bundle
 import android.os.PowerManager
 import android.os.SystemClock
 import android.view.WindowManager
@@ -24,8 +25,13 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.ui.RequestsFragment
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_GROUP_CHAT
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_PRIVATE_CHAT
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_REQUEST
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -107,7 +113,7 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         val _notificationId = notificationId
 
         val pendingIntent = generatePendingIntent(
-            generateIntent(),
+            generateIntent(richNotification),
             _notificationId
         )
         val notification = RichNotifications.create(
@@ -126,9 +132,26 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         Timber.v("[NOTIFICATION] Notification count: $notificationCount")
     }
 
-    private fun generateIntent(): Intent =
-        if (MainActivity.isActive()) Intent(this, MainActivity::class.java)
+    private fun generateIntent(richNotification: NotificationForMeReport): Intent {
+        val intent = if (MainActivity.isActive()) Intent(this, MainActivity::class.java)
         else Intent(this, SplashScreenPlaceholderActivity::class.java)
+
+        val deepLinkBundle = Bundle().apply {
+            when {
+                richNotification.isE2E() -> {
+                    putByteArray(INTENT_PRIVATE_CHAT, richNotification.source())
+                }
+                richNotification.isGroup() -> {
+                    putByteArray(INTENT_GROUP_CHAT, richNotification.source())
+                }
+                richNotification.isRequest() || richNotification.isGroupRequest() -> {
+                    putInt(INTENT_REQUEST, RequestsFragment.REQUESTS_TAB_RECEIVED)
+                }
+            }
+        }
+        intent.putExtra(INTENT_DEEP_LINK_BUNDLE, deepLinkBundle)
+        return intent
+    }
 
     private fun generatePendingIntent(
         intent: Intent,

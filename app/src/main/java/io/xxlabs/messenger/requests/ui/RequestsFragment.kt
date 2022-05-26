@@ -147,8 +147,8 @@ class RequestsFragment : BaseFragment() {
                     text = stateAdapter.getPageTitle(position)
                     icon = stateAdapter.getIcon(position)
                     contentDescription = when (position) {
-                        0 -> "requests.tab.received"
-                        1 -> "requests.tab.sent"
+                        REQUESTS_TAB_RECEIVED -> "requests.tab.received"
+                        REQUESTS_TAB_SENT -> "requests.tab.sent"
                         else -> "requests.tab.failed"
                     }
                 }
@@ -235,5 +235,11 @@ class RequestsFragment : BaseFragment() {
         groupMessages.groupId = group.groupId.toBase64String()
         groupMessages.group = (group as GroupData).copy(status = RequestStatus.ACCEPTED.value)
         findNavController().navigate(groupMessages)
+    }
+
+    companion object {
+        const val REQUESTS_TAB_RECEIVED = 0
+        const val REQUESTS_TAB_SENT = 1
+        const val REQUESTS_TAB_FAILED = 2
     }
 }
