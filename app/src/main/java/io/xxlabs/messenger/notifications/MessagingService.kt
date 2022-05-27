@@ -8,9 +8,7 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
-import android.os.SystemClock
 import android.view.WindowManager
-import androidx.core.app.NotificationCompat
 import bindings.Bindings
 import bindings.NotificationForMeReport
 import com.google.firebase.messaging.FirebaseMessagingService

@@ -27,9 +27,6 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var splashScreenViewModel: SplashScreenViewModel
-    private val doesUserSessionExists by lazy {
-        splashScreenViewModel.doesUserSessionExists()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
