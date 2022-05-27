@@ -24,16 +24,24 @@ import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.ui.RequestsFragment
+import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_GROUP_CHAT
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_PRIVATE_CHAT
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_REQUEST
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
+
+    private val scope = CoroutineScope(
+        CoroutineName("MessagingService")
+        + Job()
+        + Dispatchers.Default
+    )
 
     @Inject
     lateinit var serviceInjector: DispatchingAndroidInjector<Any>
@@ -78,8 +86,10 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
                 for (i in 0 until isNotificationForMeReport.len()) {
                     with (isNotificationForMeReport[i]) {
                         if (this.shouldNotify() && !notificationState.alreadySent(this.type())) {
-                            pushNotification(this)
-                            notificationState.sent(this.type())
+                            scope.launch {
+                                pushNotification(this@with)
+                                notificationState.sent(this@with.type())
+                            }
                         }
                     }
                 }
@@ -106,8 +116,11 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     /**
      * Create and show a simple notification containing the received FCM message.
      */
-    private fun pushNotification(richNotification: NotificationForMeReport) {
+    private suspend fun pushNotification(richNotification: NotificationForMeReport) {
         increaseNotificationCount()
+        val notificationText = getNotificationText(richNotification)
+            ?: richNotification.notificationText()
+
         val _notificationId = notificationId
 
         val pendingIntent = generatePendingIntent(
@@ -117,13 +130,49 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         val notification = RichNotifications.create(
             this,
             pendingIntent,
-            richNotification.notificationText(),
+            notificationText,
             richNotification.channelId()
         )
 
         createChannelAndNotify(richNotification, notification, _notificationId)
         wakeScreenUp()
     }
+
+    private suspend fun getNotificationText(richNotification: NotificationForMeReport): String? {
+        return when {
+            richNotification.isE2E() && shouldShowUsername() -> {
+                try {
+                    val username = lookupUsername(richNotification.source())
+                    getString(R.string.notification_e2e_text) + " from $username"
+                } catch (e: Exception) {
+                    null
+                }
+            }
+            richNotification.isGroup() && shouldShowGroupName() -> {
+                try {
+                    val groupName = lookupGroupName(richNotification.source())
+                    getString(R.string.notification_group_text) + " in $groupName"
+                } catch(e: Exception) {
+                    null
+                }
+            }
+            else -> null
+        }
+    }
+
+    private fun shouldShowUsername(): Boolean {
+        return true
+    }
+
+    private fun shouldShowGroupName(): Boolean {
+        return true
+    }
+
+    private suspend fun lookupUsername(userId: ByteArray): String? =
+        repo.userDbLookup(userId).value()?.displayName
+
+    private suspend fun lookupGroupName(groupId: ByteArray): String =
+        repo.getGroupData(groupId).value().name
 
     private fun increaseNotificationCount() {
         notificationCount++

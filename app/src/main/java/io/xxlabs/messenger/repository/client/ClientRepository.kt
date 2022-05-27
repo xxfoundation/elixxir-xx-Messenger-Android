@@ -29,6 +29,7 @@ import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferManager
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
 import io.xxlabs.messenger.repository.DaoRepository
@@ -696,6 +697,10 @@ class ClientRepository @Inject constructor(
         }
     }
 
+    override fun getGroupData(groupId: ByteArray): Single<GroupData> {
+        return daoRepo.getGroup(groupId)
+    }
+
     override fun makeGroup(
         name: String,
         idsList: List<ByteArray>,
@@ -820,6 +825,9 @@ class ClientRepository @Inject constructor(
             Timber.v("[USER LOOKUP] Total execution time: ${Utils.getCurrentTimeStamp() - executionTime}")
         }
     }
+
+    override fun userDbLookup(userId: ByteArray): Maybe<ContactData> =
+        daoRepo.getContactByUserId(userId)
 
     // Message ================================================================================
     override fun sendViaClientUnsafe(

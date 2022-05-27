@@ -480,6 +480,10 @@ class ClientMockRepository(
         return Single.create { emitter -> emitter.onSuccess(1) }
     }
 
+    override fun getGroupData(groupId: ByteArray): Single<GroupData> {
+        return Single.create { emitter -> emitter.onSuccess(GroupData(name="Mock Group"))}
+    }
+
     override fun makeGroup(
         name: String,
         idsList: List<ByteArray>,
@@ -549,6 +553,9 @@ class ClientMockRepository(
     override fun userLookup(userId: ByteArray, callback: (ContactWrapperBase?, String?) -> Unit) {
         TODO("Not yet implemented")
     }
+
+    override fun userDbLookup(userId: ByteArray): Maybe<ContactData> =
+        Maybe.create { emitter -> emitter.onSuccess(ContactData())}
 
     // Message =====================================================================
     override fun sendViaClientUnsafe(
