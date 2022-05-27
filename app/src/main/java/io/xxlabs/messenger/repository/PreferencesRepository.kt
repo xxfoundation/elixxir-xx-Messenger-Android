@@ -371,6 +371,18 @@ class PreferencesRepository @Inject constructor(
             preferences.edit().putBoolean("user_backed_up", value).apply()
         }
 
+    override var showContactNames: Boolean = preferences.getBoolean("notifications_show_contact_names", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("notifications_show_contact_names", value).apply()
+        }
+
+    override var showGroupNames: Boolean = preferences.getBoolean("notifications_show_group_names", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("notifications_show_group_names", value).apply()
+        }
+
     override var areDebugLogsOn: Boolean = preferences.getBoolean("show_debug_logs", true)
         get() = preferences.getBoolean("show_debug_logs", true)
         set(isChecked) {
