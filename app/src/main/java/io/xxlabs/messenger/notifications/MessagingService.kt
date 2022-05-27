@@ -160,13 +160,9 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         }
     }
 
-    private fun shouldShowUsername(): Boolean {
-        return true
-    }
+    private fun shouldShowUsername(): Boolean = preferencesRepo.showContactNames
 
-    private fun shouldShowGroupName(): Boolean {
-        return true
-    }
+    private fun shouldShowGroupName(): Boolean = preferencesRepo.showGroupNames
 
     private suspend fun lookupUsername(userId: ByteArray): String? =
         repo.userDbLookup(userId).value()?.displayName
