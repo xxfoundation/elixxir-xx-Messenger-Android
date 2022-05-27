@@ -84,6 +84,83 @@
                 app:layout_constraintTop_toBottomOf="@id/settingsPushTitle"
                 app:lineHeight="@dimen/text_18" />
 
+            <TextView
+                android:id="@+id/settingsPrivateMsgDetailsTitle"
+                style="@style/settings_sub_option_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="@string/settings_notifications_private_msg_title"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toEndOf="@id/settingsPushIcon"
+                app:layout_constraintTop_toBottomOf="@id/settingsPushDescription"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsPrivateMsgDetailsSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.push"
+                app:layout_constraintBottom_toBottomOf="@id/settingsPrivateMsgDetailsTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsPrivateMsgDetailsTitle" />
+
+
+            <TextView
+                android:id="@+id/settingsPrivateMsgDetailsDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="@string/settings_notifications_private_msg_description"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintStart_toStartOf="@id/settingsPushTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsPrivateMsgDetailsTitle"
+                app:lineHeight="@dimen/text_18" />
+
+            <TextView
+                android:id="@+id/settingsGroupMsgDetailsTitle"
+                style="@style/settings_sub_option_textview"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_16"
+                android:layout_marginStart="@dimen/spacing_10"
+                android:layout_marginEnd="@dimen/spacing_24"
+                android:text="@string/settings_notifications_group_msg_title"
+                android:textColor="@color/neutral_active"
+                android:textSize="@dimen/text_14"
+                app:layout_constraintStart_toEndOf="@id/settingsPushIcon"
+                app:layout_constraintTop_toBottomOf="@id/settingsPrivateMsgDetailsDesc"
+                app:lineHeight="@dimen/text_18" />
+
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/settingsGroupMsgDetailsSwitch"
+                style="@style/XxSwitcherStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="settings.switch.push"
+                app:layout_constraintBottom_toBottomOf="@id/settingsGroupMsgDetailsTitle"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/settingsGroupMsgDetailsTitle" />
+
+
+            <TextView
+                android:id="@+id/settingsGroupMsgDetailsDesc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_8"
+                android:text="@string/settings_notifications_group_msg_description"
+                android:textColor="@color/neutral_weak"
+                android:textSize="@dimen/text_12"
+                app:layout_constraintEnd_toEndOf="@id/settingsPushLine"
+                app:layout_constraintStart_toStartOf="@id/settingsGroupMsgDetailsTitle"
+                app:layout_constraintTop_toBottomOf="@id/settingsGroupMsgDetailsTitle"
+                app:lineHeight="@dimen/text_18" />
+
             <View
                 android:id="@+id/settingsPushLine"
                 android:layout_width="0dp"
@@ -93,7 +170,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/settingsPushDescription" />
+                app:layout_constraintTop_toBottomOf="@id/settingsGroupMsgDetailsDesc" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
