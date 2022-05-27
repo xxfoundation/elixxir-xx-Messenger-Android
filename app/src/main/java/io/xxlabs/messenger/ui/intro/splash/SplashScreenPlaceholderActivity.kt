@@ -27,6 +27,7 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var splashScreenViewModel: SplashScreenViewModel
+    private var mainIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,6 +35,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
         hideSystemBars()
         splashScreenViewModel =
             ViewModelProvider(this, viewModelFactory).get(SplashScreenViewModel::class.java)
+
+        intent?.let { handleIntent(it) }
     }
 
     private fun hideSystemBars() {
@@ -44,6 +47,23 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         // Hide both the status bar and the navigation bar
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        // Pass this intent on to MainActivity.
+        mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+            Intent(
+                this@SplashScreenPlaceholderActivity,
+                MainActivity::class.java
+            ).apply {
+                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
+            }
+        }
     }
 
     override fun onStart() {
@@ -112,8 +132,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
         return gson.fromJson(db, JsonObject::class.java)
     }
 
-    private fun navigateMain(intent: Intent? = null) {
-        val activity = intent ?: Intent(
+    private fun navigateMain() {
+        val activity = mainIntent ?: Intent(
             this@SplashScreenPlaceholderActivity,
             MainActivity::class.java
         )
@@ -155,22 +175,5 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
             },
             isCancellable = true
         ).show()
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        handleIntent(intent)
-    }
-
-    private fun handleIntent(intent: Intent) {
-        val mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
-            Intent(
-                this@SplashScreenPlaceholderActivity,
-                MainActivity::class.java
-            ).apply {
-                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
-            }
-        }
-        navigateMain(mainIntent)
     }
 }

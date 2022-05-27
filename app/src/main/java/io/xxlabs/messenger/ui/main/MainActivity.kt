@@ -135,6 +135,8 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         super.onStop()
     }
 
+    val richNotificationIntent: Intent? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         activeInstances++
@@ -146,6 +148,72 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         mainReportBtn.setOnSingleClickListener {
             DebugLogger.exportLatestLog(this)
         }
+        handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+            handleDeepLink(it)
+        }
+    }
+
+    private fun handleDeepLink(bundle: Bundle) {
+        with (bundle) {
+            when {
+                isPrivateMessage -> privateMessageIntent(this)
+                isGroupMessage -> groupMessageIntent(this)
+                isRequest -> requestIntent(this)
+                else -> unknownIntent()
+            }
+        }
+    }
+
+    private fun privateMessageIntent(bundle: Bundle) {
+        bundle.getByteArray(INTENT_PRIVATE_CHAT)?.let { chatId ->
+            val privateChatDirections = NavMainDirections.actionGlobalChat().apply {
+                contactId = chatId.toBase64String()
+                contact = null
+            }
+            mainNavController.navigateSafe(
+                privateChatDirections.actionId,
+                privateChatDirections.arguments
+            )
+        }
+    }
+
+    private fun groupMessageIntent(bundle: Bundle) {
+        bundle.getByteArray(INTENT_GROUP_CHAT)?.let { chatId ->
+            val groupChatDirections = NavMainDirections.actionGlobalGroupsChat().apply {
+                groupId = chatId.toBase64String()
+                group = null
+            }
+            mainNavController.navigateSafe(
+                groupChatDirections.actionId,
+                groupChatDirections.arguments
+            )
+        }
+    }
+
+    private fun requestIntent(bundle: Bundle) {
+        bundle.getInt(INTENT_REQUEST, 0).let { tab ->
+            val requestDirections = NavMainDirections.actionGlobalRequests().apply {
+                selectedTab = tab
+            }
+            mainNavController.navigateSafe(
+                requestDirections.actionId,
+                requestDirections.arguments
+            )
+        }
+    }
+
+    private fun unknownIntent() {
+        Timber.d("Unknown intent received!")
     }
 
     override fun onDestroy() {
@@ -684,67 +752,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Glide.with(this).clear(mainBlurryImg)
             mainBlurryImg.visibility = View.GONE
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
-            handleIntent(it)
-        }
-    }
-
-    private fun handleIntent(bundle: Bundle) {
-        with (bundle) {
-            when {
-                isPrivateMessage -> privateMessageIntent(this)
-                isGroupMessage -> groupMessageIntent(this)
-                isRequest -> requestIntent(this)
-                else -> unknownIntent()
-            }
-        }
-    }
-
-    private fun privateMessageIntent(bundle: Bundle) {
-        bundle.getByteArray(INTENT_PRIVATE_CHAT)?.let { chatId ->
-            val privateChatDirections = NavMainDirections.actionGlobalChat().apply {
-                contactId = chatId.toBase64String()
-                contact = null
-            }
-            mainNavController.navigateSafe(
-                privateChatDirections.actionId,
-                privateChatDirections.arguments
-            )
-        }
-    }
-
-    private fun groupMessageIntent(bundle: Bundle) {
-        bundle.getByteArray(INTENT_GROUP_CHAT)?.let { chatId ->
-            val groupChatDirections = NavMainDirections.actionGlobalGroupsChat().apply {
-                groupId = chatId.toBase64String()
-                group = null
-            }
-            mainNavController.navigateSafe(
-                groupChatDirections.actionId,
-                groupChatDirections.arguments
-            )
-        }
-    }
-
-    private fun requestIntent(bundle: Bundle) {
-        bundle.getInt(INTENT_REQUEST, 0).let { tab ->
-            val requestDirections = NavMainDirections.actionGlobalRequests().apply {
-                selectedTab = tab
-            }
-            mainNavController.navigateSafe(
-                requestDirections.actionId,
-                requestDirections.arguments
-            )
-        }
-    }
-
-    private fun unknownIntent() {
-        Timber.d("Unknown intent received!")
     }
 
     companion object : BaseInstance {
