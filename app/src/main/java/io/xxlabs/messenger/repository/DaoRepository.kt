@@ -22,7 +22,6 @@ import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
-import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionData
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
@@ -117,7 +116,9 @@ class DaoRepository @Inject constructor(
     }
 
     fun markChatRead(contactId: ByteArray): Single<Int> {
-        return messagesDao.markRead(contactId)
+        return messagesDao.markRead(contactId).also {
+            deleteNewConnection(userId = contactId.toBase64String())
+        }
     }
 
     fun isUnread(id: Long): Single<Boolean> {
@@ -258,9 +259,13 @@ class DaoRepository @Inject constructor(
     fun getNewConnectionsFlow() = newConnectionsDao.getNewConnections()
 
     fun deleteNewConnection(newConnection: NewConnection? = null, userId: String? = null) {
-        when {
-            newConnection != null -> newConnectionsDao.delete(newConnection)
-            !userId.isNullOrBlank() -> newConnectionsDao.delete(NewConnection(userId))
+        try {
+            when {
+                newConnection != null -> newConnectionsDao.delete(newConnection)
+                !userId.isNullOrBlank() -> newConnectionsDao.delete(NewConnection(userId))
+            }
+        } catch (e: Exception) {
+            Timber.d(e)
         }
     }
 
@@ -277,7 +282,9 @@ class DaoRepository @Inject constructor(
     }
 
     fun getContactByUserId(userId: ByteArray): Maybe<ContactData> {
-        return contactsDao.queryContactByUserId(userId)
+        return contactsDao.queryContactByUserId(userId).also {
+            deleteNewConnection(userId = userId.toBase64String())
+        }
     }
 
     fun getContactFlow(userId: ByteArray): Flow<ContactData> =
