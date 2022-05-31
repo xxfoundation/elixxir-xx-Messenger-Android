@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="@id/regGuideStart"
         app:layout_constraintTop_toBottomOf="@id/contactsSearchBarLayout"
         app:drawableTint="@color/brand_default"
-        app:drawableLeftCompat="@drawable/ic_create_group_24"/>
+        app:drawableLeftCompat="@drawable/ic_create_group"/>
 
     <View
         android:id="@+id/contactsGroupRequestsDivider"
