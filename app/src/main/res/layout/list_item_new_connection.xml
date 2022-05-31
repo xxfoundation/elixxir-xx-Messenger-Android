@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.ui.main.chats.NewConnectionUI" />
+            type="io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
