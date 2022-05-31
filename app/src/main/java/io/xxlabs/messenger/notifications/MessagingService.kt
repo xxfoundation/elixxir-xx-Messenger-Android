@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.RingtoneManager.isDefault
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
@@ -139,24 +140,34 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     }
 
     private suspend fun getNotificationText(richNotification: NotificationForMeReport): String? {
-        return when {
-            richNotification.isE2E() && shouldShowUsername() -> {
-                try {
-                    val username = lookupUsername(richNotification.source())
-                    getString(R.string.notification_e2e_text) + " from $username"
-                } catch (e: Exception) {
-                    null
+        return with(richNotification) {
+            when {
+                isE2E() && shouldShowUsername() -> {
+                    try {
+                        val username = lookupUsername(richNotification.source())
+                        getString(R.string.notification_e2e_text) + " from $username"
+                    } catch (e: Exception) {
+                        null
+                    }
                 }
-            }
-            richNotification.isGroup() && shouldShowGroupName() -> {
-                try {
-                    val groupName = lookupGroupName(richNotification.source())
-                    getString(R.string.notification_group_text) + " in $groupName"
-                } catch(e: Exception) {
-                    null
+                isGroup() && shouldShowGroupName() -> {
+                    try {
+                        val groupName = lookupGroupName(richNotification.source())
+                        getString(R.string.notification_group_text) + " in $groupName"
+                    } catch (e: Exception) {
+                        null
+                    }
                 }
+                isEndFT() && shouldShowUsername() -> {
+                    try {
+                        val username = lookupUsername(richNotification.source())
+                        getString(R.string.notification_endft_text) + " from $username"
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                else -> null
             }
-            else -> null
         }
     }
 
@@ -180,15 +191,17 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         else Intent(this, SplashScreenPlaceholderActivity::class.java)
 
         val deepLinkBundle = Bundle().apply {
-            when {
-                richNotification.isE2E() -> {
-                    putByteArray(INTENT_PRIVATE_CHAT, richNotification.source())
-                }
-                richNotification.isGroup() -> {
-                    putByteArray(INTENT_GROUP_CHAT, richNotification.source())
-                }
-                richNotification.isRequest() || richNotification.isGroupRequest() -> {
-                    putInt(INTENT_REQUEST, RequestsFragment.REQUESTS_TAB_RECEIVED)
+            with (richNotification) {
+                when {
+                    isE2E() || isEndFT() -> {
+                        putByteArray(INTENT_PRIVATE_CHAT, richNotification.source())
+                    }
+                    isGroup() -> {
+                        putByteArray(INTENT_GROUP_CHAT, richNotification.source())
+                    }
+                    isRequest() || isGroupRequest() -> {
+                        putInt(INTENT_REQUEST, RequestsFragment.REQUESTS_TAB_RECEIVED)
+                    }
                 }
             }
         }
