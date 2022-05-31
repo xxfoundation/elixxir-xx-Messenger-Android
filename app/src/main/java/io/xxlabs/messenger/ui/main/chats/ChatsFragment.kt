@@ -130,13 +130,17 @@ class ChatsFragment : BaseFragment() {
         resetSearchBar()
     }
 
+    private fun newConnectionsVisible(visible: Boolean) {
+        binding.newConnectionsRecyclerView.visibility =
+            if (visible) View.VISIBLE else View.GONE
+    }
+
     private fun setListeners() {
         chatsSearchBar.incognito(preferences.isIncognitoKeyboardEnabled)
         chatsSearchBar.addTextChangedListener { text ->
             chatsAdapter.filter.filter(text?.trim())
-            if (!text.isNullOrBlank()) {
-                closeBottomMenu()
-            }
+            chatsViewModel.onSearchResultsUpdated(!text.isNullOrBlank())
+            if (!text.isNullOrBlank())closeBottomMenu()
         }
 
         chatsMenu.setOnSingleClickListener {
@@ -217,6 +221,7 @@ class ChatsFragment : BaseFragment() {
         chatsRecyclerView?.post {
             val text = chatsSearchBar?.text?.trim()
             if (text != null && chatsAdapter.itemCount > 0) {
+                chatsViewModel.onSearchResultsUpdated(true)
                 Timber.v("Text search was restored!")
                 chatsAdapter.filter.filter(text)
                 if (chatsSearchBar?.text?.isBlank() != true) {

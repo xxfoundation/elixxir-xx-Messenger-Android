@@ -1,7 +1,7 @@
 package io.xxlabs.messenger.ui.main.chats
 
 interface ChatsListUI {
-    val hasNewConnections: Boolean
+    val newConnectionsVisible: Boolean
     fun onAddContactClicked()
     fun onCreateGroupClicked()
 }

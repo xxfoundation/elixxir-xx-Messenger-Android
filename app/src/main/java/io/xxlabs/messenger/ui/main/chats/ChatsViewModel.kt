@@ -41,9 +41,6 @@ class ChatsViewModel @Inject constructor(
     var acceptedContacts = daoRepo.getAllAcceptedContactsLive()
     var acceptedGroups = daoRepo.getAllAcceptedGroupsLive()
 
-    val chatsListUi: LiveData<ChatsListUI> by ::_chatsListUi
-    private val _chatsListUi = MutableLiveData<ChatsListUI>(ChatsList(this))
-
     val navigateToUdSearch: LiveData<Boolean> by ::_navigateToUdSearch
     private val _navigateToUdSearch = MutableLiveData(false)
 
@@ -55,6 +52,11 @@ class ChatsViewModel @Inject constructor(
 
     val newlyAddedContacts: LiveData<List<NewConnectionUI>> by ::_newlyAddedContacts
     private val _newlyAddedContacts = MutableLiveData<List<NewConnectionUI>>(listOf())
+
+    val chatsListUi: LiveData<ChatsListUI> by ::_chatsListUi
+    private val _chatsListUi = MutableLiveData(updateUI())
+
+    private var showingSearchResults = false
 
     class ChatObservable {
         val chatsHashMap = HashMap<String, ChatWrapper>()
@@ -234,13 +236,20 @@ class ChatsViewModel @Inject constructor(
     }
 
     private fun onNewlyAddedListFetched(newConnections: List<NewConnectionUI>) {
-        if (newConnections.isNotEmpty()) {
-            _chatsListUi.value = ChatsList(this, true)
-        } else {
-            _chatsListUi.value = ChatsList(this, false)
-        }
-
         _newlyAddedContacts.value = newConnections
+        updateUI()
+    }
+
+    private fun areNewConnectionsVisible(): Boolean =
+        if (showingSearchResults) false
+        else _newlyAddedContacts.value?.isNotEmpty() ?: false
+
+    private fun updateUI(): ChatsListUI {
+        return ChatsList(this, areNewConnectionsVisible())
+    }
+
+    override fun onSearchResultsUpdated(visible: Boolean) {
+        showingSearchResults = visible
     }
 
     private suspend fun getContact(userId: String): ContactData? =
