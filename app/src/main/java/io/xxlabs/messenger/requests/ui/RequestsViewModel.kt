@@ -131,7 +131,6 @@ class RequestsViewModel @Inject constructor(
             invitationsList.map { invitation ->
                 GroupInviteItem(
                     invitation,
-//                    fetchMembers(invitation),
                     getUsername(invitation.model.leader),
                 ).also {
                     groupInviteCache[invitation.requestId] = it

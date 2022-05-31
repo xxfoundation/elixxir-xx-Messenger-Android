@@ -189,7 +189,6 @@ class ChatsViewModel @Inject constructor(
                 updateChat(chats.getChatsData())
             }
             Timber.v("Updated Group for Chats")
-//            Timber.d("Groups: $groups")
             groups.forEach { group ->
                 mediatorLiveData.addSource(
                     daoRepo.getLastGroupMessageLiveData(group.groupId).distinctUntilChanged()

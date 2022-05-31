@@ -22,7 +22,6 @@ import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.playBeepSound
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.extensions.toast
-import io.xxlabs.messenger.support.extensions.vibrateDevice
 import io.xxlabs.messenger.support.touch.MessageSwipeController
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.NetworkViewModel
@@ -239,20 +238,8 @@ abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
 
     private fun updateChat() {
         uiController.chatData.observe(viewLifecycleOwner) { messages ->
-//            if (messages.isNotEmpty()) notifyForNewMessages(messages.first())
-//            uiController.verifyUnsentMessages(messages)
             uiController.readAll()
             chatMessagesAdapter.submitList(messages)
-        }
-    }
-
-    private fun notifyForNewMessages(latestMessage: T) {
-        when {
-            !latestMessage.unread -> return
-            !latestMessage.sender.contentEquals(uiController.getUserId()) -> {
-                requireContext().vibrateDevice(100L)
-                requireContext().playBeepSound()
-            }
         }
     }
 
