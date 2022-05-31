@@ -15,6 +15,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.ui.main.chats.data.NewConnectionsDataSource
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionData
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionListener
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
@@ -262,7 +263,7 @@ class ChatsViewModel @Inject constructor(
 
     private fun markConnectionAsSeen(contact: ContactData) {
         viewModelScope.launch {
-            daoRepo.updateContactState(contact.userId, RequestStatus.ACCEPTED).value()
+            daoRepo.deleteNewConnection(userId = contact.userId.toBase64String())
         }
     }
 

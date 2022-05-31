@@ -160,17 +160,18 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/newConnectionsRecyclerView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_12"
             android:paddingTop="@dimen/spacing_12"
             android:orientation="horizontal"
             android:visibility="@{ui.hasNewConnections}"
+            app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
             app:layoutManager="LinearLayoutManager"
-            tools:itemCount="5"
+            tools:itemCount="1"
             tools:listitem="@layout/list_item_new_connection" />
 
         <View
@@ -248,7 +249,6 @@
             android:paddingBottom="@dimen/spacing_18"
             android:text="Go to contacts"
             android:visibility="invisible"
-            android:onClick="@{() -> ui.onAddContactClicked()}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chatsEmptyBottomTxt"

@@ -15,6 +15,7 @@ import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -28,6 +29,12 @@ class DaoRepository @Inject constructor(
     private val groupMembersDao = db.groupMembersDao()
     private val groupMessagesDao = db.groupMessagesDao()
     private val newConnectionsDao = db.newConnectionsDao()
+    
+    private val scope = CoroutineScope(
+        CoroutineName("DaoRepo")
+                + Job()
+                + Dispatchers.Default
+    )
 
     fun deleteAllMessagesByUserId(ids: List<ByteArray>): Single<Int> {
         return messagesDao.deleteChats(ids)
@@ -66,9 +73,7 @@ class DaoRepository @Inject constructor(
     }
 
     fun markChatRead(contactId: ByteArray): Single<Int> {
-        return messagesDao.markRead(contactId).also {
-            deleteNewConnection(userId = contactId.toBase64String())
-        }
+        return messagesDao.markRead(contactId)
     }
 
     fun getUnreadCountLiveData(contactId: ByteArray): LiveData<Int> {
@@ -141,19 +146,23 @@ class DaoRepository @Inject constructor(
     }
 
     private fun saveNewlyAddedContact(userId: ByteArray) {
-        newConnectionsDao.insert(NewConnection(userId.toBase64String()))
+        scope.launch {
+            newConnectionsDao.insert(NewConnection(userId.toBase64String()))
+        }
     }
 
     fun getNewConnectionsFlow() = newConnectionsDao.getNewConnections()
 
     fun deleteNewConnection(newConnection: NewConnection? = null, userId: String? = null) {
-        try {
-            when {
-                newConnection != null -> newConnectionsDao.delete(newConnection)
-                !userId.isNullOrBlank() -> newConnectionsDao.delete(NewConnection(userId))
+        scope.launch {
+            try {
+                when {
+                    newConnection != null -> newConnectionsDao.delete(newConnection)
+                    !userId.isNullOrBlank() -> newConnectionsDao.delete(NewConnection(userId))
+                }
+            } catch (e: Exception) {
+                Timber.d(e)
             }
-        } catch (e: Exception) {
-            Timber.d(e)
         }
     }
 
@@ -162,9 +171,7 @@ class DaoRepository @Inject constructor(
     }
 
     fun getContactByUserId(userId: ByteArray): Maybe<ContactData> {
-        return contactsDao.queryContactByUserId(userId).also {
-            deleteNewConnection(userId = userId.toBase64String())
-        }
+        return contactsDao.queryContactByUserId(userId)
     }
 
     fun setContact(id: Long, marshalledContact: ByteArray): Single<Int> {
