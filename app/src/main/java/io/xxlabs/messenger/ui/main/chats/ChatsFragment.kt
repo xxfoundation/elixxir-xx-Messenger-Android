@@ -6,7 +6,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -25,10 +24,7 @@ import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.FragmentChatsListBinding
 import io.xxlabs.messenger.repository.DaoRepository
-import io.xxlabs.messenger.support.extensions.incognito
-import io.xxlabs.messenger.support.extensions.navigateSafe
-import io.xxlabs.messenger.support.extensions.setInsets
-import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
+import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.selection.CustomSelectionTracker
 import io.xxlabs.messenger.support.selection.LongKeyProvider
 import io.xxlabs.messenger.support.touch.ButtonSwipeHelper
@@ -38,7 +34,8 @@ import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
-import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionsAdapter
 import kotlinx.android.synthetic.main.component_bottom_menu_chats.*
 import kotlinx.android.synthetic.main.component_network_error_banner.*
 import kotlinx.android.synthetic.main.fragment_chats_list.*
@@ -68,6 +65,7 @@ class ChatsFragment : BaseFragment() {
     private val mediatorObject = Observer<Any> { Timber.v("Mediator initiated") }
 
     private lateinit var binding: FragmentChatsListBinding
+    private val newConnectionsAdapter: NewConnectionsAdapter by lazy { NewConnectionsAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -127,6 +125,7 @@ class ChatsFragment : BaseFragment() {
         )
 
         setListeners()
+        initNewConnectionsRecyclerView()
         bindRecyclerView()
         resetSearchBar()
     }
@@ -193,6 +192,15 @@ class ChatsFragment : BaseFragment() {
         }
     }
 
+    private fun initNewConnectionsRecyclerView() {
+        binding.newConnectionsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+            adapter = newConnectionsAdapter
+        }
+    }
+
     private fun bindRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
@@ -242,6 +250,25 @@ class ChatsFragment : BaseFragment() {
                 chatsViewModel.onCreateGroupHandled()
             }
         }
+
+        chatsViewModel.navigateToChat.observe(viewLifecycleOwner) { contact ->
+            contact?.let {
+                navigateToChat(contact)
+                chatsViewModel.onNavigateToChatHandled()
+            }
+        }
+
+        chatsViewModel.newlyAddedContacts.observe(viewLifecycleOwner) { newConnections ->
+            showNewConnections(newConnections)
+        }
+    }
+
+    private fun navigateToChat(contact: ContactData) {
+        val privateChatDirections = ChatsFragmentDirections.actionGlobalChat().apply {
+            this.contact = contact
+            contactId = contact.userId.toBase64String()
+        }
+        findNavController().navigateSafe(privateChatDirections)
     }
 
     private fun navigateToUdSearch() {
@@ -255,6 +282,10 @@ class ChatsFragment : BaseFragment() {
             contactSelectionMode = true
         }
         findNavController().navigateSafe(contactsDirections)
+    }
+
+    private fun showNewConnections(newConnections: List<NewConnectionUI>) {
+        newConnectionsAdapter.submitList(newConnections)
     }
 
     private fun watchForObservables() {

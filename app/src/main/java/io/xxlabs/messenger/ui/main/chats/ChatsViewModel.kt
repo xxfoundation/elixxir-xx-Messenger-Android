@@ -1,17 +1,28 @@
 package io.xxlabs.messenger.ui.main.chats
 
+import android.graphics.Bitmap
 import androidx.lifecycle.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
-import io.xxlabs.messenger.data.room.model.ContactData
-import io.xxlabs.messenger.data.room.model.GroupMessageData
-import io.xxlabs.messenger.data.room.model.GroupData
-import io.xxlabs.messenger.data.room.model.PrivateMessageData
+import io.xxlabs.messenger.data.datatype.RequestStatus
+import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
+import io.xxlabs.messenger.support.util.value
+import io.xxlabs.messenger.support.view.BitmapResolver
+import io.xxlabs.messenger.ui.main.chats.data.NewConnectionsDataSource
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionData
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionListener
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.collections.set
@@ -19,8 +30,9 @@ import kotlin.collections.set
 class ChatsViewModel @Inject constructor(
     val repo: BaseRepository,
     val daoRepo: DaoRepository,
-    private val schedulers: SchedulerProvider
-) : ViewModel(), ChatsListListener {
+    private val schedulers: SchedulerProvider,
+    private val newConnectionsDataSource: NewConnectionsDataSource
+) : ViewModel(), ChatsListListener, NewConnectionListener {
     var subscriptions = CompositeDisposable()
     var chatsData = MutableLiveData<List<ChatWrapper>>()
     var chats = ChatObservable()
@@ -36,6 +48,12 @@ class ChatsViewModel @Inject constructor(
 
     val showCreateGroup: LiveData<Boolean> by ::_showCreateGroup
     private val _showCreateGroup = MutableLiveData(false)
+
+    val navigateToChat: LiveData<ContactData?> by ::_navigateToChat
+    private val _navigateToChat = MutableLiveData<ContactData?>(null)
+
+    val newlyAddedContacts: LiveData<List<NewConnectionUI>> by ::_newlyAddedContacts
+    private val _newlyAddedContacts = MutableLiveData<List<NewConnectionUI>>(listOf())
 
     class ChatObservable {
         val chatsHashMap = HashMap<String, ChatWrapper>()
@@ -192,10 +210,65 @@ class ChatsViewModel @Inject constructor(
                 }
             }
         }
+
+        fetchNewConnections()
+    }
+
+    private val contactsCache = mutableMapOf<String, ContactData>()
+
+    private fun fetchNewConnections() {
+        viewModelScope.launch {
+            newConnectionsDataSource.getNewConnections().collect { newConnections ->
+                val newConnectionsData = newConnections.mapNotNull {
+                    getContact(it.userId)?.let { fetchedContact ->
+                        NewConnectionData(
+                            this@ChatsViewModel,
+                            fetchedContact,
+                            resolveBitmap(fetchedContact.photo)
+                        )
+                    }
+                }
+                onNewlyAddedListFetched(newConnectionsData)
+            }
+        }
+    }
+
+    private fun onNewlyAddedListFetched(newConnections: List<NewConnectionUI>) {
+        if (newConnections.isNotEmpty()) {
+            _chatsListUi.value = ChatsList(this, true)
+        } else {
+            _chatsListUi.value = ChatsList(this, false)
+        }
+
+        _newlyAddedContacts.value = newConnections
+    }
+
+    private suspend fun getContact(userId: String): ContactData? =
+        contactsCache[userId] ?: daoRepo.getContactByUserId(userId.fromBase64toByteArray())
+            .value()
+            ?.also { contactsCache[userId] = it }
+
+    private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
+        BitmapResolver.getBitmap(data)
     }
 
     private fun updateChat(values: List<ChatWrapper>) {
         chatsData.postValue(values)
+    }
+
+    override fun onNewConnectionClicked(contact: ContactData) {
+        markConnectionAsSeen(contact)
+        _navigateToChat.value = contact
+    }
+
+    private fun markConnectionAsSeen(contact: ContactData) {
+        viewModelScope.launch {
+            daoRepo.updateContactState(contact.userId, RequestStatus.ACCEPTED).value()
+        }
+    }
+
+    fun onNavigateToChatHandled() {
+        _navigateToChat.value = null
     }
 
     override fun onAddContactClicked() {

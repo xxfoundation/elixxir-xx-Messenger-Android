@@ -15,16 +15,13 @@ open class NewConnection(
 
 data class NewConnectionData(
     private val listener: NewConnectionListener,
-    override val contact: ContactData
+    override val contact: ContactData,
+    private val photo: Bitmap? = null
 ) : NewConnection(contact.userId.toBase64String()), NewConnectionUI {
+    override val itemPhoto: Bitmap? = photo
+    override val itemIconRes: Int? = null
+    override val itemInitials: String = contact.initials
 
     override fun onNewConnectionClicked(contact: ContactData) =
         listener.onNewConnectionClicked(contact)
-
-    override val itemPhoto: Bitmap?
-        get() = TODO("Not yet implemented")
-    override val itemIconRes: Int?
-        get() = TODO("Not yet implemented")
-    override val itemInitials: String?
-        get() = TODO("Not yet implemented")
 }
