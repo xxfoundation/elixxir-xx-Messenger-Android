@@ -31,6 +31,7 @@ import io.xxlabs.messenger.support.selection.ItemDetailsLookup
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.support.view.SquaredCornerLayout
+import io.xxlabs.messenger.ui.main.chat.loadImage
 import timber.log.Timber
 import java.util.regex.Pattern
 
@@ -144,7 +145,9 @@ class ChatsViewHolder(
         rowId = newGroup.id + 10000
         bindingsId = newGroup.groupId
         contactUsername.text = newGroup.name
-        setDefaultAvatar(newGroup.name.substring(0, 2).uppercase())
+
+        clearCurrentPhoto()
+        contactPhoto.loadImage(R.drawable.ic_group_chat)
     }
 
     private fun setPhoto(contact: ContactData) {
@@ -204,17 +207,6 @@ class ChatsViewHolder(
         contactPhoto.visibility = View.GONE
         contactPhotoDefault.visibility = View.VISIBLE
         contactPhotoDefault.text = initials
-
-        val colorPair = RandomColor.getRandomColor(bindingsId)
-        defaultPhotoBg.background.setTint(colorPair.first)
-        if (colorPair.second) {
-            contactPhotoDefault.setTextColor(
-                ContextCompat.getColor(
-                    itemView.context,
-                    R.color.neutral_active
-                )
-            )
-        }
     }
 
     fun setUnreadCount(unreadCount: Int, isLastSenderContact: Boolean) {

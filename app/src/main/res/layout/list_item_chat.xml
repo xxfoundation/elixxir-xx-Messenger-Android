@@ -22,12 +22,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/chatContactPhotoBg" />
 
-    <io.xxlabs.messenger.support.view.SquaredCornerLayout
+    <androidx.cardview.widget.CardView
         android:id="@+id/chatContactPhotoBg"
         android:layout_width="@dimen/spacing_42"
         android:layout_height="@dimen/spacing_42"
         android:layout_marginStart="@dimen/spacing_24"
         android:gravity="center"
+        android:backgroundTint="@color/brand_default"
         app:layout_constraintStart_toEndOf="@id/chatCheckbox"
         app:layout_constraintTop_toTopOf="@id/chatUsername"
         app:layout_goneMarginStart="@dimen/spacing_16"
@@ -45,11 +46,11 @@
 
         <ImageView
             android:id="@+id/chatContactPhoto"
-            android:layout_width="@dimen/spacing_42"
-            android:layout_height="@dimen/spacing_42"
-            android:adjustViewBounds="true"
-            android:scaleType="centerCrop" />
-    </io.xxlabs.messenger.support.view.SquaredCornerLayout>
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true" />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/chatUsername"
@@ -96,7 +97,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/spacing_16"
-        android:alpha="0.6"
         android:textAlignment="viewEnd"
         android:textColor="@color/neutral_weak"
         android:textSize="@dimen/text_12"
