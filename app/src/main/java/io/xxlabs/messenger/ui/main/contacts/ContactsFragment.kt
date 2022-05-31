@@ -308,6 +308,14 @@ class ContactsFragment : BaseFragment() {
         contactsRecyclerView.layoutManager = LinearLayoutManager(context)
         contactsRecyclerView.adapter = contactsAdapter
         contactsRecyclerView.itemAnimator = null
+
+        maybeStartContactSelection()
+    }
+
+    private fun maybeStartContactSelection() {
+        if (ContactsFragmentArgs.fromBundle(requireArguments()).contactSelectionMode) {
+            startContactSelection()
+        }
     }
 
     override fun onStart() {

@@ -131,11 +131,6 @@ class ChatsFragment : BaseFragment() {
         resetSearchBar()
     }
 
-    override fun onStart() {
-        super.onStart()
-        watchForObservables()
-    }
-
     private fun setListeners() {
         chatsSearchBar.incognito(preferences.isIncognitoKeyboardEnabled)
         chatsSearchBar.addTextChangedListener { text ->
@@ -198,6 +193,37 @@ class ChatsFragment : BaseFragment() {
         }
     }
 
+    private fun bindRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
+
+        chatsRecyclerView.layoutManager = layoutManager
+        chatsRecyclerView.adapter = chatsAdapter
+        chatsRecyclerView.itemAnimator = null
+
+        initTracker()
+        attachItemHelper()
+    }
+
+    private fun resetSearchBar() {
+        chatsRecyclerView?.post {
+            val text = chatsSearchBar?.text?.trim()
+            if (text != null && chatsAdapter.itemCount > 0) {
+                Timber.v("Text search was restored!")
+                chatsAdapter.filter.filter(text)
+                if (chatsSearchBar?.text?.isBlank() != true) {
+                    closeBottomMenu()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observeUI()
+        watchForObservables()
+    }
+
     private fun observeUI() {
         chatsViewModel.chatsListUi.observe(viewLifecycleOwner) { ui ->
             binding.ui = ui
@@ -212,7 +238,7 @@ class ChatsFragment : BaseFragment() {
 
         chatsViewModel.showCreateGroup.observe(viewLifecycleOwner) { createGroup ->
             if (createGroup) {
-                navigateToContacts()
+                navigateToContactsSelection()
                 chatsViewModel.onCreateGroupHandled()
             }
         }
@@ -224,8 +250,10 @@ class ChatsFragment : BaseFragment() {
         findNavController().navigate(udSearch)
     }
 
-    private fun navigateToContacts() {
-        val contactsDirections = ChatsFragmentDirections.actionChatsToContacts()
+    private fun navigateToContactsSelection() {
+        val contactsDirections = ChatsFragmentDirections.actionChatsToContacts().apply {
+            contactSelectionMode = true
+        }
         findNavController().navigateSafe(contactsDirections)
     }
 
@@ -300,31 +328,6 @@ class ChatsFragment : BaseFragment() {
         chatsLoading.hide()
         chatsEmptyBottomTxt?.visibility = View.VISIBLE
         chatsAddContactBtn?.visibility = View.VISIBLE
-    }
-
-    private fun resetSearchBar() {
-        chatsRecyclerView?.post {
-            val text = chatsSearchBar?.text?.trim()
-            if (text != null && chatsAdapter.itemCount > 0) {
-                Timber.v("Text search was restored!")
-                chatsAdapter.filter.filter(text)
-                if (chatsSearchBar?.text?.isBlank() != true) {
-                    closeBottomMenu()
-                }
-            }
-        }
-    }
-
-    private fun bindRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
-
-        chatsRecyclerView.layoutManager = layoutManager
-        chatsRecyclerView.adapter = chatsAdapter
-        chatsRecyclerView.itemAnimator = null
-
-        initTracker()
-        attachItemHelper()
     }
 
     private fun initTracker() {
