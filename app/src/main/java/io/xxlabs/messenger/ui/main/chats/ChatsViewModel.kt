@@ -1,9 +1,6 @@
 package io.xxlabs.messenger.ui.main.chats
 
-import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.*
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -23,13 +20,22 @@ class ChatsViewModel @Inject constructor(
     val repo: BaseRepository,
     val daoRepo: DaoRepository,
     private val schedulers: SchedulerProvider
-) : ViewModel() {
+) : ViewModel(), ChatsListListener {
     var subscriptions = CompositeDisposable()
     var chatsData = MutableLiveData<List<ChatWrapper>>()
     var chats = ChatObservable()
     var mediatorLiveData = MediatorLiveData<Any>()
     var acceptedContacts = daoRepo.getAllAcceptedContactsLive()
     var acceptedGroups = daoRepo.getAllAcceptedGroupsLive()
+
+    val chatsListUi: LiveData<ChatsListUI> by ::_chatsListUi
+    private val _chatsListUi = MutableLiveData<ChatsListUI>(ChatsList(this))
+
+    val navigateToUdSearch: LiveData<Boolean> by ::_navigateToUdSearch
+    private val _navigateToUdSearch = MutableLiveData(false)
+
+    val showCreateGroup: LiveData<Boolean> by ::_showCreateGroup
+    private val _showCreateGroup = MutableLiveData(false)
 
     class ChatObservable {
         val chatsHashMap = HashMap<String, ChatWrapper>()
@@ -190,6 +196,22 @@ class ChatsViewModel @Inject constructor(
 
     private fun updateChat(values: List<ChatWrapper>) {
         chatsData.postValue(values)
+    }
+
+    override fun onAddContactClicked() {
+        _navigateToUdSearch.value = true
+    }
+
+    fun onNavigateToUdHandled() {
+        _navigateToUdSearch.value = false
+    }
+
+    override fun onCreateGroupClicked() {
+        _showCreateGroup.value = true
+    }
+
+    fun onCreateGroupHandled() {
+        _showCreateGroup.value = false
     }
 
     fun markAllRead() {

@@ -23,6 +23,7 @@ import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
+import io.xxlabs.messenger.databinding.FragmentChatsListBinding
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.support.extensions.incognito
 import io.xxlabs.messenger.support.extensions.navigateSafe
@@ -66,12 +67,17 @@ class ChatsFragment : BaseFragment() {
     private lateinit var chatsSwipeController: ButtonSwipeHelper
     private val mediatorObject = Observer<Any> { Timber.v("Mediator initiated") }
 
+    private lateinit var binding: FragmentChatsListBinding
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_chats_list, container, false)
+        binding = FragmentChatsListBinding.inflate(inflater, container, false)
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
     override fun onDetach() {
@@ -85,6 +91,12 @@ class ChatsFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         navController = findNavController()
         navigateForNewUsers()
+    }
+
+    private fun navigateForNewUsers() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstLaunch) {
+            navigateToUdSearch()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -106,18 +118,6 @@ class ChatsFragment : BaseFragment() {
             viewModelFactory
         ).get(ContactsViewModel::class.java)
         initComponents(view)
-    }
-
-    private fun navigateForNewUsers() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstLaunch) {
-            navigateToUdSearch()
-        }
-    }
-
-    private fun navigateToUdSearch() {
-        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
-        preferences.isFirstLaunch = false
-        findNavController().navigate(udSearch)
     }
 
     fun initComponents(root: View) {
@@ -147,15 +147,6 @@ class ChatsFragment : BaseFragment() {
 
         chatsMenu.setOnSingleClickListener {
             mainViewModel.toggleMenu()
-        }
-
-        chatsSelectConversationBtn.setOnSingleClickListener {
-            val bundle = bundleOf("isSelectionMode" to true)
-            navController.navigateSafe(R.id.action_chats_to_select_contact, bundle)
-        }
-
-        chatsSearchUdBtn.setOnSingleClickListener {
-            navController.navigateSafe(R.id.action_chats_to_ud_search)
         }
 
         chatsCancelMenu.setOnSingleClickListener {
@@ -205,6 +196,37 @@ class ChatsFragment : BaseFragment() {
             tracker.setItemsSelected(idsList)
             deleteAllChats()
         }
+    }
+
+    private fun observeUI() {
+        chatsViewModel.chatsListUi.observe(viewLifecycleOwner) { ui ->
+            binding.ui = ui
+        }
+
+        chatsViewModel.navigateToUdSearch.observe(viewLifecycleOwner) { addContact ->
+            if (addContact) {
+                navigateToUdSearch()
+                chatsViewModel.onNavigateToUdHandled()
+            }
+        }
+
+        chatsViewModel.showCreateGroup.observe(viewLifecycleOwner) { createGroup ->
+            if (createGroup) {
+                navigateToContacts()
+                chatsViewModel.onCreateGroupHandled()
+            }
+        }
+    }
+
+    private fun navigateToUdSearch() {
+        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
+        preferences.isFirstLaunch = false
+        findNavController().navigate(udSearch)
+    }
+
+    private fun navigateToContacts() {
+        val contactsDirections = ChatsFragmentDirections.actionChatsToContacts()
+        findNavController().navigateSafe(contactsDirections)
     }
 
     private fun watchForObservables() {
@@ -386,11 +408,12 @@ class ChatsFragment : BaseFragment() {
         if (!isBottomMenuOpen) {
             isBottomMenuOpen = true
             chatsAdapter.selectionMode = SelectionMode.CHAT_SELECTION
-            chatsSelectConversationBtn?.visibility = View.GONE
-            chatsSearchUdBtn?.visibility = View.GONE
             chatsCancelMenu?.visibility = View.VISIBLE
             chatsBottomMenu?.visibility = View.VISIBLE
             chatsAdapter.notifyItemRangeChanged(0, chatsAdapter.itemCount)
+
+            binding.chatsListAddContact.visibility = View.GONE
+            binding.chatsListCreateGroup.visibility = View.GONE
         }
     }
 
@@ -401,10 +424,11 @@ class ChatsFragment : BaseFragment() {
 
         chatsAdapter.selectionMode = SelectionMode.CHAT_ACCESS
         tracker.clearSelection()
-        chatsSelectConversationBtn?.visibility = View.VISIBLE
-        chatsSearchUdBtn?.visibility = View.VISIBLE
         chatsCancelMenu?.visibility = View.GONE
         chatsBottomMenu?.visibility = View.GONE
+
+        binding.chatsListAddContact.visibility = View.VISIBLE
+        binding.chatsListCreateGroup.visibility = View.VISIBLE
 
         refreshChat()
     }
