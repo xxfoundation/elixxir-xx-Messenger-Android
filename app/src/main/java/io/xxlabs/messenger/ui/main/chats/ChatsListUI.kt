@@ -1,7 +1,7 @@
 package io.xxlabs.messenger.ui.main.chats
 
 interface ChatsListUI {
-    val dividerVisible: Boolean
+    val hasNewConnections: Boolean
     fun onAddContactClicked()
     fun onCreateGroupClicked()
 }

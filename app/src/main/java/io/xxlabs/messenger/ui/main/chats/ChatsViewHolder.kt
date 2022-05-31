@@ -10,8 +10,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageView
-import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
@@ -26,11 +26,9 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
-import io.xxlabs.messenger.support.RandomColor
 import io.xxlabs.messenger.support.selection.ItemDetailsLookup
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.BitmapResolver
-import io.xxlabs.messenger.support.view.SquaredCornerLayout
 import io.xxlabs.messenger.ui.main.chat.loadImage
 import timber.log.Timber
 import java.util.regex.Pattern
@@ -40,10 +38,10 @@ class ChatsViewHolder(
     private val contactUsername: TextView,
     private val conversationMsgPreview: TextView,
     private val conversationTimeStamp: TextView,
-    private val chatUnreadCount: TextView,
+    private val chatUnreadCount: CardView,
     private val contactPhoto: ImageView,
     private val contactPhotoDefault: TextView,
-    private val defaultPhotoBg: SquaredCornerLayout,
+    private val defaultPhotoBg: CardView,
     private val checkbox: CheckBox
 ) : RecyclerView.ViewHolder(parent), View.OnClickListener {
     var previousPhoto: Bitmap? = null
@@ -210,7 +208,7 @@ class ChatsViewHolder(
     }
 
     fun setUnreadCount(unreadCount: Int, isLastSenderContact: Boolean) {
-        chatUnreadCount.apply {
+        chatUnreadCount.findViewById<TextView>(R.id.chatUnreadCount)?.apply {
             if (isLastSenderContact && unreadCount > 0) {
                 visibility = View.VISIBLE
                 text = unreadCount.toString()
@@ -264,10 +262,10 @@ class ChatsViewHolder(
             val companyTextView = parent.findViewById(R.id.chatMsgPreview) as TextView
             val dateTextView = parent.findViewById(R.id.chatTimestamp) as TextView
             val chatUnreadCount =
-                parent.findViewById(R.id.chatUnreadCount) as TextView
+                parent.findViewById(R.id.chatUnreadLayout) as CardView
             val avatarPhoto = parent.findViewById(R.id.chatContactPhoto) as ImageView
             val defaultPhoto = parent.findViewById(R.id.chatContactPhotoDefault) as TextView
-            val defaultPhotoBg = parent.findViewById(R.id.chatContactPhotoBg) as SquaredCornerLayout
+            val defaultPhotoBg = parent.findViewById(R.id.chatContactPhotoBg) as CardView
             val checkbox = parent.findViewById(R.id.chatCheckbox) as CheckBox
 
             return ChatsViewHolder(

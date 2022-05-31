@@ -32,6 +32,7 @@
         app:layout_constraintStart_toEndOf="@id/chatCheckbox"
         app:layout_constraintTop_toTopOf="@id/chatUsername"
         app:layout_goneMarginStart="@dimen/spacing_16"
+        app:cardCornerRadius="14dp"
         tools:background="@drawable/component_avatar_semi_rounded">
 
         <TextView
@@ -84,7 +85,7 @@
         android:textSize="14sp"
         app:fontWeight="400"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/chatUnreadCount"
+        app:layout_constraintEnd_toStartOf="@id/chatUnreadLayout"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/chatContactPhotoBg"
         app:layout_constraintTop_toBottomOf="@id/chatUsername"
@@ -104,16 +105,23 @@
         app:layout_constraintTop_toTopOf="@id/chatUsername"
         tools:text="12:30pm" />
 
-    <TextView
-        android:id="@+id/chatUnreadCount"
-        style="@style/notification_count_text"
-        android:background="@drawable/component_semi_circular_bg"
-        android:backgroundTint="@color/neutral_disabled"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/chatUnreadLayout"
         android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:paddingHorizontal="12dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/neutral_disabled"
+        app:cardCornerRadius="18dp"
         app:layout_constraintBottom_toBottomOf="@id/chatMsgPreview"
         app:layout_constraintEnd_toEndOf="@id/chatTimestamp"
-        app:layout_constraintTop_toTopOf="@id/chatMsgPreview"
-        tools:text="99"/>
+        app:layout_constraintTop_toTopOf="@id/chatMsgPreview">
+
+        <TextView
+            android:id="@+id/chatUnreadCount"
+            style="@style/notification_count_text"
+            android:background="@drawable/component_semi_circular_bg"
+            android:backgroundTint="@color/neutral_disabled"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="99"/>
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

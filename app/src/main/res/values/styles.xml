@@ -770,10 +770,11 @@
     </style>
 
     <style name="notification_count_text" parent="xx_font">
-        <item name="android:textSize">13sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:fontWeight">600</item>
         <item name="android:gravity">center</item>
-        <item name="android:paddingHorizontal">18dp</item>
+        <item name="android:paddingHorizontal">8dp</item>
+        <item name="android:paddingVertical">4dp</item>
         <item name="lineHeight">17sp</item>
         <item name="android:textColor">@color/neutral_white</item>
     </style>

@@ -165,25 +165,25 @@
             android:layout_marginTop="@dimen/spacing_12"
             android:paddingTop="@dimen/spacing_12"
             android:orientation="horizontal"
-            app:layout_constrainedHeight="true"
-            app:layout_constraintBottom_toTopOf="@id/chatsRecyclerView"
+            android:visibility="@{ui.hasNewConnections}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
-            app:layout_constraintVertical_bias="0"
+            app:layoutManager="LinearLayoutManager"
             tools:itemCount="5"
-            tools:listitem="@layout/list_item_chat" />
+            tools:listitem="@layout/list_item_new_connection" />
 
         <View
             android:id="@+id/newConnectionsDivider"
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:background="@color/neutral_line"
-            android:visibility="@{ui.dividerVisible}"
+            android:visibility="@{ui.hasNewConnections}"
+            android:layout_margin="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
-            tools:visibility="gone"/>
+            tools:visibility="visible"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatsRecyclerView"
