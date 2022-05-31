@@ -19,7 +19,10 @@ import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionData
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
@@ -33,6 +36,7 @@ class DaoRepository @Inject constructor(
     private val groupsDao = db.groupsDao()
     private val groupMembersDao = db.groupMembersDao()
     private val groupMessagesDao = db.groupMessagesDao()
+    private val newConnectionsDao = db.newConnectionsDao()
 
     fun getChatDetails(contact: ContactData): Single<Pair<PrivateMessageData?, Int>> {
         return getLastMessage(contact.userId)
@@ -242,7 +246,22 @@ class DaoRepository @Inject constructor(
     }
 
     fun updateContactState(userId: ByteArray, requestStatus: RequestStatus): Single<Int> {
-        return contactsDao.updateContactState(userId, requestStatus.value)
+        return contactsDao.updateContactState(userId, requestStatus.value).also {
+            if (requestStatus == RequestStatus.ACCEPTED) saveNewlyAddedContact(userId)
+        }
+    }
+
+    private fun saveNewlyAddedContact(userId: ByteArray) {
+        newConnectionsDao.insert(NewConnection(userId.toBase64String()))
+    }
+
+    fun getNewConnectionsFlow() = newConnectionsDao.getNewConnections()
+
+    fun deleteNewConnection(newConnection: NewConnection? = null, userId: String? = null) {
+        when {
+            newConnection != null -> newConnectionsDao.delete(newConnection)
+            !userId.isNullOrBlank() -> newConnectionsDao.delete(NewConnection(userId))
+        }
     }
 
     fun updateGroupState(groupId: ByteArray, requestStatus: RequestStatus): Single<Int> {
