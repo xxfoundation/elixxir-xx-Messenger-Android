@@ -60,8 +60,10 @@
         android:ellipsize="marquee"
         android:lines="1"
         android:textColor="@color/neutral_active"
-        android:textSize="@dimen/text_14"
-        android:textStyle="bold"
+        android:textSize="16sp"
+        app:fontWeight="600"
+        app:lineHeight="21sp"
+        android:letterSpacing="0.04"
         app:layout_constraintEnd_toStartOf="@id/chatTimestamp"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toEndOf="@id/chatContactPhotoBg"
@@ -73,17 +75,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/spacing_20"
-        android:layout_marginTop="@dimen/spacing_5"
+        android:layout_marginTop="2dp"
         android:layout_marginEnd="@dimen/spacing_12"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textColor="@color/neutral_disabled"
-        android:textSize="@dimen/text_12"
+        android:textColor="@color/neutral_secondary"
+        android:textSize="14sp"
+        app:fontWeight="400"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/chatUnreadCountLayout"
+        app:layout_constraintEnd_toStartOf="@id/chatUnreadCount"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/chatContactPhotoBg"
         app:layout_constraintTop_toBottomOf="@id/chatUsername"
-        app:layout_constraintVertical_bias="0"
+        app:layout_constraintVertical_bias="0.083"
+        app:lineHeight="20sp"
         tools:text="Hey Have you been to the store recently I really liked how every..." />
 
     <TextView
@@ -99,26 +104,16 @@
         app:layout_constraintTop_toTopOf="@id/chatUsername"
         tools:text="12:30pm" />
 
-    <RelativeLayout
-        android:id="@+id/chatUnreadCountLayout"
-        android:layout_width="@dimen/spacing_24"
-        android:layout_height="@dimen/spacing_20"
-        android:layout_marginEnd="@dimen/spacing_16"
+    <TextView
+        android:id="@+id/chatUnreadCount"
+        style="@style/notification_count_text"
         android:background="@drawable/component_semi_circular_bg"
-        android:backgroundTint="@color/brand_background"
-        android:gravity="center"
+        android:backgroundTint="@color/neutral_disabled"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:paddingHorizontal="12dp"
         app:layout_constraintBottom_toBottomOf="@id/chatMsgPreview"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chatMsgPreview">
-
-        <TextView
-            android:id="@+id/chatUnreadCount"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:padding="@dimen/spacing_5"
-            android:textColor="@color/brand_default"
-            android:textSize="@dimen/text_9"
-            tools:text="99+" />
-    </RelativeLayout>
+        app:layout_constraintEnd_toEndOf="@id/chatTimestamp"
+        app:layout_constraintTop_toTopOf="@id/chatMsgPreview"
+        tools:text="99"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

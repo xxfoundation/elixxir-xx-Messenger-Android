@@ -39,7 +39,7 @@ class ChatsViewHolder(
     private val contactUsername: TextView,
     private val conversationMsgPreview: TextView,
     private val conversationTimeStamp: TextView,
-    private val chatUnreadCountLayout: RelativeLayout,
+    private val chatUnreadCount: TextView,
     private val contactPhoto: ImageView,
     private val contactPhotoDefault: TextView,
     private val defaultPhotoBg: SquaredCornerLayout,
@@ -218,12 +218,13 @@ class ChatsViewHolder(
     }
 
     fun setUnreadCount(unreadCount: Int, isLastSenderContact: Boolean) {
-        if (isLastSenderContact && unreadCount > 0) {
-            chatUnreadCountLayout.visibility = View.VISIBLE
-            chatUnreadCountLayout.findViewById<TextView>(R.id.chatUnreadCount).text =
-                unreadCount.toString()
-        } else {
-            chatUnreadCountLayout.visibility = View.GONE
+        chatUnreadCount.apply {
+            if (isLastSenderContact && unreadCount > 0) {
+                visibility = View.VISIBLE
+                text = unreadCount.toString()
+            } else {
+                visibility = View.GONE
+            }
         }
     }
 
@@ -270,8 +271,8 @@ class ChatsViewHolder(
             val nameTextView = parent.findViewById(R.id.chatUsername) as TextView
             val companyTextView = parent.findViewById(R.id.chatMsgPreview) as TextView
             val dateTextView = parent.findViewById(R.id.chatTimestamp) as TextView
-            val chatUnreadCountLayout =
-                parent.findViewById(R.id.chatUnreadCountLayout) as RelativeLayout
+            val chatUnreadCount =
+                parent.findViewById(R.id.chatUnreadCount) as TextView
             val avatarPhoto = parent.findViewById(R.id.chatContactPhoto) as ImageView
             val defaultPhoto = parent.findViewById(R.id.chatContactPhotoDefault) as TextView
             val defaultPhotoBg = parent.findViewById(R.id.chatContactPhotoBg) as SquaredCornerLayout
@@ -282,7 +283,7 @@ class ChatsViewHolder(
                 nameTextView,
                 companyTextView,
                 dateTextView,
-                chatUnreadCountLayout,
+                chatUnreadCount,
                 avatarPhoto,
                 defaultPhoto,
                 defaultPhotoBg,
