@@ -159,6 +159,33 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/newConnectionsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:paddingTop="@dimen/spacing_12"
+            android:orientation="horizontal"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@id/chatsRecyclerView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layout_constraintVertical_bias="0"
+            tools:itemCount="5"
+            tools:listitem="@layout/list_item_chat" />
+
+        <View
+            android:id="@+id/newConnectionsDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line"
+            android:visibility="@{ui.dividerVisible}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
+            tools:visibility="gone"/>
+
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatsRecyclerView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -169,7 +196,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
             app:layout_constraintVertical_bias="0"
             tools:itemCount="5"
             tools:listitem="@layout/list_item_chat" />
