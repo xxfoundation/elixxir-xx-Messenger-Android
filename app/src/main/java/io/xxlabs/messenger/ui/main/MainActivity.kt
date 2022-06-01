@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.NavMainDirections
@@ -743,13 +744,16 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar? {
-        if (preferences.areInAppNotificationsOn || forceMessage) {
-            val snack = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_LONG).setAction("OK") {}
-            snack.view.translationZ = 10f
-            snack.show()
-            return snack
-        }
-        return null
+        return if (preferences.areInAppNotificationsOn || forceMessage) {
+//            val snack = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_LONG).setAction("OK") {}
+//            snack.view.translationZ = 10f
+//            snack.show()
+//            return snack
+            val toastUI = ToastUI.create(body = msg, leftIcon = null)
+            val snackBar = createCustomToast(toastUI)
+            showCustomToast(toastUI)
+            snackBar
+        } else null
     }
 
     fun hideKeyboard() {
