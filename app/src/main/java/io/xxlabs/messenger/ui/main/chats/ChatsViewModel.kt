@@ -54,7 +54,7 @@ class ChatsViewModel @Inject constructor(
     private val _newlyAddedContacts = MutableLiveData<List<NewConnectionUI>>(listOf())
 
     val chatsListUi: LiveData<ChatsListUI> by ::_chatsListUi
-    private val _chatsListUi = MutableLiveData(updateUI())
+    private val _chatsListUi = MutableLiveData<ChatsListUI>(ChatsList(this))
 
     private var showingSearchResults = false
 
@@ -244,8 +244,8 @@ class ChatsViewModel @Inject constructor(
         if (showingSearchResults) false
         else _newlyAddedContacts.value?.isNotEmpty() ?: false
 
-    private fun updateUI(): ChatsListUI {
-        return ChatsList(this, areNewConnectionsVisible())
+    private fun updateUI() {
+        _chatsListUi.value = ChatsList(this, areNewConnectionsVisible())
     }
 
     override fun onSearchResultsUpdated(visible: Boolean) {
