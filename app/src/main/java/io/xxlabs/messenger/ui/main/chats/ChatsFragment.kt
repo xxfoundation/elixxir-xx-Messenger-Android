@@ -130,13 +130,11 @@ class ChatsFragment : BaseFragment() {
         resetSearchBar()
     }
 
-    private fun newConnectionsVisible(visible: Boolean) {
-        binding.newConnectionsRecyclerView.visibility =
-            if (visible) View.VISIBLE else View.GONE
-    }
-
     private fun setListeners() {
         chatsSearchBar.incognito(preferences.isIncognitoKeyboardEnabled)
+        chatsSearchBar.setOnFocusChangeListener { v, hasFocus ->
+            chatsViewModel.onSearchHasFocus(hasFocus)
+        }
         chatsSearchBar.addTextChangedListener { text ->
             chatsAdapter.filter.filter(text?.trim())
             chatsViewModel.onSearchResultsUpdated(!text.isNullOrBlank())

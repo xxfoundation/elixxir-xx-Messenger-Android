@@ -56,6 +56,7 @@ class ChatsViewModel @Inject constructor(
     val chatsListUi: LiveData<ChatsListUI> by ::_chatsListUi
     private val _chatsListUi = MutableLiveData<ChatsListUI>(ChatsList(this))
 
+    private var searchHasFocus = false
     private var showingSearchResults = false
 
     class ChatObservable {
@@ -241,15 +242,21 @@ class ChatsViewModel @Inject constructor(
     }
 
     private fun areNewConnectionsVisible(): Boolean =
-        if (showingSearchResults) false
+        if (showingSearchResults || searchHasFocus) false
         else _newlyAddedContacts.value?.isNotEmpty() ?: false
 
     private fun updateUI() {
         _chatsListUi.value = ChatsList(this, areNewConnectionsVisible())
     }
 
+    override fun onSearchHasFocus(focus: Boolean) {
+        searchHasFocus = focus
+        updateUI()
+    }
+
     override fun onSearchResultsUpdated(visible: Boolean) {
         showingSearchResults = visible
+        updateUI()
     }
 
     private suspend fun getContact(userId: String): ContactData? =
