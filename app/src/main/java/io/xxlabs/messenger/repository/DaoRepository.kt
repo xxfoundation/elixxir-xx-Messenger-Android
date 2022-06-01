@@ -186,7 +186,9 @@ class DaoRepository @Inject constructor(
     }
 
     fun deleteContactFromDb(contact: ContactData): Single<Int> {
-        return contactsDao.deleteContact(contact)
+        return contactsDao.deleteContact(contact).also {
+            deleteNewConnection(userId = contact.userId.toBase64String())
+        }
     }
 
     fun deleteContact(
