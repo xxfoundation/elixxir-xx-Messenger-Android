@@ -18,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
@@ -37,7 +36,6 @@ import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionsAdapter
 import kotlinx.android.synthetic.main.component_bottom_menu_chats.*
-import kotlinx.android.synthetic.main.component_network_error_banner.*
 import kotlinx.android.synthetic.main.fragment_chats_list.*
 import timber.log.Timber
 import javax.inject.Inject

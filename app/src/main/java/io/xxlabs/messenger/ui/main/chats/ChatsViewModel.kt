@@ -237,7 +237,7 @@ class ChatsViewModel @Inject constructor(
     }
 
     private fun onNewlyAddedListFetched(newConnections: List<NewConnectionUI>) {
-        _newlyAddedContacts.value = newConnections
+        _newlyAddedContacts.value = newConnections.sortedByDescending { it.contact.createdAt }
         updateUI()
     }
 

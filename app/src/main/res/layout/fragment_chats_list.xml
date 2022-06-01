@@ -181,8 +181,6 @@
             android:background="@color/neutral_line"
             android:visibility="@{ui.newConnectionsVisible}"
             android:layout_margin="16dp"
-            app:stackFromEnd="true"
-            app:reverseLayout="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
