@@ -4,9 +4,7 @@ import android.app.Application
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import bindings.NetworkHealthCallback
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import io.reactivex.Observable
@@ -40,11 +38,22 @@ class NetworkViewModel @Inject constructor(
     /**
      * Exposes the network status as user-friendly toasts.
      */
-    val networkStatus: LiveData<ToastUI?> by ::_networkStatus
     private val _networkStatus = MutableLiveData<ToastUI?>(null)
+    val networkStatus: LiveData<ToastUI?> = Transformations.distinctUntilChanged(_networkStatus)
+
+    private val noConnectionStatus: ToastUI by lazy {
+        val body = NetworkState.NO_CONNECTION.statusMessage ?: ""
+        val duration = LENGTH_INDEFINITE
+
+        ToastUI.create(
+            body = body,
+            duration = duration,
+            leftIcon = null
+        )
+    }
 
     var subscriptions = CompositeDisposable()
-    var networkState = MutableLiveData<NetworkState>()
+    private var networkState = MutableLiveData<NetworkState>()
     var userDiscoveryStatus = MutableLiveData<Boolean>()
     var networkFollowerTimer: CountDownTimer? = null
     var networkFollowerSeconds = -1
@@ -126,7 +135,6 @@ class NetworkViewModel @Inject constructor(
             !isNetworkHealthy -> NetworkState.NETWORK_STOPPED
             else -> NetworkState.NO_CONNECTION
         }
-
         _networkStatus.value = createStatusMessage(networkState.value)
     }
 
@@ -138,19 +146,13 @@ class NetworkViewModel @Inject constructor(
             }
         }
 
-    private fun createStatusMessage(status: NetworkState?): ToastUI? {
-        val body = status?.statusMessage ?: return null
-        val backgroundColor = R.color.accent_safe
-        val duration = LENGTH_INDEFINITE
-        val leftIcon = R.drawable.ic_variant_outline_privacy_tip
-
-        return ToastUI.create(
-            body = body,
-            backgroundColor = backgroundColor,
-            duration = duration,
-            leftIcon = leftIcon
-        )
-    }
+    private fun createStatusMessage(status: NetworkState?): ToastUI? =
+        status?.let {
+            when (it.ordinal) {
+                NetworkState.HAS_CONNECTION.ordinal -> null
+                else -> noConnectionStatus
+            }
+        }
 
     fun getNetworkStateMessage(currentNetworkState: NetworkState): SpannableStringBuilder {
         val spannableStringBuilder = SpannableStringBuilder()

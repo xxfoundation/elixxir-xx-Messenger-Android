@@ -4,6 +4,7 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -16,12 +17,14 @@ import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.NavMainDirections
@@ -57,6 +60,7 @@ import kotlinx.android.synthetic.main.component_menu.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 private val Bundle.isPrivateMessage: Boolean
@@ -390,15 +394,16 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
 //                NetworkState.NETWORK_STOPPED -> showDisconnectedMessage()
 //            }
 //        }
+        networkViewModel.networkStatus.observe(this) { statusMessage ->
+            dismissNetworkStatusMessage()
+            statusMessage?.let { showCustomToast(it) }
         }
     }
 
-    private fun showDisconnectedMessage() {
-        // Network not healthy.
-    }
-
-    private fun showConnectingMessage() {
-        toas
+    private fun dismissNetworkStatusMessage() {
+        for (status in cachedNetworkStatus) {
+            dismissIndefiniteToast(status)
+        }
     }
 
     private fun openChat(contact: Contact) {
@@ -784,7 +789,27 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         }
     }
 
+    /**
+     * Cache indefinite toasts, so they may be looked up for dismissal
+     */
+    private val indefiniteToasts: MutableMap<ToastUI, Snackbar> = mutableMapOf()
+    private val cachedNetworkStatus: MutableList<ToastUI> = mutableListOf()
+
     override fun showCustomToast(ui: ToastUI) {
+        createCustomToast(ui).apply {
+            if (ui.duration == LENGTH_INDEFINITE) indefiniteToasts[ui] = this
+            show()
+        }
+    }
+
+    override fun dismissIndefiniteToast(ui: ToastUI) {
+        indefiniteToasts[ui]?.run {
+            indefiniteToasts.remove(ui)
+            dismiss()
+        }
+    }
+
+    private fun createCustomToast(ui: ToastUI): Snackbar {
         val snackBar = Snackbar.make(findViewById(R.id.customToastView), "", ui.duration)
         val binding = ComponentCustomToastBinding.inflate(layoutInflater)
         binding.ui = ui
@@ -797,7 +822,8 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             params.gravity = Gravity.TOP
             layoutParams = params
         }
+
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-        snackBar.show()
+        return snackBar
     }
 }
