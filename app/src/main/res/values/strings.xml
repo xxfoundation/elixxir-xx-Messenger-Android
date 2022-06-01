@@ -592,4 +592,5 @@
     <string name="settings_notifications_private_msg_description">Show details in private message notifications.</string>
     <string name="settings_notifications_group_msg_title">Group message notifications</string>
     <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
+    <string name="network_state_connecting">Connecting to xx network...</string>
 </resources>

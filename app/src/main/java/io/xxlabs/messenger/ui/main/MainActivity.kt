@@ -29,6 +29,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
+import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
@@ -134,8 +135,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
 
         super.onStop()
     }
-
-    val richNotificationIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -384,8 +383,22 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
                 contactsViewModel.onNavigateHandled()
             }
         }.launchIn(lifecycleScope)
+
+        networkViewModel.networkState.observe(this) { state ->
+            when (state) {
+                NetworkState.NO_CONNECTION -> showConnectingMessage()
+                NetworkState.NETWORK_STOPPED -> showDisconnectedMessage()
+            }
+        }
     }
 
+    private fun showDisconnectedMessage() {
+        // Network not healthy.
+    }
+
+    private fun showConnectingMessage() {
+        toas
+    }
 
     private fun openChat(contact: Contact) {
         val bundle = bundleOf("contact_id" to contact.userId)
@@ -593,11 +606,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
                 networkViewModel.setInternetState(false)
             },
             onChanged = {
-//                if (mainViewModel.wasLoggedIn) {
-//                    networkViewModel.tryRestartNetworkFollower()
-//                } else {
-//                    Timber.v("[MAIN] Not logged in before")
-//                }
+                if (mainViewModel.wasLoggedIn) {
+                    networkViewModel.tryRestartNetworkFollower()
+                } else {
+                    Timber.v("[MAIN] Not logged in before")
+                }
             },
         )
     }

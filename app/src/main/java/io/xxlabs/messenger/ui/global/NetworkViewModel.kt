@@ -4,12 +4,15 @@ import android.app.Application
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import bindings.NetworkHealthCallback
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.data.datatype.Environment
@@ -17,7 +20,9 @@ import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.isMockVersion
+import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -31,6 +36,13 @@ class NetworkViewModel @Inject constructor(
     val daoRepo: DaoRepository,
     val schedulers: SchedulerProvider
 ) : ViewModel() {
+
+    /**
+     * Exposes the network status as user-friendly toasts.
+     */
+    val networkStatus: LiveData<ToastUI?> by ::_networkStatus
+    private val _networkStatus = MutableLiveData<ToastUI?>(null)
+
     var subscriptions = CompositeDisposable()
     var networkState = MutableLiveData<NetworkState>()
     var userDiscoveryStatus = MutableLiveData<Boolean>()
@@ -114,6 +126,30 @@ class NetworkViewModel @Inject constructor(
             !isNetworkHealthy -> NetworkState.NETWORK_STOPPED
             else -> NetworkState.NO_CONNECTION
         }
+
+        _networkStatus.value = createStatusMessage(networkState.value)
+    }
+
+    private val NetworkState.statusMessage: String?
+        get() {
+            return when (ordinal) {
+                NetworkState.HAS_CONNECTION.ordinal -> null
+                else -> appContext().getString(R.string.network_state_connecting)
+            }
+        }
+
+    private fun createStatusMessage(status: NetworkState?): ToastUI? {
+        val body = status?.statusMessage ?: return null
+        val backgroundColor = R.color.accent_safe
+        val duration = LENGTH_INDEFINITE
+        val leftIcon = R.drawable.ic_variant_outline_privacy_tip
+
+        return ToastUI.create(
+            body = body,
+            backgroundColor = backgroundColor,
+            duration = duration,
+            leftIcon = leftIcon
+        )
     }
 
     fun getNetworkStateMessage(currentNetworkState: NetworkState): SpannableStringBuilder {
