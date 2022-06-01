@@ -2,43 +2,47 @@ package io.xxlabs.messenger.ui.main.chats.newConnections
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.ListItemNewConnectionBinding
 
-class NewConnectionsAdapter : RecyclerView.Adapter<NewConnectionsAdapter.NewConnectionViewHolder>() {
-
-    private var newConnections = listOf<NewConnectionUI>()
-
-    class NewConnectionViewHolder(
-        private val binding: ListItemNewConnectionBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
-
-        fun onBind(ui: NewConnectionUI) {
-            binding.ui = ui
-        }
-
-        companion object {
-            fun create(parent: ViewGroup): NewConnectionViewHolder {
-                val binding = ListItemNewConnectionBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
-                )
-                return NewConnectionViewHolder(binding)
-            }
-        }
-    }
-
-    fun submitList(newConnections: List<NewConnectionUI>) {
-        this.newConnections = newConnections
-        notifyDataSetChanged()
-    }
+class NewConnectionsAdapter :
+    ListAdapter<NewConnectionUI, NewConnectionViewHolder>(NewConnectionDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NewConnectionViewHolder =
         NewConnectionViewHolder.create(parent)
 
     override fun onBindViewHolder(holder: NewConnectionViewHolder, position: Int) =
-        holder.onBind(newConnections[position])
+        holder.onBind(currentList[position])
+}
 
-    override fun getItemCount(): Int = newConnections.size
+class NewConnectionViewHolder(
+    private val binding: ListItemNewConnectionBinding
+) : RecyclerView.ViewHolder(binding.root) {
+
+    fun onBind(ui: NewConnectionUI) {
+        binding.ui = ui
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): NewConnectionViewHolder {
+            val binding = ListItemNewConnectionBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return NewConnectionViewHolder(binding)
+        }
+    }
+}
+
+class NewConnectionDiffCallback : DiffUtil.ItemCallback<NewConnectionUI>() {
+    override fun areItemsTheSame(oldItem: NewConnectionUI, newItem: NewConnectionUI): Boolean =
+        oldItem.contact.id == newItem.contact.id
+
+    override fun areContentsTheSame(oldItem: NewConnectionUI, newItem: NewConnectionUI): Boolean =
+        oldItem.contact.id == newItem.contact.id
 }
