@@ -318,6 +318,7 @@ class ContactsViewModel @Inject constructor(
                     },
                     onSuccess = {
                         Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
+                        saveRequest(contact)
                         verifyNewRequest(contact)
                     })
         )
