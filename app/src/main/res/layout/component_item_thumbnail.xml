@@ -34,14 +34,23 @@
             tools:visibility="gone"/>
 
         <ImageView
-            android:id="@+id/thumbnailImage"
+            android:id="@+id/thumbnailIcon"
             android:layout_width="@dimen/spacing_24"
             android:layout_height="@dimen/spacing_24"
             android:layout_gravity="center"
             android:adjustViewBounds="true"
-            android:visibility="@{ui.itemPhoto != null || ui.itemIconRes != null}"
-            app:thumbnailBitmap="@{ui.itemPhoto}"
+            android:visibility="@{ui.itemIconRes != null}"
             app:thumbnailIcon="@{ui.itemIconRes}"
             tools:srcCompat="@drawable/ic_group_chat"/>
+
+        <ImageView
+            android:id="@+id/thumbnailImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:adjustViewBounds="true"
+            android:visibility="@{ui.itemPhoto != null}"
+            app:thumbnailBitmap="@{ui.itemPhoto}"
+            tools:srcCompat="@tools:sample/avatars" />
     </androidx.cardview.widget.CardView>
 </layout>
