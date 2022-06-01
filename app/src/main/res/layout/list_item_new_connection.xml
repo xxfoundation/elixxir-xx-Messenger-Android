@@ -55,10 +55,10 @@
             android:layout_marginTop="4dp"
             android:textSize="13sp"
             android:onClick="@{() -> ui.onNewConnectionClicked(ui.contact)}"
+            android:gravity="center"
             app:fontWeight="600"
             app:lineHeight="17sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/contactProfilePhoto"
             tools:text="bartender007" />
