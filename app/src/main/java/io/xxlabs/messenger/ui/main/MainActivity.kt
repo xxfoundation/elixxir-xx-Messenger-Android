@@ -384,11 +384,12 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             }
         }.launchIn(lifecycleScope)
 
-        networkViewModel.networkState.observe(this) { state ->
-            when (state) {
-                NetworkState.NO_CONNECTION -> showConnectingMessage()
-                NetworkState.NETWORK_STOPPED -> showDisconnectedMessage()
-            }
+//        networkViewModel.networkState.observe(this) { state ->
+//            when (state) {
+//                NetworkState.NO_CONNECTION -> showConnectingMessage()
+//                NetworkState.NETWORK_STOPPED -> showDisconnectedMessage()
+//            }
+//        }
         }
     }
 

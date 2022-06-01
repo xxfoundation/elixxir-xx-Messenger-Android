@@ -419,13 +419,13 @@ class UdSearchFragment : BaseFragment() {
     }
 
     private fun watchForChanges() {
-        networkViewModel.networkState.observe(viewLifecycleOwner, { networkState ->
-            if (networkState != NetworkState.HAS_CONNECTION) {
-                snackBar.show()
-            } else {
-                snackBar.dismiss()
-            }
-        })
+//        networkViewModel.networkState.observe(viewLifecycleOwner, { networkState ->
+//            if (networkState != NetworkState.HAS_CONNECTION) {
+//                snackBar.show()
+//            } else {
+//                snackBar.dismiss()
+//            }
+//        })
 
         networkViewModel.userDiscoveryStatus.observe(
             viewLifecycleOwner,

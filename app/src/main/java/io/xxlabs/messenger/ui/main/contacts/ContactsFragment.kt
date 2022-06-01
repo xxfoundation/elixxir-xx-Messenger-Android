@@ -352,18 +352,18 @@ class ContactsFragment : BaseFragment() {
             checkListIsEmpty()
         })
 
-        networkViewModel.networkState.observe(
-            viewLifecycleOwner,
-            Observer { networkState ->
-                Timber.v("Network State: $networkState")
-                if (networkState == NetworkState.HAS_CONNECTION) {
-                    networkStatusLayout?.visibility = View.GONE
-                } else {
-                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
-                    networkStatusLayout?.visibility = View.VISIBLE
-                    networkStatusText?.text = bannerMsg
-                }
-            })
+//        networkViewModel.networkState.observe(
+//            viewLifecycleOwner,
+//            Observer { networkState ->
+//                Timber.v("Network State: $networkState")
+//                if (networkState == NetworkState.HAS_CONNECTION) {
+//                    networkStatusLayout?.visibility = View.GONE
+//                } else {
+//                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
+//                    networkStatusLayout?.visibility = View.VISIBLE
+//                    networkStatusText?.text = bannerMsg
+//                }
+//            })
 
         contactsViewModel.newGroupRequestSent.observe(viewLifecycleOwner, { result ->
             when (result) {

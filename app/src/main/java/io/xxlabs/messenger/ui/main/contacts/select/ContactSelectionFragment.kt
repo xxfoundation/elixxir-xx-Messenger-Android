@@ -155,18 +155,18 @@ class ContactSelectionFragment : BaseFragment() {
             checkListIsEmpty()
         }
 
-        networkViewModel.networkState.observe(
-            viewLifecycleOwner,
-            Observer<NetworkState> { networkState ->
-                Timber.v("Network State: $networkState")
-                if (networkState == NetworkState.HAS_CONNECTION) {
-                    networkStatusLayout?.visibility = View.GONE
-                } else {
-                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
-                    networkStatusLayout?.visibility = View.VISIBLE
-                    networkStatusText?.text = bannerMsg
-                }
-            })
+//        networkViewModel.networkState.observe(
+//            viewLifecycleOwner,
+//            Observer<NetworkState> { networkState ->
+//                Timber.v("Network State: $networkState")
+//                if (networkState == NetworkState.HAS_CONNECTION) {
+//                    networkStatusLayout?.visibility = View.GONE
+//                } else {
+//                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
+//                    networkStatusLayout?.visibility = View.VISIBLE
+//                    networkStatusText?.text = bannerMsg
+//                }
+//            })
         Timber.v("Successful listening to banner updates")
     }
 
