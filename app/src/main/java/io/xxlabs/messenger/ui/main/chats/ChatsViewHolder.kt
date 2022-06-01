@@ -6,45 +6,35 @@ import android.graphics.Typeface
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.style.BackgroundColorSpan
-import android.view.MotionEvent
+import android.view.LayoutInflater
 import android.view.View
-import android.widget.CheckBox
-import android.widget.ImageView
+import android.view.ViewGroup
 import android.widget.TextView
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
-import io.xxlabs.messenger.support.selection.ItemDetailsLookup
-import io.xxlabs.messenger.support.util.Utils
+import io.xxlabs.messenger.databinding.ListItemChatBinding
+import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.view.BitmapResolver
-import io.xxlabs.messenger.ui.main.chat.loadImage
 import timber.log.Timber
 import java.util.regex.Pattern
 
 class ChatsViewHolder(
-    private val parent: View,
-    private val contactUsername: TextView,
-    private val conversationMsgPreview: TextView,
-    private val conversationTimeStamp: TextView,
-    private val chatUnreadCount: CardView,
-    private val contactPhoto: ImageView,
-    private val contactPhotoDefault: TextView,
-    private val defaultPhotoBg: CardView,
-    private val checkbox: CheckBox
-) : RecyclerView.ViewHolder(parent), View.OnClickListener {
-    var previousPhoto: Bitmap? = null
+    private val binding: ListItemChatBinding
+) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+    private val defaultItemThumbnail: ItemThumbnail by lazy {
+        object : ItemThumbnail {
+            override val itemPhoto: Bitmap? = null
+            override val itemIconRes: Int = R.drawable.ic_contact_light
+            override val itemInitials: String? = null
+        }
+    }
+
     var currentObj: Any? = null
     var bindingsId: ByteArray = byteArrayOf()
     var rowId: Long = -1
@@ -63,7 +53,7 @@ class ChatsViewHolder(
                     "group_id" to (group?.groupId ?: bindingsId)
                 )
 
-                Navigation.findNavController(parent.context as Activity, R.id.mainNavHost)
+                Navigation.findNavController(itemView.context as Activity, R.id.mainNavHost)
                     .navigate(R.id.action_global_groups_chat, bundle)
             } else if (currentObj is ContactData) {
                 val contact = currentObj as ContactData?
@@ -72,7 +62,7 @@ class ChatsViewHolder(
                     "contact_id" to (contact?.userId ?: bindingsId)
                 )
 
-                Navigation.findNavController(parent.context as Activity, R.id.mainNavHost)
+                Navigation.findNavController(itemView.context as Activity, R.id.mainNavHost)
                     .navigate(R.id.action_global_chat, bundle)
             }
         }
@@ -82,11 +72,13 @@ class ChatsViewHolder(
      * @param text
      */
     fun setDateText(text: String) {
-        try {
-            conversationTimeStamp.text = text
-        } catch (err: Exception) {
-            err.localizedMessage
-            conversationTimeStamp.visibility = View.GONE
+        binding.chatTimestamp.apply {
+            try {
+                this.text = text
+            } catch (err: Exception) {
+                err.localizedMessage
+                visibility = View.GONE
+            }
         }
     }
 
@@ -94,7 +86,7 @@ class ChatsViewHolder(
      * @param text
      */
     fun setPreview(text: String) {
-        conversationMsgPreview.text = text
+        binding.chatMsgPreview.text = text
     }
 
     fun setPreviewHighlight(text: String, lastSearch: String) {
@@ -115,18 +107,18 @@ class ChatsViewHolder(
             )
         }
 
-        conversationMsgPreview.text = stringBuilder
+        binding.chatMsgPreview.text = stringBuilder
     }
 
     fun setBold(isNotViewed: Boolean) {
         if (isNotViewed) {
-            conversationTimeStamp.setTypeface(null, Typeface.BOLD)
-            contactUsername.setTypeface(null, Typeface.BOLD)
-            conversationMsgPreview.setTypeface(null, Typeface.BOLD)
+            binding.chatTimestamp.setTypeface(null, Typeface.BOLD)
+            binding.chatUsername.setTypeface(null, Typeface.BOLD)
+            binding.chatMsgPreview.setTypeface(null, Typeface.BOLD)
         } else {
-            contactUsername.setTypeface(null, Typeface.NORMAL)
-            conversationTimeStamp.setTypeface(null, Typeface.NORMAL)
-            conversationMsgPreview.setTypeface(null, Typeface.NORMAL)
+            binding.chatTimestamp.setTypeface(null, Typeface.NORMAL)
+            binding.chatUsername.setTypeface(null, Typeface.NORMAL)
+            binding.chatMsgPreview.setTypeface(null, Typeface.NORMAL)
         }
     }
 
@@ -134,7 +126,7 @@ class ChatsViewHolder(
         currentObj = newContact
         rowId = newContact.id
         bindingsId = newContact.userId
-        contactUsername.text = newContact.displayName
+        binding.chatUsername.text = newContact.displayName
         setPhoto(newContact)
     }
 
@@ -142,73 +134,41 @@ class ChatsViewHolder(
         currentObj = newGroup
         rowId = newGroup.id + 10000
         bindingsId = newGroup.groupId
-        contactUsername.text = newGroup.name
+        binding.chatUsername.text = newGroup.name
 
-        clearCurrentPhoto()
-        contactPhoto.loadImage(R.drawable.ic_group_chat)
+        setThumbnail(groupData = newGroup)
     }
 
-    private fun setPhoto(contact: ContactData) {
-        if (contact.photo == null) {
-            setDefaultAvatar(contact.initials)
-        } else {
-            val bitmap = BitmapResolver.getBitmap(contact.photo!!) ?: return
+    private fun setThumbnail(contactData: ContactData? = null, groupData: GroupData? = null) {
+        val ui = contactData?.let { contact ->
+            object : ItemThumbnail {
+                override val itemPhoto: Bitmap? = resolveBitmap(contact.photo)
+                override val itemIconRes: Int? = null
+                override val itemInitials: String = contact.initials
 
-            if (bitmap.sameAs(previousPhoto)) {
-                return
             }
+        } ?: groupData?.let {
+            object : ItemThumbnail {
+                override val itemPhoto: Bitmap? = null
+                override val itemIconRes: Int = R.drawable.ic_group_chat
+                override val itemInitials: String? = null
+            }
+        } ?: defaultItemThumbnail
+        binding.ui = ui
+    }
 
-            val resizedBitmap = BitmapResolver.getResizedBitmap(bitmap, Utils.dpToPx(42))
-            clearCurrentPhoto()
-            hideDefaultAvatar()
-
-            Glide.with(itemView.context)
-                .asBitmap()
-                .diskCacheStrategy(DiskCacheStrategy.RESOURCE)
-                .load(resizedBitmap)
-                .listener(object : RequestListener<Bitmap> {
-                    override fun onResourceReady(
-                        resource: Bitmap?,
-                        model: Any?,
-                        target: Target<Bitmap>?,
-                        dataSource: DataSource?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        previousPhoto = bitmap
-                        contactPhoto.setImageBitmap(resource)
-                        return true
-                    }
-
-                    override fun onLoadFailed(
-                        e: GlideException?,
-                        model: Any?,
-                        target: Target<Bitmap>?,
-                        isFirstResource: Boolean
-                    ): Boolean {
-                        setDefaultAvatar(contact.initials)
-                        return false
-                    }
-                }).submit()
+    private fun resolveBitmap(data: ByteArray?): Bitmap? {
+        return data?.let {
+            BitmapResolver.getBitmap(data)
         }
     }
 
-    private fun clearCurrentPhoto() {
-        Glide.with(itemView.context).clear(contactPhoto)
-        contactPhoto.setImageBitmap(null)
-    }
-
-    fun hideDefaultAvatar() {
-        contactPhotoDefault.visibility = View.INVISIBLE
-    }
-
-    private fun setDefaultAvatar(initials: String) {
-        contactPhoto.visibility = View.GONE
-        contactPhotoDefault.visibility = View.VISIBLE
-        contactPhotoDefault.text = initials
+    private fun setPhoto(contact: ContactData) {
+        setThumbnail(contact)
     }
 
     fun setUnreadCount(unreadCount: Int, isLastSenderContact: Boolean) {
-        chatUnreadCount.findViewById<TextView>(R.id.chatUnreadCount)?.apply {
+        binding.chatUnreadCount.findViewById<TextView>(R.id.chatUnreadCount)?.apply {
             if (isLastSenderContact && unreadCount > 0) {
                 visibility = View.VISIBLE
                 text = unreadCount.toString()
@@ -218,17 +178,8 @@ class ChatsViewHolder(
         }
     }
 
-    fun getItemDetails(): ItemDetailsLookup.ItemDetails<Long> =
-        object : ItemDetailsLookup.ItemDetails<Long>() {
-            override val position = bindingAdapterPosition
-            override val selectionKey: Long = rowId
-            override fun inSelectionHotspot(e: MotionEvent): Boolean {
-                return selectionMode == SelectionMode.CHAT_SELECTION
-            }
-        }
-
     fun isSelected(isChecked: Boolean = false) {
-        checkbox.isChecked = isChecked
+        binding.chatCheckbox.isChecked = isChecked
     }
 
     fun setSelectionOptions(selectionMode: SelectionMode) {
@@ -239,7 +190,7 @@ class ChatsViewHolder(
                     R.color.neutral_off_white
                 )
             )
-            checkbox.visibility = View.VISIBLE
+            binding.chatCheckbox.visibility = View.VISIBLE
         } else {
             itemView.setBackgroundColor(
                 ContextCompat.getColor(
@@ -247,38 +198,19 @@ class ChatsViewHolder(
                     R.color.transparent
                 )
             )
-            checkbox.visibility = View.GONE
+            binding.chatCheckbox.visibility = View.GONE
         }
         this.selectionMode = selectionMode
     }
 
     companion object {
-        /**
-         * @param parent
-         * @return ConversationsViewHolder
-         */
-        fun newInstance(parent: View): ChatsViewHolder {
-            val nameTextView = parent.findViewById(R.id.chatUsername) as TextView
-            val companyTextView = parent.findViewById(R.id.chatMsgPreview) as TextView
-            val dateTextView = parent.findViewById(R.id.chatTimestamp) as TextView
-            val chatUnreadCount =
-                parent.findViewById(R.id.chatUnreadLayout) as CardView
-            val avatarPhoto = parent.findViewById(R.id.chatContactPhoto) as ImageView
-            val defaultPhoto = parent.findViewById(R.id.chatContactPhotoDefault) as TextView
-            val defaultPhotoBg = parent.findViewById(R.id.chatContactPhotoBg) as CardView
-            val checkbox = parent.findViewById(R.id.chatCheckbox) as CheckBox
-
-            return ChatsViewHolder(
+        fun create(parent: ViewGroup): ChatsViewHolder {
+            val binding = ListItemChatBinding.inflate(
+                LayoutInflater.from(parent.context),
                 parent,
-                nameTextView,
-                companyTextView,
-                dateTextView,
-                chatUnreadCount,
-                avatarPhoto,
-                defaultPhoto,
-                defaultPhotoBg,
-                checkbox
+                false
             )
+            return ChatsViewHolder(binding)
         }
     }
 }

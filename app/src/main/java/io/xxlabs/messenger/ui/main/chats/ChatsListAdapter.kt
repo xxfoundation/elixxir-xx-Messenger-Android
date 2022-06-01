@@ -81,11 +81,7 @@ class ChatsListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
         return if (viewType == 0) {
-            val view = LayoutInflater.from(context).inflate(
-                R.layout.list_item_chat, parent,
-                false
-            )
-            ChatsViewHolder.newInstance(view)
+            ChatsViewHolder.create(parent)
         } else {
             val view = LayoutInflater.from(context).inflate(
                 R.layout.list_item_chat_contact, parent,

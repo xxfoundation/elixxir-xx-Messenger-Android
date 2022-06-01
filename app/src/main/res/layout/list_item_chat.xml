@@ -1,127 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/spacing_12"
-    android:background="@color/neutral_white"
-    android:orientation="vertical"
-    android:paddingTop="@dimen/spacing_12"
-    android:paddingBottom="@dimen/spacing_12">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.AppCompatCheckBox
-        android:id="@+id/chatCheckbox"
-        android:layout_width="wrap_content"
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_16"
-        android:button="@drawable/bg_checkbox_circular"
-        android:clickable="false"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/chatContactPhotoBg"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chatContactPhotoBg" />
+        android:layout_marginTop="@dimen/spacing_12"
+        android:background="@color/neutral_white"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/chatContactPhotoBg"
-        android:layout_width="@dimen/spacing_42"
-        android:layout_height="@dimen/spacing_42"
-        android:layout_marginStart="@dimen/spacing_24"
-        android:gravity="center"
-        android:backgroundTint="@color/brand_default"
-        app:layout_constraintStart_toEndOf="@id/chatCheckbox"
-        app:layout_constraintTop_toTopOf="@id/chatUsername"
-        app:layout_goneMarginStart="@dimen/spacing_16"
-        app:cardCornerRadius="14dp"
-        tools:background="@drawable/component_avatar_semi_rounded">
-
-        <TextView
-            android:id="@+id/chatContactPhotoDefault"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true"
-            android:gravity="center"
-            style="@style/XxTextStyle.Bold"
-            android:textColor="@color/neutral_white"
-            tools:text="BP" />
-
-        <ImageView
-            android:id="@+id/chatContactPhoto"
-            android:layout_width="@dimen/spacing_24"
-            android:layout_height="@dimen/spacing_24"
-            android:layout_gravity="center"
-            android:adjustViewBounds="true" />
-    </androidx.cardview.widget.CardView>
-
-    <TextView
-        android:id="@+id/chatUsername"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_20"
-        android:layout_marginEnd="@dimen/spacing_10"
-        android:ellipsize="marquee"
-        android:lines="1"
-        android:textColor="@color/neutral_active"
-        android:textSize="16sp"
-        app:fontWeight="600"
-        app:lineHeight="21sp"
-        android:letterSpacing="0.04"
-        app:layout_constraintEnd_toStartOf="@id/chatTimestamp"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/chatContactPhotoBg"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="\@username" />
-
-    <TextView
-        android:id="@+id/chatMsgPreview"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_20"
-        android:layout_marginTop="2dp"
-        android:layout_marginEnd="@dimen/spacing_12"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:textColor="@color/neutral_secondary"
-        android:textSize="14sp"
-        app:fontWeight="400"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/chatUnreadLayout"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@id/chatContactPhotoBg"
-        app:layout_constraintTop_toBottomOf="@id/chatUsername"
-        app:layout_constraintVertical_bias="0.083"
-        app:lineHeight="20sp"
-        tools:text="Hey Have you been to the store recently I really liked how every..." />
-
-    <TextView
-        android:id="@+id/chatTimestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/spacing_16"
-        android:textAlignment="viewEnd"
-        android:textColor="@color/neutral_weak"
-        android:textSize="@dimen/text_12"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/chatUsername"
-        tools:text="12:30pm" />
-
-    <androidx.cardview.widget.CardView
-        android:id="@+id/chatUnreadLayout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="@color/neutral_disabled"
-        app:cardCornerRadius="18dp"
-        app:layout_constraintBottom_toBottomOf="@id/chatMsgPreview"
-        app:layout_constraintEnd_toEndOf="@id/chatTimestamp"
-        app:layout_constraintTop_toTopOf="@id/chatMsgPreview">
-
-        <TextView
-            android:id="@+id/chatUnreadCount"
-            style="@style/notification_count_text"
-            android:background="@drawable/component_semi_circular_bg"
-            android:backgroundTint="@color/neutral_disabled"
+        <androidx.appcompat.widget.AppCompatCheckBox
+            android:id="@+id/chatCheckbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="99"/>
-    </androidx.cardview.widget.CardView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginStart="@dimen/spacing_16"
+            android:button="@drawable/bg_checkbox_circular"
+            android:clickable="false"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="@id/contactProfilePhoto"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/contactProfilePhoto" />
+
+        <include
+            layout="@layout/component_item_thumbnail"
+            android:id="@+id/contactProfilePhoto"
+            android:layout_height="42dp"
+            android:layout_width="42dp"
+            app:ui="@{ui}"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toEndOf="@id/chatCheckbox"
+            app:layout_constraintTop_toTopOf="@id/chatUsername"
+            app:layout_goneMarginStart="@dimen/spacing_16" />
+
+        <TextView
+            android:id="@+id/chatUsername"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_10"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:textColor="@color/neutral_active"
+            android:textSize="16sp"
+            app:fontWeight="600"
+            app:lineHeight="21sp"
+            android:letterSpacing="0.04"
+            app:layout_constraintEnd_toStartOf="@id/chatTimestamp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/contactProfilePhoto"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="\@username" />
+
+        <TextView
+            android:id="@+id/chatMsgPreview"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/spacing_12"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/neutral_secondary"
+            android:textSize="14sp"
+            app:fontWeight="400"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/chatUnreadLayout"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/contactProfilePhoto"
+            app:layout_constraintTop_toBottomOf="@id/chatUsername"
+            app:layout_constraintVertical_bias="0.083"
+            app:lineHeight="20sp"
+            tools:text="Hey Have you been to the store recently I really liked how every..." />
+
+        <TextView
+            android:id="@+id/chatTimestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/chatUsername"
+            tools:text="12:30pm" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/chatUnreadLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/neutral_disabled"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/chatMsgPreview"
+            app:layout_constraintEnd_toEndOf="@id/chatTimestamp"
+            app:layout_constraintTop_toTopOf="@id/chatMsgPreview">
+
+            <TextView
+                android:id="@+id/chatUnreadCount"
+                style="@style/notification_count_text"
+                android:background="@drawable/component_semi_circular_bg"
+                android:backgroundTint="@color/neutral_disabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="99" />
+        </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
