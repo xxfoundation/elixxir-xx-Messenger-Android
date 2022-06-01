@@ -49,7 +49,10 @@ class DaoRepository @Inject constructor(
     }
 
     fun insertMessage(message: PrivateMessageData): Single<Long> {
-        return messagesDao.insertMessage(message)
+        return messagesDao.insertMessage(message).also {
+            val senderId = message.sender.toBase64String()
+            deleteNewConnection(userId = senderId)
+        }
     }
 
     fun updateMessage(msg: PrivateMessageData): Single<Int> {
