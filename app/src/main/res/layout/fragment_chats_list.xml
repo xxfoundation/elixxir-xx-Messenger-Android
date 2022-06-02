@@ -106,8 +106,8 @@
 
         <ImageView
             android:id="@+id/chats_list_create_group"
-            android:layout_width="@dimen/spacing_34"
-            android:layout_height="@dimen/spacing_34"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/spacing_10"
             android:contentDescription="chats.btn.search.ud"
             android:padding="@dimen/spacing_7"
@@ -122,10 +122,10 @@
 
         <ImageView
             android:id="@+id/chats_list_add_contact"
-            android:layout_width="@dimen/spacing_34"
-            android:layout_height="@dimen/spacing_34"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:contentDescription="chats.btn.select.conversation"
-            android:padding="@dimen/spacing_8"
+            android:padding="@dimen/spacing_7"
             android:src="@drawable/ic_add_contact"
             android:onClick="@{() -> ui.onAddContactClicked()}"
             app:layout_constraintBottom_toBottomOf="@id/chatsTitle"
