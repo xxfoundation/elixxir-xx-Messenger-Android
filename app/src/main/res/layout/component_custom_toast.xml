@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@{ui.backgroundColor}"
-        android:layout_margin="16dp"
+        android:layout_margin="24dp"
         app:cardCornerRadius="16dp"
         app:cardElevation="5dp"
         tools:backgroundTint="@color/modal_overlay">
