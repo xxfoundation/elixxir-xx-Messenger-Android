@@ -79,9 +79,18 @@ class GroupRequestsRepository @Inject constructor(
     }
 
     override fun send(request: GroupInvitation) {
+        // TODO: Move group creation logic from MainViewModel to this class
+        retry(request)
+    }
+
+    override fun retry(request: GroupInvitation) {
         scope.launch {
             if (request.requestStatus == RequestStatus.CONFIRM_FAIL) accept(request)
         }
+    }
+
+    override fun verify(request: GroupInvitation) {
+        // Group invitations don't have verification at the moment.
     }
 
     override fun resetResentRequests() {

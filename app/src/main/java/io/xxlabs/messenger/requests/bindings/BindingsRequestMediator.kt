@@ -10,7 +10,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class BindingsRequestMediator @Inject constructor(
-    private val repo: BaseRepository
+    private val repo: BaseRepository,
+    private val requestVerifier: RequestVerifier
 ): ContactRequestsService {
 
     override suspend fun acceptContactRequest(request: ContactRequest): Boolean =
@@ -59,6 +60,9 @@ class BindingsRequestMediator @Inject constructor(
         }
         return result
     }
+
+    override suspend fun verifyContactRequest(request: ContactRequest): VerificationResult =
+       requestVerifier.verifyRequest(request)
 
     override fun resetSession(contact: Contact): Boolean {
         var result = false
