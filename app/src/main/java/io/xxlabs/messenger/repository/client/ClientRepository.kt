@@ -28,6 +28,7 @@ import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferManager
@@ -42,6 +43,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
 import javax.inject.Inject
+import bindings.Contact as ContactBindings
 
 class ClientRepository @Inject constructor(
     val schedulers: SchedulerProvider,
@@ -655,7 +657,7 @@ class ClientRepository @Inject constructor(
     }
 
     override fun unmarshallContact(rawData: ByteArray): ContactWrapperBase {
-        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as Contact)
+        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as ContactBindings)
     }
 
     override fun getContactWrapper(contact: ByteArray): ContactWrapperBase {
@@ -962,7 +964,7 @@ class ClientRepository @Inject constructor(
     override lateinit var fileRepository: FileTransferRepository
 
     override fun verifyOwnership(
-        receivedContact: ContactData,
+        receivedContact: Contact,
         verifiedContact: ContactWrapperBase
     ): Boolean {
         return receivedContact.marshaled?.let{

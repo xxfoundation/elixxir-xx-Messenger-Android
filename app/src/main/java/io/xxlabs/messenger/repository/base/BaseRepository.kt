@@ -111,7 +111,7 @@ interface BaseRepository {
     fun getContactWrapper(contact: ByteArray): ContactWrapperBase
     fun requestAuthenticatedChannel(marshalledRecipient: ByteArray): Single<Long>
     fun confirmAuthenticatedChannel(data: ByteArray): Single<Long>
-    fun verifyOwnership(receivedContact: ContactData, verifiedContact: ContactWrapperBase): Boolean
+    fun verifyOwnership(receivedContact: Contact, verifiedContact: ContactWrapperBase): Boolean
 
     //  Groups ===============================================================================
 

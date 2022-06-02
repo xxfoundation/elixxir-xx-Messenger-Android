@@ -23,6 +23,7 @@ import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
@@ -614,7 +615,7 @@ class ClientMockRepository(
     }
 
     override fun verifyOwnership(
-        receivedContact: ContactData,
+        receivedContact: Contact,
         verifiedContact: ContactWrapperBase
     ): Boolean = true
 
