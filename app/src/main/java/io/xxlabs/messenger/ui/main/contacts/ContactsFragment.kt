@@ -83,7 +83,7 @@ class ContactsFragment : BaseFragment() {
             }
         }
     }
-    
+
     private fun observeUI() {
         connectionsViewModel.connectionsList.observe(viewLifecycleOwner) { connections ->
             connectionsAdapter.submitList(connections)
