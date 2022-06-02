@@ -3,6 +3,8 @@ package io.xxlabs.messenger.ui.main.contacts.list
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.dummy.randomString
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 sealed class Connection {
     abstract val listener: ConnectionListener
@@ -33,6 +35,10 @@ fun dummyContacts(count: Int = 20): List<ContactItem> {
         dummyList.add(dummyContactItem(10) )
     }
     return dummyList.sortedBy { it.name.lowercase() }
+}
+
+val dummyContactsFlow: Flow<List<ContactItem>> = flow {
+    emit(dummyContacts())
 }
 
 private fun dummyContactItem(maxNameLength: Int): ContactItem {

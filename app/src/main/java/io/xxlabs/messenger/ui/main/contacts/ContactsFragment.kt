@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.ui.main.contacts
 
 import android.os.Bundle
+import android.text.method.Touch.scrollTo
 import android.view.LayoutInflater
 import android.view.MotionEvent.*
 import android.view.View
@@ -19,6 +20,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
+import timber.log.Timber
 import javax.inject.Inject
 
 class ContactsFragment : BaseFragment() {
@@ -89,8 +91,8 @@ class ContactsFragment : BaseFragment() {
             connectionsAdapter.submitList(connections)
         }
 
-        connectionsViewModel.scrollToPosition.observe(viewLifecycleOwner) {
-
+        connectionsViewModel.scrollToPosition.observe(viewLifecycleOwner) { position ->
+            position?.let { scrollToConnectionListPosition(it) }
         }
 
         connectionsViewModel.navigateToChat.observe(viewLifecycleOwner) { contact ->
@@ -126,6 +128,14 @@ class ContactsFragment : BaseFragment() {
                 findNavController().navigateUp()
                 connectionsViewModel.onNavigateUpHandled()
             }
+        }
+    }
+
+    private fun scrollToConnectionListPosition(position: Int) {
+        try {
+            binding.connectionsList.smoothScrollToPosition(position)
+        } catch (e: Exception) {
+            Timber.d("An exception was thrown: ${e.message}")
         }
     }
 

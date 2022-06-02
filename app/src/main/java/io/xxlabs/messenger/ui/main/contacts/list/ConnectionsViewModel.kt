@@ -37,15 +37,28 @@ class ConnectionsViewModel @Inject constructor(
             GroupItem(group, this, group.thumbnail)
         }
     }
-
+    private val listPositionMap = mutableMapOf<Char, Int>()
     private val connectionsFlow = contactItemFlow.combine(groupItemFlow) { contacts, groups ->
-        (contacts + groups).sortedBy { it.name }
+        (contacts + groups).sortedBy { it.name }.apply {
+            createLetterIndex(map { it.name })
+        }
+    }
+
+    private fun createLetterIndex(names: List<String>) {
+        names.forEachIndexed { index, name ->
+            listPositionMap.putIfAbsent(name[0], index)
+        }
     }
 
     val contactItems: LiveData<List<ContactItem>> = contactItemFlow.asLiveData()
 //    override val connectionsList: LiveData<List<Connection>> = connectionsFlow.asLiveData()
+//    override val connectionsList: LiveData<List<Connection>> = MutableLiveData(dummyContacts())
 
-    override val connectionsList: LiveData<List<Connection>> = MutableLiveData(dummyContacts())
+    override val connectionsList: LiveData<List<Connection>> = dummyContactsFlow.map { contacts ->
+        contacts.apply {
+            createLetterIndex(map { it.name })
+        }
+    }.asLiveData()
 
     override val emptyListPlaceholderVisible = Transformations.map(connectionsList) { it.isEmpty() }
 
@@ -183,8 +196,16 @@ class ConnectionsViewModel @Inject constructor(
                 .coerceAtMost(charList.size-1)
                 .coerceAtLeast(0)
 
-            val letter = charList[letterPosition].toString()
-            _currentLetter.postValue(letter)
+            with(charList[letterPosition]) {
+                updateConnectionsListPosition(this)
+                _currentLetter.postValue(toString())
+            }
+        }
+    }
+
+    private fun updateConnectionsListPosition(char: Char) {
+        listPositionMap[char]?.let {
+            _scrollToPosition.postValue(it)
         }
     }
 
