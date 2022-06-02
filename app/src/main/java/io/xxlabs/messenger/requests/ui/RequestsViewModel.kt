@@ -2,10 +2,7 @@ package io.xxlabs.messenger.requests.ui
 
 import android.graphics.Bitmap
 import androidx.annotation.StringRes
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
@@ -38,6 +35,8 @@ import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -94,6 +93,16 @@ class RequestsViewModel @Inject constructor(
 
     val customToast: Flow<ToastUI?> by ::_customToast
     private val _customToast = MutableStateFlow<ToastUI?>(null)
+
+    val verifyingInfoDialogUI: LiveData<InfoDialogUI?> by ::_verifyingInfoDialogUI
+    private val _verifyingInfoDialogUI = MutableLiveData<InfoDialogUI?>(null)
+
+    private val verifyingInfoDialog: InfoDialogUI by lazy {
+        InfoDialogUI.create(
+            title = appContext().getString(R.string.request_verifying_popup_title),
+            body = appContext().getString(R.string.request_verifying_popup_message)
+        )
+    }
 
     init {
         viewModelScope.launch { cacheContactsList() }
@@ -291,6 +300,7 @@ class RequestsViewModel @Inject constructor(
 
     override fun onItemClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            VERIFYING -> showVerifyingInfo()
             VERIFIED, HIDDEN -> showDetails(request)
         }
     }
@@ -304,9 +314,18 @@ class RequestsViewModel @Inject constructor(
 
     override fun onActionClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            VERIFYING -> showVerifyingInfo()
             SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
         }
+    }
+
+    private fun showVerifyingInfo() {
+        _verifyingInfoDialogUI.value = verifyingInfoDialog
+    }
+
+    fun onVerifyingInfoHandled() {
+        _verifyingInfoDialogUI.value = null
     }
 
     override fun markAsSeen(item: RequestItem) {
