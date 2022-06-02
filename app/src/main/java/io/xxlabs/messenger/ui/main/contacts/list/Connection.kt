@@ -32,7 +32,7 @@ fun dummyContacts(count: Int = 20): List<ContactItem> {
     repeat(count) {
         dummyList.add(dummyContactItem(10) )
     }
-    return dummyList
+    return dummyList.sortedBy { it.name.lowercase() }
 }
 
 private fun dummyContactItem(maxNameLength: Int): ContactItem {

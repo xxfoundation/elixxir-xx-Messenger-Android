@@ -178,7 +178,11 @@ class ConnectionsViewModel @Inject constructor(
         viewModelScope.launch {
             val totalHeight = abs(bottom) - abs(top)
             val relativePosition = currentY / totalHeight
-            val letterPosition = (relativePosition * charList.size).toInt()
+            val letterPosition = (relativePosition * charList.size)
+                .toInt()
+                .coerceAtMost(charList.size-1)
+                .coerceAtLeast(0)
+
             val letter = charList[letterPosition].toString()
             _currentLetter.postValue(letter)
         }
