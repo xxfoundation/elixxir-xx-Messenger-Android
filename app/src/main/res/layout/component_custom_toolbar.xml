@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.support.toolbar.ToolbarUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/toolbarGenericInner"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+
+        <ImageView
+            android:id="@+id/toolbarBackButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_5"
+            android:contentDescription="toolbar.btn.back"
+            android:minWidth="@dimen/spacing_24"
+            android:minHeight="@dimen/spacing_24"
+            android:padding="@dimen/spacing_12"
+            android:src="@drawable/ic_back_24dp"
+            android:onClick="@{() -> ui.onBackPressed()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/neutral_active" />
+
+        <TextView
+            android:id="@+id/toolbarTitle"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_16"
+            android:contentDescription="toolbar.title"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_18"
+            android:text="@{ui.title}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/toolbarBackButton"
+            app:layout_constraintHorizontal_bias="0"
+            tools:text="Title" />
+
+        <io.xxlabs.messenger.support.toolbar.MenuItemRecyclerView
+            android:id="@+id/toolbarButtonsRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="12dp"
+            android:layout_marginVertical="4dp"
+            android:orientation="horizontal"
+            android:nestedScrollingEnabled="false"
+            tools:itemCount="1"
+            tools:listitem="@layout/list_item_icon_menu_item"
+            app:menuItems="@{ui.menuItems}"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/toolbarTitle"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/toolbarGenericLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
