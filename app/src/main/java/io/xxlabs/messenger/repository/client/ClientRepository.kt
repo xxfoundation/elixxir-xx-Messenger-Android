@@ -814,17 +814,19 @@ class ClientRepository @Inject constructor(
         userId: ByteArray,
         callback: (ContactWrapperBase?, String?) -> Unit
     ) {
-        val executionTime = Utils.getCurrentTimeStamp()
-        udWrapperBindings.userLookup(userId) { contact, error ->
-            if (error.isNullOrEmpty() && contact != null) {
-                Timber.v("[USER LOOKUP] User found id ${contact.getId().toBase64String()}")
-                Timber.v("[USER LOOKUP] Found!")
-                callback.invoke(contact, error)
-            } else {
-                Timber.v("[USER LOOKUP] Error: $error")
-                callback.invoke(null, error)
+        if (areNodesReady()) {
+            val executionTime = Utils.getCurrentTimeStamp()
+            udWrapperBindings.userLookup(userId) { contact, error ->
+                if (error.isNullOrEmpty() && contact != null) {
+                    Timber.v("[USER LOOKUP] User found id ${contact.getId().toBase64String()}")
+                    Timber.v("[USER LOOKUP] Found!")
+                    callback.invoke(contact, error)
+                } else {
+                    Timber.v("[USER LOOKUP] Error: $error")
+                    callback.invoke(null, error)
+                }
+                Timber.v("[USER LOOKUP] Total execution time: ${Utils.getCurrentTimeStamp() - executionTime}")
             }
-            Timber.v("[USER LOOKUP] Total execution time: ${Utils.getCurrentTimeStamp() - executionTime}")
         }
     }
 
