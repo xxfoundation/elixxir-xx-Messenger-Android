@@ -115,6 +115,9 @@ class RequestsViewModel @Inject constructor(
     private suspend fun getContactRequests() =
         requestsDataSource.getRequests().map { requestsList ->
             requestsList.map { request ->
+                if (request.requestStatus == VERIFIED) {
+
+                }
                 ContactRequestItem(
                     request,
                     resolveBitmap(request.model.photo)
@@ -292,10 +295,10 @@ class RequestsViewModel @Inject constructor(
         }
     }
 
-    private fun showDetails(request: RequestItem) {
-        when (request) {
-            is ContactRequestItem -> showRequestDialog(request.contactRequest)
-            is GroupInviteItem -> showInvitationDialog(request.invite)
+    private fun showDetails(item: RequestItem) {
+        when (item) {
+            is ContactRequestItem -> showRequestDialog(item.contactRequest)
+            is GroupInviteItem -> showInvitationDialog(item.invite)
         }
     }
 
@@ -306,11 +309,11 @@ class RequestsViewModel @Inject constructor(
         }
     }
 
-    override fun markAsSeen(request: RequestItem) {
-        if (request.request.unread) {
-            when (request) {
-                is ContactRequestItem -> requestsDataSource.markAsSeen(request.contactRequest)
-                is GroupInviteItem -> invitationsDataSource.markAsSeen(request.invite)
+    override fun markAsSeen(item: RequestItem) {
+        if (item.request.unread) {
+            when (item) {
+                is ContactRequestItem -> requestsDataSource.markAsSeen(item.contactRequest)
+                is GroupInviteItem -> invitationsDataSource.markAsSeen(item.invite)
             }
         }
     }
@@ -327,9 +330,9 @@ class RequestsViewModel @Inject constructor(
         _showConnectionAccepted.value = null
     }
 
-    private fun retryVerification(request: RequestItem) {
-        (request as? ContactRequest)?.let {
-            requestsDataSource.send(request)
+    private fun retryVerification(item: RequestItem) {
+        (item.request as? ContactRequest)?.let {
+            requestsDataSource.verify(it)
         }
     }
 
