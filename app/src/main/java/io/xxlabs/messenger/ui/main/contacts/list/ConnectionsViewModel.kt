@@ -50,15 +50,9 @@ class ConnectionsViewModel @Inject constructor(
         }
     }
 
+    // TODO: Implment this for selections list
     val contactItems: LiveData<List<ContactItem>> = contactItemFlow.asLiveData()
-//    override val connectionsList: LiveData<List<Connection>> = connectionsFlow.asLiveData()
-//    override val connectionsList: LiveData<List<Connection>> = MutableLiveData(dummyContacts())
-
-    override val connectionsList: LiveData<List<Connection>> = dummyContactsFlow.map { contacts ->
-        contacts.apply {
-            createLetterIndex(map { it.name })
-        }
-    }.asLiveData()
+    override val connectionsList: LiveData<List<Connection>> = connectionsFlow.asLiveData()
 
     override val emptyListPlaceholderVisible = Transformations.map(connectionsList) { it.isEmpty() }
 
