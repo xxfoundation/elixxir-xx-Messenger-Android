@@ -40,11 +40,11 @@ class ConnectionsViewModel @Inject constructor(
     private val listPositionMap = mutableMapOf<Char, Int>()
     private val connectionsFlow = contactItemFlow.combine(groupItemFlow) { contacts, groups ->
         (contacts + groups).sortedBy { it.name }.apply {
-            createLetterIndex(map { it.name })
+            mapLetterIndices(map { it.name })
         }
     }
 
-    private fun createLetterIndex(names: List<String>) {
+    private fun mapLetterIndices(names: List<String>) {
         names.forEachIndexed { index, name ->
             listPositionMap.putIfAbsent(name[0], index)
         }
