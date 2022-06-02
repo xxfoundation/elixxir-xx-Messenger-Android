@@ -13,6 +13,7 @@ import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.toolbar.*
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
 
@@ -63,7 +64,10 @@ class ConnectionsViewModel @Inject constructor(
             charList.add(char)
             scrollbar += "${char}\n"
         }
-        scrollbar += "#"
+        with ('#') {
+            charList.add(this)
+            scrollbar += this
+        }
         return scrollbar
     }
 
@@ -171,11 +175,13 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     fun onLettersScrolled(top: Int, bottom: Int, currentY: Float) {
-        val totalHeight = abs(bottom) - abs(top)
-        val relativePosition = currentY / totalHeight
-        val letterPosition = (relativePosition * charList.size).toInt()
-        val letter = charList[letterPosition].toString()
-        _currentLetter.postValue(letter)
+        viewModelScope.launch {
+            val totalHeight = abs(bottom) - abs(top)
+            val relativePosition = currentY / totalHeight
+            val letterPosition = (relativePosition * charList.size).toInt()
+            val letter = charList[letterPosition].toString()
+            _currentLetter.postValue(letter)
+        }
     }
 
     fun onScrollStopped() {
