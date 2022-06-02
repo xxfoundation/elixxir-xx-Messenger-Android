@@ -20,7 +20,6 @@ import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
 import javax.inject.Inject
-import kotlin.math.abs
 
 class ContactsFragment : BaseFragment() {
 
@@ -50,16 +49,8 @@ class ContactsFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        initUI()
         initRecyclerView()
     }
-
-//    private fun initUI() {
-//        binding.apply {
-//            ui = connectionsViewModel
-//            toolbarUi = connectionsViewModel.toolbar
-//        }
-//    }
 
     private fun initRecyclerView() {
         binding.connectionsList.apply {
@@ -79,12 +70,8 @@ class ContactsFragment : BaseFragment() {
             setOnTouchListener { view, motionEvent ->
                 view.performClick()
                 when (motionEvent.action) {
-                    ACTION_DOWN -> {
-//                        dY = motionEvent.rawY
-                        true
-                    }
                     ACTION_MOVE -> {
-                        connectionsViewModel.getRelativePosition(top, bottom, motionEvent.y)
+                        connectionsViewModel.onLettersScrolled(top, bottom, motionEvent.y)
                         true
                     }
                     ACTION_UP -> {

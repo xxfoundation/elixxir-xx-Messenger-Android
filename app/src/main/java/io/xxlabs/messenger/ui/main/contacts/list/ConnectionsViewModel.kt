@@ -170,13 +170,9 @@ class ConnectionsViewModel @Inject constructor(
         _navigateToSearch.value = false
     }
 
-    fun onLettersScrolled() {
-
-    }
-
-    fun getRelativePosition(top: Int, bottom: Int, yPosition: Float) {
+    fun onLettersScrolled(top: Int, bottom: Int, currentY: Float) {
         val totalHeight = abs(bottom) - abs(top)
-        val relativePosition = yPosition / totalHeight
+        val relativePosition = currentY / totalHeight
         val letterPosition = (relativePosition * charList.size).toInt()
         val letter = charList[letterPosition].toString()
         _currentLetter.postValue(letter)
