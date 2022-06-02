@@ -14,6 +14,7 @@ import io.xxlabs.messenger.support.toolbar.*
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlin.math.abs
 
 class ConnectionsViewModel @Inject constructor(
     val daoRepository: DaoRepository,
@@ -54,9 +55,12 @@ class ConnectionsViewModel @Inject constructor(
         generateScrollBarLetters()
     }
 
+    private val charList: MutableList<Char> = mutableListOf()
+
     private fun generateScrollBarLetters(): String {
         var scrollbar = ""
         for (char in 'a'..'z') {
+            charList.add(char)
             scrollbar += "${char}\n"
         }
         scrollbar += "#"
@@ -168,6 +172,18 @@ class ConnectionsViewModel @Inject constructor(
 
     fun onLettersScrolled() {
 
+    }
+
+    fun getRelativePosition(top: Int, bottom: Int, yPosition: Float) {
+        val totalHeight = abs(bottom) - abs(top)
+        val relativePosition = yPosition / totalHeight
+        val letterPosition = (relativePosition * charList.size).toInt()
+        val letter = charList[letterPosition].toString()
+        _currentLetter.postValue(letter)
+    }
+
+    fun onScrollStopped() {
+        _currentLetter.postValue(null)
     }
 
     companion object {

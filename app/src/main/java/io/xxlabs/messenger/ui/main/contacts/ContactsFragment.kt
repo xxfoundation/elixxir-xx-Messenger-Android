@@ -2,6 +2,7 @@ package io.xxlabs.messenger.ui.main.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -19,6 +20,7 @@ import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
 import javax.inject.Inject
+import kotlin.math.abs
 
 class ContactsFragment : BaseFragment() {
 
@@ -68,8 +70,34 @@ class ContactsFragment : BaseFragment() {
 
     override fun onStart() {
         super.onStart()
+        detectScrollGesture()
         observeUI()
     }
+
+    private fun detectScrollGesture() {
+        binding.lettersScrollbar.apply {
+            setOnTouchListener { view, motionEvent ->
+                view.performClick()
+                when (motionEvent.action) {
+                    ACTION_DOWN -> {
+//                        dY = motionEvent.rawY
+                        true
+                    }
+                    ACTION_MOVE -> {
+                        connectionsViewModel.getRelativePosition(top, bottom, motionEvent.y)
+                        true
+                    }
+                    ACTION_UP -> {
+                        connectionsViewModel.onScrollStopped()
+                        true
+                    }
+                    else -> false
+                }
+            }
+        }
+    }
+
+
 
     private fun observeUI() {
         connectionsViewModel.connectionsList.observe(viewLifecycleOwner) { connections ->
