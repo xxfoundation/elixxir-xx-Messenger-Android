@@ -133,7 +133,7 @@ class ContactsFragment : BaseFragment() {
             setImageDrawable(
                 ContextCompat.getDrawable(
                     requireContext(),
-                    R.drawable.ic_qr_scan
+                    R.drawable.ic_create_group
                 )
             )
             visibility = View.VISIBLE
@@ -142,7 +142,7 @@ class ContactsFragment : BaseFragment() {
         toolbarGenericActionBtn.setImageDrawable(
             ContextCompat.getDrawable(
                 requireContext(),
-                R.drawable.ic_menu_requests
+                R.drawable.ic_add_contact
             )
         )
         toolbarGenericActionBtn.visibility = View.VISIBLE
@@ -159,7 +159,7 @@ class ContactsFragment : BaseFragment() {
         }
 
         toolbarGenericActionBtnLeft.setOnSingleClickListener {
-            findNavController().navigate(R.id.action_global_qr_code)
+            startContactSelection()
         }
 
         toolbarGenericActionBtn.setOnSingleClickListener {
