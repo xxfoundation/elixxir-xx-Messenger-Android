@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.contacts.list.Connection" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> ui.onClick()}"
+        android:padding="12dp">
+
+        <include
+            android:id="@+id/thumbnailLayout"
+            layout="@layout/component_item_thumbnail"
+            android:onClick="@{() -> ui.onClick()}"
+            app:ui="@{ui.thumbnail}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/connectionName"
+            style="@style/request_item_header"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:text="@{ui.name}"
+            android:onClick="@{() -> ui.onClick()}"
+            android:gravity="center|start"
+            app:layout_constraintTop_toTopOf="@id/thumbnailLayout"
+            app:layout_constraintStart_toEndOf="@id/thumbnailLayout"
+            app:layout_constraintBottom_toBottomOf="@id/thumbnailLayout"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="Bill Gates"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

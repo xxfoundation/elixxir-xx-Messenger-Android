@@ -169,7 +169,6 @@ class ChatsListAdapter(
         holder.setContactUsernameText(username)
         holder.setState(contact.status)
         holder.setPhoto(contact.photo, contact.initials)
-        holder.showDivider(false)
         holder.setOnClick(selectionMode)
     }
 

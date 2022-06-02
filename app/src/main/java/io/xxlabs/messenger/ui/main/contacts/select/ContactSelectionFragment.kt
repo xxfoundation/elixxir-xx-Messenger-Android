@@ -93,20 +93,9 @@ class ContactSelectionFragment : BaseFragment() {
             requireActivity().onBackPressed()
         }
 
-        contactsNewGroup.visibility = View.GONE
-        contactsRequests.visibility = View.GONE
-        contactRequestsCount.visibility = View.GONE
-
-        contactsSearchBar.doOnTextChanged { text, _, _, _ ->
-            contactsAdapter.isSearching = !text.isNullOrEmpty()
-            contactsAdapter.filter.filter(text)
-        }
-
         contactsAddContactBtn.setOnSingleClickListener {
             openAddContact()
         }
-
-        contactsSearchBar.incognito(preferences.isIncognitoKeyboardEnabled)
     }
 
     private fun openAddContact() {

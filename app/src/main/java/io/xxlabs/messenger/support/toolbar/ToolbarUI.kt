@@ -5,7 +5,7 @@ import android.text.Spanned
 interface ToolbarUI {
     val title: Spanned
     val menuItems: List<ToolbarMenuItem>
-    fun onBackPressed()
+    fun onActionClicked()
 }
 
 interface ToolbarMenuItem {

@@ -24,7 +24,7 @@
             android:minHeight="@dimen/spacing_24"
             android:padding="@dimen/spacing_12"
             android:src="@drawable/ic_back_24dp"
-            android:onClick="@{() -> ui.onBackPressed()}"
+            android:onClick="@{() -> ui.onActionClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

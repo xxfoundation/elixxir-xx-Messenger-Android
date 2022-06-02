@@ -11,13 +11,12 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class MenuItemRecyclerView : RecyclerView {
 
-    private val menuItemAdapter: MenuItemAdapter by lazy { MenuItemAdapter() }
-    private val layoutManager by lazy {
+    private val menuItemAdapter: MenuItemAdapter = MenuItemAdapter()
+    private val menuItemLayoutManager =
         object : LinearLayoutManager(context, HORIZONTAL, false) {
             override fun canScrollHorizontally(): Boolean = false
             override fun canScrollVertically(): Boolean = false
         }
-    }
 
     constructor(context: Context) : super(context)
 
@@ -27,14 +26,17 @@ class MenuItemRecyclerView : RecyclerView {
         context: Context, attrs: AttributeSet, defStyle: Int
     ) : super(context, attrs, defStyle)
 
-    override fun getAdapter(): Adapter<*> = menuItemAdapter
+    init {
+        adapter = menuItemAdapter
+        layoutManager = menuItemLayoutManager
+    }
 
-    override fun getLayoutManager(): LayoutManager = layoutManager
-
-    @BindingAdapter("menuItems")
-    fun setMenuItems(view: MenuItemRecyclerView, menuItems: List<ToolbarMenuItem>) {
+    fun initMenu(menuItems: List<ToolbarMenuItem>) {
         menuItemAdapter.submitList(menuItems)
     }
 }
 
-
+@BindingAdapter("menuItems")
+fun MenuItemRecyclerView.setMenuItems(menuItems: List<ToolbarMenuItem>) {
+    initMenu(menuItems)
+}

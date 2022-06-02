@@ -14,19 +14,16 @@
     tools:context=".ui.main.contacts.ContactsFragment">
 
     <include
-        android:id="@+id/toolbar"
-        layout="@layout/component_toolbar_generic"
-        tools:visibility="gone" />
+        layout="@layout/component_toolbar_generic" />
 
     <include
-        android:id="@+id/networkStatusBanner"
         layout="@layout/component_network_error_banner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbarGeneric" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsGroupRecyclerView"
@@ -42,7 +39,7 @@
         android:scrollbars="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/networkStatusBanner"
+        app:layout_constraintTop_toBottomOf="@id/networkStatusLayout"
         tools:itemCount="7"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/list_item_member"

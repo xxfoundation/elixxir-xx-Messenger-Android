@@ -15,6 +15,7 @@ import io.xxlabs.messenger.ui.intro.splash.SplashScreenViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
 import io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitationViewModel
+import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
 import io.xxlabs.messenger.ui.main.qrcode.QrCodeViewModel
 import io.xxlabs.messenger.ui.main.settings.SettingsViewModel
 import io.xxlabs.messenger.ui.main.ud.profile.UdProfileViewModel
@@ -90,6 +91,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(RequestsViewModel::class)
     abstract fun bindRequestsViewModel(requestsViewModel: RequestsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConnectionsViewModel::class)
+    abstract fun bindConnectionsViewModel(connectionsViewModel: ConnectionsViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory

@@ -30,7 +30,6 @@ class ContactsViewHolder(
     private val contactPhoto: ImageView,
     private val contactPhotoDefault: TextView,
     private val contactPhotoDefaultBg: RoundedCornerLayout,
-    private val divider: View,
     private val checkBox: CheckBox
 ) : RecyclerView.ViewHolder(parent) {
     private var requestStatus: RequestStatus = RequestStatus.SENT
@@ -38,14 +37,6 @@ class ContactsViewHolder(
     private var id: Long = -1L
     private var bindingsId: ByteArray = byteArrayOf()
     private var isChooseModeEnabled = false
-
-    fun showDivider(show: Boolean) {
-        divider.visibility = if (show) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
-    }
 
     fun setState(friendStatus: Int) {
         contactUsername.alpha = if (friendStatus == RequestStatus.ACCEPTED.value
@@ -272,7 +263,6 @@ class ContactsViewHolder(
             val contactPhotoDefault = parent.findViewById(R.id.contactPhotoDefault) as TextView
             val contactPhotoDefaultBg =
                 parent.findViewById(R.id.contactPhotoHolder) as RoundedCornerLayout
-            val divider = parent.findViewById(R.id.contactDivider) as View
             val checkBox = parent.findViewById(R.id.contactCheckbox) as CheckBox
 
             return ContactsViewHolder(
@@ -281,7 +271,6 @@ class ContactsViewHolder(
                 contactPhoto,
                 contactPhotoDefault,
                 contactPhotoDefaultBg,
-                divider,
                 checkBox
             )
         }

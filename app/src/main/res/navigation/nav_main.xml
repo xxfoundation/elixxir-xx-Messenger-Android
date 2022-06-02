@@ -9,7 +9,7 @@
         android:id="@+id/contactsFragment"
         android:name="io.xxlabs.messenger.ui.main.contacts.ContactsFragment"
         android:label="Contacts"
-        tools:layout="@layout/fragment_contacts">
+        tools:layout="@layout/fragment_connections">
         <action
             android:id="@+id/action_contacts_to_profile"
             app:destination="@id/contactDetailsFragment"
@@ -33,7 +33,7 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_contacts_fragment_to_ud_search_fragment"
+            android:id="@+id/action_contacts_to_search"
             app:destination="@id/udPrivateSearchFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -494,5 +494,4 @@
         android:name="io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment"
         android:label="ReceivedRequestsFragment" >
     </fragment>
-
 </navigation>
