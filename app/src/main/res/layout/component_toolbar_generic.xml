@@ -89,11 +89,12 @@
 
         <ImageView
             android:id="@+id/toolbarGenericActionBtnLeft"
-            android:layout_width="@dimen/spacing_20"
-            android:layout_height="@dimen/spacing_20"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/spacing_20"
             android:contentDescription="toolbar.btn.image"
             android:visibility="gone"
+            android:padding="@dimen/spacing_7"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/toolbarGenericActionBtn"
             app:layout_constraintTop_toTopOf="parent"
@@ -102,10 +103,11 @@
 
         <ImageView
             android:id="@+id/toolbarGenericActionBtn"
-            android:layout_width="@dimen/spacing_20"
-            android:layout_height="@dimen/spacing_20"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginEnd="@dimen/spacing_20"
             android:contentDescription="toolbar.btn.image"
+            android:padding="@dimen/spacing_7"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
