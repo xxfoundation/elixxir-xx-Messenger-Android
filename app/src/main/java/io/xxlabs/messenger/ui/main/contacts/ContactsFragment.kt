@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.ui.main.contacts
 
 import android.os.Bundle
-import android.text.method.Touch.scrollTo
 import android.view.LayoutInflater
 import android.view.MotionEvent.*
 import android.view.View
