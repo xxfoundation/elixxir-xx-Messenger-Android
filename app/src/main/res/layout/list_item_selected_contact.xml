@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.contacts.select.SelectedContactUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:padding="4dp">
+
+        <include
+            android:id="@+id/thumbnailLayout"
+            layout="@layout/component_item_thumbnail"
+            android:layout_height="42dp"
+            android:layout_width="42dp"
+            android:layout_marginTop="8dp"
+            app:ui="@{ui.thumbnail}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <ImageView
+            android:id="@+id/removeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:onClick="@{() -> ui.onRemoveClicked()}"
+            android:background="@color/neutral_white"
+            app:srcCompat="@drawable/ic_remove"
+            app:tint="@color/accent_danger"
+            app:layout_constraintCircle="@id/thumbnailLayout"
+            app:layout_constraintCircleRadius="24dp"
+            app:layout_constraintCircleAngle="45"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/name"
+            style="@style/XxTextStyle.SemiBold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/neutral_active"
+            android:textSize="13sp"
+            android:fontWeight="600"
+            android:layout_margin="4dp"
+            android:text="@{ui.contact.displayName}"
+            app:lineHeight="17sp"
+            app:layout_constraintTop_toBottomOf="@id/thumbnailLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constrainedWidth="true"
+            app:layout_constrainedHeight="true"
+            tools:text="Bill Gates" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
