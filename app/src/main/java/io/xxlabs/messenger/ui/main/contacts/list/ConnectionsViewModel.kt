@@ -11,6 +11,9 @@ import io.xxlabs.messenger.data.room.model.thumbnail
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.toolbar.*
+import io.xxlabs.messenger.ui.main.contacts.select.SelectedContact
+import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactListener
+import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactUI
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -24,7 +27,8 @@ class ConnectionsViewModel @Inject constructor(
     ToolbarListener,
     MenuItemListener,
     ConnectionsListUI,
-    ConnectionsListScrollHandler
+    ConnectionsListScrollHandler,
+    SelectedContactListener
 {
 
     private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
@@ -51,9 +55,13 @@ class ConnectionsViewModel @Inject constructor(
         }
     }
 
-    // TODO: Implment this for selections list
-    val contactItems: LiveData<List<ContactItem>> = contactItemFlow.asLiveData()
     override val connectionsList: LiveData<List<Connection>> = connectionsFlow.asLiveData()
+
+    val selectableContacts: LiveData<List<SelectableContact>> = contactItemFlow.map { list ->
+        list.map { contactItem ->
+            SelectableContact(contactItem)
+        }
+    }.asLiveData()
 
     override val emptyListPlaceholderVisible = Transformations.map(connectionsList) { it.isEmpty() }
 
@@ -94,8 +102,12 @@ class ConnectionsViewModel @Inject constructor(
     val navigateToSearch: LiveData<Boolean> by ::_navigateToSearch
     private val _navigateToSearch = MutableLiveData(false)
 
-    val navigateUp: MutableLiveData<Boolean> by ::_navigateUp
+    val navigateUp: LiveData<Boolean> by ::_navigateUp
     private val _navigateUp = MutableLiveData(false)
+
+    val selectedContacts: LiveData<List<SelectedContactUI>> by ::_selectedContacts
+    private val _selectedContacts = MutableLiveData<List<SelectedContactUI>>(listOf())
+    private val cachedSelections = mutableMapOf<ContactItem, SelectedContactUI>()
 
     private val createGroupMenuItem : ToolbarMenuItem by lazy {
         ToolbarItem(
@@ -132,6 +144,35 @@ class ConnectionsViewModel @Inject constructor(
         when (connection) {
             is ContactItem -> onContactClicked(connection.model)
             is GroupItem -> onGroupClicked(connection.model)
+            is SelectableContact -> onSelectToggled(connection.contactItem)
+        }
+    }
+
+    private fun onSelectToggled(contact: ContactItem) {
+        viewModelScope.launch {
+            cachedSelections[contact]?.let {
+                selectContact(contact)
+            } ?: deselectContact(contact)
+        }
+    }
+
+    private fun selectContact(contact: ContactItem) {
+        cachedSelections[contact] = contact.selected()
+        _selectedContacts.value = cachedSelections.values.toList()
+    }
+
+    private fun ContactItem.selected() : SelectedContactUI =
+        SelectedContact(this, this@ConnectionsViewModel, thumbnail)
+
+    private fun deselectContact(contact: ContactItem) {
+        cachedSelections.remove(contact)?.let {
+            _selectedContacts.value = cachedSelections.values.toList()
+        }
+    }
+
+    override fun onContactRemoved(selection: SelectedContact) {
+        viewModelScope.launch {
+            deselectContact(selection.contactItem)
         }
     }
 
