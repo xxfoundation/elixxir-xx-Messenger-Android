@@ -55,10 +55,6 @@ abstract class ContactsFragment : BaseFragment() {
     }
 
     private fun observeUI() {
-        scrollHandler.connectionsList.observe(viewLifecycleOwner) { connections ->
-            connectionsAdapter.submitList(connections)
-        }
-
         scrollHandler.scrollToPosition.observe(viewLifecycleOwner) { position ->
             position?.let { scrollToConnectionListPosition(it) }
         }
