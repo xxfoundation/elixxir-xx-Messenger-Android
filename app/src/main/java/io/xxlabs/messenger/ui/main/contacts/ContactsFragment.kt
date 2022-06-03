@@ -13,7 +13,7 @@ import timber.log.Timber
 
 abstract class ContactsFragment : BaseFragment() {
     protected abstract val scrollHandler: ConnectionsListScrollHandler
-    protected abstract val connectionsAdapter: ConnectionsAdapter
+    protected abstract val connectionsAdapter: RecyclerView.Adapter<*>
     protected abstract val connectionsRecyclerView: RecyclerView
     protected abstract val lettersScrollbar: View
 

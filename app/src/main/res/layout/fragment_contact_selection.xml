@@ -41,7 +41,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layoutManager="LinearLayoutManager"
             tools:itemCount="1"
-            tools:listitem="@layout/list_item_new_connection"/>
+            tools:listitem="@layout/list_item_selected_contact"/>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/connectionsList"
