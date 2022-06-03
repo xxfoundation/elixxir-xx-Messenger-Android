@@ -63,7 +63,6 @@ class SentAudioViewHolder(
         sentIcon.setImageResource(R.drawable.ic_lock_white)
 
         when (status) {
-            MessageStatus.PENDING -> sentIcon.startAnimation(blinkAnimation)
             MessageStatus.FAILED -> {
                 rootLayout.backgroundTintList =
                     ContextCompat.getColorStateList(itemView.context, R.color.chatBgColorError)
@@ -71,7 +70,6 @@ class SentAudioViewHolder(
                 sentIcon.setImageResource(R.drawable.ic_send_failure)
             }
             else -> {
-                sentIcon.clearAnimation()
                 rootLayout.backgroundTintList =
                     ContextCompat.getColorStateList(itemView.context, R.color.brand_dark)
                 errorText.visibility = View.GONE
