@@ -94,7 +94,7 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToPrivateChat(contact: Contact) {
-        val directions = io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionGlobalChat()
+        val directions = ContactListFragmentDirections.actionGlobalChat()
             .apply {
             this.contact = contact as ContactData
             contactId = contact.userId.toBase64String()
@@ -103,7 +103,7 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToGroupChat(group: Group) {
-        val directions = io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionGlobalGroupsChat()
+        val directions = ContactListFragmentDirections.actionGlobalGroupsChat()
             .apply {
             this.group = group as GroupData
             groupId = group.groupId.toBase64String()
@@ -112,12 +112,12 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToSearch() {
-        val directions =
-            io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionContactsToSearch()
+        val directions = ContactListFragmentDirections.actionContactsToSearch()
         findNavController().navigateSafe(directions)
     }
 
     private fun navigateToContactSelection() {
-        // TODO: Navigate to select contact screen
+        val directions = ContactListFragmentDirections.actionContactsToContactsSelect()
+        findNavController().navigateSafe(directions)
     }
 }

@@ -43,13 +43,16 @@
             android:name="contactSelectionMode"
             app:argType="boolean"
             android:defaultValue="false" />
+        <action
+            android:id="@+id/action_contacts_to_contactsSelect"
+            app:destination="@id/contactsSelectFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/contactsSelectFragment"
         android:name="io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment"
         android:label="Contacts Selection"
-        tools:layout="@layout/fragment_contacts">
+        tools:layout="@layout/fragment_contact_selection">
 
         <action
             android:id="@+id/action_contacts_selection_to_chat"
