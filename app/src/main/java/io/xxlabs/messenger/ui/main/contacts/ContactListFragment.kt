@@ -2,13 +2,12 @@ package io.xxlabs.messenger.ui.main.contacts
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.MotionEvent.*
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.Group
@@ -16,20 +15,22 @@ import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.FragmentConnectionsBinding
 import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.extensions.toBase64String
-import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
+import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListScrollHandler
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
-import timber.log.Timber
 import javax.inject.Inject
 
-class ContactListFragment : BaseFragment() {
+class ContactListFragment : ContactsFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private val connectionsViewModel: ConnectionsViewModel by viewModels { viewModelFactory }
+    override val scrollHandler: ConnectionsListScrollHandler by lazy { connectionsViewModel }
 
     private lateinit var binding: FragmentConnectionsBinding
-    private val connectionsAdapter: ConnectionsAdapter = ConnectionsAdapter()
+    override val connectionsAdapter: ConnectionsAdapter = ConnectionsAdapter()
+    override val connectionsRecyclerView: RecyclerView by lazy { binding.connectionsList }
+    override val lettersScrollbar: View by lazy { binding.lettersScrollbar }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,50 +49,14 @@ class ContactListFragment : BaseFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initRecyclerView()
-    }
-
-    private fun initRecyclerView() {
-        binding.connectionsList.apply {
-            layoutManager = LinearLayoutManager(requireContext())
-            adapter = connectionsAdapter
-        }
-    }
-
     override fun onStart() {
         super.onStart()
-        detectScrollGesture()
         observeUI()
-    }
-
-    private fun detectScrollGesture() {
-        binding.lettersScrollbar.apply {
-            setOnTouchListener { view, motionEvent ->
-                view.performClick()
-                when (motionEvent.action) {
-                    ACTION_MOVE -> {
-                        connectionsViewModel.onLettersScrolled(top, bottom, motionEvent.y)
-                        true
-                    }
-                    ACTION_UP -> {
-                        connectionsViewModel.onScrollStopped()
-                        true
-                    }
-                    else -> false
-                }
-            }
-        }
     }
 
     private fun observeUI() {
         connectionsViewModel.connectionsList.observe(viewLifecycleOwner) { connections ->
             connectionsAdapter.submitList(connections)
-        }
-
-        connectionsViewModel.scrollToPosition.observe(viewLifecycleOwner) { position ->
-            position?.let { scrollToConnectionListPosition(it) }
         }
 
         connectionsViewModel.navigateToChat.observe(viewLifecycleOwner) { contact ->
@@ -127,14 +92,6 @@ class ContactListFragment : BaseFragment() {
                 findNavController().navigateUp()
                 connectionsViewModel.onNavigateUpHandled()
             }
-        }
-    }
-
-    private fun scrollToConnectionListPosition(position: Int) {
-        try {
-            binding.connectionsList.smoothScrollToPosition(position)
-        } catch (e: Exception) {
-            Timber.d("An exception was thrown: ${e.message}")
         }
     }
 

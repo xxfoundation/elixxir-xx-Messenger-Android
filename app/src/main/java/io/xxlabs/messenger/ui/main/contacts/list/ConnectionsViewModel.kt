@@ -23,7 +23,8 @@ class ConnectionsViewModel @Inject constructor(
     ConnectionListener,
     ToolbarListener,
     MenuItemListener,
-    ConnectionsListUI
+    ConnectionsListUI,
+    ConnectionsListScrollHandler
 {
 
     private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
@@ -78,7 +79,7 @@ class ConnectionsViewModel @Inject constructor(
         return scrollbar
     }
 
-    val scrollToPosition: LiveData<Int?> by ::_scrollToPosition
+    override val scrollToPosition: LiveData<Int?> by ::_scrollToPosition
     private val _scrollToPosition = MutableLiveData<Int?>(null)
 
     val navigateToChat: LiveData<Contact?> by ::_navigateToChat
@@ -181,7 +182,7 @@ class ConnectionsViewModel @Inject constructor(
         _navigateToSearch.value = false
     }
 
-    fun onLettersScrolled(top: Int, bottom: Int, currentY: Float) {
+    override fun onLettersScrolled(top: Int, bottom: Int, currentY: Float) {
         viewModelScope.launch {
             val totalHeight = abs(bottom) - abs(top)
             val relativePosition = currentY / totalHeight
@@ -203,7 +204,7 @@ class ConnectionsViewModel @Inject constructor(
         }
     }
 
-    fun onScrollStopped() {
+    override fun onScrollStopped() {
         _currentLetter.postValue(null)
     }
 
