@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.WindowInsetsCompat
-import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -15,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.datatype.RequestStatus
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
@@ -29,7 +26,6 @@ import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.contacts.*
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialog
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogUI
-import kotlinx.android.synthetic.main.component_network_error_banner.*
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_contacts.*
 import timber.log.Timber

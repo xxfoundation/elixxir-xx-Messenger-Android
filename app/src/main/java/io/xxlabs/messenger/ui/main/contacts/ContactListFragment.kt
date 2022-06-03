@@ -22,7 +22,7 @@ import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
 import timber.log.Timber
 import javax.inject.Inject
 
-class ContactsFragment : BaseFragment() {
+class ContactListFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -139,7 +139,7 @@ class ContactsFragment : BaseFragment() {
     }
 
     private fun navigateToPrivateChat(contact: Contact) {
-        val directions = ContactsFragmentDirections.actionGlobalChat().apply {
+        val directions = ContactListFragmentDirections.actionGlobalChat().apply {
             this.contact = contact as ContactData
             contactId = contact.userId.toBase64String()
         }
@@ -147,7 +147,7 @@ class ContactsFragment : BaseFragment() {
     }
 
     private fun navigateToGroupChat(group: Group) {
-        val directions = ContactsFragmentDirections.actionGlobalGroupsChat()
+        val directions = ContactListFragmentDirections.actionGlobalGroupsChat()
             .apply {
             this.group = group as GroupData
             groupId = group.groupId.toBase64String()
@@ -156,7 +156,7 @@ class ContactsFragment : BaseFragment() {
     }
 
     private fun navigateToSearch() {
-        val directions = ContactsFragmentDirections.actionContactsToSearch()
+        val directions = ContactListFragmentDirections.actionContactsToSearch()
         findNavController().navigateSafe(directions)
     }
 
