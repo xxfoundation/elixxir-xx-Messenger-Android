@@ -286,9 +286,9 @@ class ContactsFragment : BaseFragment() {
     }
 
     private fun maybeStartContactSelection() {
-        if (ContactsFragmentArgs.fromBundle(requireArguments()).contactSelectionMode) {
-            startContactSelection()
-        }
+//        if (ContactsFragmentArgs.fromBundle(requireArguments()).contactSelectionMode) {
+//            startContactSelection()
+//        }
     }
 
     override fun onStart() {
