@@ -32,22 +32,20 @@ class ConnectionsViewModel @Inject constructor(
     SelectedContactListener
 {
 
-//    private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
-//        list.map { contact ->
-//            ContactItem(contact, this, createThumbnail(contact))
-//        }
-//    }
-
-    // TODO: remove mock
-    private val contactItemFlow: Flow<List<ContactItem>> =
-        createDummyContactsFlow(this)
+    private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
+        list.map { contact ->
+            ContactItem(contact, this, createThumbnail(contact))
+        }
+    }
 
     private val groupItemFlow = daoRepository.getAllAcceptedGroupsLive().asFlow().map { list ->
         list.map { group ->
             GroupItem(group, this, group.thumbnail)
         }
     }
+
     private val listPositionMap = mutableMapOf<Char, Int>()
+
     private val connectionsFlow = contactItemFlow.combine(groupItemFlow) { contacts, groups ->
         (contacts + groups).sortedBy { it.name }.apply {
             mapLetterIndices(map { it.name })
