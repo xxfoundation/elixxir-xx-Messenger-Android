@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.contacts
+package io.xxlabs.messenger.ui.main.contacts.deprecated
 
 import android.content.Context
 import android.view.LayoutInflater

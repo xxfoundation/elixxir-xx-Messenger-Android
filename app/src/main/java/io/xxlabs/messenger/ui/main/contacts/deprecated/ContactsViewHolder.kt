@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.contacts
+package io.xxlabs.messenger.ui.main.contacts.deprecated
 
 import android.os.Bundle
 import android.view.View
@@ -18,7 +18,6 @@ import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.support.RandomColor
-import io.xxlabs.messenger.support.extensions.capitalizeWords
 import io.xxlabs.messenger.support.selection.ItemDetailsLookup
 import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.support.view.RoundedCornerLayout
