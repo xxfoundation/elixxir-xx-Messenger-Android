@@ -7,7 +7,6 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.ui.base.BaseFragment
-import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListScrollHandler
 import timber.log.Timber
 

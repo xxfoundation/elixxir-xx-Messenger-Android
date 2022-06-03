@@ -27,8 +27,8 @@ class ContactListFragment : ContactsFragment() {
 
     private lateinit var binding: FragmentConnectionsBinding
     override val connectionsAdapter: ConnectionsAdapter = ConnectionsAdapter()
-    override val connectionsRecyclerView: RecyclerView by lazy { binding.connectionsList }
-    override val lettersScrollbar: View by lazy { binding.lettersScrollbar }
+    override val connectionsRecyclerView: RecyclerView get() = binding.connectionsList
+    override val lettersScrollbar: View get() = binding.lettersScrollbar
 
     override fun onCreateView(
         inflater: LayoutInflater,

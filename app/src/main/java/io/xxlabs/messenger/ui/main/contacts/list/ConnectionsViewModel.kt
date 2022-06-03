@@ -132,9 +132,8 @@ class ConnectionsViewModel @Inject constructor(
 
     private val menuItems = listOf(newGroupMenuItem, addContactMenuItem)
 
-    val toolbar: ToolbarUI by lazy {
+    val toolbar: ToolbarUI =
         CustomToolbar(this, SpannedString("Connections"), menuItems)
-    }
 
     private val createGroupMenuItem : ToolbarMenuItem =
         ToolbarItem(
@@ -230,7 +229,7 @@ class ConnectionsViewModel @Inject constructor(
 
     override fun onActionClicked() {
         _navigateUp.value = true
-        clearSelections()
+//        clearSelections()
     }
 
     private fun clearSelections() {

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -34,8 +35,8 @@ class ContactSelectionFragment : ContactsFragment() {
 
     override val scrollHandler: ConnectionsListScrollHandler by lazy { connectionsViewModel }
     override val connectionsAdapter: SelectableContactsAdapter = SelectableContactsAdapter()
-    override val connectionsRecyclerView: RecyclerView by lazy { binding.connectionsList }
-    override val lettersScrollbar: View by lazy { binding.lettersScrollbar }
+    override val connectionsRecyclerView: RecyclerView get() = binding.connectionsList
+    override val lettersScrollbar: View get() = binding.lettersScrollbar
 
     override fun onCreateView(
         inflater: LayoutInflater,
