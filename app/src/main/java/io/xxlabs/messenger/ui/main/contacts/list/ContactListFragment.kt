@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.contacts
+package io.xxlabs.messenger.ui.main.contacts.list
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,9 +15,7 @@ import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.FragmentConnectionsBinding
 import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.extensions.toBase64String
-import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsAdapter
-import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListScrollHandler
-import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
+import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
 import javax.inject.Inject
 
 class ContactListFragment : ContactsFragment() {
@@ -96,7 +94,8 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToPrivateChat(contact: Contact) {
-        val directions = ContactListFragmentDirections.actionGlobalChat().apply {
+        val directions = io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionGlobalChat()
+            .apply {
             this.contact = contact as ContactData
             contactId = contact.userId.toBase64String()
         }
@@ -104,7 +103,7 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToGroupChat(group: Group) {
-        val directions = ContactListFragmentDirections.actionGlobalGroupsChat()
+        val directions = io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionGlobalGroupsChat()
             .apply {
             this.group = group as GroupData
             groupId = group.groupId.toBase64String()
@@ -113,7 +112,8 @@ class ContactListFragment : ContactsFragment() {
     }
 
     private fun navigateToSearch() {
-        val directions = ContactListFragmentDirections.actionContactsToSearch()
+        val directions =
+            io.xxlabs.messenger.ui.main.contacts.ContactListFragmentDirections.actionContactsToSearch()
         findNavController().navigateSafe(directions)
     }
 

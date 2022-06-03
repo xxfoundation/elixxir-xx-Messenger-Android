@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="io.xxlabs.messenger.ui.main.contacts.ContactListFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment"
         android:label="Contacts"
         tools:layout="@layout/fragment_connections">
         <action

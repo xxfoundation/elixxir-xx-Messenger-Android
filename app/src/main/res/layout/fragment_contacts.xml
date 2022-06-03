@@ -11,7 +11,7 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".ui.main.contacts.ContactListFragment">
+    tools:context=".ui.main.contacts.list.ContactListFragment">
 
     <include
         layout="@layout/component_toolbar_generic" />

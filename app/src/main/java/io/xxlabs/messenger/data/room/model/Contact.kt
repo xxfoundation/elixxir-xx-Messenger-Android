@@ -39,6 +39,15 @@ suspend fun Contact.resolveBitmap(): Bitmap? = withContext(Dispatchers.IO) {
     BitmapResolver.getBitmap(photo)
 }
 
+suspend fun Contact.generateThumbnail(): ItemThumbnail {
+    val photo = resolveBitmap()
+    return object : ItemThumbnail {
+        override val itemPhoto: Bitmap? = photo
+        override val itemIconRes: Int? = null
+        override val itemInitials: String = initials
+    }
+}
+
 fun Contact.dummyThumbnail(): ItemThumbnail =
     object : ItemThumbnail {
         override val itemPhoto: Bitmap? = null

@@ -16,7 +16,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.selection.CustomSelectionTracker
 import io.xxlabs.messenger.support.util.Utils
-import io.xxlabs.messenger.ui.main.contacts.ContactsViewHolder
+import io.xxlabs.messenger.ui.main.contacts.deprecated.ContactsViewHolder
 import timber.log.Timber
 import java.util.*
 

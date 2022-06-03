@@ -9,7 +9,7 @@ import io.xxlabs.messenger.media.FullScreenImageFragment
 import io.xxlabs.messenger.requests.deprecated.RequestGenericFragment
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
-import io.xxlabs.messenger.ui.main.contacts.ContactListFragment
+import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitation
 import io.xxlabs.messenger.ui.main.contacts.profile.ContactProfileFragment
