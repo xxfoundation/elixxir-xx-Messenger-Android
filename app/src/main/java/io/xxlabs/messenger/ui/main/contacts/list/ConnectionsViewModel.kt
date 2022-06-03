@@ -14,6 +14,7 @@ import io.xxlabs.messenger.support.toolbar.*
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContact
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactListener
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactUI
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -31,11 +32,15 @@ class ConnectionsViewModel @Inject constructor(
     SelectedContactListener
 {
 
-    private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
-        list.map { contact ->
-            ContactItem(contact, this, createThumbnail(contact))
-        }
-    }
+//    private val contactItemFlow = daoRepository.getAllAcceptedContactsLive().asFlow().map { list ->
+//        list.map { contact ->
+//            ContactItem(contact, this, createThumbnail(contact))
+//        }
+//    }
+
+    // TODO: remove mock
+    private val contactItemFlow: Flow<List<ContactItem>> =
+        createDummyContactsFlow(this)
 
     private val groupItemFlow = daoRepository.getAllAcceptedGroupsLive().asFlow().map { list ->
         list.map { group ->
@@ -59,7 +64,7 @@ class ConnectionsViewModel @Inject constructor(
 
     val selectableContacts: LiveData<List<SelectableContact>> = contactItemFlow.map { list ->
         list.map { contactItem ->
-            SelectableContact(contactItem)
+            SelectableContact(contactItem, this@ConnectionsViewModel,)
         }
     }.asLiveData()
 
@@ -109,10 +114,10 @@ class ConnectionsViewModel @Inject constructor(
     private val _selectedContacts = MutableLiveData<List<SelectedContactUI>>(listOf())
     private val cachedSelections = mutableMapOf<ContactItem, SelectedContactUI>()
 
-    private val createGroupMenuItem : ToolbarMenuItem by lazy {
+    private val newGroupMenuItem : ToolbarMenuItem by lazy {
         ToolbarItem(
             listener =this,
-            id = ITEM_CREATE_GROUP_ID,
+            id = ITEM_NEW_GROUP,
             icon = R.drawable.ic_create_group
         )
     }
@@ -120,15 +125,40 @@ class ConnectionsViewModel @Inject constructor(
     private val addContactMenuItem : ToolbarMenuItem by lazy {
         ToolbarItem(
             listener =this,
-            id = ITEM_ADD_CONTACT_ID,
+            id = ITEM_ADD_CONTACT,
             icon = R.drawable.ic_add_contact
         )
     }
 
-    private val menuItems = listOf(createGroupMenuItem, addContactMenuItem)
+    private val menuItems = listOf(newGroupMenuItem, addContactMenuItem)
 
     val toolbar: ToolbarUI by lazy {
         CustomToolbar(this, SpannedString("Connections"), menuItems)
+    }
+
+    private val createGroupMenuItem : ToolbarMenuItem =
+        ToolbarItem(
+            listener = this,
+            id = ITEM_CREATE_GROUP,
+            label = R.string.connections_create_group
+        )
+
+    private val createGroupMenu = listOf(createGroupMenuItem)
+
+    private val initialCreateGroupToolbar: ToolbarUI =
+        CustomToolbar(this, SpannedString("Add members"), createGroupMenu)
+
+    val createGroupToolbar: LiveData<ToolbarUI> by ::_createGroupToolbar
+    private val _createGroupToolbar = MutableLiveData(initialCreateGroupToolbar)
+
+    private fun updateCreateGroupToolbar() {
+        _createGroupToolbar.postValue(
+            CustomToolbar(
+                this,
+                SpannedString("Add members (${cachedSelections.count()}/$MAX_GROUP_SIZE)"),
+                createGroupMenu
+            )
+        )
     }
 
     private suspend fun createThumbnail(contact: Contact): ItemThumbnail {
@@ -142,19 +172,25 @@ class ConnectionsViewModel @Inject constructor(
 
     override fun onClicked(connection: Connection) {
         when (connection) {
+            is SelectableContact -> onSelectToggled(connection.contactItem)
             is ContactItem -> onContactClicked(connection.model)
             is GroupItem -> onGroupClicked(connection.model)
-            is SelectableContact -> onSelectToggled(connection.contactItem)
         }
     }
 
     private fun onSelectToggled(contact: ContactItem) {
+        if (memberLimitReached()) return
+
         viewModelScope.launch {
             cachedSelections[contact]?.let {
-                selectContact(contact)
-            } ?: deselectContact(contact)
+                deselectContact(contact)
+            } ?: selectContact(contact)
+            updateCreateGroupToolbar()
         }
     }
+
+    // TODO: Implement onCheckedListener to prevent checking boxes when limit is reached
+    private fun memberLimitReached(): Boolean = false
 
     private fun selectContact(contact: ContactItem) {
         cachedSelections[contact] = contact.selected()
@@ -194,6 +230,13 @@ class ConnectionsViewModel @Inject constructor(
 
     override fun onActionClicked() {
         _navigateUp.value = true
+        clearSelections()
+    }
+
+    private fun clearSelections() {
+        cachedSelections.clear()
+        _selectedContacts.value = listOf()
+        _createGroupToolbar.value = initialCreateGroupToolbar
     }
 
     fun onNavigateUpHandled() {
@@ -202,12 +245,24 @@ class ConnectionsViewModel @Inject constructor(
 
     override fun onClick(item: ToolbarMenuItem) {
         when (item.id) {
-            ITEM_CREATE_GROUP_ID -> onCreateGroupClicked()
-            ITEM_ADD_CONTACT_ID -> onAddContactClicked()
+            ITEM_NEW_GROUP -> onNewGroupClicked()
+            ITEM_ADD_CONTACT -> onAddContactClicked()
+            ITEM_CREATE_GROUP -> onCreateGroupClicked()
         }
     }
 
+    val createGroupDialog: LiveData<Boolean> by ::_createGroupDialog
+    private val _createGroupDialog = MutableLiveData(false)
+
     private fun onCreateGroupClicked() {
+        _createGroupDialog.value = true
+    }
+
+    fun onCreateGroupHandled() {
+        _createGroupDialog.value = false
+    }
+
+    private fun onNewGroupClicked() {
         _navigateToContactSelection.value = true
     }
 
@@ -250,7 +305,10 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     companion object {
-        private const val ITEM_CREATE_GROUP_ID = 0
-        private const val ITEM_ADD_CONTACT_ID = 1
+        private const val ITEM_NEW_GROUP = 0
+        private const val ITEM_ADD_CONTACT = 1
+        private const val ITEM_CREATE_GROUP = 2
+
+        private const val MAX_GROUP_SIZE = 10
     }
 }

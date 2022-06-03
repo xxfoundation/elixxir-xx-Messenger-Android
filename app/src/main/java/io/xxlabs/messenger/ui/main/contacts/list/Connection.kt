@@ -30,25 +30,30 @@ data class GroupItem(
 
 data class SelectableContact(
     val contactItem: ContactItem,
-) : Connection by contactItem
+    override val listener: ConnectionListener,
+) : Connection {
+    val model: Contact = contactItem.model
+    override val thumbnail: ItemThumbnail = contactItem.thumbnail
+    override val name: String = model.displayName
+}
 
-fun dummyContacts(count: Int = 20): List<ContactItem> {
+fun dummyContacts(listener: ConnectionListener? = null, count: Int = 20): List<ContactItem> {
     val dummyList = mutableListOf<ContactItem>()
     repeat(count) {
-        dummyList.add(dummyContactItem(10) )
+        dummyList.add(dummyContactItem(listener,10) )
     }
     return dummyList.sortedBy { it.name.lowercase() }
 }
 
-val dummyContactsFlow: Flow<List<ContactItem>> = flow {
-    emit(dummyContacts())
+fun createDummyContactsFlow(listener: ConnectionListener? = null): Flow<List<ContactItem>> = flow {
+    emit(dummyContacts(listener))
 }
 
-private fun dummyContactItem(maxNameLength: Int): ContactItem {
+private fun dummyContactItem(listener: ConnectionListener? = null, maxNameLength: Int): ContactItem {
     val dummyContact = ContactData(nickname = randomString(maxNameLength))
     return ContactItem(
         dummyContact,
-        dummyListener,
+        listener ?: dummyListener,
         dummyContact.dummyThumbnail()
     )
 }
