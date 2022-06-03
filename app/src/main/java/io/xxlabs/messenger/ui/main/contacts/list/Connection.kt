@@ -6,12 +6,12 @@ import io.xxlabs.messenger.support.dummy.randomString
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-sealed class Connection {
-    abstract val listener: ConnectionListener
-    abstract val thumbnail: ItemThumbnail
-    abstract val name: String
+sealed interface Connection {
+    val listener: ConnectionListener
+    val thumbnail: ItemThumbnail
+    val name: String
 
-    open fun onClick() = listener.onClicked(this)
+    fun onClick() = listener.onClicked(this)
 }
 
 data class ContactItem(
@@ -19,15 +19,18 @@ data class ContactItem(
     override val listener: ConnectionListener,
     override val thumbnail: ItemThumbnail,
     override val name: String = model.displayName,
-): Connection()
+) : Connection
 
 data class GroupItem(
     val model: Group,
     override val listener: ConnectionListener,
     override val thumbnail: ItemThumbnail,
     override val name: String = model.name,
-): Connection()
+) : Connection
 
+data class SelectableContact(
+    val contactItem: ContactItem,
+) : Connection by contactItem
 
 fun dummyContacts(count: Int = 20): List<ContactItem> {
     val dummyList = mutableListOf<ContactItem>()
