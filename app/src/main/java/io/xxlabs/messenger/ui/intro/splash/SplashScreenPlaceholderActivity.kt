@@ -19,17 +19,15 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var splashScreenViewModel: SplashScreenViewModel
-    private val doesUserSessionExists by lazy {
-        splashScreenViewModel.doesUserSessionExists()
-    }
+    private var mainIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +35,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
         hideSystemBars()
         splashScreenViewModel =
             ViewModelProvider(this, viewModelFactory).get(SplashScreenViewModel::class.java)
+
+        intent?.let { handleIntent(it) }
     }
 
     private fun hideSystemBars() {
@@ -47,6 +47,23 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         // Hide both the status bar and the navigation bar
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        // Pass this intent on to MainActivity.
+        mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+            Intent(
+                this@SplashScreenPlaceholderActivity,
+                MainActivity::class.java
+            ).apply {
+                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
+            }
+        }
     }
 
     override fun onStart() {
@@ -116,7 +133,7 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun navigateMain() {
-        val activity = Intent(
+        val activity = mainIntent ?: Intent(
             this@SplashScreenPlaceholderActivity,
             MainActivity::class.java
         )

@@ -5,11 +5,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.media.RingtoneManager.isDefault
 import android.os.Build
+import android.os.Bundle
 import android.os.PowerManager
-import android.os.SystemClock
 import android.view.WindowManager
-import androidx.core.app.NotificationCompat
 import bindings.Bindings
 import bindings.NotificationForMeReport
 import com.google.firebase.messaging.FirebaseMessagingService
@@ -24,12 +24,25 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.ui.RequestsFragment
+import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_GROUP_CHAT
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_PRIVATE_CHAT
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_REQUEST
+import kotlinx.coroutines.*
 import timber.log.Timber
 import javax.inject.Inject
 
 class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
+
+    private val scope = CoroutineScope(
+        CoroutineName("MessagingService")
+        + Job()
+        + Dispatchers.Default
+    )
 
     @Inject
     lateinit var serviceInjector: DispatchingAndroidInjector<Any>
@@ -74,8 +87,10 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
                 for (i in 0 until isNotificationForMeReport.len()) {
                     with (isNotificationForMeReport[i]) {
                         if (this.shouldNotify() && !notificationState.alreadySent(this.type())) {
-                            pushNotification(this)
-                            notificationState.sent(this.type())
+                            scope.launch {
+                                pushNotification(this@with)
+                                notificationState.sent(this@with.type())
+                            }
                         }
                     }
                 }
@@ -102,18 +117,21 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     /**
      * Create and show a simple notification containing the received FCM message.
      */
-    private fun pushNotification(richNotification: NotificationForMeReport) {
+    private suspend fun pushNotification(richNotification: NotificationForMeReport) {
         increaseNotificationCount()
+        val notificationText = getNotificationText(richNotification)
+            ?: richNotification.notificationText()
+
         val _notificationId = notificationId
 
         val pendingIntent = generatePendingIntent(
-            generateIntent(),
+            generateIntent(richNotification),
             _notificationId
         )
         val notification = RichNotifications.create(
             this,
             pendingIntent,
-            richNotification.notificationText(),
+            notificationText,
             richNotification.channelId()
         )
 
@@ -121,14 +139,75 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
         wakeScreenUp()
     }
 
+    private suspend fun getNotificationText(richNotification: NotificationForMeReport): String? {
+        return with(richNotification) {
+            when {
+                isE2E() && shouldShowUsername() -> {
+                    try {
+                        val username = lookupUsername(richNotification.source())
+                        getString(R.string.notification_e2e_text) + " from $username"
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                isGroup() && shouldShowGroupName() -> {
+                    try {
+                        val groupName = lookupGroupName(richNotification.source())
+                        getString(R.string.notification_group_text) + " in $groupName"
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                isEndFT() && shouldShowUsername() -> {
+                    try {
+                        val username = lookupUsername(richNotification.source())
+                        getString(R.string.notification_endft_text) + " from $username"
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+                else -> null
+            }
+        }
+    }
+
+    private fun shouldShowUsername(): Boolean = preferencesRepo.showContactNames
+
+    private fun shouldShowGroupName(): Boolean = preferencesRepo.showGroupNames
+
+    private suspend fun lookupUsername(userId: ByteArray): String? =
+        repo.userDbLookup(userId).value()?.displayName
+
+    private suspend fun lookupGroupName(groupId: ByteArray): String =
+        repo.getGroupData(groupId).value().name
+
     private fun increaseNotificationCount() {
         notificationCount++
         Timber.v("[NOTIFICATION] Notification count: $notificationCount")
     }
 
-    private fun generateIntent(): Intent =
-        if (MainActivity.isActive()) Intent(this, MainActivity::class.java)
+    private fun generateIntent(richNotification: NotificationForMeReport): Intent {
+        val intent = if (MainActivity.isActive()) Intent(this, MainActivity::class.java)
         else Intent(this, SplashScreenPlaceholderActivity::class.java)
+
+        val deepLinkBundle = Bundle().apply {
+            with (richNotification) {
+                when {
+                    isE2E() || isEndFT() -> {
+                        putByteArray(INTENT_PRIVATE_CHAT, richNotification.source())
+                    }
+                    isGroup() -> {
+                        putByteArray(INTENT_GROUP_CHAT, richNotification.source())
+                    }
+                    isRequest() || isGroupRequest() -> {
+                        putInt(INTENT_REQUEST, RequestsFragment.REQUESTS_TAB_RECEIVED)
+                    }
+                }
+            }
+        }
+        intent.putExtra(INTENT_DEEP_LINK_BUNDLE, deepLinkBundle)
+        return intent
+    }
 
     private fun generatePendingIntent(
         intent: Intent,

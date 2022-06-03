@@ -17,6 +17,7 @@ import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.repository.mock.ClientMockRepository
 import io.xxlabs.messenger.requests.RequestsModule
 import io.xxlabs.messenger.support.isMockVersion
+import io.xxlabs.messenger.ui.main.chats.ChatsModule
 import io.xxlabs.messenger.ui.main.settings.SettingsModule
 import javax.inject.Singleton
 
@@ -24,7 +25,8 @@ import javax.inject.Singleton
     ViewModelModule::class,
     SettingsModule::class,
     BackupModule::class,
-    RequestsModule::class
+    RequestsModule::class,
+    ChatsModule::class
 ])
 class AppModule {
     @Provides

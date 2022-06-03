@@ -222,4 +222,20 @@ class SettingsViewModel @Inject constructor(
         super.onCleared()
         subscriptions.clear()
     }
+
+    /* Notification details */
+
+    fun isMessageNotificationContentShown(): Boolean =
+        preferencesRepository.showContactNames
+
+    fun isGroupNotificationContentShown(): Boolean =
+        preferencesRepository.showGroupNames
+
+    fun showMessageNotificationDetails(show: Boolean) {
+        preferencesRepository.showContactNames = show
+    }
+
+    fun showGroupNotificationDetails(show: Boolean) {
+        preferencesRepository.showGroupNames = show
+    }
 }

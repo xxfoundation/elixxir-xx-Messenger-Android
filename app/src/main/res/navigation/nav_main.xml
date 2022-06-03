@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/contactsFragment"
-        android:name="io.xxlabs.messenger.ui.main.contacts.ContactsFragment"
+        android:name="io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment"
         android:label="Contacts"
-        tools:layout="@layout/fragment_contacts">
+        tools:layout="@layout/fragment_connections">
         <action
             android:id="@+id/action_contacts_to_profile"
             app:destination="@id/contactDetailsFragment"
@@ -33,19 +33,30 @@
             app:popExitAnim="@anim/slide_out_right" />
 
         <action
-            android:id="@+id/action_contacts_fragment_to_ud_search_fragment"
+            android:id="@+id/action_contacts_to_search"
             app:destination="@id/udPrivateSearchFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="contactSelectionMode"
+            app:argType="boolean"
+            android:defaultValue="false" />
+        <action
+            android:id="@+id/action_contacts_to_contactsSelect"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:destination="@id/contactsSelectFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/contactsSelectFragment"
         android:name="io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment"
         android:label="Contacts Selection"
-        tools:layout="@layout/fragment_contacts">
+        tools:layout="@layout/fragment_contact_selection">
 
         <action
             android:id="@+id/action_contacts_selection_to_chat"
@@ -490,5 +501,4 @@
         android:name="io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment"
         android:label="ReceivedRequestsFragment" >
     </fragment>
-
 </navigation>

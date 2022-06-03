@@ -14,7 +14,10 @@ import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.Group
+import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
 
 interface BaseRepository {
@@ -108,9 +111,12 @@ interface BaseRepository {
     fun getContactWrapper(contact: ByteArray): ContactWrapperBase
     fun requestAuthenticatedChannel(marshalledRecipient: ByteArray): Single<Long>
     fun confirmAuthenticatedChannel(data: ByteArray): Single<Long>
-    fun verifyOwnership(receivedContact: ContactData, verifiedContact: ContactWrapperBase): Boolean
+    fun verifyOwnership(receivedContact: Contact, verifiedContact: ContactWrapperBase): Boolean
 
     //  Groups ===============================================================================
+
+    fun getGroupData(groupId: ByteArray): Single<GroupData>
+
     fun makeGroup(
         name: String,
         idsList: List<ByteArray>,
@@ -149,6 +155,8 @@ interface BaseRepository {
         userId: ByteArray,
         callback: (ContactWrapperBase?, String?) -> Unit
     )
+
+    fun userDbLookup(userId: ByteArray): Maybe<ContactData>
 
     // Message ================================================================================
     fun sendViaClientUnsafe(

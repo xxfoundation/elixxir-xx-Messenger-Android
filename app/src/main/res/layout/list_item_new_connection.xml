@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/newConnectionItemLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:padding="4dp">
+
+        <include
+            layout="@layout/component_item_thumbnail"
+            android:id="@+id/contactProfilePhoto"
+            android:layout_height="42dp"
+            android:layout_width="42dp"
+            app:ui="@{ui}"
+            android:onClick="@{() -> ui.onNewConnectionClicked(ui.contact)}"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <TextView
+            android:id="@+id/newBadge"
+            style="@style/xx_font"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:text="New"
+            android:textAllCaps="true"
+            android:textSize="6sp"
+            android:background="@drawable/bg_rectangle_rounded_corners_mini"
+            android:backgroundTint="@color/accent_safe"
+            android:textColor="@color/neutral_white"
+            app:layout_constraintCircle="@id/contactProfilePhoto"
+            app:layout_constraintCircleRadius="21dp"
+            app:layout_constraintCircleAngle="45"
+            tools:ignore="MissingConstraints" />
+
+        <TextView
+            android:id="@+id/contactName"
+            style="@style/request_item_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ui.contact.displayName}"
+            android:layout_marginHorizontal="0dp"
+            android:layout_marginTop="4dp"
+            android:textSize="13sp"
+            android:onClick="@{() -> ui.onNewConnectionClicked(ui.contact)}"
+            android:gravity="center"
+            app:fontWeight="600"
+            app:lineHeight="17sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/contactProfilePhoto"
+            tools:text="bartender007" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

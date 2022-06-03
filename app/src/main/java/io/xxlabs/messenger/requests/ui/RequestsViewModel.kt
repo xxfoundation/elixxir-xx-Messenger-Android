@@ -2,10 +2,7 @@ package io.xxlabs.messenger.requests.ui
 
 import android.graphics.Bitmap
 import androidx.annotation.StringRes
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asFlow
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
@@ -38,6 +35,8 @@ import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
@@ -95,6 +94,16 @@ class RequestsViewModel @Inject constructor(
     val customToast: Flow<ToastUI?> by ::_customToast
     private val _customToast = MutableStateFlow<ToastUI?>(null)
 
+    val verifyingInfoDialogUI: LiveData<InfoDialogUI?> by ::_verifyingInfoDialogUI
+    private val _verifyingInfoDialogUI = MutableLiveData<InfoDialogUI?>(null)
+
+    private val verifyingInfoDialog: InfoDialogUI by lazy {
+        InfoDialogUI.create(
+            title = appContext().getString(R.string.request_verifying_popup_title),
+            body = appContext().getString(R.string.request_verifying_popup_message)
+        )
+    }
+
     init {
         viewModelScope.launch { cacheContactsList() }
         requestsDataSource.resetResentRequests()
@@ -115,6 +124,9 @@ class RequestsViewModel @Inject constructor(
     private suspend fun getContactRequests() =
         requestsDataSource.getRequests().map { requestsList ->
             requestsList.map { request ->
+                if (request.requestStatus == VERIFIED) {
+
+                }
                 ContactRequestItem(
                     request,
                     resolveBitmap(request.model.photo)
@@ -131,7 +143,6 @@ class RequestsViewModel @Inject constructor(
             invitationsList.map { invitation ->
                 GroupInviteItem(
                     invitation,
-//                    fetchMembers(invitation),
                     getUsername(invitation.model.leader),
                 ).also {
                     groupInviteCache[invitation.requestId] = it
@@ -289,29 +300,39 @@ class RequestsViewModel @Inject constructor(
 
     override fun onItemClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            VERIFYING -> showVerifyingInfo()
             VERIFIED, HIDDEN -> showDetails(request)
         }
     }
 
-    private fun showDetails(request: RequestItem) {
-        when (request) {
-            is ContactRequestItem -> showRequestDialog(request.contactRequest)
-            is GroupInviteItem -> showInvitationDialog(request.invite)
+    private fun showDetails(item: RequestItem) {
+        when (item) {
+            is ContactRequestItem -> showRequestDialog(item.contactRequest)
+            is GroupInviteItem -> showInvitationDialog(item.invite)
         }
     }
 
     override fun onActionClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            VERIFYING -> showVerifyingInfo()
             SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
         }
     }
 
-    override fun markAsSeen(request: RequestItem) {
-        if (request.request.unread) {
-            when (request) {
-                is ContactRequestItem -> requestsDataSource.markAsSeen(request.contactRequest)
-                is GroupInviteItem -> invitationsDataSource.markAsSeen(request.invite)
+    private fun showVerifyingInfo() {
+        _verifyingInfoDialogUI.value = verifyingInfoDialog
+    }
+
+    fun onVerifyingInfoHandled() {
+        _verifyingInfoDialogUI.value = null
+    }
+
+    override fun markAsSeen(item: RequestItem) {
+        if (item.request.unread) {
+            when (item) {
+                is ContactRequestItem -> requestsDataSource.markAsSeen(item.contactRequest)
+                is GroupInviteItem -> invitationsDataSource.markAsSeen(item.invite)
             }
         }
     }
@@ -328,9 +349,9 @@ class RequestsViewModel @Inject constructor(
         _showConnectionAccepted.value = null
     }
 
-    private fun retryVerification(request: RequestItem) {
-        (request as? ContactRequest)?.let {
-            requestsDataSource.send(request)
+    private fun retryVerification(item: RequestItem) {
+        (item.request as? ContactRequest)?.let {
+            requestsDataSource.verify(it)
         }
     }
 

@@ -23,6 +23,7 @@ import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
@@ -480,6 +481,10 @@ class ClientMockRepository(
         return Single.create { emitter -> emitter.onSuccess(1) }
     }
 
+    override fun getGroupData(groupId: ByteArray): Single<GroupData> {
+        return Single.create { emitter -> emitter.onSuccess(GroupData(name="Mock Group"))}
+    }
+
     override fun makeGroup(
         name: String,
         idsList: List<ByteArray>,
@@ -550,6 +555,9 @@ class ClientMockRepository(
         TODO("Not yet implemented")
     }
 
+    override fun userDbLookup(userId: ByteArray): Maybe<ContactData> =
+        Maybe.create { emitter -> emitter.onSuccess(ContactData())}
+
     // Message =====================================================================
     override fun sendViaClientUnsafe(
         senderId: String,
@@ -607,7 +615,7 @@ class ClientMockRepository(
     }
 
     override fun verifyOwnership(
-        receivedContact: ContactData,
+        receivedContact: Contact,
         verifiedContact: ContactWrapperBase
     ): Boolean = true
 

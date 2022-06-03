@@ -596,6 +596,13 @@
         <item name="android:focusable">true</item>
     </style>
 
+    <style name="settings_sub_option_textview" parent="XxTextStyle.SemiBold">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+    </style>
+
     <style name="menu_icon">
         <item name="android:layout_width">@dimen/spacing_24</item>
         <item name="android:layout_height">@dimen/spacing_24</item>
@@ -760,5 +767,15 @@
         <item name="android:letterSpacing">0.05</item>
         <item name="android:lineSpacingExtra">3sp</item>
         <item name="android:gravity">center</item>
+    </style>
+
+    <style name="notification_count_text" parent="xx_font">
+        <item name="android:textSize">12sp</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingHorizontal">8dp</item>
+        <item name="android:paddingVertical">4dp</item>
+        <item name="lineHeight">17sp</item>
+        <item name="android:textColor">@color/neutral_white</item>
     </style>
 </resources>

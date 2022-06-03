@@ -233,9 +233,12 @@ class SettingsFragment : BaseFragment() {
     }
 
     private fun bindPushNotificationsSwitcher() {
+        initNotificationPrivacySwitches()
         settingsPushSwitch.isChecked = settingsViewModel.arePushNotificationsOn()
         val checkedListener = CompoundButton.OnCheckedChangeListener { switch, isChecked ->
             settingsViewModel.enablePushNotifications(isChecked)
+            if (isChecked) showPushNotificationPrivacyOptions()
+            else hidePushNotificationPrivacyOptions()
         }
 
         settingsViewModel.enableNotifications.observe(viewLifecycleOwner, Observer { result ->
@@ -269,6 +272,42 @@ class SettingsFragment : BaseFragment() {
 
         setPushTransparency()
         settingsPushSwitch.setOnCheckedChangeListener(checkedListener)
+    }
+
+    private fun initNotificationPrivacySwitches() {
+        settingsPrivateMsgDetailsSwitch.isChecked = settingsViewModel.isMessageNotificationContentShown()
+        val messageNotificationsDetailsListener = CompoundButton.OnCheckedChangeListener {
+                _, isChecked ->
+            settingsViewModel.showMessageNotificationDetails(isChecked)
+        }
+        settingsPrivateMsgDetailsSwitch.setOnCheckedChangeListener(messageNotificationsDetailsListener)
+
+        settingsGroupMsgDetailsSwitch.isChecked = settingsViewModel.isGroupNotificationContentShown()
+        val groupNotificationsDetailsListener = CompoundButton.OnCheckedChangeListener {
+                _, isChecked ->
+            settingsViewModel.showGroupNotificationDetails(isChecked)
+        }
+        settingsGroupMsgDetailsSwitch.setOnCheckedChangeListener(groupNotificationsDetailsListener)
+    }
+
+    private fun showPushNotificationPrivacyOptions() {
+        settingsPrivateMsgDetailsTitle.visibility = View.VISIBLE
+        settingsPrivateMsgDetailsDesc.visibility = View.VISIBLE
+        settingsPrivateMsgDetailsSwitch.visibility = View.VISIBLE
+
+        settingsGroupMsgDetailsTitle.visibility = View.VISIBLE
+        settingsGroupMsgDetailsDesc.visibility = View.VISIBLE
+        settingsGroupMsgDetailsSwitch.visibility = View.VISIBLE
+    }
+
+    private fun hidePushNotificationPrivacyOptions() {
+        settingsPrivateMsgDetailsTitle.visibility = View.GONE
+        settingsPrivateMsgDetailsDesc.visibility = View.GONE
+        settingsPrivateMsgDetailsSwitch.visibility = View.GONE
+
+        settingsGroupMsgDetailsTitle.visibility = View.GONE
+        settingsGroupMsgDetailsDesc.visibility = View.GONE
+        settingsGroupMsgDetailsSwitch.visibility = View.GONE
     }
 
     private fun setPushTransparency() {

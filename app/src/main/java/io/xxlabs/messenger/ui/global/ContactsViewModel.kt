@@ -318,6 +318,7 @@ class ContactsViewModel @Inject constructor(
                     },
                     onSuccess = {
                         Timber.v("${contact.userId.toBase64String()} has sent a new contact request!")
+                        saveRequest(contact, true)
                         verifyNewRequest(contact)
                     })
         )
@@ -451,6 +452,7 @@ class ContactsViewModel @Inject constructor(
 
     private fun onFailedToVerify(contact: ContactData) {
         saveContact(contact, VERIFICATION_FAIL)
+        saveRequest(contact, true)
     }
 
     private fun deleteFraudulentContact(contact: ContactData) {

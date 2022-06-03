@@ -194,15 +194,13 @@ enum class DrawablePosition {
     TOP, START, END, BOTTOM
 }
 
-@BindingAdapter("thumbnailBitmap", "thumbnailIcon", requireAll = true)
+@BindingAdapter("thumbnailBitmap", "thumbnailIcon", requireAll = false)
 fun ImageView.thumbnail(bitmap: Bitmap?, @IdRes icon: Int?) {
     bitmap?.let {
         visibility = View.VISIBLE
         setPadding(0)
         Glide.with(context)
             .asBitmap()
-            .diskCacheStrategy(DiskCacheStrategy.DATA)
-            .apply(RequestOptions().override(50, 50))
             .centerCrop()
             .load(it)
             .into(this)

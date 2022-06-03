@@ -1,6 +1,11 @@
 package io.xxlabs.messenger.data.room.model
 
+import android.graphics.Bitmap
 import io.xxlabs.messenger.data.data.Country
+import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
+import io.xxlabs.messenger.support.view.BitmapResolver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.Serializable
 
 interface Contact : Serializable {
@@ -29,3 +34,23 @@ fun Contact.formattedEmail(): String? =
 fun Contact.formattedPhone(flagEmoji: Boolean = false): String? =
     if (phone.isNotBlank()) Country.toFormattedNumber(phone, flagEmoji)
     else null
+
+suspend fun Contact.resolveBitmap(): Bitmap? = withContext(Dispatchers.IO) {
+    BitmapResolver.getBitmap(photo)
+}
+
+suspend fun Contact.generateThumbnail(): ItemThumbnail {
+    val photo = resolveBitmap()
+    return object : ItemThumbnail {
+        override val itemPhoto: Bitmap? = photo
+        override val itemIconRes: Int? = null
+        override val itemInitials: String = initials
+    }
+}
+
+fun Contact.dummyThumbnail(): ItemThumbnail =
+    object : ItemThumbnail {
+        override val itemPhoto: Bitmap? = null
+        override val itemIconRes: Int? = null
+        override val itemInitials: String? = initials
+    }

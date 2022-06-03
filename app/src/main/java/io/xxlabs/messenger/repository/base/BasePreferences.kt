@@ -2,9 +2,10 @@ package io.xxlabs.messenger.repository.base
 
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.data.data.ContactRoundRequest
+import io.xxlabs.messenger.notifications.NotificationPreferences
 import io.xxlabs.messenger.requests.deprecated.RequestsFilter
 
-abstract class BasePreferences : BackupPreferencesRepository {
+abstract class BasePreferences : BackupPreferencesRepository, NotificationPreferences {
     abstract fun addContactRequest(contactRoundRequest: ContactRoundRequest)
     abstract fun addContactRequest(contactId: ByteArray, contactUsername: String, roundId: Long, isSent: Boolean)
     abstract fun removeContactRequest(contactRoundRequest: ContactRoundRequest)

@@ -38,6 +38,8 @@ import io.xxlabs.messenger.support.toast.CustomToastActivity
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.base.ViewPagerFragmentStateAdapter
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_requests.*
 import kotlinx.coroutines.flow.launchIn
@@ -79,14 +81,14 @@ class RequestsFragment : BaseFragment() {
     private fun observeUI() {
         requestsViewModel.showReceivedRequestDetails.onEach { request ->
             request?.let {
-                showRequestDetails(request)
+                safelyInvoke { showRequestDetails(request) }
                 requestsViewModel.onRequestDialogShown()
             }
         }.launchIn(lifecycleScope)
 
         requestsViewModel.showConnectionAccepted.onEach { request ->
             request?.let {
-                showAccepted(request)
+                safelyInvoke { showAccepted(request) }
                 requestsViewModel.onNewConnectionShown()
             }
         }.launchIn(lifecycleScope)
@@ -100,14 +102,14 @@ class RequestsFragment : BaseFragment() {
 
         requestsViewModel.showInvitationDetails.onEach { invitation ->
             invitation?.let {
-                showInvitationDetails(invitation)
+                safelyInvoke { showInvitationDetails(invitation) }
                 requestsViewModel.onInvitationDialogShown()
             }
         }.launchIn(lifecycleScope)
 
         requestsViewModel.showGroupAccepted.onEach { group ->
             group?.let {
-                showJoined(group)
+                safelyInvoke { showJoined(group) }
                 requestsViewModel.onGroupAcceptedShown()
             }
         }.launchIn(lifecycleScope)
@@ -115,7 +117,7 @@ class RequestsFragment : BaseFragment() {
 
         requestsViewModel.navigateToGroupChat.onEach { group ->
             group?.let {
-                navigateToGroup(group)
+                safelyInvoke { navigateToGroup(group) }
                 requestsViewModel.onNavigateToGroupHandled()
             }
         }.launchIn(lifecycleScope)
@@ -126,6 +128,22 @@ class RequestsFragment : BaseFragment() {
                 requestsViewModel.onShowToastHandled()
             }
         }.launchIn(lifecycleScope)
+
+        requestsViewModel.verifyingInfoDialogUI.observe(viewLifecycleOwner) { dialogUi ->
+            dialogUi?.let {
+                safelyInvoke { showVerifyingInfo(dialogUi) }
+                requestsViewModel.onVerifyingInfoHandled()
+            }
+        }
+    }
+
+    /**
+     * Prevents crash caused by user closing/navigating away when a dialog is about to display.
+     */
+    private fun safelyInvoke(block: () -> Unit) {
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+            block.invoke()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -147,8 +165,8 @@ class RequestsFragment : BaseFragment() {
                     text = stateAdapter.getPageTitle(position)
                     icon = stateAdapter.getIcon(position)
                     contentDescription = when (position) {
-                        0 -> "requests.tab.received"
-                        1 -> "requests.tab.sent"
+                        REQUESTS_TAB_RECEIVED -> "requests.tab.received"
+                        REQUESTS_TAB_SENT -> "requests.tab.sent"
                         else -> "requests.tab.failed"
                     }
                 }
@@ -230,10 +248,21 @@ class RequestsFragment : BaseFragment() {
         toastHandler.showCustomToast(ui)
     }
 
+    private fun showVerifyingInfo(dialogUI: InfoDialogUI) {
+        InfoDialog.newInstance(dialogUI)
+            .show(requireActivity().supportFragmentManager, null)
+    }
+
     private fun navigateToGroup(group: Group) {
         val groupMessages = RequestsFragmentDirections.actionGlobalGroupsChat()
         groupMessages.groupId = group.groupId.toBase64String()
         groupMessages.group = (group as GroupData).copy(status = RequestStatus.ACCEPTED.value)
         findNavController().navigate(groupMessages)
+    }
+
+    companion object {
+        const val REQUESTS_TAB_RECEIVED = 0
+        const val REQUESTS_TAB_SENT = 1
+        const val REQUESTS_TAB_FAILED = 2
     }
 }

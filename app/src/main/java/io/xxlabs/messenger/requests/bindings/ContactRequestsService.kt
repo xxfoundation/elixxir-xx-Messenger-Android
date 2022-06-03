@@ -6,5 +6,6 @@ import io.xxlabs.messenger.requests.model.ContactRequest
 interface ContactRequestsService {
     suspend fun acceptContactRequest(request: ContactRequest): Boolean
     suspend fun sendContactRequest(request: ContactRequest): Boolean
+    suspend fun verifyContactRequest(request: ContactRequest): VerificationResult
     fun resetSession(contact: Contact): Boolean
 }

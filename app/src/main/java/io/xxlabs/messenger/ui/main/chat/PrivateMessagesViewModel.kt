@@ -469,6 +469,11 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     override fun startSubscription(contactId: ByteArray) {
         getContactInfo(contactId)
         getMessages(contactId)
+        markContactAsInteracted(contactId)
+    }
+
+    private fun markContactAsInteracted(contactId: ByteArray) {
+        daoRepo.deleteNewConnection(userId = contactId.toBase64String())
     }
 
     override fun getMessages(chatId: ByteArray) {
