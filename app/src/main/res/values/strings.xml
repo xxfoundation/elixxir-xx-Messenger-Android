@@ -594,4 +594,5 @@
     <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
     <string name="network_state_connecting">Connecting to xx network...</string>
     <string name="connections_create_group">Create</string>
+    <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
 </resources>
