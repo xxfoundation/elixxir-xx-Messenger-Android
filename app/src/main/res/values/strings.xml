@@ -594,6 +594,10 @@
     <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
     <string name="network_state_connecting">Connecting to xx network...</string>
     <string name="connections_create_group">Create</string>
+<<<<<<< HEAD
+=======
+    <string name="chats_show_mix_pending_message">The mix for this message will be available shortly. Please check again later.</string>
+>>>>>>> ea8dd2a... Updated pending show mix text
 
     <string name="chat_image_sent_label">Sent a photo</string>
     <string name="chat_video_sent_label">Sent a video</string>
