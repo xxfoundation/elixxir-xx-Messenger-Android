@@ -2,8 +2,6 @@ package io.xxlabs.messenger.ui.main.chat
 
 import android.app.Application
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -34,14 +32,12 @@ import io.xxlabs.messenger.support.misc.DummyGenerator
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.BitmapResolver
 import timber.log.Timber
-import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.XxMessengerApplication
+import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import java.util.concurrent.TimeUnit
 
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -559,7 +555,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     private fun createMessage(sentFile: SentFile): PrivateMessage {
         val messagePayload = CMIXText.newBuilder().apply {
-            text = "Sent file"
+            text = sentFile.outgoingText()
         }.build()
 
         return PrivateMessageData(
@@ -574,6 +570,15 @@ class PrivateMessagesViewModel @AssistedInject constructor(
             fileUri = sentFile.uri.toString()
         )
     }
+
+    private fun SentFile.outgoingText(): String = when {
+        isImage() -> appContext().getString(R.string.chat_image_sent_label)
+        isVideo() -> appContext().getString(R.string.chat_video_sent_label)
+        isAudio() -> appContext().getString(R.string.chat_audio_sent_label)
+        isDocument() -> appContext().getString(R.string.chat_doc_sent_label)
+        else -> appContext().getString(R.string.chat_file_sent_label)
+    }
+
 
     private fun saveFileMessageToDb(fileMessage: PrivateMessage) {
         subscriptions.add(
