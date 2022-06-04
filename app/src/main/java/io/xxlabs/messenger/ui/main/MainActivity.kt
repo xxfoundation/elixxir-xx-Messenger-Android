@@ -313,11 +313,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             mainNavController.navigateSafe(R.id.action_global_requests)
         }
 
-        menuContactProfileTxt?.setOnSingleClickListener {
-            hideMenu()
-            mainNavController.navigateSafe(R.id.action_global_ud_profile)
-        }
-
         menuScanText?.setOnSingleClickListener {
             hideMenu()
             mainNavController.navigateSafe(R.id.action_global_qr_code)

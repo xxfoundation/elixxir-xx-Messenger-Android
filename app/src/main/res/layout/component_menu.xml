@@ -235,38 +235,12 @@
 
         <!-- REQUESTS -->
 
-        <!-- PROFILE -->
-        <ImageView
-            android:id="@+id/menuContactProfileIcon"
-            android:src="@drawable/ic_menu_profile"
-            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
-            app:layout_constraintTop_toBottomOf="@id/menuContactRequestsTxt"
-            style="@style/menu_icon" />
-
-        <TextView
-            android:id="@+id/menuContactProfileTxt"
-            style="@style/XxTextStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_10"
-            android:contentDescription="menu.option.profile"
-            android:padding="@dimen/spacing_8"
-            android:paddingEnd="0dp"
-            android:text="@string/menu_profile"
-            android:textColor="@color/neutral_weak"
-            android:textSize="@dimen/text_14"
-            app:layout_constraintBottom_toBottomOf="@id/menuContactProfileIcon"
-            app:layout_constraintStart_toEndOf="@id/menuContactProfileIcon"
-            app:layout_constraintTop_toTopOf="@id/menuContactProfileIcon" />
-
-        <!-- PROFILE -->
-
-        <!-- PROFILE -->
+        <!-- SCAN -->
         <ImageView
             android:id="@+id/menuScanIcon"
             android:src="@drawable/ic_qr_scan"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
-            app:layout_constraintTop_toBottomOf="@id/menuContactProfileTxt"
+            app:layout_constraintTop_toBottomOf="@id/menuContactRequestsTxt"
             style="@style/menu_icon" />
 
         <TextView
@@ -285,7 +259,7 @@
             app:layout_constraintStart_toEndOf="@id/menuScanIcon"
             app:layout_constraintTop_toTopOf="@id/menuScanIcon" />
 
-        <!-- PROFILE -->
+        <!-- SCAN -->
 
         <!-- SETTINGS -->
         <ImageView
