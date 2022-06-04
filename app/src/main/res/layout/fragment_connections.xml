@@ -111,6 +111,7 @@
             android:paddingBottom="@dimen/spacing_18"
             android:text="Add Contact"
             android:visibility="@{ui.emptyListPlaceholderVisible}"
+            android:onClick="@{() -> ui.onAddContactClicked()}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

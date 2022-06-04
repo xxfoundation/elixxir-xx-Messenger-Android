@@ -80,7 +80,7 @@
             app:popUpTo="@id/chatsFragment" />
 
         <action
-            android:id="@+id/action_contacts_selection_to_ud_search_fragment"
+            android:id="@+id/action_contacts_selection_to_search"
             app:destination="@id/udPrivateSearchFragment"
             app:enterAnim="@anim/slide_in_right"
             app:exitAnim="@anim/slide_out_left"
@@ -306,6 +306,7 @@
             app:popUpTo="@id/chatsFragment" />
     </fragment>
 
+    <!-- TODO: Add a global search action -->
     <fragment
         android:id="@+id/udPrivateSearchFragment"
         android:name="io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment"
