@@ -94,6 +94,12 @@ class ChatsFragment : BaseFragment() {
             navigateToUdSearch()
         }
     }
+    
+    private fun navigateToUdSearch() {
+        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
+        preferences.isFirstLaunch = false
+        findNavController().navigate(udSearch)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -114,18 +120,6 @@ class ChatsFragment : BaseFragment() {
             viewModelFactory
         ).get(ContactsViewModel::class.java)
         initComponents(view)
-    }
-
-    private fun navigateForNewUsers() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstLaunch) {
-            navigateToUdSearch()
-        }
-    }
-
-    private fun navigateToUdSearch() {
-        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
-        preferences.isFirstLaunch = false
-        findNavController().navigate(udSearch)
     }
 
     fun initComponents(root: View) {
@@ -282,12 +276,6 @@ class ChatsFragment : BaseFragment() {
             contactId = contact.userId.toBase64String()
         }
         findNavController().navigateSafe(privateChatDirections)
-    }
-
-    private fun navigateToUdSearch() {
-        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
-        preferences.isFirstLaunch = false
-        findNavController().navigate(udSearch)
     }
 
     private fun navigateToContactsSelection() {
