@@ -953,6 +953,17 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         _fullScreenImageUri.value = null
     }
 
+    val navigateToProfile: LiveData<Boolean> get() = _navigateToProfile
+    private val _navigateToProfile = MutableLiveData(false)
+
+    override fun onContactClicked() {
+        _navigateToProfile.value = true
+    }
+
+    fun onNavigateToProfileHandled() {
+        _navigateToProfile.value = false
+    }
+
     companion object {
         fun provideFactory(
             assistedFactory: PrivateMessagesViewModelFactory,

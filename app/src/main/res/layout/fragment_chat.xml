@@ -89,6 +89,7 @@
                 android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:scaleType="centerCrop"
+                android:onClick="@{() -> chatViewModel.onContactClicked()}"
                 app:profilePhoto="@{chatViewModel.chatIcon}"
                 tools:src="@drawable/ic_contact" />
         </io.xxlabs.messenger.support.view.SquaredCornerLayout>
@@ -104,6 +105,7 @@
             android:text="@{chatViewModel.chatTitle}"
             android:textColor="@color/neutral_active"
             android:textSize="@dimen/text_18"
+            android:onClick="@{() -> chatViewModel.onContactClicked()}"
             app:layout_constraintBottom_toTopOf="@id/chatTopBarContactsRecycler"
             app:layout_constraintEnd_toStartOf="@id/chatTopBarMenu"
             app:layout_constraintStart_toEndOf="@id/chatTitleStartBarrier"

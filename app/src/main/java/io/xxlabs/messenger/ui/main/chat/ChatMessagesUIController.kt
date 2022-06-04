@@ -296,6 +296,8 @@ interface ChatMessagesUIController<T: ChatMessage>  {
 
     val showMixClicked: LiveData<String?>
 
+    fun onContactClicked()
+
     companion object {
         /** The max text length to when displaying a message being replied to.*/
         const val MAX_REPLY_PREVIEW_LENGTH = 100

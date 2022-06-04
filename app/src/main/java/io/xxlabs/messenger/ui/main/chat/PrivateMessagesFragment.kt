@@ -253,6 +253,13 @@ class PrivateMessagesFragment :
             }
         }
 
+        chatViewModel.navigateToProfile.observe(viewLifecycleOwner) { navigate ->
+            if (navigate) {
+                menuActionOpenContactProfile()
+                chatViewModel.onNavigateToProfileHandled()
+            }
+        }
+
         super.observeUI()
     }
 
