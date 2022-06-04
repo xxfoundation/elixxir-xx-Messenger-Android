@@ -520,10 +520,10 @@
     <string name="confirm_delete_chats_dialog_body">This will clear the selected chat messages only for you. It can’t be undone.</string>
     <string name="confirm_delete_chats_dialog_button">Yes, Delete</string>
     <string name="confirm_delete_groups_dialog_title">Are you sure you want to leave one or more groups?</string>
-    <string name="confirm_delete_groups_dialog_body">You will be leaving the selected group chats. It can\'t be undone.</string>
+    <string name="confirm_delete_groups_dialog_body">You will exit the selected group(s) and won’t receive any more messages from them.\n\nThe group messages will be lost.</string>
     <string name="confirm_delete_groups_dialog_button">Leave Groups</string>
     <string name="confirm_leave_group_dialog_title">Leave group</string>
-    <string name="confirm_leave_group_dialog_body">You will be leaving this group chat. It can\'t be undone.</string>
+    <string name="confirm_leave_group_dialog_body">You will exit this group and won’t receive any more messages from this group.\n\nThis group's messages will be lost.</string>
     <string name="confirm_leave_group_dialog_button">Leave Group</string>
     <string name="group_invitation_pending">You will not be able to send messages until you have accepted the invitation.</string>
     <string name="settings_delete_account_username_error">Username does not match.</string>
