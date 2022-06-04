@@ -526,6 +526,7 @@ class GroupMessagesViewModel @AssistedInject constructor(
     override fun onFileBrowserHandled() {}
     override fun onCameraHandled() {}
     override fun onGalleryHandled() {}
+    override fun onContactClicked() {}
 
     override val lastMessage: LiveData<GroupMessage?> =
         Transformations.switchMap(groupData) {
