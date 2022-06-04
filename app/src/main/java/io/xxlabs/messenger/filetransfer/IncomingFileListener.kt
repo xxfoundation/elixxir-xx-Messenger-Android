@@ -6,6 +6,7 @@ import androidx.core.content.FileProvider
 import data.proto.CMIXText
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.PrivateMessageData
 import io.xxlabs.messenger.repository.base.BaseRepository
@@ -149,13 +150,21 @@ class IncomingFileListener (
             FileType.OTHER -> saveToDownloadsDirectory(fileData, download.fileInfo)
         }
 
-        val messagePayload = createMessagePayload("Received file")
+        val messagePayload = createMessagePayload(download.fileInfo.incomingText())
         val updatedMessage = download.message.copy(
             payload = messagePayload,
             fileUri = uri.toString(),
             transferProgress = 100
         )
         updateMessageInDb(updatedMessage)
+    }
+
+    private fun IncomingFile.incomingText(): String = when {
+        isImage() -> appContext().getString(R.string.chat_image_recv_label)
+        isVideo() -> appContext().getString(R.string.chat_video_recv_label)
+        isAudio() -> appContext().getString(R.string.chat_audio_recv_label)
+        isDocument() -> appContext().getString(R.string.chat_doc_recv_label)
+        else -> appContext().getString(R.string.chat_file_recv_label)
     }
 
     private suspend fun saveToPicturesDirectory(

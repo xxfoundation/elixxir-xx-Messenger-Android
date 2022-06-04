@@ -594,5 +594,16 @@
     <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
     <string name="network_state_connecting">Connecting to xx network...</string>
     <string name="connections_create_group">Create</string>
-    <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
+
+    <string name="chat_image_sent_label">Sent a photo</string>
+    <string name="chat_video_sent_label">Sent a video</string>
+    <string name="chat_audio_sent_label">Sent an audio message</string>
+    <string name="chat_doc_sent_label">Sent a document</string>
+    <string name="chat_file_sent_label">Sent a file</string>
+
+    <string name="chat_image_recv_label">Received a photo</string>
+    <string name="chat_video_recv_label">Received a video</string>
+    <string name="chat_audio_recv_label">Received an audio message</string>
+    <string name="chat_doc_recv_label">Received a document</string>
+    <string name="chat_file_recv_label">Received a file</string>
 </resources>
