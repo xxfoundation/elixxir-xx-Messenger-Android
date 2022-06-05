@@ -607,4 +607,5 @@
     <string name="chat_audio_recv_label">Received an audio message</string>
     <string name="chat_doc_recv_label">Received a document</string>
     <string name="chat_file_recv_label">Received a file</string>
+    <string name="chats_no_results_found_message">was not found in your connections or in a chat. Click below to search for them as a new connection.</string>
 </resources>

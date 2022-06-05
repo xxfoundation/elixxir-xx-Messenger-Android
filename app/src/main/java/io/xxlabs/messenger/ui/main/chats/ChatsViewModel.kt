@@ -269,12 +269,16 @@ class ChatsViewModel @Inject constructor(
         updateUI()
     }
 
+    private var noResultsFound: Boolean = false
+
     private fun updateUI() {
         _chatsListUi.value = ChatsList(
-            this,
-            areNewConnectionsVisible(),
-            isSearchVisible(),
-            isPlaceHolderVisible && !isSearchVisible()
+            listener = this,
+            newConnectionsVisible = areNewConnectionsVisible(),
+            searchVisible = isSearchVisible(),
+            emptyPlaceholderVisible = isPlaceHolderVisible && !isSearchVisible(),
+            noResultsFoundVisible = isSearchVisible() && noResultsFound,
+            noResultsFoundName = cachedSearch
         )
     }
 
@@ -299,11 +303,15 @@ class ChatsViewModel @Inject constructor(
                 if (matchingChats.isEmpty()) {
                     searchConnectionsFor(text).collect { matchingContact ->
                         val results = matchingChats + matchingGroups + matchingContact
+                        noResultsFound = results.isEmpty()
                         _searchResults.postValue(results)
+                        updateUI()
                     }
                 } else {
                     val results = matchingChats + matchingGroups
+                    noResultsFound = results.isEmpty()
                     _searchResults.postValue(results)
+                    updateUI()
                 }
             }.collect()
         }

@@ -272,6 +272,65 @@
             app:layout_constraintBottom_toBottomOf="parent"
             tools:visibility="visible" />
 
+        <TextView
+            android:id="@+id/noResultsFoundName"
+            style="@style/xx_font"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.noResultsFoundName}"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:layout_marginBottom="8dp"
+            app:fontWeight="700"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/brand_default"
+            app:lineHeight="30sp"
+            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintBottom_toTopOf="@id/noResultsFoundMessage"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Bill Gates" />
+
+        <TextView
+            android:id="@+id/noResultsFoundMessage"
+            style="@style/xx_font"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/chats_no_results_found_message"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"
+            app:fontWeight="400"
+            app:lineHeight="21sp"
+            android:textColor="@color/neutral_active"
+            app:layout_constraintTop_toBottomOf="@id/noResultsFoundName"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintBottom_toTopOf="@id/noResultsFoundActionButton"
+            tools:text="No results found"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/noResultsFoundActionButton"
+            style="@style/ButtonStyle.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:layout_marginBottom="@dimen/spacing_40"
+            android:contentDescription="chats.btn.contacts.ud"
+            android:paddingTop="@dimen/spacing_18"
+            android:paddingBottom="@dimen/spacing_18"
+            android:text="Search for a connection"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:onClick="@{() -> ui.onAddContactClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noResultsFoundMessage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+
         <include
             layout="@layout/component_bottom_menu_chats"
             android:layout_width="0dp"
