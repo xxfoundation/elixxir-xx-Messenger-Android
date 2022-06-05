@@ -313,9 +313,7 @@ class ChatsFragment : BaseFragment() {
     }
 
     private fun navigateToContactsSelection() {
-        val contactsDirections = ChatsFragmentDirections.actionChatsToContacts().apply {
-            contactSelectionMode = true
-        }
+        val contactsDirections = ChatsFragmentDirections.actionChatsToSelectContact()
         findNavController().navigateSafe(contactsDirections)
     }
 
