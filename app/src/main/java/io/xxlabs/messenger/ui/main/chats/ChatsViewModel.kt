@@ -300,15 +300,13 @@ class ChatsViewModel @Inject constructor(
         showingSearchResults = true
         viewModelScope.launch {
             searchChatsFor(text).combine(searchGroupsFor(text)) { matchingChats, matchingGroups ->
-                if (matchingChats.isEmpty()) {
-                    searchConnectionsFor(text).collect { matchingContact ->
-                        val results = matchingChats + matchingGroups + matchingContact
-                        noResultsFound = results.isEmpty()
-                        _searchResults.postValue(results)
-                        updateUI()
+                searchConnectionsFor(text).collect { matchingContacts ->
+                    val activeChats = matchingChats.map { it.model }
+                    // Don't show a contact result if there's an active chat already.
+                    val duplicatesRemoved = matchingContacts.filterNot { contactResult ->
+                        contactResult.model in activeChats
                     }
-                } else {
-                    val results = matchingChats + matchingGroups
+                    val results = matchingChats + matchingGroups + duplicatesRemoved
                     noResultsFound = results.isEmpty()
                     _searchResults.postValue(results)
                     updateUI()

@@ -28,7 +28,7 @@ sealed interface SearchResult : SearchResultItem {
 
 data class ConnectionResult(
     private val listener: SearchResultListener,
-    private val model: Contact,
+    val model: Contact,
     override val thumbnail: ItemThumbnail,
 ) : SearchResult {
     override val id: Int = model.userId.hashCode()
@@ -42,7 +42,7 @@ data class ConnectionResult(
 
 data class PrivateChatResult(
     private val listener: SearchResultListener,
-    private val model: Contact,
+    val model: Contact,
     private val lastMessage: String,
     override val thumbnail: ItemThumbnail,
     override val timestamp: String?,
@@ -57,7 +57,7 @@ data class PrivateChatResult(
 
 data class GroupChatResult(
     private val listener: SearchResultListener,
-    private val model: Group,
+    val model: Group,
     private val lastMessage: String,
     override val timestamp: String,
     override val notificationCount: String?,
