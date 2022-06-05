@@ -189,9 +189,10 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/chatsRecyclerView"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginTop="@dimen/spacing_12"
             android:paddingTop="@dimen/spacing_12"
+            app:invisible="@{ui.searchVisible}"
             app:layout_constrainedHeight="true"
             app:layout_constraintBottom_toTopOf="@id/chatsBottomMenu"
             app:layout_constraintEnd_toEndOf="parent"
@@ -201,6 +202,22 @@
             app:layout_constraintVertical_bias="0"
             tools:itemCount="5"
             tools:listitem="@layout/list_item_chat" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:paddingTop="@dimen/spacing_12"
+            android:visibility="@{ui.searchVisible}"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@id/chatsBottomMenu"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
+            tools:itemCount="5"
+            tools:listitem="@layout/list_item_chat"
+            tools:visibility="gone"/>
 
         <androidx.core.widget.ContentLoadingProgressBar
             android:id="@+id/chatsLoading"
@@ -226,7 +243,7 @@
             android:text="Start chatting with your contacts"
             android:textColor="@color/neutral_active"
             android:textSize="@dimen/text_24"
-            android:visibility="invisible"
+            android:visibility="@{ui.emptyPlaceholderVisible}"
             app:layout_constraintBottom_toTopOf="@id/chatsAddContactBtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -248,7 +265,7 @@
             android:paddingTop="@dimen/spacing_18"
             android:paddingBottom="@dimen/spacing_18"
             android:text="Go to contacts"
-            android:visibility="invisible"
+            android:visibility="@{ui.emptyPlaceholderVisible}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/chatsEmptyBottomTxt"
