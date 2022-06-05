@@ -78,6 +78,9 @@ class ChatsViewModel @Inject constructor(
     var cachedSearch: String? = null
         private set
 
+    private val contactsHeader: SectionHeader by lazy { SectionHeader("connetions") }
+    private val chatsHeader: SectionHeader by lazy { SectionHeader("chats") }
+
     class ChatObservable {
         val chatsHashMap = HashMap<String, ChatWrapper>()
 
@@ -306,13 +309,33 @@ class ChatsViewModel @Inject constructor(
                     val duplicatesRemoved = matchingContacts.filterNot { contactResult ->
                         contactResult.model in activeChats
                     }
-                    val results = matchingChats + matchingGroups + duplicatesRemoved
+                    val results = sortResults(duplicatesRemoved, matchingChats, matchingGroups)
                     noResultsFound = results.isEmpty()
                     _searchResults.postValue(results)
                     updateUI()
                 }
             }.collect()
         }
+    }
+
+    private suspend fun sortResults(
+        contacts: List<ConnectionResult>,
+        chats: List<PrivateChatResult>,
+        groups: List<GroupChatResult>
+    ) : List<SearchResultItem> = withContext(Dispatchers.Main) {
+        val sortedResults = mutableListOf<SearchResultItem>()
+
+        if (contacts.isNotEmpty()) {
+            sortedResults.add(contactsHeader)
+            sortedResults += contacts.sortedByDescending { it.name }
+        }
+        with (chats + groups) {
+            if (isNotEmpty()) {
+                sortedResults.add(chatsHeader)
+                sortedResults += sortedByDescending { it.name }
+            }
+        }
+        sortedResults
     }
 
     private suspend fun searchConnectionsFor(text: String): Flow<List<ConnectionResult>> =
