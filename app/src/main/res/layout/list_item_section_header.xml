@@ -14,9 +14,11 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <include
-            android:id="@+id/dividerLayout"
-            layout="@layout/list_item_divider"/>
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line" />
 
         <TextView
             android:id="@+id/label"
@@ -27,6 +29,7 @@
             android:textColor="@color/neutral_weak"
             android:textSize="12sp"
             android:layout_marginTop="24dp"
+            android:textAllCaps="true"
             app:fontWeight="700"
             app:lineHeight="18sp"
             tools:text="Chats"/>

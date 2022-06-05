@@ -85,7 +85,7 @@ private class SectionHeaderViewHolder(
 
     fun onBind(label: String, position: Int) {
         binding.header = label
-        binding.dividerLayout.divider.setVisibility(position > 0)
+        binding.divider.setVisibility(position > 0)
     }
 
     companion object {
