@@ -14,9 +14,7 @@ import io.xxlabs.messenger.support.toolbar.*
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContact
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactListener
 import io.xxlabs.messenger.ui.main.contacts.select.SelectedContactUI
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.math.abs
@@ -60,11 +58,18 @@ class ConnectionsViewModel @Inject constructor(
 
     override val connectionsList: LiveData<List<Connection>> = connectionsFlow.asLiveData()
 
-    val selectableContacts: LiveData<List<SelectableContact>> = contactItemFlow.map { list ->
-        list.map { contactItem ->
-            SelectableContact(contactItem, this@ConnectionsViewModel,)
-        }
-    }.asLiveData()
+    private val cachedSelectionsFlow = MutableStateFlow<List<ContactItem>>(listOf())
+
+    val selectableContacts: LiveData<List<SelectableContact>> =
+        cachedSelectionsFlow.combine(contactItemFlow) { cache, source ->
+            source.map { contactItem ->
+                SelectableContact(
+                    contactItem,
+                    this@ConnectionsViewModel,
+                    contactItem in cache
+                )
+            }
+        }.asLiveData()
 
     override val emptyListPlaceholderVisible = Transformations.map(connectionsList) { it.isEmpty() }
 
@@ -177,18 +182,15 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     private fun onSelectToggled(contact: ContactItem) {
-        if (memberLimitReached()) return
-
         viewModelScope.launch {
             cachedSelections[contact]?.let {
                 deselectContact(contact)
             } ?: selectContact(contact)
+
+            cachedSelectionsFlow.emit(cachedSelections.keys.toList())
             updateCreateGroupToolbar()
         }
     }
-
-    // TODO: Implement onCheckedListener to prevent checking boxes when limit is reached
-    private fun memberLimitReached(): Boolean = false
 
     private fun selectContact(contact: ContactItem) {
         cachedSelections[contact] = contact.selected()
@@ -205,9 +207,7 @@ class ConnectionsViewModel @Inject constructor(
     }
 
     override fun onContactRemoved(selection: SelectedContact) {
-        viewModelScope.launch {
-            deselectContact(selection.contactItem)
-        }
+        onSelectToggled(selection.contactItem)
     }
 
     private fun onContactClicked(contact: Contact) {
@@ -228,13 +228,6 @@ class ConnectionsViewModel @Inject constructor(
 
     override fun onActionClicked() {
         _navigateUp.value = true
-//        clearSelections()
-    }
-
-    private fun clearSelections() {
-        cachedSelections.clear()
-        _selectedContacts.value = listOf()
-        _createGroupToolbar.value = initialCreateGroupToolbar
     }
 
     fun onNavigateUpHandled() {
