@@ -133,14 +133,15 @@ class ConnectionsViewModel @Inject constructor(
     val toolbar: ToolbarUI =
         CustomToolbar(this, SpannedString("Connections"), menuItems)
 
-    private val createGroupMenuItem : ToolbarMenuItem =
+    private val createGroupMenuItem : ToolbarMenuItem get() =
         ToolbarItem(
             listener = this,
             id = ITEM_CREATE_GROUP,
-            label = R.string.connections_create_group
+            label = R.string.connections_create_group,
+            enabled = cachedSelections.count() in 2..MAX_GROUP_SIZE
         )
 
-    private val createGroupMenu = listOf(createGroupMenuItem)
+    private val createGroupMenu get() = listOf(createGroupMenuItem)
 
     private val initialCreateGroupToolbar: ToolbarUI =
         CustomToolbar(this, SpannedString("Add members"), createGroupMenu)
