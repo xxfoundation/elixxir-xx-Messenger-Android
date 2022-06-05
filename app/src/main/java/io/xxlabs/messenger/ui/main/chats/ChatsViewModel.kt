@@ -353,12 +353,12 @@ class ChatsViewModel @Inject constructor(
             val contact = item as ContactData
             val lastMessageContent: String
             val lastMessageTimeStamp: String
-            val notificationCountText: String
+            val notificationCountText: String?
             val thumbnail = contact.generateThumbnail()
 
             (lastMessage as PrivateMessageData).run {
                 lastMessageContent = payloadWrapper.text
-                notificationCountText = unreadCount.toString()
+                notificationCountText = if (unreadCount > 0) unreadCount.toString() else null
                 lastMessageTimeStamp = getDateText(timestamp)
 
                 PrivateChatResult(
@@ -407,11 +407,11 @@ class ChatsViewModel @Inject constructor(
         val group = item as GroupData
         val lastMessageContent: String
         val lastMessageTimeStamp: String
-        val notificationCountText: String
+        val notificationCountText: String?
 
         return (lastMessage as GroupMessageData).run {
             lastMessageContent = payloadWrapper.text
-            notificationCountText = unreadCount.toString()
+            notificationCountText = if (unreadCount > 0) unreadCount.toString() else null
             lastMessageTimeStamp = getDateText(timestamp)
 
             GroupChatResult(
