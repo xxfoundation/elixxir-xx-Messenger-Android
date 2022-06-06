@@ -112,6 +112,18 @@ class ContactRequestsRepository @Inject constructor(
         }
     }
 
+    override fun failUnverifiedRequests() {
+        scope.launch {
+            getRequests().collect { requests ->
+                requests.filter {
+                    it.requestStatus == VERIFYING
+                }.forEach {
+                    update(it, VERIFICATION_FAIL)
+                }
+            }
+        }
+    }
+
     private suspend fun handleFraudulentRequest(request: ContactRequest) {
         update(request, DELETING)
         val rowsDeleted = daoRepository.deleteContact(request.model as ContactData).value()

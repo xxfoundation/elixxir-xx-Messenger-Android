@@ -93,6 +93,10 @@ class GroupRequestsRepository @Inject constructor(
         // Group invitations don't have verification at the moment.
     }
 
+    override fun failUnverifiedRequests() {
+        // Group invitations don't have verification at the moment.
+    }
+
     override fun resetResentRequests() {
         scope.launch {
             getRequests().take(2).collectLatest { invitationsList ->
