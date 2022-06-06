@@ -414,7 +414,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             ToastUI.create(
                 body = message ?: "One of your requests failed.",
                 leftIcon = R.drawable.ic_danger,
-                backgroundColor = getColor(R.color.accent_danger)
+                backgroundColor = R.color.accent_danger
             )
         )
         contactsViewModel.onToastShown()
