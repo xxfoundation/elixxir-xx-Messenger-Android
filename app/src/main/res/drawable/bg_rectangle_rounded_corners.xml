@@ -7,5 +7,5 @@
         android:right="@dimen/spacing_10"
         android:top="5dp" />
 
-    <solid android:color="@color/tealTagVariation" />
+    <solid android:color="@color/brand_default" />
 </shape>

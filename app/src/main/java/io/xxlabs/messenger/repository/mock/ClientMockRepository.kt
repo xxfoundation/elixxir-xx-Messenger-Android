@@ -19,10 +19,10 @@ import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportMock
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListMock
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MsgType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
@@ -32,7 +32,6 @@ import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import timber.log.Timber
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.random.Random
 
 class ClientMockRepository(

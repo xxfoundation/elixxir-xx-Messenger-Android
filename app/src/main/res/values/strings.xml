@@ -594,7 +594,6 @@
     <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
     <string name="network_state_connecting">Connecting to xx network...</string>
     <string name="connections_create_group">Create</string>
-    <string name="chats_show_mix_pending_message">The mix for this message will be available shortly. Please check again later.</string>
 
     <string name="chat_image_sent_label">Sent a photo</string>
     <string name="chat_video_sent_label">Sent a video</string>
@@ -607,4 +606,16 @@
     <string name="chat_audio_recv_label">Received an audio message</string>
     <string name="chat_doc_recv_label">Received a document</string>
     <string name="chat_file_recv_label">Received a file</string>
+    <string name="scan_qr_ready_description">Place QR Code inside\nframe to scan.</string>
+    <string name="scan_qr_self_scan_error">You can\'t add yourself.</string>
+    <string name="scan_qr_scanning_description">Scanning code</string>
+    <string name="scan_qr_successful_description">SUCCESS</string>
+    <string name="scan_qr_already_requested_error">You already have a request sent\nfrom this connection.</string>
+    <string name="scan_qr_already_connection_error">You have already added %s</string>
+    <string name="scan_qr_already_requested_error_cta">Check requests</string>
+    <string name="scan_qr_already_connection_error_cta">See contact</string>
+    <string name="scan_qr_generic_error">Could not find user. Please try again.</string>
+    <string name="share_contact_info_placeholder">not added</string>
+    <string name="share_contact_info_title">Select what you would like to share</string>
+    <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
 </resources>

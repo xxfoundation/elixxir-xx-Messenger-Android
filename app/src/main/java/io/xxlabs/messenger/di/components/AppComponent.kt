@@ -9,7 +9,6 @@ import io.xxlabs.messenger.di.modules.ActivityBuildersModule
 import io.xxlabs.messenger.di.modules.AppModule
 import io.xxlabs.messenger.di.modules.ListenersBuildersModule
 import io.xxlabs.messenger.di.modules.ServiceBuilderModule
-import io.xxlabs.messenger.repository.client.ClientRepository
 import javax.inject.Singleton
 
 @Singleton

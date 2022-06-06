@@ -8,7 +8,6 @@ import io.reactivex.Single
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.XxMessengerApplication
-import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings.Companion.development
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
@@ -21,7 +20,6 @@ import io.xxlabs.messenger.repository.client.NodeErrorException
 import io.xxlabs.messenger.support.appContext
 import timber.log.Timber
 import java.io.File
-import java.lang.UnsupportedOperationException
 
 private val devUserDiscoveryIp = "18.198.117.203:11420".encodeToByteArray()
 private const val NDF_MAX_RETRIES = 2

@@ -3,7 +3,6 @@ package io.xxlabs.messenger.ui.main.chat.viewholders.media.photo
 import android.view.View
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
 import io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener

@@ -9,8 +9,8 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBase
 import io.xxlabs.messenger.bindings.wrapper.groups.membership.GroupMembershipBase
 import io.xxlabs.messenger.data.data.PayloadWrapper
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.MessageStatus
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion

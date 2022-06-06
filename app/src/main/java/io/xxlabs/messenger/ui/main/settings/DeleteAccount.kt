@@ -1,28 +1,20 @@
 package io.xxlabs.messenger.ui.main.settings
 
+import android.app.ActivityManager
 import android.app.Application
+import android.content.Context.ACTIVITY_SERVICE
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Single
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
-import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.repository.client.ClientRepository
-import io.xxlabs.messenger.support.appContext
 import javax.inject.Inject
-import android.content.Context.ACTIVITY_SERVICE
-
-import androidx.core.content.ContextCompat.getSystemService
-
-import android.app.ActivityManager
-
-import android.os.Build
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import java.lang.Exception
 
 
 class DeleteAccount @Inject constructor(

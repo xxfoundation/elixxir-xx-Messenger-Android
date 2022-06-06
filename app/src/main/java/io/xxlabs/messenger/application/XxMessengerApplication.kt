@@ -7,13 +7,6 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.NotificationManagerCompat
 import androidx.multidex.MultiDex
 import androidx.multidex.MultiDexApplication
-import com.datadog.android.Datadog
-import com.datadog.android.core.configuration.Configuration
-import com.datadog.android.core.configuration.Credentials
-import com.datadog.android.log.Logger
-import com.datadog.android.privacy.TrackingConsent
-import com.datadog.android.rum.GlobalRum
-import com.datadog.android.rum.RumMonitor
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.lyft.kronos.AndroidClockFactory
 import com.lyft.kronos.KronosClock
@@ -24,7 +17,6 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
-import io.xxlabs.messenger.data.datatype.Environment
 import io.xxlabs.messenger.di.utils.AppInjector
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.support.error.DefaultErrorHandler

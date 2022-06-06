@@ -17,10 +17,10 @@ import io.xxlabs.messenger.ui.main.chat.viewholders.media.file.ReceivedFileViewH
 import io.xxlabs.messenger.ui.main.chat.viewholders.media.file.SentFileViewHolder
 import io.xxlabs.messenger.ui.main.chat.viewholders.media.photo.ReceivedImageViewHolder
 import io.xxlabs.messenger.ui.main.chat.viewholders.media.photo.SentImageViewHolder
-import io.xxlabs.messenger.ui.main.chat.viewholders.text.ReceivedMessageViewHolder
-import io.xxlabs.messenger.ui.main.chat.viewholders.text.SentMessageViewHolder
 import io.xxlabs.messenger.ui.main.chat.viewholders.media.video.ReceivedVideoViewHolder
 import io.xxlabs.messenger.ui.main.chat.viewholders.media.video.SentVideoViewHolder
+import io.xxlabs.messenger.ui.main.chat.viewholders.text.ReceivedMessageViewHolder
+import io.xxlabs.messenger.ui.main.chat.viewholders.text.SentMessageViewHolder
 
 class PrivateMessagesAdapter(
     private val chatViewModel: PrivateMessagesViewModel,

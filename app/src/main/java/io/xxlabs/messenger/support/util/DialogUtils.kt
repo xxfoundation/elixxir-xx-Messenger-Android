@@ -4,13 +4,10 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.core.content.ContextCompat
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.dialog.PopupActionDialog
-import io.xxlabs.messenger.support.isMockVersion
 import timber.log.Timber
 
 class DialogUtils {

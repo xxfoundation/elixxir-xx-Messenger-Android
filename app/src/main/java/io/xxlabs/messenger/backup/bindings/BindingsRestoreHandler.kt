@@ -21,7 +21,6 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 

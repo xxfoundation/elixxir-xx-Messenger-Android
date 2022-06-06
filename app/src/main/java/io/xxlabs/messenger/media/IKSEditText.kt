@@ -2,16 +2,15 @@ package io.xxlabs.messenger.media
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.widget.EditText
+import android.util.AttributeSet
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
+import android.widget.EditText
+import androidx.core.os.BuildCompat
 import androidx.core.view.inputmethod.EditorInfoCompat
+import androidx.core.view.inputmethod.InputConnectionCompat
 import androidx.core.view.inputmethod.InputConnectionCompat.OnCommitContentListener
 import androidx.core.view.inputmethod.InputContentInfoCompat
-import android.util.AttributeSet
-import androidx.core.os.BuildCompat
-import androidx.core.view.inputmethod.InputConnectionCompat
-import java.lang.Exception
 
 @SuppressLint("AppCompatCustomView")
 class IKSEditText : EditText {

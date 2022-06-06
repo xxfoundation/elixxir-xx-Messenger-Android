@@ -11,8 +11,8 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.FragmentRegistrationCompletedStepBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep.*
 import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep.*
 
 class RegistrationCompletedStepFragment : RegistrationFlowFragment(), Injectable {
 

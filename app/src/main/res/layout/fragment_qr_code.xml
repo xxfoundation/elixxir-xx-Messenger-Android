@@ -40,17 +40,17 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
-                app:tabGravity="center"
-                app:tabIndicatorFullWidth="false"
-                app:tabIndicatorHeight="@dimen/spacing_5"
-                app:tabInlineLabel="true"
+                app:tabGravity="fill"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorHeight="@dimen/spacing_3"
+                app:tabInlineLabel="false"
                 app:tabMaxWidth="0dp"
                 app:tabMode="fixed"
-                app:tabPaddingBottom="@dimen/spacing_5"
                 app:tabPaddingEnd="@dimen/spacing_24"
                 app:tabPaddingStart="@dimen/spacing_24"
                 app:tabTextAppearance="@style/TabTextStyle"
-                app:tabIndicatorGravity="top"/>
+                app:tabIconTint="@color/selector_qr_code_tab_secondary"
+                app:tabTextColor="@color/selector_qr_code_tab_secondary"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.viewpager2.widget.ViewPager2

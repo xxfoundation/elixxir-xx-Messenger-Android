@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.databinding.ListItemMsgVideoReceivedBinding
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
-import io.xxlabs.messenger.ui.main.chat.PrivateMessagesViewModel
 import io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener
 
 class ReceivedVideoViewHolder(

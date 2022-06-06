@@ -2,8 +2,8 @@ package io.xxlabs.messenger.backup
 
 import dagger.Binds
 import dagger.Module
-import io.xxlabs.messenger.backup.bindings.BindingsBackupMediator
 import io.xxlabs.messenger.backup.bindings.BackupService
+import io.xxlabs.messenger.backup.bindings.BindingsBackupMediator
 import io.xxlabs.messenger.backup.data.backup.*
 import io.xxlabs.messenger.backup.data.restore.RestoreManager
 import io.xxlabs.messenger.backup.data.restore.RestoreMediator

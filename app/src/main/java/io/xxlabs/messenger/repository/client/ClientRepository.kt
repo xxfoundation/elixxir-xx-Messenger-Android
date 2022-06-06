@@ -1,7 +1,8 @@
 package io.xxlabs.messenger.repository.client
 
 import android.content.Context
-import bindings.*
+import bindings.Bindings
+import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Maybe

@@ -29,6 +29,7 @@ import io.xxlabs.messenger.support.selection.LongKeyProvider
 import io.xxlabs.messenger.support.touch.ButtonSwipeHelper
 import io.xxlabs.messenger.support.touch.UnderlayButton
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel

@@ -1,10 +1,10 @@
 package io.xxlabs.messenger.bindings.wrapper.report
 
+import com.google.gson.Gson
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListMock
 import io.xxlabs.messenger.support.util.Utils
 import kotlin.random.Random
-import com.google.gson.Gson
 
 class SendReportMock : SendReportBase {
     override fun getMessageId(): ByteArray {
