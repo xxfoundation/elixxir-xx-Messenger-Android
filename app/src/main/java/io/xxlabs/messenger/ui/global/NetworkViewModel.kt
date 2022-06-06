@@ -18,6 +18,7 @@ import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.toast.ToastUI
@@ -32,7 +33,8 @@ class NetworkViewModel @Inject constructor(
     val app: Application,
     val repo: BaseRepository,
     val daoRepo: DaoRepository,
-    val schedulers: SchedulerProvider
+    val schedulers: SchedulerProvider,
+    private val requestsDataSource: ContactRequestsRepository
 ) : ViewModel() {
 
     /**
@@ -241,6 +243,7 @@ class NetworkViewModel @Inject constructor(
     }
 
     private fun stopNetworkFollower() {
+        requestsDataSource.failUnverifiedRequests()
         subscriptions.add(
             repo.stopNetworkFollower()
                 .subscribeOn(schedulers.single)
