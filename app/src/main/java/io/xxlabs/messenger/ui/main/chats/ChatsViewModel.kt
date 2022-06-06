@@ -2,30 +2,36 @@ package io.xxlabs.messenger.ui.main.chats
 
 import android.graphics.Bitmap
 import androidx.lifecycle.*
+import com.dropbox.core.v2.team.GroupSelector.groupId
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.notifications.MessagingService.Companion.notificationCount
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
+import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.ui.main.chats.data.NewConnectionsDataSource
-import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionData
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionListener
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
+import io.xxlabs.messenger.ui.main.chats.search.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.cancellable
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class ChatsViewModel @Inject constructor(
@@ -33,7 +39,7 @@ class ChatsViewModel @Inject constructor(
     val daoRepo: DaoRepository,
     private val schedulers: SchedulerProvider,
     private val newConnectionsDataSource: NewConnectionsDataSource
-) : ViewModel(), ChatsListListener, NewConnectionListener {
+) : ViewModel(), ChatsListListener, NewConnectionListener, SearchResultListener {
     var subscriptions = CompositeDisposable()
     var chatsData = MutableLiveData<List<ChatWrapper>>()
     var chats = ChatObservable()
@@ -41,14 +47,20 @@ class ChatsViewModel @Inject constructor(
     var acceptedContacts = daoRepo.getAllAcceptedContactsLive()
     var acceptedGroups = daoRepo.getAllAcceptedGroupsLive()
 
+    override val searchResults: LiveData<List<SearchResultItem>> by ::_searchResults
+    private val _searchResults = MutableLiveData<List<SearchResultItem>>(listOf())
+
+    override val navigateToGroup: LiveData<Group?> by ::_navigateToGroup
+    private val _navigateToGroup = MutableLiveData<Group?>(null)
+
     val navigateToUdSearch: LiveData<Boolean> by ::_navigateToUdSearch
     private val _navigateToUdSearch = MutableLiveData(false)
 
     val showCreateGroup: LiveData<Boolean> by ::_showCreateGroup
     private val _showCreateGroup = MutableLiveData(false)
 
-    val navigateToChat: LiveData<ContactData?> by ::_navigateToChat
-    private val _navigateToChat = MutableLiveData<ContactData?>(null)
+    override val navigateToChat: LiveData<Contact?> by ::_navigateToChat
+    private val _navigateToChat = MutableLiveData<Contact?>(null)
 
     val newlyAddedContacts: LiveData<List<NewConnectionUI>> by ::_newlyAddedContacts
     private val _newlyAddedContacts = MutableLiveData<List<NewConnectionUI>>(listOf())
@@ -58,6 +70,16 @@ class ChatsViewModel @Inject constructor(
 
     private var searchHasFocus = false
     private var showingSearchResults = false
+
+    private val contactsCache = mutableMapOf<String, ContactData>()
+
+    private var isPlaceHolderVisible: Boolean = true
+
+    var cachedSearch: String? = null
+        private set
+
+    private val contactsHeader: SectionHeader by lazy { SectionHeader("connetions") }
+    private val chatsHeader: SectionHeader by lazy { SectionHeader("chats") }
 
     class ChatObservable {
         val chatsHashMap = HashMap<String, ChatWrapper>()
@@ -217,8 +239,6 @@ class ChatsViewModel @Inject constructor(
         fetchNewConnections()
     }
 
-    private val contactsCache = mutableMapOf<String, ContactData>()
-
     private fun fetchNewConnections() {
         viewModelScope.launch {
             newConnectionsDataSource.getNewConnections().collect { newConnections ->
@@ -241,12 +261,28 @@ class ChatsViewModel @Inject constructor(
         updateUI()
     }
 
+    private fun isSearchVisible(): Boolean = showingSearchResults || searchHasFocus
+
     private fun areNewConnectionsVisible(): Boolean =
-        if (showingSearchResults || searchHasFocus) false
+        if (isSearchVisible()) false
         else _newlyAddedContacts.value?.isNotEmpty() ?: false
 
+    fun setPlaceHolderVisibility(visible: Boolean) {
+        isPlaceHolderVisible = visible
+        updateUI()
+    }
+
+    private var noResultsFound: Boolean = false
+
     private fun updateUI() {
-        _chatsListUi.value = ChatsList(this, areNewConnectionsVisible())
+        _chatsListUi.value = ChatsList(
+            listener = this,
+            newConnectionsVisible = areNewConnectionsVisible(),
+            searchVisible = isSearchVisible(),
+            emptyPlaceholderVisible = isPlaceHolderVisible && !isSearchVisible(),
+            noResultsFoundVisible = isSearchVisible() && noResultsFound,
+            noResultsFoundName = cachedSearch
+        )
     }
 
     override fun onSearchHasFocus(focus: Boolean) {
@@ -254,10 +290,163 @@ class ChatsViewModel @Inject constructor(
         updateUI()
     }
 
-    override fun onSearchResultsUpdated(visible: Boolean) {
-        showingSearchResults = visible
+    override fun onSearchTextChanged(text: String?) {
+        cachedSearch = text
+        text?.let {
+            if (it.isNotEmpty()) searchFor(it)
+            else showingSearchResults = false
+        } ?: run { showingSearchResults = false }
         updateUI()
     }
+
+    private fun searchFor(text: String) {
+        showingSearchResults = true
+        viewModelScope.launch {
+            searchChatsFor(text).combine(searchGroupsFor(text)) { matchingChats, matchingGroups ->
+                searchConnectionsFor(text).collect { matchingContacts ->
+                    val activeChats = matchingChats.map { it.model }
+                    // Don't show a contact result if there's an active chat already.
+                    val duplicatesRemoved = matchingContacts.filterNot { contactResult ->
+                        contactResult.model in activeChats
+                    }
+                    val results = sortResults(duplicatesRemoved, matchingChats, matchingGroups)
+                    noResultsFound = results.isEmpty()
+                    _searchResults.postValue(results)
+                    updateUI()
+                }
+            }.collect()
+        }
+    }
+
+    private suspend fun sortResults(
+        contacts: List<ConnectionResult>,
+        chats: List<PrivateChatResult>,
+        groups: List<GroupChatResult>
+    ) : List<SearchResultItem> = withContext(Dispatchers.Main) {
+        val sortedResults = mutableListOf<SearchResultItem>()
+
+        if (contacts.isNotEmpty()) {
+            sortedResults.add(contactsHeader)
+            sortedResults += contacts.sortedByDescending { it.name }
+        }
+        with (chats + groups) {
+            if (isNotEmpty()) {
+                sortedResults.add(chatsHeader)
+                sortedResults += sortedByDescending { it.name }
+            }
+        }
+        sortedResults
+    }
+
+    private suspend fun searchConnectionsFor(text: String): Flow<List<ConnectionResult>> =
+        acceptedContacts.asFlow().map { contacts ->
+            contacts.filter { contact ->
+                contact.run {
+                    listOf(nickname, username, email, phone)
+                        .joinToString(" ")
+                        .contains(text)
+                }
+            }.map { matchingContact ->
+                matchingContact.toConnectionResult()
+            }
+        }
+
+    private suspend fun ContactData.toConnectionResult(): ConnectionResult =
+        ConnectionResult(
+            listener = this@ChatsViewModel,
+            model = this,
+            thumbnail = generateThumbnail()
+        )
+
+    private suspend fun searchChatsFor(text: String): Flow<List<PrivateChatResult>> =
+        chatsData.asFlow().map { chats ->
+            chats.filter {
+                (it.item as? ContactData)?.run {
+                    listOf(nickname, username, email, phone)
+                        .joinToString(" ")
+                        .contains(text)
+                } ?: false
+            }.map { matchingChat ->
+                matchingChat.toPrivateChatResult()
+            }
+        }
+
+    private suspend fun ChatWrapper.toPrivateChatResult(): PrivateChatResult =
+        withContext(Dispatchers.Default) {
+            val contact = item as ContactData
+            val lastMessageContent: String
+            val lastMessageTimeStamp: String
+            val notificationCountText: String?
+            val thumbnail = contact.generateThumbnail()
+
+            (lastMessage as PrivateMessageData).run {
+                lastMessageContent = payloadWrapper.text
+                notificationCountText = if (unreadCount > 0) unreadCount.toString() else null
+                lastMessageTimeStamp = getDateText(timestamp)
+
+                PrivateChatResult(
+                    listener = this@ChatsViewModel,
+                    model = contact,
+                    lastMessage = lastMessageContent,
+                    thumbnail = thumbnail,
+                    timestamp = lastMessageTimeStamp,
+                    notificationCount = notificationCountText
+                )
+            }
+        }
+
+    private suspend fun getDateText(timestamp: Long): String = withContext(Dispatchers.Default) {
+        val date = Date(timestamp)
+        val calendar = Calendar.getInstance().apply {
+            time = date
+        }
+
+        if (Utils.isToday(calendar)) Utils.getTimestampString(date.time)
+        else Utils.calculateGetTimestampString(date.time, "MM/dd/yyyy")
+    }
+
+    private suspend fun searchGroupsFor(text: String): Flow<List<GroupChatResult>> {
+        val matchingGroupMembers = getGroupMembers().filter {
+            it.username?.contains(text) ?: false
+        }
+        val matchingGroupIds = matchingGroupMembers.map {
+            it.groupId
+        }
+
+        return chatsData.asFlow().map { chats ->
+            chats.filter {
+                (it.item as? GroupData)?.run {
+                    groupId in matchingGroupIds
+                } ?: false
+            }.map { matchingGroup ->
+                matchingGroup.toGroupChatResult()
+            }
+        }
+    }
+
+    private suspend fun getGroupMembers(): List<GroupMember> = daoRepo.queryAllMembers().value()
+
+    private suspend fun ChatWrapper.toGroupChatResult(): GroupChatResult {
+        val group = item as GroupData
+        val lastMessageContent: String
+        val lastMessageTimeStamp: String
+        val notificationCountText: String?
+
+        return (lastMessage as GroupMessageData).run {
+            lastMessageContent = payloadWrapper.text
+            notificationCountText = if (unreadCount > 0) unreadCount.toString() else null
+            lastMessageTimeStamp = getDateText(timestamp)
+
+            GroupChatResult(
+                listener = this@ChatsViewModel,
+                model = group,
+                lastMessage = lastMessageContent,
+                timestamp = lastMessageTimeStamp,
+                notificationCount = notificationCountText
+            )
+        }
+    }
+
 
     private suspend fun getContact(userId: String): ContactData? =
         contactsCache[userId] ?: daoRepo.getContactByUserId(userId.fromBase64toByteArray())
@@ -285,6 +474,18 @@ class ChatsViewModel @Inject constructor(
 
     fun onNavigateToChatHandled() {
         _navigateToChat.value = null
+    }
+
+    fun onNavigateToGroupHandled() {
+        _navigateToGroup.value = null
+    }
+
+    override fun onConnectionClicked(contact: Contact) {
+        _navigateToChat.value = contact as ContactData
+    }
+
+    override fun onGroupChatClicked(group: Group) {
+        _navigateToGroup.value = group
     }
 
     override fun onAddContactClicked() {

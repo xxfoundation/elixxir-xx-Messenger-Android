@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable name="header" type="String" />
+        <variable name="showDivider" type="boolean" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line" />
+
+        <TextView
+            android:id="@+id/label"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{header}"
+            android:textColor="@color/neutral_weak"
+            android:textSize="12sp"
+            android:layout_marginTop="24dp"
+            android:textAllCaps="true"
+            app:fontWeight="700"
+            app:lineHeight="18sp"
+            tools:text="Chats"/>
+    </LinearLayout>
+</layout>

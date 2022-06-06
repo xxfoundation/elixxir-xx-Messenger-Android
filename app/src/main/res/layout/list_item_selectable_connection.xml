@@ -20,6 +20,7 @@
             android:layout_height="wrap_content"
             android:onClick="@{() -> ui.onClick()}"
             android:layout_margin="16dp"
+            android:checked="@{ui.selected}"
             app:layout_constrainedHeight="true"
             app:layout_constrainedWidth="true"
             app:layout_constraintTop_toTopOf="parent"

@@ -31,6 +31,7 @@ data class GroupItem(
 data class SelectableContact(
     val contactItem: ContactItem,
     override val listener: ConnectionListener,
+    val selected: Boolean,
 ) : Connection {
     val model: Contact = contactItem.model
     override val thumbnail: ItemThumbnail = contactItem.thumbnail

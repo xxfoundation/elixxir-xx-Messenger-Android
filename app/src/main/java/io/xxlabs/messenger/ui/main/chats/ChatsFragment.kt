@@ -3,6 +3,9 @@ package io.xxlabs.messenger.ui.main.chats
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +22,9 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
 import io.xxlabs.messenger.data.datatype.SelectionMode
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.FragmentChatsListBinding
 import io.xxlabs.messenger.repository.DaoRepository
@@ -36,6 +41,7 @@ import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionsAdapter
+import io.xxlabs.messenger.ui.main.chats.search.SearchResultAdapter
 import kotlinx.android.synthetic.main.component_bottom_menu_chats.*
 import kotlinx.android.synthetic.main.fragment_chats_list.*
 import timber.log.Timber
@@ -65,6 +71,7 @@ class ChatsFragment : BaseFragment() {
 
     private lateinit var binding: FragmentChatsListBinding
     private val newConnectionsAdapter: NewConnectionsAdapter by lazy { NewConnectionsAdapter() }
+    private val searchResultsAdapter: SearchResultAdapter by lazy { SearchResultAdapter() }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -131,6 +138,7 @@ class ChatsFragment : BaseFragment() {
 
         setListeners()
         initNewConnectionsRecyclerView()
+        initSearchResultsRecyclerView()
         bindRecyclerView()
         resetSearchBar()
     }
@@ -141,8 +149,8 @@ class ChatsFragment : BaseFragment() {
             chatsViewModel.onSearchHasFocus(hasFocus)
         }
         chatsSearchBar.addTextChangedListener { text ->
-            chatsAdapter.filter.filter(text?.trim())
-            chatsViewModel.onSearchResultsUpdated(!text.isNullOrBlank())
+//            chatsAdapter.filter.filter(text?.trim())
+            chatsViewModel.onSearchTextChanged(text.toString())
             if (!text.isNullOrBlank())closeBottomMenu()
         }
 
@@ -208,6 +216,13 @@ class ChatsFragment : BaseFragment() {
         }
     }
 
+    private fun initSearchResultsRecyclerView() {
+        binding.searchRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchResultsAdapter
+        }
+    }
+
     private fun bindRecyclerView() {
         val layoutManager = LinearLayoutManager(context)
         chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
@@ -223,10 +238,10 @@ class ChatsFragment : BaseFragment() {
     private fun resetSearchBar() {
         chatsRecyclerView?.post {
             val text = chatsSearchBar?.text?.trim()
+            chatsViewModel.onSearchTextChanged(text.toString())
             if (text != null && chatsAdapter.itemCount > 0) {
-                chatsViewModel.onSearchResultsUpdated(true)
                 Timber.v("Text search was restored!")
-                chatsAdapter.filter.filter(text)
+//                chatsAdapter.filter.filter(text)
                 if (chatsSearchBar?.text?.isBlank() != true) {
                     closeBottomMenu()
                 }
@@ -269,20 +284,37 @@ class ChatsFragment : BaseFragment() {
         chatsViewModel.newlyAddedContacts.observe(viewLifecycleOwner) { newConnections ->
             showNewConnections(newConnections)
         }
+
+        chatsViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
+            searchResultsAdapter.submitList(searchResults)
+        }
+
+        chatsViewModel.navigateToGroup.observe(viewLifecycleOwner) { group ->
+            group?.let {
+                navigateToGroup(group)
+                chatsViewModel.onNavigateToGroupHandled()
+            }
+        }
     }
 
-    private fun navigateToChat(contact: ContactData) {
+    private fun navigateToChat(contact: Contact) {
         val privateChatDirections = ChatsFragmentDirections.actionGlobalChat().apply {
-            this.contact = contact
+            this.contact = contact as ContactData
             contactId = contact.userId.toBase64String()
         }
         findNavController().navigateSafe(privateChatDirections)
     }
 
-    private fun navigateToContactsSelection() {
-        val contactsDirections = ChatsFragmentDirections.actionChatsToContacts().apply {
-            contactSelectionMode = true
+    private fun navigateToGroup(group: Group) {
+        val groupChatDirections = ChatsFragmentDirections.actionGlobalGroupsChat().apply {
+            this.group = group as GroupData
+            groupId = group.groupId.toBase64String()
         }
+        findNavController().navigateSafe(groupChatDirections)
+    }
+
+    private fun navigateToContactsSelection() {
+        val contactsDirections = ChatsFragmentDirections.actionChatsToSelectContact()
         findNavController().navigateSafe(contactsDirections)
     }
 
@@ -353,14 +385,12 @@ class ChatsFragment : BaseFragment() {
     }
 
     private fun hideEmptyMessage() {
-        chatsEmptyBottomTxt?.visibility = View.INVISIBLE
-        chatsAddContactBtn?.visibility = View.INVISIBLE
+        chatsViewModel.setPlaceHolderVisibility(false)
     }
 
     private fun showEmptyMessage() {
         chatsLoading.hide()
-        chatsEmptyBottomTxt?.visibility = View.VISIBLE
-        chatsAddContactBtn?.visibility = View.VISIBLE
+        chatsViewModel.setPlaceHolderVisibility(true)
     }
 
     private fun initTracker() {

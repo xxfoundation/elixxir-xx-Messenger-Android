@@ -13,11 +13,13 @@ import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.databinding.FragmentContactSelectionBinding
+import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListScrollHandler
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
+import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragmentDirections
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialog
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogUI
 import javax.inject.Inject
@@ -106,6 +108,13 @@ class ContactSelectionFragment : ContactsFragment() {
                 connectionsViewModel.onNavigateUpHandled()
             }
         }
+
+        connectionsViewModel.navigateToSearch.observe(viewLifecycleOwner) { navigate ->
+            if (navigate) {
+                navigateToSearch()
+                connectionsViewModel.onSearchNavigationHandled()
+            }
+        }
     }
 
     private fun showCreateGroupDialog() {
@@ -131,5 +140,10 @@ class ContactSelectionFragment : ContactsFragment() {
             R.string.group_create_dialog_info_body,
             null
         )
+    }
+
+    private fun navigateToSearch() {
+        val directions = ContactSelectionFragmentDirections.actionContactsSelectionToSearch()
+        findNavController().navigateSafe(directions)
     }
 }

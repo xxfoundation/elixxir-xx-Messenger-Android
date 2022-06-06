@@ -381,6 +381,8 @@ class DaoRepository @Inject constructor(
         return groupMessagesDao.updateMessage(msg)
     }
 
+    fun queryAllMembers(): Single<List<GroupMember>> = groupMembersDao.queryAllMember()
+
     fun getAllMembers(groupId: ByteArray): Single<List<GroupMember>> {
         return groupMembersDao.queryMembers(groupId)
     }
