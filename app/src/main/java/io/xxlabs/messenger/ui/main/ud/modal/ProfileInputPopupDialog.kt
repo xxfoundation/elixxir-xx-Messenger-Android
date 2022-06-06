@@ -9,7 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.annotation.NonNull
 import androidx.annotation.Nullable
 import androidx.core.content.ContextCompat
@@ -19,7 +22,6 @@ import com.google.android.material.textfield.TextInputLayout
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.util.Utils
-import kotlinx.android.synthetic.main.fragment_register.*
 
 
 class ProfileInputPopupDialog(

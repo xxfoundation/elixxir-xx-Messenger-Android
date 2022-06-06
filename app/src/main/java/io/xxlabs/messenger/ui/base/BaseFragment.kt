@@ -12,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import dagger.android.support.AndroidSupportInjection
-import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.biometrics.BiometricContainerCallback
 import io.xxlabs.messenger.biometrics.BiometricContainerProvider
@@ -23,7 +22,7 @@ import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.util.DialogUtils
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeScanFragment
+import io.xxlabs.messenger.ui.main.qrcode.scan.QrCodeScanFragment
 import javax.inject.Inject
 
 abstract class BaseFragment : Fragment(), Injectable {

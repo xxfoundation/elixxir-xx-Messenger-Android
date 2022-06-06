@@ -32,7 +32,6 @@ import io.xxlabs.messenger.media.MediaCallback
 import io.xxlabs.messenger.media.MicrophoneProvider
 import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.toast
-import io.xxlabs.messenger.support.util.FileUtils
 import io.xxlabs.messenger.support.view.BitmapResolver
 import kotlinx.android.synthetic.main.fragment_contact_details.*
 import timber.log.Timber

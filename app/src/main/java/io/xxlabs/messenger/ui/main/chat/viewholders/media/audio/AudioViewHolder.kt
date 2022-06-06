@@ -6,9 +6,9 @@ import android.widget.SeekBar
 import android.widget.TextView
 import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
-import io.xxlabs.messenger.ui.main.chat.viewholders.media.MediaPlaybackViewHolder
-import io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener
 import io.xxlabs.messenger.ui.main.chat.elapsedTime
+import io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener
+import io.xxlabs.messenger.ui.main.chat.viewholders.media.MediaPlaybackViewHolder
 
 /**
  * Superclass for sent and received audio messages.

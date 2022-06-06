@@ -2,7 +2,6 @@ package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.Client
 import bindings.NetworkHealthCallback
-import io.reactivex.Single
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportMock

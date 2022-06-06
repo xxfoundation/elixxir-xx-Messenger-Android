@@ -6,14 +6,12 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import io.xxlabs.messenger.application.XxMessengerApplication
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SQLiteException
 import java.io.File
 import java.io.IOException
 import java.security.SecureRandom
-import kotlin.jvm.Throws
 
 private const val DB_KEY_SIZE = 32
 const val DB_KEY_NAME = "dbKey"

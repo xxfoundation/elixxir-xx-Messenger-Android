@@ -778,4 +778,13 @@
         <item name="lineHeight">17sp</item>
         <item name="android:textColor">@color/neutral_white</item>
     </style>
+
+    <style name="share_qr_code_subtitle" parent="XxTextStyle.SemiBold">
+        <item name="android:layout_marginTop">@dimen/registration_body_vertical_margin</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:fontWeight">600</item>
+        <item name="android:lineSpacingExtra">8sp</item>
+    </style>
 </resources>

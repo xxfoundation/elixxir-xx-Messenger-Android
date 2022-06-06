@@ -13,7 +13,6 @@ import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*
 import timber.log.Timber
 import java.io.File
-import java.lang.Exception
 
 
 /**

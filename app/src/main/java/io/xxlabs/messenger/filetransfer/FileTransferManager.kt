@@ -2,17 +2,16 @@ package io.xxlabs.messenger.filetransfer
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.core.content.FileProvider
 import bindings.*
 import io.xxlabs.messenger.BuildConfig
-import io.xxlabs.messenger.media.MediaProviderActivity
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.toBase64String
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream

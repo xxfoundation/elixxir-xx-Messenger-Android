@@ -20,7 +20,6 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
@@ -39,7 +38,6 @@ import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
 import io.xxlabs.messenger.notifications.MessagingService
-import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.callback.NetworkWatcher
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.extensions.*

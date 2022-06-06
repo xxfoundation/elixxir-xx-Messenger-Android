@@ -18,7 +18,6 @@ import timber.log.Timber
 import java.io.File
 import java.io.FileOutputStream
 import java.io.InvalidObjectException
-import kotlin.jvm.Throws
 
 /**
  * Listens for incoming files and saves them to the device.

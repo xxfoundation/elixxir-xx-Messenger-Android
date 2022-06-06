@@ -1,10 +1,11 @@
 package io.xxlabs.messenger.ui.main.chat
 
-import android.content.*
+import android.content.Context
 import android.media.MediaRecorder
 import android.net.Uri
 import android.os.Environment.DIRECTORY_MUSIC
-import android.view.*
+import android.view.HapticFeedbackConstants
+import android.view.View
 import android.widget.SeekBar
 import android.widget.TextView
 import androidx.core.content.FileProvider
@@ -28,16 +29,15 @@ import io.xxlabs.messenger.support.dialog.MenuChatDialog
 import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.touch.MessageSwipeController
 import io.xxlabs.messenger.support.touch.SwipeActions
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentListener
 import io.xxlabs.messenger.ui.main.chat.adapters.AttachmentsAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
 import io.xxlabs.messenger.ui.main.chat.adapters.PrivateMessagesAdapter
-import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.lang.ClassCastException
 import javax.inject.Inject
 
 class PrivateMessagesFragment :

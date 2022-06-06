@@ -17,11 +17,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import data.proto.CMIXText
 import io.reactivex.rxkotlin.subscribeBy
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.MessageStatus
-import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.data.datatype.RequestStatus
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.PrivateMessage
+import io.xxlabs.messenger.data.room.model.PrivateMessageData
 import io.xxlabs.messenger.filetransfer.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
@@ -31,11 +35,13 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.misc.DummyGenerator
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.BitmapResolver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*
 

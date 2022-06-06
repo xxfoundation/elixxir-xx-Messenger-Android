@@ -3,7 +3,6 @@ package io.xxlabs.messenger.bindings.wrapper.bindings
 import android.content.Context
 import io.reactivex.Single
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBase
-import io.xxlabs.messenger.bindings.wrapper.groups.report.GroupSendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBase
 import java.io.File

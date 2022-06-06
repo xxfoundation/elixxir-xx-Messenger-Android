@@ -1,22 +1,12 @@
 package io.xxlabs.messenger.repository.base
 
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
-import io.xxlabs.messenger.data.data.ContactRoundRequest
 import io.xxlabs.messenger.notifications.NotificationPreferences
-import io.xxlabs.messenger.requests.deprecated.RequestsFilter
 
 abstract class BasePreferences : BackupPreferencesRepository, NotificationPreferences {
-    abstract fun addContactRequest(contactRoundRequest: ContactRoundRequest)
     abstract fun addContactRequest(contactId: ByteArray, contactUsername: String, roundId: Long, isSent: Boolean)
-    abstract fun removeContactRequest(contactRoundRequest: ContactRoundRequest)
-    abstract fun updateContactRequest(contactRoundRequest: ContactRoundRequest)
-    abstract fun getContactRequest(contactId: ByteArray, roundId: Long): ContactRoundRequest?
-    abstract fun getContactRequest(contactId: ByteArray): ContactRoundRequest?
-    abstract fun getContactRequest(filter: RequestsFilter): List<ContactRoundRequest>
     abstract fun getUserId(): ByteArray
     abstract fun setUserId(userId: ByteArray)
-    abstract fun clearAll()
-    abstract fun removeContactRequests(contactId: ByteArray): Int
 
     //User
     abstract var isFirstLaunch: Boolean

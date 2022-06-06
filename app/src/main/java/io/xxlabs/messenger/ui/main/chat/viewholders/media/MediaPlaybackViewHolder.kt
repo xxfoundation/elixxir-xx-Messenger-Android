@@ -9,7 +9,6 @@ import io.xxlabs.messenger.media.MediaPlayerProvider
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
 import io.xxlabs.messenger.ui.main.chat.viewholders.MessageListener
 import io.xxlabs.messenger.ui.main.chat.viewholders.MessageViewHolder
-import java.lang.ClassCastException
 
 /**
  * Base presentation class for [PrivateMessageData] that have playable media

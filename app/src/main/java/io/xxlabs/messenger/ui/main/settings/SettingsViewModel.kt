@@ -4,17 +4,14 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
-import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.misc.DebugLogger
 import timber.log.Timber
 import javax.inject.Inject
@@ -159,45 +156,6 @@ class SettingsViewModel @Inject constructor(
 
     fun isCrashReportOn(): Boolean {
         return preferencesRepository.isCrashReportEnabled
-    }
-
-    fun deleteUser() {
-        deleteUser.value = DataRequestState.Start()
-        subscriptions.add(
-            repo.unregisterForNotification()
-                .flatMap {
-                    repo.deleteUser()
-                }
-                .flatMap {
-                    repo.stopNetworkFollower()
-                }
-                .subscribeOn(schedulers.single)
-                .observeOn(schedulers.io)
-                .flatMap {
-                    preferencesRepository.clearAll()
-                    var trial = 0
-                    var deleted: Boolean
-                    do {
-                        deleted = BindingsWrapperBindings.getSessionFolder(appContext())
-                            ?.deleteRecursively() ?: false
-                        trial++
-                        Timber.v("Trying to delete session folder ($trial): $deleted")
-                    } while (!deleted || trial < 3)
-
-                    Single.just(deleted)
-                }
-                .flatMap {
-                    daoRepository.deleteAll()
-                }.observeOn(schedulers.main)
-                .subscribeBy(
-                    onError = { err ->
-                        deleteUser.value = DataRequestState.Error(err)
-                    },
-                    onSuccess = {
-                        deleteUser.value = DataRequestState.Success(true)
-                    }
-                )
-        )
     }
 
     /* Account backup & restore navigation handling */

@@ -1,132 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/qrCodeScanRoot"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
 
-    <FrameLayout
-        android:id="@+id/cameraRoot"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/qrCodeBottomLayout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/cameraBackground"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/neutral_active">
-
-            <io.xxlabs.messenger.support.view.CameraRoundedLayout
-                android:id="@+id/cameraPreviewHolder"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:animateLayoutChanges="true"
-                android:layout_margin="@dimen/spacing_20"
-                android:background="@drawable/btn_color_outlined"
-                app:layout_constraintBottom_toTopOf="@id/cameraUsernameHolder"
-                app:layout_constraintDimensionRatio="W, 1:1"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/cameraFlashControl"
-                tools:background="@drawable/bg_btn_outline_white">
-
-                <androidx.camera.view.PreviewView
-                    android:id="@+id/cameraPreview"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    app:scaleType="fillCenter" />
-            </io.xxlabs.messenger.support.view.CameraRoundedLayout>
-
-            <TextView
-                android:id="@+id/cameraNoPermission"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_20"
-                android:layout_marginEnd="@dimen/spacing_20"
-                android:gravity="center"
-                android:text="Camera permission is required in order to use this feature. Please, click here to change your settings."
-                android:textColor="@color/background"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="@id/cameraPreviewHolder"
-                app:layout_constraintEnd_toEndOf="@id/cameraPreviewHolder"
-                app:layout_constraintStart_toStartOf="@id/cameraPreviewHolder"
-                app:layout_constraintTop_toTopOf="@id/cameraPreviewHolder" />
-
-            <ImageView
-                android:id="@+id/cameraFlashControl"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_margin="@dimen/spacing_18"
-                android:background="@drawable/component_flash_bg"
-                android:contentDescription="qrcode.scan.flash"
-                android:padding="12dp"
-                android:src="@drawable/ic_flash_on"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <LinearLayout
-                android:id="@+id/cameraUsernameHolder"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/spacing_16"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
-
-                <TextView
-                    style="@style/XxTextStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:text="Sending as"
-                    android:textColor="@color/background"
-                    android:textSize="@dimen/text_16" />
-
-                <TextView
-                    android:id="@+id/cameraUsername"
-                    style="@style/XxTextStyle.Bold"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:contentDescription="qrcode.scan.username.text"
-                    android:gravity="center"
-                    android:textColor="@color/background"
-                    android:textSize="@dimen/text_28"
-                    tools:text="UserA" />
-            </LinearLayout>
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </FrameLayout>
-
-    <!--    <include-->
-    <!--        layout="@layout/fragment_qr_code_scan_camera"-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        android:contentDescription="qrcode.scan.camera"-->
-    <!--        android:translationY="25dp"-->
-    <!--        app:layout_constraintBottom_toTopOf="@id/qrCodeBottomLayout"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintStart_toStartOf="parent"-->
-    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.qrcode.scan.ScanQrCodeUI" />
+    </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/qrCodeBottomLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:animateLayoutChanges="true"
-        android:background="@drawable/bg_rounded_top_corners"
-        android:paddingTop="@dimen/spacing_20"
-        android:paddingBottom="@dimen/spacing_20"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        android:id="@+id/qrCodeScanRoot"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/cameraPreview"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <io.xxlabs.messenger.ui.main.qrcode.scan.RoundedSquareMaskView
+            android:id="@+id/cameraMask"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha=".9"
+            android:background="@color/neutral_dark"
+            custom:strokeWidth="4dp"
+            custom:cornerRadius="32dp"
+            app:outlineColor="@{ui.scanState.accentColor}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/cameraFlashControl"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_margin="@dimen/spacing_18"
+            android:background="@drawable/component_flash_bg"
+            android:clipToOutline="true"
+            android:contentDescription="qrcode.scan.flash"
+            android:padding="12dp"
+            android:src="@drawable/ic_flash_on"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/permissionWarning"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:onClick="@{() -> ui.onPermissionWarningClicked()}"
+            android:text="Camera permission is required in order to use this feature. Please, click here to change your settings."
+            android:textColor="@color/background"
+            android:textStyle="bold"
+            app:invisible="@{ui.hasCameraPermission}"
+            app:layout_constraintDimensionRatio="H, 1:1"
+            app:layout_constraintEnd_toEndOf="@id/viewFinderEndGuideline"
+            app:layout_constraintStart_toStartOf="@id/viewFinderStartGuideline"
+            app:layout_constraintTop_toTopOf="@id/viewFinderTopGuideline" />
 
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/qrCodeBottomAnimation"
@@ -137,81 +77,86 @@
             android:scaleType="fitXY"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/permissionWarning"
             app:lottie_autoPlay="true"
             app:lottie_loop="true"
             app:lottie_rawRes="@raw/dots_loading2"
             app:lottie_scale="2"
-            app:lottie_speed="2" />
+            app:lottie_speed="2"
+            app:qrCodeAnimationVisibility="@{ui.scanState}" />
 
         <ImageView
-            android:id="@+id/qrCodeBottomIcon"
-            android:visibility="gone"
+            android:id="@+id/qrCodeStateIcon"
             android:layout_width="@dimen/spacing_24"
             android:layout_height="@dimen/spacing_24"
-            android:adjustViewBounds="true"
+            android:layout_marginVertical="16dp"
             android:layout_marginTop="@dimen/spacing_20"
+            android:adjustViewBounds="true"
             android:contentDescription="qrcode.scan.status.icon"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/qrCodeDescription"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:src="@drawable/ic_check" />
+            app:scanStateIcon="@{ui.scanState}"
+            tools:src="@drawable/ic_check"
+            tools:visibility="visible" />
 
-        <androidx.constraintlayout.widget.Barrier
-            android:id="@+id/qrCodeBottomBarrier"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:barrierAllowsGoneWidgets="true"
-            app:barrierDirection="bottom"
-            app:constraint_referenced_ids="qrCodeBottomAnimation, qrCodeBottomIcon" />
-
-        <LinearLayout
-            android:id="@+id/qrCodeBottomTextLayout"
+        <TextView
+            android:id="@+id/qrCodeDescription"
+            style="@style/xx_font"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_below="@id/qrCodeBottomAnimation"
-            android:layout_marginStart="@dimen/spacing_54"
-            android:layout_marginEnd="@dimen/spacing_54"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:paddingTop="@dimen/spacing_10"
+            android:layout_marginVertical="16dp"
+            android:fontWeight="600"
+            android:gravity="center"
+            android:letterSpacing="0.03"
+            android:lineSpacingExtra="4sp"
+            android:text="@{ui.description}"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/qrCodeBottomBarrier"
-            app:layout_constraintVertical_bias="0">
+            app:layout_constraintTop_toBottomOf="@id/permissionWarning"
+            tools:text="Scanning Code from User A" />
 
-            <TextView
-                android:id="@+id/qrCodeBottomText"
-                style="@style/XxTextStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:contentDescription="qrcode.scan.status.text.bottom"
-                android:gravity="center_horizontal"
-                android:text="Reading QR code"
-                android:textColor="@color/neutral_dark"
-                android:textSize="@dimen/text_18" />
+        <Button
+            android:id="@+id/qrCodeCta"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="32dp"
+            android:fontFamily="@font/mulish_regular"
+            android:letterSpacing="0.02"
+            android:lineSpacingExtra="10sp"
+            android:onClick="@{() -> ui.onCtaClicked()}"
+            android:text="@{ui.callToActionText}"
+            android:textSize="14sp"
+            android:visibility="@{ui.callToActionText}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/qrCodeDescription"
+            tools:text="See contact" />
 
-            <Button
-                android:id="@+id/qrCodeBottomButton"
-                style="@style/ButtonStyle.Secondary"
-                android:layout_width="200dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/spacing_24"
-                android:layout_marginTop="@dimen/spacing_20"
-                android:layout_marginEnd="@dimen/spacing_24"
-                android:visibility="gone"
-                android:contentDescription="ud.profile.dialog.btn.confirm"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_16"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_chainStyle="packed"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/profileRegistrationResendBtn"
-                app:layout_goneMarginTop="@dimen/spacing_50"
-                tools:text="Check Requests" />
-        </LinearLayout>
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/viewFinderStartGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/viewFinderTopGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent=".15" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/viewFinderEndGuideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".85" />
     </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

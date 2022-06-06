@@ -1,11 +1,11 @@
 package io.xxlabs.messenger.backup.ui.restore
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
@@ -15,8 +15,8 @@ import io.xxlabs.messenger.databinding.FragmentRestoreDetailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
-import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
+import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
 import javax.inject.Inject
 
 class RestoreDetailFragment : Fragment(), Injectable {

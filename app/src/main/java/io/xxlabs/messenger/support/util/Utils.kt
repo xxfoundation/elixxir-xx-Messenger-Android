@@ -5,7 +5,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.res.Resources
-import android.graphics.*
+import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Rect
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -83,6 +86,10 @@ class Utils {
          */
         fun dpToPx(dp: Int): Int {
             return (dp * XxMessengerApplication.appResources.displayMetrics.density).toInt()
+        }
+
+        fun dpToPx(dp: Float): Float {
+            return (dp * XxMessengerApplication.appResources.displayMetrics.density)
         }
 
         /***

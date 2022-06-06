@@ -1,8 +1,6 @@
 package io.xxlabs.messenger.media
 
 import android.content.Context
-import android.net.Uri
-import android.provider.OpenableColumns
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.default
 import id.zelory.compressor.constraint.destination
