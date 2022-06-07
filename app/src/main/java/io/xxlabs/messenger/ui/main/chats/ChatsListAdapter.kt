@@ -16,7 +16,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.selection.CustomSelectionTracker
 import io.xxlabs.messenger.support.util.Utils
-import io.xxlabs.messenger.ui.main.contacts.ContactsViewHolder
+import io.xxlabs.messenger.ui.main.contacts.deprecated.ContactsViewHolder
 import timber.log.Timber
 import java.util.*
 
@@ -81,11 +81,7 @@ class ChatsListAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val context = parent.context
         return if (viewType == 0) {
-            val view = LayoutInflater.from(context).inflate(
-                R.layout.list_item_chat, parent,
-                false
-            )
-            ChatsViewHolder.newInstance(view)
+            ChatsViewHolder.create(parent)
         } else {
             val view = LayoutInflater.from(context).inflate(
                 R.layout.list_item_chat_contact, parent,
@@ -173,7 +169,6 @@ class ChatsListAdapter(
         holder.setContactUsernameText(username)
         holder.setState(contact.status)
         holder.setPhoto(contact.photo, contact.initials)
-        holder.showDivider(false)
         holder.setOnClick(selectionMode)
     }
 

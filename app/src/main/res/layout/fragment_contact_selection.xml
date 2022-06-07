@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListUI" />
+        <variable
+            name="toolbarUi"
+            type="io.xxlabs.messenger.support.toolbar.ToolbarUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include
+            android:id="@+id/toolbarLayout"
+            layout="@layout/component_custom_toolbar"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_marginTop="?attr/actionBarSize"
+            app:ui="@{toolbarUi}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/selectedContactsRV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_10"
+            android:paddingBottom="@dimen/spacing_10"
+            android:orientation="horizontal"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintTop_toBottomOf="@id/toolbarLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layoutManager="LinearLayoutManager"
+            tools:itemCount="1"
+            tools:listitem="@layout/list_item_selected_contact"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/connectionsList"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:padding="@dimen/spacing_10"
+            android:paddingBottom="@dimen/spacing_10"
+            app:layout_constraintTop_toBottomOf="@id/selectedContactsRV"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/lettersScrollbar"/>
+
+        <TextView
+            android:id="@+id/lettersScrollbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.scrollBarLetters}"
+            android:gravity="center"
+            android:padding="24dp"
+            android:clickable="true"
+            android:visibility="@{!ui.emptyListPlaceholderVisible}"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintTop_toBottomOf="@id/selectedContactsRV"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="a\nb\nc\n\d\n\e\n\f\ng"/>
+
+        <TextView
+            android:id="@+id/currentLetter"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="96sp"
+            android:layout_height="96sp"
+            android:padding="16dp"
+            android:layout_margin="16dp"
+            android:textSize="50dp"
+            android:gravity="center"
+            android:background="@drawable/bg_rectangle_rounded_corners_mini"
+            android:backgroundTint="@color/brand_default"
+            android:textColor="@color/neutral_white"
+            android:text="@{ui.currentLetter}"
+            android:visibility="@{ui.currentLetter}"
+            android:textAllCaps="true"
+            app:layout_constraintEnd_toStartOf="@id/lettersScrollbar"
+            app:layout_constraintTop_toBottomOf="@id/selectedContactsRV"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:text="A" />
+
+        <TextView
+            android:id="@+id/emptyListPlaceholder"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:contentDescription="contacts.empty.text"
+            android:gravity="center"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingEnd="@dimen/spacing_20"
+            android:text="Add a contact to start messaging"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_24"
+            android:visibility="@{ui.emptyListPlaceholderVisible}"
+            app:lineHeight="@dimen/text_28"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/selectedContactsRV"
+            app:layout_constraintBottom_toTopOf="@id/addContactButton"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:visibility="gone" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/addContactButton"
+            style="@style/ButtonStyle.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:layout_marginBottom="@dimen/spacing_40"
+            android:contentDescription="contacts.btn.add.contact"
+            android:paddingTop="@dimen/spacing_18"
+            android:paddingBottom="@dimen/spacing_18"
+            android:text="Add Contact"
+            android:visibility="@{ui.emptyListPlaceholderVisible}"
+            android:onClick="@{() -> ui.onAddContactClicked()}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/emptyListPlaceholder"
+            tools:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

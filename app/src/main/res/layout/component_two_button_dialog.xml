@@ -59,9 +59,9 @@
             <Button
                 android:id="@+id/info_dialog_cancel_button"
                 android:text="@{ui.negativeLabel}"
-                android:layout_marginTop="@dimen/registration_body_vertical_margin"
                 android:layout_marginEnd="@dimen/registration_horizontal_margin"
                 android:layout_marginStart="0dp"
+                app:layout_constraintTop_toTopOf="@id/info_dialog_ok_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/info_dialog_ok_button"
                 app:layout_constraintEnd_toEndOf="parent"

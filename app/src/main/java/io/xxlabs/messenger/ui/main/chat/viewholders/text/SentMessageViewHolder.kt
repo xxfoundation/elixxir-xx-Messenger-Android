@@ -41,10 +41,6 @@ open class SentMessageViewHolder<T: ChatMessage>(
         binding.listener = listener
 
         setSentStatus(MessageStatus.fromInt(message.status))
-        binding.itemMsgSentShowMix.visibility =
-            if (message.roundUrl.isNullOrEmpty()) View.GONE
-            else View.VISIBLE
-
         super.onBind(message, listener, header, selectionMode, chatViewModel)
     }
 
@@ -57,7 +53,6 @@ open class SentMessageViewHolder<T: ChatMessage>(
         sentIcon.setImageResource(R.drawable.ic_lock_white)
 
         when (status) {
-            MessageStatus.PENDING -> sentIcon.startAnimation(blinkAnimation)
             MessageStatus.FAILED -> {
                 rootLayout.backgroundTintList =
                     ContextCompat.getColorStateList(itemView.context, R.color.chatBgColorError)
@@ -66,7 +61,6 @@ open class SentMessageViewHolder<T: ChatMessage>(
                 binding.itemMsgSentShowMix.visibility = View.GONE
             }
             else -> {
-                sentIcon.clearAnimation()
                 rootLayout.backgroundTintList =
                     ContextCompat.getColorStateList(itemView.context, R.color.brand_dark)
                 errorText.visibility = View.GONE

@@ -16,28 +16,28 @@ val TransferredFile.fileType: FileType
         else -> FileType.OTHER
     }
 
-private fun TransferredFile.isImage(): Boolean {
+fun TransferredFile.isImage(): Boolean {
     return when(fileExtension) {
         "jpg", "jpeg", "png", "gif", "heif" -> true
         else -> false
     }
 }
 
-private fun TransferredFile.isVideo(): Boolean {
+fun TransferredFile.isVideo(): Boolean {
     return when(fileExtension) {
         "mp4", "hevc" -> true
         else -> false
     }
 }
 
-private fun TransferredFile.isAudio(): Boolean {
+fun TransferredFile.isAudio(): Boolean {
     return when(fileExtension) {
         "mp3", "3gp", "wav", "m4a" -> true
         else -> false
     }
 }
 
-private fun TransferredFile.isDocument(): Boolean {
+fun TransferredFile.isDocument(): Boolean {
     return when(fileExtension) {
         "txt", "doc", "ppt", "pdf" -> true
         else -> false

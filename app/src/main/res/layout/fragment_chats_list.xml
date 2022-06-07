@@ -1,257 +1,372 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:descendantFocusability="beforeDescendants"
-    android:focusableInTouchMode="true"
-    tools:context=".ui.main.chats.ChatsFragment">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <include
-        layout="@layout/component_network_error_banner"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatsMenuLine" />
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.chats.ChatsListUI" />
+    </data>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/chatsSearchBarHolder"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_16"
-        app:endIconMode="clear_text"
-        app:errorEnabled="false"
-        app:helperTextEnabled="false"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
-        app:layout_constraintHorizontal_weight="1"
-        app:layout_constraintStart_toEndOf="@id/regGuideStart"
-        app:layout_constraintTop_toBottomOf="@id/networkStatusLayout">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/chatsSearchBar"
-            style="@style/InputEditText.Search"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_40"
-            android:layout_gravity="center"
-            android:contentDescription="chats.input.search"
-            android:hint="@string/search_chats"
-            android:maxHeight="@dimen/spacing_40"
-            app:layout_goneMarginTop="@dimen/spacing_28" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <ImageView
-        android:id="@+id/chatsMenu"
-        android:layout_width="@dimen/spacing_32"
-        android:layout_height="@dimen/spacing_32"
-        android:layout_marginTop="@dimen/spacing_14"
-        android:contentDescription="chats.btn.menu"
-        android:padding="@dimen/spacing_4"
-        android:src="@drawable/ic_menu"
-        app:layout_constraintStart_toStartOf="@id/regGuideStart"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/neutral_active" />
-
-    <View
-        android:id="@+id/chatsMenuNotification"
-        android:layout_width="@dimen/spacing_18"
-        android:layout_height="@dimen/spacing_18"
-        android:layout_marginStart="2dp"
-        android:background="@drawable/component_circular_bg"
-        android:backgroundTint="@color/brand_default"
-        app:layout_constraintBottom_toTopOf="@id/chatsMenu"
-        app:layout_constraintEnd_toStartOf="@id/chatsMenu"
-        app:layout_constraintStart_toStartOf="@id/chatsMenu"
-        app:layout_constraintTop_toTopOf="@id/chatsMenu" />
-
-    <TextView
-        android:id="@+id/chatsMenuNotificationNumber"
-        style="@style/XxTextStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="chats.menu.badge"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_12"
-        app:layout_constraintBottom_toBottomOf="@id/chatsMenuNotification"
-        app:layout_constraintEnd_toEndOf="@id/chatsMenuNotification"
-        app:layout_constraintStart_toStartOf="@id/chatsMenuNotification"
-        app:layout_constraintTop_toTopOf="@id/chatsMenuNotification"
-        tools:text="3" />
-
-    <TextView
-        android:id="@+id/chatsTitle"
-        style="@style/XxTextStyle.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_27"
-        android:text="@string/chats"
-        android:textColor="@color/neutral_active"
-        android:textSize="@dimen/text_18"
-        app:layout_constraintBottom_toBottomOf="@id/chatsMenu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0"
-        app:layout_constraintStart_toEndOf="@id/chatsMenu"
-        app:layout_constraintTop_toTopOf="@id/chatsMenu" />
-
-    <ImageView
-        android:id="@+id/chatsSearchUdBtn"
-        android:layout_width="@dimen/spacing_34"
-        android:layout_height="@dimen/spacing_34"
-        android:layout_marginEnd="@dimen/spacing_10"
-        android:contentDescription="chats.btn.search.ud"
-        android:padding="@dimen/spacing_7"
-        android:src="@drawable/ic_menu_requests"
-        app:layout_constraintBottom_toBottomOf="@id/chatsTitle"
-        app:layout_constraintEnd_toStartOf="@id/chatsSelectConversationBtn"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toEndOf="@id/chatsTitle"
-        app:layout_constraintTop_toTopOf="@id/chatsTitle" />
-
-    <ImageView
-        android:id="@+id/chatsSelectConversationBtn"
-        android:layout_width="@dimen/spacing_34"
-        android:layout_height="@dimen/spacing_34"
-        android:contentDescription="chats.btn.select.conversation"
-        android:padding="@dimen/spacing_8"
-        android:src="@drawable/ic_new_chat"
-        app:layout_constraintBottom_toBottomOf="@id/chatsTitle"
-        app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
-        app:layout_constraintHorizontal_bias="1"
-        app:layout_constraintStart_toEndOf="@id/chatsSearchUdBtn"
-        app:layout_constraintTop_toTopOf="@id/chatsTitle" />
-
-    <View
-        android:id="@+id/chatsMenuLine"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/spacing_12"
-        android:background="@color/neutral_line"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatsMenu" />
-
-    <TextView
-        android:id="@+id/chatsCancelMenu"
-        style="@style/XxTextStyle.Bold"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/spacing_12"
-        android:text="Cancel"
-        android:textColor="@color/chatsAccentColor"
-        android:textSize="@dimen/text_14"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@id/chatsMenuLine"
-        app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/chatsRecyclerView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_12"
-        android:paddingTop="@dimen/spacing_12"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintBottom_toTopOf="@id/chatsBottomMenu"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
-        app:layout_constraintVertical_bias="0"
-        tools:itemCount="5"
-        tools:listitem="@layout/list_item_chat" />
-
-    <androidx.core.widget.ContentLoadingProgressBar
-        android:id="@+id/chatsLoading"
-        style="@style/XxProgressBarCircularBlue"
-        android:layout_width="@dimen/spacing_60"
-        android:layout_height="@dimen/spacing_60"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/chatsEmptyBottomTxt"
-        style="@style/XxTextStyle.Bold"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_24"
-        android:contentDescription="chats.empty.text"
-        android:gravity="center"
-        android:paddingStart="@dimen/spacing_20"
-        android:paddingEnd="@dimen/spacing_20"
-        android:text="Start chatting with your contacts"
-        android:textColor="@color/neutral_active"
-        android:textSize="@dimen/text_24"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toTopOf="@id/chatsAddContactBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
-        app:layout_constraintVertical_chainStyle="packed"
-        app:lineHeight="@dimen/text_28"
-        tools:visibility="visible" />
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/chatsAddContactBtn"
-        style="@style/ButtonStyle.Secondary"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/spacing_24"
-        android:layout_marginTop="@dimen/spacing_20"
-        android:layout_marginEnd="@dimen/spacing_24"
-        android:layout_marginBottom="@dimen/spacing_40"
-        android:contentDescription="chats.btn.contacts.ud"
-        android:paddingTop="@dimen/spacing_18"
-        android:paddingBottom="@dimen/spacing_18"
-        android:text="Go to contacts"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/chatsEmptyBottomTxt"
-        app:layout_constraintBottom_toBottomOf="parent"
-        tools:visibility="visible" />
-
-    <include
-        layout="@layout/component_bottom_menu_chats"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/regGuideStart"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".05" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/regGuideMiddle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.50" />
-
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/regGuideEnd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent=".95" />
-
-    <View
-        android:id="@+id/chatsClickArea"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:translationZ="1dp"
-        android:visibility="gone" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        android:descendantFocusability="beforeDescendants"
+        android:focusableInTouchMode="true"
+        tools:context=".ui.main.chats.ChatsFragment">
+
+        <include
+            layout="@layout/component_network_error_banner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsMenuLine" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/chatsSearchBarHolder"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:helperTextEnabled="false"
+            app:hintEnabled="false"
+            app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@id/regGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/networkStatusLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/chatsSearchBar"
+                style="@style/InputEditText.Search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_40"
+                android:layout_gravity="center"
+                android:contentDescription="chats.input.search"
+                android:hint="@string/search_chats"
+                android:maxHeight="@dimen/spacing_40"
+                app:layout_goneMarginTop="@dimen/spacing_28" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageView
+            android:id="@+id/chatsMenu"
+            android:layout_width="@dimen/spacing_32"
+            android:layout_height="@dimen/spacing_32"
+            android:layout_marginTop="@dimen/spacing_14"
+            android:contentDescription="chats.btn.menu"
+            android:padding="@dimen/spacing_4"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintStart_toStartOf="@id/regGuideStart"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/neutral_active" />
+
+        <View
+            android:id="@+id/chatsMenuNotification"
+            android:layout_width="@dimen/spacing_18"
+            android:layout_height="@dimen/spacing_18"
+            android:layout_marginStart="2dp"
+            android:background="@drawable/component_circular_bg"
+            android:backgroundTint="@color/brand_default"
+            app:layout_constraintBottom_toTopOf="@id/chatsMenu"
+            app:layout_constraintEnd_toStartOf="@id/chatsMenu"
+            app:layout_constraintStart_toStartOf="@id/chatsMenu"
+            app:layout_constraintTop_toTopOf="@id/chatsMenu" />
+
+        <TextView
+            android:id="@+id/chatsMenuNotificationNumber"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="chats.menu.badge"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_12"
+            app:layout_constraintBottom_toBottomOf="@id/chatsMenuNotification"
+            app:layout_constraintEnd_toEndOf="@id/chatsMenuNotification"
+            app:layout_constraintStart_toStartOf="@id/chatsMenuNotification"
+            app:layout_constraintTop_toTopOf="@id/chatsMenuNotification"
+            tools:text="3" />
+
+        <TextView
+            android:id="@+id/chatsTitle"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_27"
+            android:text="@string/chats"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_18"
+            app:layout_constraintBottom_toBottomOf="@id/chatsMenu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/chatsMenu"
+            app:layout_constraintTop_toTopOf="@id/chatsMenu" />
+
+        <ImageView
+            android:id="@+id/chats_list_create_group"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/spacing_10"
+            android:contentDescription="chats.btn.search.ud"
+            android:padding="@dimen/spacing_7"
+            android:src="@drawable/ic_create_group"
+            android:onClick="@{() -> ui.onCreateGroupClicked()}"
+            app:layout_constraintBottom_toBottomOf="@id/chatsTitle"
+            app:layout_constraintEnd_toStartOf="@id/chats_list_add_contact"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toEndOf="@id/chatsTitle"
+            app:layout_constraintTop_toTopOf="@id/chatsTitle" />
+
+        <ImageView
+            android:id="@+id/chats_list_add_contact"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:contentDescription="chats.btn.select.conversation"
+            android:padding="@dimen/spacing_7"
+            android:src="@drawable/ic_add_contact"
+            android:onClick="@{() -> ui.onAddContactClicked()}"
+            app:layout_constraintBottom_toBottomOf="@id/chatsTitle"
+            app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@id/chats_list_create_group"
+            app:layout_constraintTop_toTopOf="@id/chatsTitle" />
+
+        <View
+            android:id="@+id/chatsMenuLine"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:background="@color/neutral_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsMenu" />
+
+        <TextView
+            android:id="@+id/chatsCancelMenu"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/spacing_12"
+            android:text="Cancel"
+            android:textColor="@color/chatsAccentColor"
+            android:textSize="@dimen/text_14"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/chatsMenuLine"
+            app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/newConnectionsRecyclerView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:paddingTop="@dimen/spacing_12"
+            android:orientation="horizontal"
+            android:visibility="@{ui.newConnectionsVisible}"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layoutManager="LinearLayoutManager"
+            tools:itemCount="1"
+            tools:listitem="@layout/list_item_new_connection" />
+
+        <View
+            android:id="@+id/newConnectionsDivider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:background="@color/neutral_line"
+            android:visibility="@{ui.newConnectionsVisible}"
+            android:layout_margin="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
+            tools:visibility="visible"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatsRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:paddingTop="@dimen/spacing_12"
+            app:invisible="@{ui.searchVisible}"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@id/chatsBottomMenu"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
+            app:layout_constraintVertical_bias="0"
+            tools:itemCount="5"
+            tools:listitem="@layout/list_item_chat" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchRecyclerView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="@dimen/spacing_12"
+            android:paddingTop="@dimen/spacing_12"
+            android:visibility="@{ui.searchVisible}"
+            app:layout_constrainedHeight="true"
+            app:layout_constraintBottom_toTopOf="@id/chatsBottomMenu"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintTop_toBottomOf="@id/newConnectionsRecyclerView"
+            tools:itemCount="5"
+            tools:listitem="@layout/list_item_chat"
+            tools:visibility="gone"/>
+
+        <androidx.core.widget.ContentLoadingProgressBar
+            android:id="@+id/chatsLoading"
+            style="@style/XxProgressBarCircularBlue"
+            android:layout_width="@dimen/spacing_60"
+            android:layout_height="@dimen/spacing_60"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/chatsEmptyBottomTxt"
+            style="@style/XxTextStyle.Bold"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:contentDescription="chats.empty.text"
+            android:gravity="center"
+            android:paddingStart="@dimen/spacing_20"
+            android:paddingEnd="@dimen/spacing_20"
+            android:text="Start chatting with your contacts"
+            android:textColor="@color/neutral_active"
+            android:textSize="@dimen/text_24"
+            android:visibility="@{ui.emptyPlaceholderVisible}"
+            app:layout_constraintBottom_toTopOf="@id/chatsAddContactBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layout_constraintVertical_chainStyle="packed"
+            app:lineHeight="@dimen/text_28"
+            tools:visibility="visible" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/chatsAddContactBtn"
+            style="@style/ButtonStyle.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:layout_marginBottom="@dimen/spacing_40"
+            android:contentDescription="chats.btn.contacts.ud"
+            android:paddingTop="@dimen/spacing_18"
+            android:paddingBottom="@dimen/spacing_18"
+            android:text="Go to contacts"
+            android:visibility="@{ui.emptyPlaceholderVisible}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/chatsEmptyBottomTxt"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/noResultsFoundName"
+            style="@style/xx_font"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{ui.noResultsFoundName}"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:layout_marginBottom="8dp"
+            app:fontWeight="700"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/brand_default"
+            app:lineHeight="30sp"
+            app:layout_constraintTop_toBottomOf="@id/chatsSearchBarHolder"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintBottom_toTopOf="@id/noResultsFoundMessage"
+            app:layout_constraintVertical_chainStyle="packed"
+            tools:text="Bill Gates" />
+
+        <TextView
+            android:id="@+id/noResultsFoundMessage"
+            style="@style/xx_font"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/chats_no_results_found_message"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:textSize="16sp"
+            android:layout_marginBottom="24dp"
+            app:fontWeight="400"
+            app:lineHeight="21sp"
+            android:textColor="@color/neutral_active"
+            app:layout_constraintTop_toBottomOf="@id/noResultsFoundName"
+            app:layout_constraintStart_toStartOf="@id/chatsSearchBarHolder"
+            app:layout_constraintEnd_toEndOf="@id/chatsSearchBarHolder"
+            app:layout_constraintBottom_toTopOf="@id/noResultsFoundActionButton"
+            tools:text="No results found"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/noResultsFoundActionButton"
+            style="@style/ButtonStyle.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_24"
+            android:layout_marginBottom="@dimen/spacing_40"
+            android:contentDescription="chats.btn.contacts.ud"
+            android:paddingTop="@dimen/spacing_18"
+            android:paddingBottom="@dimen/spacing_18"
+            android:text="Search for a connection"
+            android:visibility="@{ui.noResultsFoundVisible}"
+            android:onClick="@{() -> ui.onAddContactClicked()}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/noResultsFoundMessage"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:visibility="visible" />
+
+        <include
+            layout="@layout/component_bottom_menu_chats"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/regGuideStart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".05" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/regGuideMiddle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/regGuideEnd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent=".95" />
+
+        <View
+            android:id="@+id/chatsClickArea"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
+            android:translationZ="1dp"
+            android:visibility="gone" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

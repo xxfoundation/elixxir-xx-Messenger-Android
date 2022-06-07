@@ -7,25 +7,26 @@ import androidx.lifecycle.*
 import androidx.paging.PagedList
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.data.ReplyWrapper
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.ChatMessage
-import io.xxlabs.messenger.data.room.model.GroupMessage
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.ioThread
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.ALL_MESSAGES
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.MAX_REPLY_PREVIEW_LENGTH
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.*
-import kotlin.NoSuchElementException
 
 abstract class ChatMessagesViewModel<T: ChatMessage> (
     val repo: BaseRepository,
@@ -533,15 +534,27 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
 
     override val showMixClicked: LiveData<String?> get() = _showMixClicked
     private val _showMixClicked = MutableLiveData<String?>()
+    private val showMixPendingDialogUI: InfoDialogUI by lazy {
+        InfoDialogUI.create(
+            title = "Show mix",
+            body = appContext().getString(R.string.chats_show_mix_pending_message),
+        )
+    }
 
     override fun onShowMixClicked(message: T) {
-        message.roundUrl?.let {
-            _showMixClicked.value = it
-        }
+        message.roundUrl?.let { _showMixClicked.value = it }
+            ?: run { _showMixPendingMessage.value = showMixPendingDialogUI }
     }
+
+    override val showMixPendingMessage: LiveData<InfoDialogUI?> get() = _showMixPendingMessage
+    private val _showMixPendingMessage = MutableLiveData<InfoDialogUI?>(null)
 
     override fun onShowMixHandled() {
         _showMixClicked.value = null
+    }
+
+    override fun onShowMixPendingMessageShown() {
+        _showMixPendingMessage.value = null
     }
 
     companion object {

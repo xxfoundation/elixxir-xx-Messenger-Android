@@ -15,24 +15,22 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.ChatMessage
 import io.xxlabs.messenger.databinding.FragmentChatBinding
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
 import io.xxlabs.messenger.support.extensions.playBeepSound
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.extensions.toast
-import io.xxlabs.messenger.support.extensions.vibrateDevice
 import io.xxlabs.messenger.support.touch.MessageSwipeController
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.ALL_MESSAGES
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
 import io.xxlabs.messenger.ui.main.chat.viewholders.WebViewDialog
 import io.xxlabs.messenger.ui.main.chat.viewholders.WebViewDialogUI
-import kotlinx.android.synthetic.main.component_network_error_banner.*
-import timber.log.Timber
 import javax.inject.Inject
 
 abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
@@ -115,16 +113,16 @@ abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
 
     @CallSuper
     protected open fun observeUI() {
-        networkViewModel.networkState.observe(viewLifecycleOwner) { networkState ->
-            Timber.v("Network State: $networkState")
-            if (networkState == NetworkState.HAS_CONNECTION) {
-                networkStatusLayout?.visibility = View.GONE
-            } else {
-                val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
-                networkStatusLayout?.visibility = View.VISIBLE
-                networkStatusText?.text = bannerMsg
-            }
-        }
+//        networkViewModel.networkState.observe(viewLifecycleOwner) { networkState ->
+//            Timber.v("Network State: $networkState")
+//            if (networkState == NetworkState.HAS_CONNECTION) {
+//                networkStatusLayout?.visibility = View.GONE
+//            } else {
+//                val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
+//                networkStatusLayout?.visibility = View.VISIBLE
+//                networkStatusText?.text = bannerMsg
+//            }
+//        }
 
         uiController.lastMessage.observe(viewLifecycleOwner) { lastMessage ->
             lastMessage?.let {
@@ -198,7 +196,19 @@ abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
             url?.let { showWebViewDialog(it) }
         }
 
+        uiController.showMixPendingMessage.observe(viewLifecycleOwner) { dialogUI ->
+            dialogUI?.let {
+                showMixPendingDialog(dialogUI)
+                uiController.onShowMixPendingMessageShown()
+            }
+        }
+
         updateChat()
+    }
+
+    private fun showMixPendingDialog(dialogUI: InfoDialogUI) {
+        InfoDialog.newInstance(dialogUI)
+            .show(childFragmentManager, null)
     }
 
     private fun showWebViewDialog(url: String) {
@@ -239,20 +249,8 @@ abstract class ChatMessagesFragment<T: ChatMessage>: BaseFragment() {
 
     private fun updateChat() {
         uiController.chatData.observe(viewLifecycleOwner) { messages ->
-//            if (messages.isNotEmpty()) notifyForNewMessages(messages.first())
-//            uiController.verifyUnsentMessages(messages)
             uiController.readAll()
             chatMessagesAdapter.submitList(messages)
-        }
-    }
-
-    private fun notifyForNewMessages(latestMessage: T) {
-        when {
-            !latestMessage.unread -> return
-            !latestMessage.sender.contentEquals(uiController.getUserId()) -> {
-                requireContext().vibrateDevice(100L)
-                requireContext().playBeepSound()
-            }
         }
     }
 

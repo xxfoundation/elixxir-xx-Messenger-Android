@@ -5,13 +5,15 @@ import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import io.xxlabs.messenger.backup.ui.list.RestoreListFragment
 import io.xxlabs.messenger.backup.ui.restore.RestoreDetailFragment
-import io.xxlabs.messenger.ui.intro.registration.success.*
 import io.xxlabs.messenger.ui.intro.registration.email.EmailRegistration
 import io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.email.RegistrationEmailFragment
 import io.xxlabs.messenger.ui.intro.registration.phone.PhoneRegistration
 import io.xxlabs.messenger.ui.intro.registration.phone.PhoneRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.phone.RegistrationPhoneFragment
+import io.xxlabs.messenger.ui.intro.registration.success.CompletedRegistrationStep
+import io.xxlabs.messenger.ui.intro.registration.success.CompletedRegistrationStepController
+import io.xxlabs.messenger.ui.intro.registration.success.RegistrationCompletedStepFragment
 import io.xxlabs.messenger.ui.intro.registration.tfa.RegistrationTfaFragment
 import io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistration
 import io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistrationController

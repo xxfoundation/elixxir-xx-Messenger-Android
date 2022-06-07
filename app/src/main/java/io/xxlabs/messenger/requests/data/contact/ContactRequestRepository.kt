@@ -2,16 +2,18 @@ package io.xxlabs.messenger.requests.data.contact
 
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.RequestData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.requests.bindings.ContactRequestsService
+import io.xxlabs.messenger.requests.bindings.VerificationResult
 import io.xxlabs.messenger.requests.data.LocalRequestsDataSource
 import io.xxlabs.messenger.requests.data.RequestDataSource
 import io.xxlabs.messenger.requests.model.ContactRequest
-import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.support.util.value
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 
 class ContactRequestsRepository @Inject constructor(
@@ -83,14 +85,51 @@ class ContactRequestsRepository @Inject constructor(
     }
 
     override fun send(request: ContactRequest) {
+        retry(request)
+    }
+
+    override fun retry(request: ContactRequest) {
         scope.launch {
             when (request.requestStatus) {
+                VERIFICATION_FAIL -> verify(request)
                 RESET_FAIL, RESET_SENT -> resetSession(request)
                 SENT -> resendRequest(request)
                 CONFIRM_FAIL -> accept(request)
                 SENDING -> sendRequest(request)
+                else -> Timber.d("Unknown request status: ${request.requestStatus.value}")
             }
         }
+    }
+
+    override fun verify(request: ContactRequest) {
+        scope.launch {
+            update(request, VERIFYING)
+            when (requestsService.verifyContactRequest(request)) {
+                is VerificationResult.Verified -> update(request, VERIFIED)
+                is VerificationResult.Fraudulent -> handleFraudulentRequest(request)
+                else -> update(request, VERIFICATION_FAIL)
+            }
+        }
+    }
+
+    override fun failUnverifiedRequests() {
+        scope.launch {
+            getRequests().collect { requests ->
+                requests.filter {
+                    it.requestStatus == VERIFYING
+                }.forEach {
+                    update(it, VERIFICATION_FAIL)
+                }
+            }
+        }
+    }
+
+    private suspend fun handleFraudulentRequest(request: ContactRequest) {
+        update(request, DELETING)
+        val rowsDeleted = daoRepository.deleteContact(request.model as ContactData).value()
+
+        if (rowsDeleted > 0) delete(request)
+        else Timber.d("Failed to delete ${request.requestId}")
     }
 
     private fun resetSession(request: ContactRequest) {

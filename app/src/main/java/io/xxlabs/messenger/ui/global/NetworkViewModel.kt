@@ -4,12 +4,13 @@ import android.app.Application
 import android.os.CountDownTimer
 import android.text.SpannableStringBuilder
 import androidx.core.text.bold
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import bindings.NetworkHealthCallback
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.data.datatype.Environment
@@ -17,7 +18,10 @@ import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.isMockVersion
+import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
 import java.text.SimpleDateFormat
@@ -29,10 +33,29 @@ class NetworkViewModel @Inject constructor(
     val app: Application,
     val repo: BaseRepository,
     val daoRepo: DaoRepository,
-    val schedulers: SchedulerProvider
+    val schedulers: SchedulerProvider,
+    private val requestsDataSource: ContactRequestsRepository
 ) : ViewModel() {
+
+    /**
+     * Exposes the network status as user-friendly toasts.
+     */
+    private val _networkStatus = MutableLiveData<ToastUI?>(null)
+    val networkStatus: LiveData<ToastUI?> = Transformations.distinctUntilChanged(_networkStatus)
+
+    private val noConnectionStatus: ToastUI by lazy {
+        val body = NetworkState.NO_CONNECTION.statusMessage ?: ""
+        val duration = LENGTH_INDEFINITE
+
+        ToastUI.create(
+            body = body,
+            duration = duration,
+            leftIcon = null
+        )
+    }
+
     var subscriptions = CompositeDisposable()
-    var networkState = MutableLiveData<NetworkState>()
+    private var networkState = MutableLiveData<NetworkState>()
     var userDiscoveryStatus = MutableLiveData<Boolean>()
     var networkFollowerTimer: CountDownTimer? = null
     var networkFollowerSeconds = -1
@@ -114,7 +137,24 @@ class NetworkViewModel @Inject constructor(
             !isNetworkHealthy -> NetworkState.NETWORK_STOPPED
             else -> NetworkState.NO_CONNECTION
         }
+        _networkStatus.value = createStatusMessage(networkState.value)
     }
+
+    private val NetworkState.statusMessage: String?
+        get() {
+            return when (ordinal) {
+                NetworkState.HAS_CONNECTION.ordinal -> null
+                else -> appContext().getString(R.string.network_state_connecting)
+            }
+        }
+
+    private fun createStatusMessage(status: NetworkState?): ToastUI? =
+        status?.let {
+            when (it.ordinal) {
+                NetworkState.HAS_CONNECTION.ordinal -> null
+                else -> noConnectionStatus
+            }
+        }
 
     fun getNetworkStateMessage(currentNetworkState: NetworkState): SpannableStringBuilder {
         val spannableStringBuilder = SpannableStringBuilder()
@@ -203,6 +243,7 @@ class NetworkViewModel @Inject constructor(
     }
 
     private fun stopNetworkFollower() {
+        requestsDataSource.failUnverifiedRequests()
         subscriptions.add(
             repo.stopNetworkFollower()
                 .subscribeOn(schedulers.single)

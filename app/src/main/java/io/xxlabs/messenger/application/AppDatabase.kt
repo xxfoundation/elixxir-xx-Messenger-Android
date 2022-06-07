@@ -14,6 +14,7 @@ import io.xxlabs.messenger.data.room.model.converters.DateConverter
 import io.xxlabs.messenger.data.room.model.converters.DateTimeConverter
 import io.xxlabs.messenger.data.room.model.converters.SentStatusConverter
 import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnection
 import kotlinx.coroutines.*
 import net.sqlcipher.database.SQLiteDatabase
 import net.sqlcipher.database.SupportFactory
@@ -26,9 +27,10 @@ import net.sqlcipher.database.SupportFactory
         GroupMember::class,
         GroupData::class,
         GroupMessageData::class,
-        RequestData::class
+        RequestData::class,
+        NewConnection::class
     ],
-    version = 2,
+    version = 3,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -38,6 +40,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun groupMembersDao(): GroupMembersDao
     abstract fun groupMessagesDao(): GroupMessagesDao
     abstract fun requestsDao(): RequestsDao
+    abstract fun newConnectionsDao(): NewConnectionsDao
 
     companion object {
         @Volatile

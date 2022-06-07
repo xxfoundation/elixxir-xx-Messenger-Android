@@ -2,8 +2,6 @@ package io.xxlabs.messenger.ui.main.chat
 
 import android.app.Application
 import android.net.Uri
-import android.os.Handler
-import android.os.Looper
 import android.text.Spannable
 import android.text.SpannableString
 import android.text.SpannableStringBuilder
@@ -19,11 +17,15 @@ import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import data.proto.CMIXText
 import io.reactivex.rxkotlin.subscribeBy
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.MessageStatus
-import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.data.datatype.RequestStatus
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.PrivateMessage
+import io.xxlabs.messenger.data.room.model.PrivateMessageData
 import io.xxlabs.messenger.filetransfer.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
@@ -33,15 +35,15 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.misc.DummyGenerator
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.support.view.BitmapResolver
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.util.*
 import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.XxMessengerApplication
+import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
-import java.util.concurrent.TimeUnit
 
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -469,6 +471,11 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     override fun startSubscription(contactId: ByteArray) {
         getContactInfo(contactId)
         getMessages(contactId)
+        markContactAsInteracted(contactId)
+    }
+
+    private fun markContactAsInteracted(contactId: ByteArray) {
+        daoRepo.deleteNewConnection(userId = contactId.toBase64String())
     }
 
     override fun getMessages(chatId: ByteArray) {
@@ -554,7 +561,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     private fun createMessage(sentFile: SentFile): PrivateMessage {
         val messagePayload = CMIXText.newBuilder().apply {
-            text = "Sent file"
+            text = sentFile.outgoingText()
         }.build()
 
         return PrivateMessageData(
@@ -569,6 +576,15 @@ class PrivateMessagesViewModel @AssistedInject constructor(
             fileUri = sentFile.uri.toString()
         )
     }
+
+    private fun SentFile.outgoingText(): String = when {
+        isImage() -> appContext().getString(R.string.chat_image_sent_label)
+        isVideo() -> appContext().getString(R.string.chat_video_sent_label)
+        isAudio() -> appContext().getString(R.string.chat_audio_sent_label)
+        isDocument() -> appContext().getString(R.string.chat_doc_sent_label)
+        else -> appContext().getString(R.string.chat_file_sent_label)
+    }
+
 
     private fun saveFileMessageToDb(fileMessage: PrivateMessage) {
         subscriptions.add(
@@ -946,6 +962,17 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     fun onFullScreenImageHandled() {
         _fullScreenImageUri.value = null
+    }
+
+    val navigateToProfile: LiveData<Boolean> get() = _navigateToProfile
+    private val _navigateToProfile = MutableLiveData(false)
+
+    override fun onContactClicked() {
+        _navigateToProfile.value = true
+    }
+
+    fun onNavigateToProfileHandled() {
+        _navigateToProfile.value = false
     }
 
     companion object {

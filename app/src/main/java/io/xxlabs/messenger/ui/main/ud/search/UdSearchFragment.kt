@@ -10,7 +10,6 @@ import android.view.inputmethod.EditorInfo
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.children
 import androidx.core.widget.doAfterTextChanged
@@ -419,13 +418,13 @@ class UdSearchFragment : BaseFragment() {
     }
 
     private fun watchForChanges() {
-        networkViewModel.networkState.observe(viewLifecycleOwner, { networkState ->
-            if (networkState != NetworkState.HAS_CONNECTION) {
-                snackBar.show()
-            } else {
-                snackBar.dismiss()
-            }
-        })
+//        networkViewModel.networkState.observe(viewLifecycleOwner, { networkState ->
+//            if (networkState != NetworkState.HAS_CONNECTION) {
+//                snackBar.show()
+//            } else {
+//                snackBar.dismiss()
+//            }
+//        })
 
         networkViewModel.userDiscoveryStatus.observe(
             viewLifecycleOwner,

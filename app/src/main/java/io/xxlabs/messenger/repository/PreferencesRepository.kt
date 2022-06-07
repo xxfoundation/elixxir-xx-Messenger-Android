@@ -7,14 +7,11 @@ import android.security.keystore.KeyProperties
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import io.xxlabs.messenger.data.data.ContactRoundRequest
-import io.xxlabs.messenger.data.datatype.ContactRequestState
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.Utils
-import io.xxlabs.messenger.requests.deprecated.RequestsFilter
 import timber.log.Timber
-import java.security.KeyStore
 import javax.inject.Inject
 
 class PreferencesRepository @Inject constructor(
@@ -44,6 +41,13 @@ class PreferencesRepository @Inject constructor(
         EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
     )
 
+    @Deprecated(
+        "Use RequestDataSource",
+        replaceWith = ReplaceWith(
+            "ContactRequestsRepository.save()",
+            "io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository"
+        )
+    )
     override fun addContactRequest(
         contactId: ByteArray,
         contactUsername: String,
@@ -73,65 +77,18 @@ class PreferencesRepository @Inject constructor(
         contactRoundRequests = ContactRoundRequest.toJsonSet(currRequestsList)
     }
 
-    override fun addContactRequest(contactRoundRequest: ContactRoundRequest) {
-        val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
-        val exists = currRequestsList.firstOrNull { roundRequest ->
-            roundRequest == contactRoundRequest
-        }
-
-        if (exists != null) {
-            Timber.v("Failed adding round request for ${contactRoundRequest.contactId.toBase64String()}: Already exists")
-        } else {
-            currRequestsList.add(contactRoundRequest)
-            Timber.v("Added ${contactRoundRequest.contactId.toBase64String()} request = $contactRoundRequest")
-        }
-
-        contactRoundRequests = ContactRoundRequest.toJsonSet(currRequestsList)
-    }
-
-    override fun removeContactRequest(
-        contactRoundRequest: ContactRoundRequest
-    ) {
-        val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
-        val exists = currRequestsList.firstOrNull { roundRequest ->
-            roundRequest == contactRoundRequest
-        }
-
-        if (exists != null) {
-            currRequestsList.remove(exists)
-            Timber.v("Round Request removed: ${contactRoundRequest.contactId.toBase64String()} || request = $contactRoundRequest")
-        } else {
-            Timber.v("Round Request for ${contactRoundRequest.contactId.toBase64String()} not found")
-        }
-
-        contactRoundRequests = ContactRoundRequest.toJsonSet(currRequestsList)
-    }
-
-    override fun updateContactRequest(contactRoundRequest: ContactRoundRequest) {
-        removeContactRequest(contactRoundRequest)
-        addContactRequest(contactRoundRequest)
-    }
-
-    override fun getContactRequest(contactId: ByteArray, roundId: Long): ContactRoundRequest? {
-        val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
-        val exists = currRequestsList.firstOrNull { roundRequest ->
-            roundRequest.contactId.contentEquals(contactId) && roundRequest.roundId == roundId
-        }
-
-        return if (exists != null) {
-            Timber.v("Request for ${contactId.toBase64String()} exists")
-            exists
-        } else {
-            Timber.v("Request for ${contactId.toBase64String()} was not found")
-            null
-        }
-    }
-
     /**
      * Remove all requests with the matching [contactId].
      * Returns the number of removed requests.
      */
-    override fun removeContactRequests(contactId: ByteArray): Int {
+    @Deprecated(
+        "Use RequestDataSource",
+        replaceWith = ReplaceWith(
+            "ContactRequestsRepository.save()",
+            "io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository"
+        )
+    )
+    fun removeContactRequests(contactId: ByteArray): Int {
         val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
         val matchingRequests = currRequestsList.filter { roundRequest ->
             roundRequest.contactId.contentEquals(contactId)
@@ -143,59 +100,12 @@ class PreferencesRepository @Inject constructor(
         return matchingRequests.size
     }
 
-    override fun getContactRequest(contactId: ByteArray): ContactRoundRequest? {
-        val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
-        val exists = currRequestsList.firstOrNull { roundRequest ->
-            roundRequest.contactId.contentEquals(contactId)
-        }
-
-        return if (exists != null) {
-            Timber.v("Request for ${contactId.toBase64String()} exists")
-            exists
-        } else {
-            Timber.v("Request for ${contactId.toBase64String()} was not found")
-            null
-        }
-    }
-
-    override fun getContactRequest(filter: RequestsFilter): List<ContactRoundRequest> {
-        val currRequestsList = ContactRoundRequest.toRoundRequestsSet(contactRoundRequests)
-        val filteredList = currRequestsList.filter { round ->
-            when (filter) {
-                RequestsFilter.RECEIVED -> {
-                    round.verifyState == ContactRequestState.RECEIVED
-                }
-
-                RequestsFilter.SENT -> {
-                    round.verifyState == ContactRequestState.SUCCESS || round.verifyState == ContactRequestState.VERIFYING
-                }
-
-                RequestsFilter.FAILED -> {
-                    round.verifyState == ContactRequestState.FAILED
-                }
-            }
-        }
-
-        return filteredList.toList()
-    }
-
     override fun getUserId(): ByteArray {
         return this.userId.fromBase64toByteArray()
     }
 
     override fun setUserId(userId: ByteArray) {
         this.userId = userId.toBase64String()
-    }
-
-    override fun clearAll() {
-        preferences.edit().clear().apply()
-        try {
-            val keyStore: KeyStore = KeyStore.getInstance("AndroidKeyStore")
-            keyStore.load(null)
-            keyStore.deleteEntry(masterKeyAlias)
-        } catch (err: Exception) {
-            Timber.e("Error occurred while trying to delete the master key: ${err.localizedMessage}")
-        }
     }
 
     fun nextRegistrationPhase() {
@@ -369,6 +279,18 @@ class PreferencesRepository @Inject constructor(
         set(value) {
             field = value
             preferences.edit().putBoolean("user_backed_up", value).apply()
+        }
+
+    override var showContactNames: Boolean = preferences.getBoolean("notifications_show_contact_names", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("notifications_show_contact_names", value).apply()
+        }
+
+    override var showGroupNames: Boolean = preferences.getBoolean("notifications_show_group_names", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("notifications_show_group_names", value).apply()
         }
 
     override var areDebugLogsOn: Boolean = preferences.getBoolean("show_debug_logs", true)

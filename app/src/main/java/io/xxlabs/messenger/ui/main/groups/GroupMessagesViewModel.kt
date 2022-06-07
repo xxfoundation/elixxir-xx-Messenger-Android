@@ -14,26 +14,25 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.reactivex.rxkotlin.subscribeBy
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
-import io.xxlabs.messenger.data.data.*
+import io.xxlabs.messenger.application.XxMessengerApplication
+import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
+import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
+import io.xxlabs.messenger.data.data.AvatarWrapper
 import io.xxlabs.messenger.data.datatype.MessageStatus
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
+import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.misc.DummyGenerator
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesViewModel
 import timber.log.Timber
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.XxMessengerApplication
-import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
-import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
-import io.xxlabs.messenger.data.datatype.RequestStatus
-import io.xxlabs.messenger.support.extensions.toBase64String
-import kotlinx.coroutines.launch
 
 class GroupMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -526,6 +525,7 @@ class GroupMessagesViewModel @AssistedInject constructor(
     override fun onFileBrowserHandled() {}
     override fun onCameraHandled() {}
     override fun onGalleryHandled() {}
+    override fun onContactClicked() {}
 
     override val lastMessage: LiveData<GroupMessage?> =
         Transformations.switchMap(groupData) {

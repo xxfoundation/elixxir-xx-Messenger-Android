@@ -6,10 +6,8 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.data.ReplyWrapper
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.GroupMessage
-import io.xxlabs.messenger.data.room.model.PrivateMessage
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessageDiffCallback
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
-import java.util.*
 
 class GroupMessagesAdapter(
     private val chatViewModel: GroupMessagesViewModel

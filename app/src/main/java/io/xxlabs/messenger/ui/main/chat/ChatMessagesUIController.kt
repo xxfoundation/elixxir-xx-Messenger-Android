@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.PagedList
 import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
 interface ChatMessagesUIController<T: ChatMessage>  {
     /**
@@ -33,6 +34,9 @@ interface ChatMessagesUIController<T: ChatMessage>  {
     val copyMenuOptionEnabled: LiveData<Boolean>
     val deleteMenuOptionEnabled: LiveData<Boolean>
     val replyMenuOptionEnabled: LiveData<Boolean>
+    val showMixPendingMessage: LiveData<InfoDialogUI?>
+
+    abstract fun onShowMixPendingMessageShown()
 
     /**
      * Determines if the RecyclerView swipe selection should be enabled.
@@ -295,6 +299,8 @@ interface ChatMessagesUIController<T: ChatMessage>  {
     fun onShowMixHandled()
 
     val showMixClicked: LiveData<String?>
+
+    fun onContactClicked()
 
     companion object {
         /** The max text length to when displaying a message being replied to.*/

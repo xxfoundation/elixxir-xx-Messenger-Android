@@ -8,11 +8,9 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import bindings.Bindings
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
-import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.repository.base.BaseRepository
 
 class EmailTfaState(

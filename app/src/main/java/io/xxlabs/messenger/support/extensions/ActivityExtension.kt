@@ -9,10 +9,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.updatePadding
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.NavController
-import androidx.navigation.NavOptions
-import androidx.navigation.Navigator
+import androidx.navigation.*
 import timber.log.Timber
 
 /**
@@ -88,6 +85,25 @@ fun NavController.navigateSafe(
     try {
         navDirections.let {
             this.navigate(navDirections, bundle, navOptions, extras)
+        }
+    } catch (e: Exception) {
+        e.printStackTrace()
+    }
+}
+
+/**
+ * Safe [NavDirections] navigation that prevents double click crash
+ */
+fun NavController.navigateSafe(
+    navDirections: NavDirections,
+    navOptions: NavOptions? = null,
+    extras: Navigator.Extras? = null
+) {
+    try {
+        when {
+            navOptions != null -> navigate(navDirections, navOptions)
+            extras != null -> navigate(navDirections, extras)
+            else -> navigate(navDirections)
         }
     } catch (e: Exception) {
         e.printStackTrace()

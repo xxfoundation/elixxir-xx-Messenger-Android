@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.support.toolbar.ToolbarMenuItem" />
+    </data>
+
+    <ImageButton
+        android:id="@+id/menuItemIcon"
+        android:layout_width="42dp"
+        android:layout_height="match_parent"
+        android:adjustViewBounds="true"
+        android:onClick="@{() -> ui.onClick(ui)}"
+        android:layout_margin="4dp"
+        style="@style/registration_borderless_text_button"
+        app:actionIcon="@{ui.icon}"
+        app:actionIconTint="@{ui.iconTint}"
+        tools:src="@drawable/ic_create_group"
+        tools:layout_height="42dp"/>
+</layout>

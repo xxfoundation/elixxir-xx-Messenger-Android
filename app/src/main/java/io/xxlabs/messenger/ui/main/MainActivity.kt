@@ -4,11 +4,12 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
+import android.app.ProgressDialog.show
 import android.content.Context
+import android.content.Intent
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -16,24 +17,27 @@ import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
 import androidx.lifecycle.*
+import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.NavMainDirections
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
+import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
 import io.xxlabs.messenger.notifications.MessagingService
-import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.callback.NetworkWatcher
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.extensions.*
@@ -56,9 +60,18 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.component_menu.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+
+private val Bundle.isPrivateMessage: Boolean
+    get() = getByteArray(MainActivity.INTENT_PRIVATE_CHAT) != null
+
+private val Bundle.isGroupMessage: Boolean
+    get() = getByteArray(MainActivity.INTENT_GROUP_CHAT) != null
+
+private val Bundle.isRequest: Boolean
+    get() = getInt(MainActivity.INTENT_REQUEST, -1) != -1
 
 class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActivity {
     @Inject
@@ -139,6 +152,72 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         mainReportBtn.setOnSingleClickListener {
             DebugLogger.exportLatestLog(this)
         }
+        handleIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIntent(intent)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+            handleDeepLink(it)
+        }
+    }
+
+    private fun handleDeepLink(bundle: Bundle) {
+        with (bundle) {
+            when {
+                isPrivateMessage -> privateMessageIntent(this)
+                isGroupMessage -> groupMessageIntent(this)
+                isRequest -> requestIntent(this)
+                else -> unknownIntent()
+            }
+        }
+    }
+
+    private fun privateMessageIntent(bundle: Bundle) {
+        bundle.getByteArray(INTENT_PRIVATE_CHAT)?.let { chatId ->
+            val privateChatDirections = NavMainDirections.actionGlobalChat().apply {
+                contactId = chatId.toBase64String()
+                contact = null
+            }
+            mainNavController.navigateSafe(
+                privateChatDirections.actionId,
+                privateChatDirections.arguments
+            )
+        }
+    }
+
+    private fun groupMessageIntent(bundle: Bundle) {
+        bundle.getByteArray(INTENT_GROUP_CHAT)?.let { chatId ->
+            val groupChatDirections = NavMainDirections.actionGlobalGroupsChat().apply {
+                groupId = chatId.toBase64String()
+                group = null
+            }
+            mainNavController.navigateSafe(
+                groupChatDirections.actionId,
+                groupChatDirections.arguments
+            )
+        }
+    }
+
+    private fun requestIntent(bundle: Bundle) {
+        bundle.getInt(INTENT_REQUEST, 0).let { tab ->
+            val requestDirections = NavMainDirections.actionGlobalRequests().apply {
+                selectedTab = tab
+            }
+            mainNavController.navigateSafe(
+                requestDirections.actionId,
+                requestDirections.arguments
+            )
+        }
+    }
+
+    private fun unknownIntent() {
+        Timber.d("Unknown intent received!")
     }
 
     override fun onDestroy() {
@@ -232,11 +311,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             mainNavController.navigateSafe(R.id.action_global_requests)
         }
 
-        menuContactProfileTxt?.setOnSingleClickListener {
-            hideMenu()
-            mainNavController.navigateSafe(R.id.action_global_ud_profile)
-        }
-
         menuScanText?.setOnSingleClickListener {
             hideMenu()
             mainNavController.navigateSafe(R.id.action_global_qr_code)
@@ -309,8 +383,24 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
                 contactsViewModel.onNavigateHandled()
             }
         }.launchIn(lifecycleScope)
+
+//        networkViewModel.networkState.observe(this) { state ->
+//            when (state) {
+//                NetworkState.NO_CONNECTION -> showConnectingMessage()
+//                NetworkState.NETWORK_STOPPED -> showDisconnectedMessage()
+//            }
+//        }
+        networkViewModel.networkStatus.observe(this) { statusMessage ->
+            dismissNetworkStatusMessage()
+            statusMessage?.let { showCustomToast(it) }
+        }
     }
 
+    private fun dismissNetworkStatusMessage() {
+        for (status in cachedNetworkStatus) {
+            dismissIndefiniteToast(status)
+        }
+    }
 
     private fun openChat(contact: Contact) {
         val bundle = bundleOf("contact_id" to contact.userId)
@@ -322,7 +412,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             ToastUI.create(
                 body = message ?: "One of your requests failed.",
                 leftIcon = R.drawable.ic_danger,
-                backgroundColor = getColor(R.color.accent_danger)
+                backgroundColor = R.color.accent_danger
             )
         )
         contactsViewModel.onToastShown()
@@ -518,11 +608,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
                 networkViewModel.setInternetState(false)
             },
             onChanged = {
-//                if (mainViewModel.wasLoggedIn) {
-//                    networkViewModel.tryRestartNetworkFollower()
-//                } else {
-//                    Timber.v("[MAIN] Not logged in before")
-//                }
+                if (mainViewModel.wasLoggedIn) {
+                    networkViewModel.tryRestartNetworkFollower()
+                } else {
+                    Timber.v("[MAIN] Not logged in before")
+                }
             },
         )
     }
@@ -649,13 +739,16 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar? {
-        if (preferences.areInAppNotificationsOn || forceMessage) {
-            val snack = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_LONG).setAction("OK") {}
-            snack.view.translationZ = 10f
-            snack.show()
-            return snack
-        }
-        return null
+        return if (preferences.areInAppNotificationsOn || forceMessage) {
+//            val snack = Snackbar.make(mainLayout, msg, Snackbar.LENGTH_LONG).setAction("OK") {}
+//            snack.view.translationZ = 10f
+//            snack.show()
+//            return snack
+            val toastUI = ToastUI.create(body = msg, leftIcon = null)
+            val snackBar = createCustomToast(toastUI)
+            showCustomToast(toastUI)
+            snackBar
+        } else null
     }
 
     fun hideKeyboard() {
@@ -680,6 +773,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     companion object : BaseInstance {
+        const val INTENT_DEEP_LINK_BUNDLE = "nav_bundle"
+        const val INTENT_PRIVATE_CHAT = "private_message"
+        const val INTENT_GROUP_CHAT = "group_message"
+        const val INTENT_REQUEST = "request"
+
         private var activeInstances = 0
         override fun activeInstancesCount(): Int {
             return activeInstances
@@ -690,7 +788,27 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         }
     }
 
+    /**
+     * Cache indefinite toasts, so they may be looked up for dismissal
+     */
+    private val indefiniteToasts: MutableMap<ToastUI, Snackbar> = mutableMapOf()
+    private val cachedNetworkStatus: MutableList<ToastUI> = mutableListOf()
+
     override fun showCustomToast(ui: ToastUI) {
+        createCustomToast(ui).apply {
+            if (ui.duration == LENGTH_INDEFINITE) indefiniteToasts[ui] = this
+            show()
+        }
+    }
+
+    override fun dismissIndefiniteToast(ui: ToastUI) {
+        indefiniteToasts[ui]?.run {
+            indefiniteToasts.remove(ui)
+            dismiss()
+        }
+    }
+
+    private fun createCustomToast(ui: ToastUI): Snackbar {
         val snackBar = Snackbar.make(findViewById(R.id.customToastView), "", ui.duration)
         val binding = ComponentCustomToastBinding.inflate(layoutInflater)
         binding.ui = ui
@@ -703,7 +821,8 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             params.gravity = Gravity.TOP
             layoutParams = params
         }
+
         snackBar.animationMode = BaseTransientBottomBar.ANIMATION_MODE_FADE
-        snackBar.show()
+        return snackBar
     }
 }

@@ -14,7 +14,6 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.singleThread
 import timber.log.Timber
-import java.nio.charset.Charset
 import javax.inject.Inject
 
 class UdSearchViewModel @Inject constructor(

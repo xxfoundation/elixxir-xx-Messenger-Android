@@ -11,11 +11,10 @@
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
-    tools:context=".ui.main.contacts.ContactsFragment">
+    tools:context=".ui.main.contacts.list.ContactListFragment">
 
     <include
-        layout="@layout/component_toolbar_generic"
-        tools:visibility="gone" />
+        layout="@layout/component_toolbar_generic" />
 
     <include
         layout="@layout/component_network_error_banner"
@@ -25,93 +24,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbarGeneric" />
-
-    <io.xxlabs.messenger.support.view.TextInputLayoutXx
-        android:id="@+id/contactsSearchBarLayout"
-        style="@style/InputLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/spacing_24"
-        app:endIconMode="clear_text"
-        app:hintEnabled="false"
-        app:layout_constraintEnd_toStartOf="@id/regGuideEnd"
-        app:layout_constraintStart_toEndOf="@id/regGuideStart"
-        app:layout_constraintTop_toBottomOf="@id/networkStatusLayout"
-        app:layout_constraintVertical_chainStyle="packed">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/contactsSearchBar"
-            style="@style/InputEditText.Search"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_40"
-            android:layout_gravity="center"
-            android:contentDescription="contacts.input.search"
-            android:hint="@string/search_contacts"
-            android:imeOptions="actionDone"
-            android:inputType="textFilter"
-            android:maxHeight="@dimen/spacing_40" />
-    </io.xxlabs.messenger.support.view.TextInputLayoutXx>
-
-    <TextView
-        android:id="@+id/contactsNewGroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/connections_new_group"
-        android:textColor="@color/brand_default"
-        android:textSize="@dimen/text_16"
-        android:drawablePadding="@dimen/spacing_12"
-        android:layout_marginStart="@dimen/spacing_12"
-        android:layout_marginTop="@dimen/spacing_24"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintStart_toStartOf="@id/regGuideStart"
-        app:layout_constraintTop_toBottomOf="@id/contactsSearchBarLayout"
-        app:drawableTint="@color/brand_default"
-        app:drawableLeftCompat="@drawable/ic_create_group_24"/>
-
-    <View
-        android:id="@+id/contactsGroupRequestsDivider"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="@dimen/spacing_12"
-        android:background="@color/neutral_line"
-        app:layout_constraintEnd_toEndOf="@id/regGuideEnd"
-        app:layout_constraintStart_toStartOf="@id/regGuideStart"
-        app:layout_constraintTop_toBottomOf="@id/contactsNewGroup" />
-
-    <TextView
-        android:id="@+id/contactsRequests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/contacts_requests"
-        android:textColor="@color/brand_default"
-        android:textSize="@dimen/text_16"
-        android:drawablePadding="@dimen/spacing_12"
-        android:layout_marginStart="@dimen/spacing_12"
-        android:layout_marginTop="@dimen/spacing_24"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintStart_toStartOf="@id/regGuideStart"
-        app:layout_constraintTop_toBottomOf="@id/contactsGroupRequestsDivider"
-        app:drawableTint="@color/brand_default"
-        app:drawableLeftCompat="@drawable/ic_mail" />
-
-    <TextView
-        android:id="@+id/contactRequestsCount"
-        android:layout_width="@dimen/spacing_30"
-        android:layout_height="@dimen/spacing_24"
-        android:background="@drawable/bg_btn_white"
-        tools:text="2"
-        android:backgroundTint="@color/brand_default"
-        android:textSize="@dimen/text_16"
-        android:textColor="@color/neutral_white"
-        android:layout_marginStart="@dimen/spacing_12"
-        android:gravity="center"
-        android:visibility="gone"
-        tools:visibility="visible"
-        app:layout_constraintStart_toEndOf="@id/contactsRequests"
-        app:layout_constraintBottom_toBottomOf="@id/contactsRequests"
-        app:layout_constraintTop_toTopOf="@id/contactsRequests" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/contactsGroupRecyclerView"
@@ -127,7 +39,7 @@
         android:scrollbars="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/contactsRequests"
+        app:layout_constraintTop_toBottomOf="@id/networkStatusLayout"
         tools:itemCount="7"
         tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         tools:listitem="@layout/list_item_member"

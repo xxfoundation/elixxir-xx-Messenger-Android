@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.contacts
+package io.xxlabs.messenger.ui.main.contacts.deprecated
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -9,7 +9,6 @@ import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
-
 
 class GroupMembersListAdapter(private val groupsSelectionListener: GroupsSelectionListener) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {

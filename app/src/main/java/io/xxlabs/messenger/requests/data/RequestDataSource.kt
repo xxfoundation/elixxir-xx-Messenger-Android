@@ -12,5 +12,8 @@ interface RequestDataSource<T: Request> {
     fun reject(request: T)
     fun delete(request: T)
     fun send(request: T)
+    fun retry(request: T)
+    fun verify(request: T)
+    fun failUnverifiedRequests()
     fun resetResentRequests()
 }

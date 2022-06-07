@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.chats.search.SearchResult" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_12"
+        android:background="@color/neutral_white"
+        android:orientation="vertical"
+        android:paddingTop="@dimen/spacing_12"
+        android:paddingBottom="@dimen/spacing_12">
+
+        <include
+            layout="@layout/component_item_thumbnail"
+            android:id="@+id/thumbnailLayout"
+            android:layout_height="42dp"
+            android:layout_width="42dp"
+            app:ui="@{ui.thumbnail}"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/name"
+            app:layout_goneMarginStart="@dimen/spacing_16" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginEnd="@dimen/spacing_10"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:textColor="@color/neutral_active"
+            android:textSize="16sp"
+            android:text="@{ui.name}"
+            app:fontWeight="600"
+            app:lineHeight="21sp"
+            android:letterSpacing="0.04"
+            app:layout_constraintEnd_toStartOf="@id/timestamp"
+            app:layout_constraintHorizontal_bias="0"
+            app:layout_constraintStart_toEndOf="@id/thumbnailLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="\@username" />
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_20"
+            android:layout_marginTop="2dp"
+            android:layout_marginEnd="@dimen/spacing_12"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:textColor="@color/neutral_secondary"
+            android:textSize="14sp"
+            android:text="@{ui.description}"
+            android:visibility="@{ui.description}"
+            app:fontWeight="400"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/unreadCountLayout"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@id/thumbnailLayout"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintVertical_bias="0.083"
+            app:lineHeight="20sp"
+            tools:text="Hey Have you been to the store recently I really liked how every..." />
+
+        <TextView
+            android:id="@+id/timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/spacing_16"
+            android:textAlignment="viewEnd"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_12"
+            android:text="@{ui.timestamp}"
+            android:visibility="@{ui.timestamp}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/name"
+            tools:text="12:30pm" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/unreadCountLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/neutral_disabled"
+            android:visibility="@{ui.notificationCount}"
+            app:cardCornerRadius="18dp"
+            app:layout_constraintBottom_toBottomOf="@id/description"
+            app:layout_constraintEnd_toEndOf="@id/timestamp"
+            app:layout_constraintTop_toTopOf="@id/description">
+
+            <TextView
+                android:id="@+id/unreadCount"
+                style="@style/notification_count_text"
+                android:background="@drawable/component_semi_circular_bg"
+                android:backgroundTint="@color/neutral_disabled"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@{ui.notificationCount}"
+                tools:text="99" />
+        </androidx.cardview.widget.CardView>
+
+        <View
+            android:id="@+id/clickArea"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="@{() -> ui.onClick()}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

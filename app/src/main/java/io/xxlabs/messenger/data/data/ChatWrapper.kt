@@ -1,7 +1,9 @@
 package io.xxlabs.messenger.data.data
 
 import io.xxlabs.messenger.data.datatype.RequestStatus
-import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.data.room.model.ChatMessage
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.GroupData
 
 data class ChatWrapper(
     val item: Any,

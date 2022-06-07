@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.contacts
+package io.xxlabs.messenger.ui.main.contacts.deprecated
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -117,8 +117,6 @@ class ContactsListAdapter(
         } else {
             holder.setOnClick(SelectionMode.CHAT_ACCESS)
         }
-
-        holder.showDivider(position != 0 && position != composedItemsList.size - 1)
     }
 
     private fun bindGroup(
@@ -135,7 +133,6 @@ class ContactsListAdapter(
         holder.setPhoto(null, initials)
 
         holder.setOnClick(SelectionMode.GROUP_ACCESS)
-        holder.showDivider(position != 0 && position != composedItemsList.size - 1)
     }
 
     private fun showHeader(position: Int): Boolean {

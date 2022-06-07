@@ -3,10 +3,12 @@ package io.xxlabs.messenger.ui.main.chats
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Editable
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
@@ -19,27 +21,28 @@ import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.datatype.SelectionMode
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.data.room.model.GroupData
+import io.xxlabs.messenger.databinding.FragmentChatsListBinding
 import io.xxlabs.messenger.repository.DaoRepository
-import io.xxlabs.messenger.support.extensions.incognito
-import io.xxlabs.messenger.support.extensions.navigateSafe
-import io.xxlabs.messenger.support.extensions.setInsets
-import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
+import io.xxlabs.messenger.support.extensions.*
 import io.xxlabs.messenger.support.selection.CustomSelectionTracker
 import io.xxlabs.messenger.support.selection.LongKeyProvider
 import io.xxlabs.messenger.support.touch.ButtonSwipeHelper
 import io.xxlabs.messenger.support.touch.UnderlayButton
 import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
-import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
+import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionsAdapter
+import io.xxlabs.messenger.ui.main.chats.search.SearchResultAdapter
 import kotlinx.android.synthetic.main.component_bottom_menu_chats.*
-import kotlinx.android.synthetic.main.component_network_error_banner.*
 import kotlinx.android.synthetic.main.fragment_chats_list.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -66,12 +69,19 @@ class ChatsFragment : BaseFragment() {
     private lateinit var chatsSwipeController: ButtonSwipeHelper
     private val mediatorObject = Observer<Any> { Timber.v("Mediator initiated") }
 
+    private lateinit var binding: FragmentChatsListBinding
+    private val newConnectionsAdapter: NewConnectionsAdapter by lazy { NewConnectionsAdapter() }
+    private val searchResultsAdapter: SearchResultAdapter by lazy { SearchResultAdapter() }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_chats_list, container, false)
+        binding = FragmentChatsListBinding.inflate(inflater, container, false)
+
+        binding.lifecycleOwner = viewLifecycleOwner
+        return binding.root
     }
 
     override fun onDetach() {
@@ -85,6 +95,18 @@ class ChatsFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         navController = findNavController()
         navigateForNewUsers()
+    }
+
+    private fun navigateForNewUsers() {
+        if (preferences.userData.isNotBlank() && preferences.isFirstLaunch) {
+            navigateToUdSearch()
+        }
+    }
+    
+    private fun navigateToUdSearch() {
+        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
+        preferences.isFirstLaunch = false
+        findNavController().navigate(udSearch)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,18 +130,6 @@ class ChatsFragment : BaseFragment() {
         initComponents(view)
     }
 
-    private fun navigateForNewUsers() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstLaunch) {
-            navigateToUdSearch()
-        }
-    }
-
-    private fun navigateToUdSearch() {
-        val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
-        preferences.isFirstLaunch = false
-        findNavController().navigate(udSearch)
-    }
-
     fun initComponents(root: View) {
         root.setInsets(
             bottomMask = WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.ime(),
@@ -127,35 +137,25 @@ class ChatsFragment : BaseFragment() {
         )
 
         setListeners()
+        initNewConnectionsRecyclerView()
+        initSearchResultsRecyclerView()
         bindRecyclerView()
         resetSearchBar()
     }
 
-    override fun onStart() {
-        super.onStart()
-        watchForObservables()
-    }
-
     private fun setListeners() {
         chatsSearchBar.incognito(preferences.isIncognitoKeyboardEnabled)
+        chatsSearchBar.setOnFocusChangeListener { v, hasFocus ->
+            chatsViewModel.onSearchHasFocus(hasFocus)
+        }
         chatsSearchBar.addTextChangedListener { text ->
-            chatsAdapter.filter.filter(text?.trim())
-            if (!text.isNullOrBlank()) {
-                closeBottomMenu()
-            }
+//            chatsAdapter.filter.filter(text?.trim())
+            chatsViewModel.onSearchTextChanged(text.toString())
+            if (!text.isNullOrBlank())closeBottomMenu()
         }
 
         chatsMenu.setOnSingleClickListener {
             mainViewModel.toggleMenu()
-        }
-
-        chatsSelectConversationBtn.setOnSingleClickListener {
-            val bundle = bundleOf("isSelectionMode" to true)
-            navController.navigateSafe(R.id.action_chats_to_select_contact, bundle)
-        }
-
-        chatsSearchUdBtn.setOnSingleClickListener {
-            navController.navigateSafe(R.id.action_chats_to_ud_search)
         }
 
         chatsCancelMenu.setOnSingleClickListener {
@@ -207,6 +207,121 @@ class ChatsFragment : BaseFragment() {
         }
     }
 
+    private fun initNewConnectionsRecyclerView() {
+        binding.newConnectionsRecyclerView.apply {
+            layoutManager = LinearLayoutManager(
+                requireContext(), LinearLayoutManager.HORIZONTAL, false
+            )
+            adapter = newConnectionsAdapter
+        }
+    }
+
+    private fun initSearchResultsRecyclerView() {
+        binding.searchRecyclerView.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = searchResultsAdapter
+        }
+    }
+
+    private fun bindRecyclerView() {
+        val layoutManager = LinearLayoutManager(context)
+        chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
+
+        chatsRecyclerView.layoutManager = layoutManager
+        chatsRecyclerView.adapter = chatsAdapter
+        chatsRecyclerView.itemAnimator = null
+
+        initTracker()
+        attachItemHelper()
+    }
+
+    private fun resetSearchBar() {
+        chatsRecyclerView?.post {
+            val text = chatsSearchBar?.text?.trim()
+            chatsViewModel.onSearchTextChanged(text.toString())
+            if (text != null && chatsAdapter.itemCount > 0) {
+                Timber.v("Text search was restored!")
+//                chatsAdapter.filter.filter(text)
+                if (chatsSearchBar?.text?.isBlank() != true) {
+                    closeBottomMenu()
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        observeUI()
+        watchForObservables()
+    }
+
+    private fun observeUI() {
+        chatsViewModel.chatsListUi.observe(viewLifecycleOwner) { ui ->
+            binding.ui = ui
+        }
+
+        chatsViewModel.navigateToUdSearch.observe(viewLifecycleOwner) { addContact ->
+            if (addContact) {
+                navigateToUdSearch()
+                chatsViewModel.onNavigateToUdHandled()
+            }
+        }
+
+        chatsViewModel.showCreateGroup.observe(viewLifecycleOwner) { createGroup ->
+            if (createGroup) {
+                navigateToContactsSelection()
+                chatsViewModel.onCreateGroupHandled()
+            }
+        }
+
+        chatsViewModel.navigateToChat.observe(viewLifecycleOwner) { contact ->
+            contact?.let {
+                navigateToChat(contact)
+                chatsViewModel.onNavigateToChatHandled()
+            }
+        }
+
+        chatsViewModel.newlyAddedContacts.observe(viewLifecycleOwner) { newConnections ->
+            showNewConnections(newConnections)
+        }
+
+        chatsViewModel.searchResults.observe(viewLifecycleOwner) { searchResults ->
+            searchResultsAdapter.submitList(searchResults)
+        }
+
+        chatsViewModel.navigateToGroup.observe(viewLifecycleOwner) { group ->
+            group?.let {
+                navigateToGroup(group)
+                chatsViewModel.onNavigateToGroupHandled()
+            }
+        }
+    }
+
+    private fun navigateToChat(contact: Contact) {
+        val privateChatDirections = ChatsFragmentDirections.actionGlobalChat().apply {
+            this.contact = contact as ContactData
+            contactId = contact.userId.toBase64String()
+        }
+        findNavController().navigateSafe(privateChatDirections)
+    }
+
+    private fun navigateToGroup(group: Group) {
+        val groupChatDirections = ChatsFragmentDirections.actionGlobalGroupsChat().apply {
+            this.group = group as GroupData
+            groupId = group.groupId.toBase64String()
+        }
+        findNavController().navigateSafe(groupChatDirections)
+    }
+
+    private fun navigateToContactsSelection() {
+        val contactsDirections = ChatsFragmentDirections.actionChatsToSelectContact()
+        findNavController().navigateSafe(contactsDirections)
+    }
+
+    private fun showNewConnections(newConnections: List<NewConnectionUI>) {
+        newConnectionsAdapter.submitList(newConnections)
+    }
+
     private fun watchForObservables() {
         contactsViewModel.requestsCount.observe(viewLifecycleOwner, Observer { newCount ->
             if (newCount > 0) {
@@ -255,54 +370,27 @@ class ChatsFragment : BaseFragment() {
             }
         }
 
-        networkViewModel.networkState.observe(
-            viewLifecycleOwner,
-            Observer<NetworkState> { networkState ->
-                Timber.v("Network State: $networkState")
-                if (networkState == NetworkState.HAS_CONNECTION) {
-                    networkStatusLayout?.visibility = View.GONE
-                } else {
-                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
-                    networkStatusLayout?.visibility = View.VISIBLE
-                    networkStatusText?.text = bannerMsg
-                }
-            })
+//        networkViewModel.networkState.observe(
+//            viewLifecycleOwner,
+//            Observer<NetworkState> { networkState ->
+//                Timber.v("Network State: $networkState")
+//                if (networkState == NetworkState.HAS_CONNECTION) {
+//                    networkStatusLayout?.visibility = View.GONE
+//                } else {
+//                    val bannerMsg = networkViewModel.getNetworkStateMessage(networkState)
+//                    networkStatusLayout?.visibility = View.VISIBLE
+//                    networkStatusText?.text = bannerMsg
+//                }
+//            })
     }
 
     private fun hideEmptyMessage() {
-        chatsEmptyBottomTxt?.visibility = View.INVISIBLE
-        chatsAddContactBtn?.visibility = View.INVISIBLE
+        chatsViewModel.setPlaceHolderVisibility(false)
     }
 
     private fun showEmptyMessage() {
         chatsLoading.hide()
-        chatsEmptyBottomTxt?.visibility = View.VISIBLE
-        chatsAddContactBtn?.visibility = View.VISIBLE
-    }
-
-    private fun resetSearchBar() {
-        chatsRecyclerView?.post {
-            val text = chatsSearchBar?.text?.trim()
-            if (text != null && chatsAdapter.itemCount > 0) {
-                Timber.v("Text search was restored!")
-                chatsAdapter.filter.filter(text)
-                if (chatsSearchBar?.text?.isBlank() != true) {
-                    closeBottomMenu()
-                }
-            }
-        }
-    }
-
-    private fun bindRecyclerView() {
-        val layoutManager = LinearLayoutManager(context)
-        chatsAdapter = ChatsListAdapter(daoRepo, schedulers)
-
-        chatsRecyclerView.layoutManager = layoutManager
-        chatsRecyclerView.adapter = chatsAdapter
-        chatsRecyclerView.itemAnimator = null
-
-        initTracker()
-        attachItemHelper()
+        chatsViewModel.setPlaceHolderVisibility(true)
     }
 
     private fun initTracker() {
@@ -386,11 +474,12 @@ class ChatsFragment : BaseFragment() {
         if (!isBottomMenuOpen) {
             isBottomMenuOpen = true
             chatsAdapter.selectionMode = SelectionMode.CHAT_SELECTION
-            chatsSelectConversationBtn?.visibility = View.GONE
-            chatsSearchUdBtn?.visibility = View.GONE
             chatsCancelMenu?.visibility = View.VISIBLE
             chatsBottomMenu?.visibility = View.VISIBLE
             chatsAdapter.notifyItemRangeChanged(0, chatsAdapter.itemCount)
+
+            binding.chatsListAddContact.visibility = View.GONE
+            binding.chatsListCreateGroup.visibility = View.GONE
         }
     }
 
@@ -401,10 +490,11 @@ class ChatsFragment : BaseFragment() {
 
         chatsAdapter.selectionMode = SelectionMode.CHAT_ACCESS
         tracker.clearSelection()
-        chatsSelectConversationBtn?.visibility = View.VISIBLE
-        chatsSearchUdBtn?.visibility = View.VISIBLE
         chatsCancelMenu?.visibility = View.GONE
         chatsBottomMenu?.visibility = View.GONE
+
+        binding.chatsListAddContact.visibility = View.VISIBLE
+        binding.chatsListCreateGroup.visibility = View.VISIBLE
 
         refreshChat()
     }

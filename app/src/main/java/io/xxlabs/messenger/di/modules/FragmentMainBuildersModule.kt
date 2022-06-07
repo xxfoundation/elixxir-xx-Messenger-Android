@@ -2,23 +2,11 @@ package io.xxlabs.messenger.di.modules
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import io.xxlabs.messenger.backup.ui.list.BackupListFragment
 import io.xxlabs.messenger.backup.ui.backup.BackupDetailFragment
 import io.xxlabs.messenger.backup.ui.backup.BackupSettingsFragment
+import io.xxlabs.messenger.backup.ui.list.BackupListFragment
 import io.xxlabs.messenger.media.FullScreenImageFragment
 import io.xxlabs.messenger.requests.deprecated.RequestGenericFragment
-import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
-import io.xxlabs.messenger.ui.main.chats.ChatsFragment
-import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
-import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
-import io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitation
-import io.xxlabs.messenger.ui.main.contacts.profile.ContactProfileFragment
-import io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment
-import io.xxlabs.messenger.ui.main.contacts.success.ContactSuccessFragment
-import io.xxlabs.messenger.ui.main.groups.GroupMessagesFragment
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeScanFragment
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeShowFragment
 import io.xxlabs.messenger.requests.ui.RequestsFragment
 import io.xxlabs.messenger.requests.ui.accepted.contact.RequestAcceptedDialog
 import io.xxlabs.messenger.requests.ui.accepted.group.InvitationAcceptedDialog
@@ -29,9 +17,21 @@ import io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment
 import io.xxlabs.messenger.requests.ui.list.SentRequestsFragment
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
 import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
+import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
+import io.xxlabs.messenger.ui.main.chats.ChatsFragment
+import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment
+import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
+import io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitation
+import io.xxlabs.messenger.ui.main.contacts.profile.ContactProfileFragment
+import io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment
+import io.xxlabs.messenger.ui.main.contacts.success.ContactSuccessFragment
+import io.xxlabs.messenger.ui.main.groups.GroupMessagesFragment
+import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
+import io.xxlabs.messenger.ui.main.qrcode.scan.QrCodeScanFragment
+import io.xxlabs.messenger.ui.main.qrcode.show.QrCodeShowFragment
 import io.xxlabs.messenger.ui.main.settings.DeleteAccountFragment
-import io.xxlabs.messenger.ui.main.settings.SettingsFragment
 import io.xxlabs.messenger.ui.main.settings.SettingsAdvancedFragment
+import io.xxlabs.messenger.ui.main.settings.SettingsFragment
 import io.xxlabs.messenger.ui.main.ud.profile.UdProfileFragment
 import io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment
 
@@ -52,7 +52,7 @@ abstract class FragmentMainBuildersModule {
     abstract fun contributeUdProfileFragment(): UdProfileFragment
 
     @ContributesAndroidInjector
-    abstract fun contributeContactsFragment(): ContactsFragment
+    abstract fun contributeContactsFragment(): ContactListFragment
 
     @ContributesAndroidInjector
     abstract fun contributeContactInvitation(): ContactInvitation

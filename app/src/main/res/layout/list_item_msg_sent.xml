@@ -222,7 +222,6 @@
                     android:text="@string/msg_show_mix"
                     android:textColor="@color/chatTimeoutColor"
                     android:textSize="@dimen/text_10"
-                    android:visibility="gone"
                     android:alpha="0.49"
                     app:layout_constraintBottom_toTopOf="@id/itemMsgSentErrorText"
                     app:layout_constraintEnd_toStartOf="@id/itemMsgSentTimestamp"

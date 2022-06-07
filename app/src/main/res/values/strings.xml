@@ -520,10 +520,10 @@
     <string name="confirm_delete_chats_dialog_body">This will clear the selected chat messages only for you. It can’t be undone.</string>
     <string name="confirm_delete_chats_dialog_button">Yes, Delete</string>
     <string name="confirm_delete_groups_dialog_title">Are you sure you want to leave one or more groups?</string>
-    <string name="confirm_delete_groups_dialog_body">You will be leaving the selected group chats. It can\'t be undone.</string>
+    <string name="confirm_delete_groups_dialog_body">You will exit the selected group(s) and won’t receive any more messages from them.\n\nThe group messages will be lost.</string>
     <string name="confirm_delete_groups_dialog_button">Leave Groups</string>
     <string name="confirm_leave_group_dialog_title">Leave group</string>
-    <string name="confirm_leave_group_dialog_body">You will be leaving this group chat. It can\'t be undone.</string>
+    <string name="confirm_leave_group_dialog_body">You will exit this group and won\’t receive any more messages from this group.\n\nThis group\'s messages will be lost.</string>
     <string name="confirm_leave_group_dialog_button">Leave Group</string>
     <string name="group_invitation_pending">You will not be able to send messages until you have accepted the invitation.</string>
     <string name="settings_delete_account_username_error">Username does not match.</string>
@@ -588,4 +588,35 @@
     <string name="request_item_action_resent">Resent</string>
     <string name="request_item_action_verifying">Verifying</string>
     <string name="request_item_action_failed_verification">Failed to\nverify</string>
+    <string name="settings_notifications_private_msg_title">Private message notifications</string>
+    <string name="settings_notifications_private_msg_description">Show details in private message notifications.</string>
+    <string name="settings_notifications_group_msg_title">Group message notifications</string>
+    <string name="settings_notifications_group_msg_description">Show details in group message notifications.</string>
+    <string name="network_state_connecting">Connecting to xx network...</string>
+    <string name="connections_create_group">Create</string>
+
+    <string name="chat_image_sent_label">Sent a photo</string>
+    <string name="chat_video_sent_label">Sent a video</string>
+    <string name="chat_audio_sent_label">Sent an audio message</string>
+    <string name="chat_doc_sent_label">Sent a document</string>
+    <string name="chat_file_sent_label">Sent a file</string>
+
+    <string name="chat_image_recv_label">Received a photo</string>
+    <string name="chat_video_recv_label">Received a video</string>
+    <string name="chat_audio_recv_label">Received an audio message</string>
+    <string name="chat_doc_recv_label">Received a document</string>
+    <string name="chat_file_recv_label">Received a file</string>
+    <string name="scan_qr_ready_description">Place QR Code inside\nframe to scan.</string>
+    <string name="scan_qr_self_scan_error">You can\'t add yourself.</string>
+    <string name="scan_qr_scanning_description">Scanning code</string>
+    <string name="scan_qr_successful_description">SUCCESS</string>
+    <string name="scan_qr_already_requested_error">You already have a request sent\nfrom this connection.</string>
+    <string name="scan_qr_already_connection_error">You have already added %s</string>
+    <string name="scan_qr_already_requested_error_cta">Check requests</string>
+    <string name="scan_qr_already_connection_error_cta">See contact</string>
+    <string name="scan_qr_generic_error">Could not find user. Please try again.</string>
+    <string name="share_contact_info_placeholder">not added</string>
+    <string name="share_contact_info_title">Select what you would like to share</string>
+    <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
+    <string name="chats_no_results_found_message">was not found in your connections or in a chat. Click below to search for them as a new connection.</string>
 </resources>
