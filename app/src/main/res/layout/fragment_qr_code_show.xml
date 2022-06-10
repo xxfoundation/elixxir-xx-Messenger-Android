@@ -18,23 +18,25 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/qrCodeShowHolder"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginHorizontal="32dp"
+            android:layout_marginTop="16dp"
             android:background="@color/background"
+            android:maxWidth="500dp"
             app:cardCornerRadius="@dimen/spacing_32"
             app:cardElevation="0dp"
             app:layout_constrainedWidth="true"
             app:layout_constraintBottom_toTopOf="@id/copy_qr_button"
+            app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/qrCodeShowCode"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:adjustViewBounds="true"
                 android:clickable="true"
@@ -42,8 +44,8 @@
                 android:focusable="true"
                 android:focusableInTouchMode="false"
                 android:labelFor="@id/qrCodeShowHolder"
-                android:padding="@dimen/spacing_16"
                 android:onClick="@{() -> ui.onCopyClicked()}"
+                android:padding="@dimen/spacing_16"
                 tools:src="@drawable/ic_qr_code" />
 
             <androidx.core.widget.ContentLoadingProgressBar
