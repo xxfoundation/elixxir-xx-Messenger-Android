@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/positive_button"
             style="@style/request_details_dialog_button"
             android:layout_width="match_parent"
@@ -27,7 +27,7 @@
             android:enabled="@{ui.positiveButtonEnabled}"
             tools:text="Accept and Save"/>
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/negative_button"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"

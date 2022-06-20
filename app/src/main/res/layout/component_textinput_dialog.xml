@@ -62,7 +62,7 @@
                     android:afterTextChanged="@{ui::onTextInput}"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/edittext_dialog_positive_button"
                 style="@style/dialog_button"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"
@@ -78,7 +78,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/edittext_dialog_text_input" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/edittext_dialog_negative_button"
                 android:text="@{ui.negativeLabel}"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"

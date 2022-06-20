@@ -7,7 +7,7 @@
     android:background="@drawable/bg_rounded_top_edges_short_light"
     android:backgroundTint="@color/modalBg">
 
-    <ImageView
+    <io.xxlabs.messenger.support.view.SingleClickImageView
         android:id="@+id/chatBottomMenuPin"
         android:layout_width="@dimen/spacing_24"
         android:layout_height="@dimen/spacing_24"
@@ -22,7 +22,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <io.xxlabs.messenger.support.view.SingleClickImageView
         android:id="@+id/chatBottomMenuReply"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_goneMarginStart="@dimen/spacing_24" />
 
-    <ImageView
+    <io.xxlabs.messenger.support.view.SingleClickImageView
         android:id="@+id/chatBottomMenuDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,21 +51,24 @@
         app:layout_constraintStart_toEndOf="@id/chatBottomMenuReply"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
+    <io.xxlabs.messenger.support.view.SingleClickImageView
         android:id="@+id/chatBottomMenuCopy"
-        android:layout_width="wrap_content"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/spacing_28"
         android:layout_marginBottom="@dimen/spacing_28"
-        android:padding="@dimen/spacing_18"
-        android:src="@drawable/ic_copy"
         android:contentDescription="chat.menu.bottom.copy"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:padding="@dimen/spacing_18"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_copy"
+        android:adjustViewBounds="true"
+        app:layout_constraintBottom_toBottomOf="@id/chatBottomMenuDelete"
         app:layout_constraintEnd_toStartOf="@id/chatBottomMenuDeleteAll"
         app:layout_constraintStart_toEndOf="@id/chatBottomMenuDelete"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="@id/chatBottomMenuDelete"
+        app:tint="@color/tealThemeColor" />
 
-    <TextView
+    <io.xxlabs.messenger.support.view.SingleClickTextView
         android:id="@+id/chatBottomMenuDeleteAll"
         style="@style/XxTextStyle.Bold"
         android:layout_width="wrap_content"
