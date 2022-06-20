@@ -42,7 +42,7 @@
                 tools:text="@string/confirm_delete_fact_dialog_body"
                 style="@style/dialog_body" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/confirm_dialog_button"
                 style="@style/confirm_dialog_button"
                 android:layout_width="0dp"

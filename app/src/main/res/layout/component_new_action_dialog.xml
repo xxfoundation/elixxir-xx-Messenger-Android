@@ -42,7 +42,7 @@
                 tools:text="@string/group_limit_dialog_body"
                 style="@style/dialog_body" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/action_dialog_button"
                 android:layout_width="0dp"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"

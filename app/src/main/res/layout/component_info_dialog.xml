@@ -41,7 +41,7 @@
                 tools:text="@string/registration_username_info_body"
                 style="@style/dialog_body" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/info_dialog_button"
                 android:text="@string/registration_flow_ok"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"
