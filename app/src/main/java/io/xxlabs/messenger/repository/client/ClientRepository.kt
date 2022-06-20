@@ -991,6 +991,10 @@ class ClientRepository @Inject constructor(
         }
     }
 
+    override suspend fun getPartners(): List<String> {
+        return unmarshallPartners(clientWrapper.getPartners()).toList()
+    }
+
     companion object {
         @Volatile
         private var instance: ClientRepository? = null

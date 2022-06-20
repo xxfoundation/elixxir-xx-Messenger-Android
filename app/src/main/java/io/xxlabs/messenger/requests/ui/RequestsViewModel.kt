@@ -35,10 +35,10 @@ import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
-import io.xxlabs.messenger.ui.dialog.info.InfoDialog
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -97,6 +97,9 @@ class RequestsViewModel @Inject constructor(
     val verifyingInfoDialogUI: LiveData<InfoDialogUI?> by ::_verifyingInfoDialogUI
     private val _verifyingInfoDialogUI = MutableLiveData<InfoDialogUI?>(null)
 
+    // A debounce implementation to prevent running actionClick logic again before completion
+    private val actionQueue: MutableList<ByteArray> = mutableListOf()
+
     private val verifyingInfoDialog: InfoDialogUI by lazy {
         InfoDialogUI.create(
             title = appContext().getString(R.string.request_verifying_popup_title),
@@ -124,9 +127,6 @@ class RequestsViewModel @Inject constructor(
     private suspend fun getContactRequests() =
         requestsDataSource.getRequests().map { requestsList ->
             requestsList.map { request ->
-                if (request.requestStatus == VERIFIED) {
-
-                }
                 ContactRequestItem(
                     request,
                     resolveBitmap(request.model.photo)
@@ -313,8 +313,11 @@ class RequestsViewModel @Inject constructor(
     }
 
     override fun onActionClicked(request: RequestItem) {
+        if (actionQueue.contains(request.id)) return
+        else actionQueue.add(request.id)
+
         when (request.request.requestStatus) {
-            VERIFYING -> showVerifyingInfo()
+            VERIFYING -> showVerifyingInfo().also { actionQueue.remove(request.id) }
             SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
         }
@@ -350,8 +353,19 @@ class RequestsViewModel @Inject constructor(
     }
 
     private fun retryVerification(item: RequestItem) {
-        (item.request as? ContactRequest)?.let {
-            requestsDataSource.verify(it)
+        viewModelScope.launch {
+            (item.request as? ContactRequest)?.let {
+                when (requestsDataSource.verify(it)) {
+                    true -> {
+                        Timber.d("Verification successful")
+                        actionQueue.remove(item.id)
+                    }
+                    false -> {
+                        Timber.d("Verification failed")
+                        actionQueue.remove(item.id)
+                    }
+                }
+            }
         }
     }
 
@@ -371,6 +385,7 @@ class RequestsViewModel @Inject constructor(
         _customToast.value = ToastUI.create(
             body = "$request successfully resent to ${item.request.name}"
         )
+        actionQueue.remove(item.id)
     }
 
     suspend fun getRequestDetails(contactRequest: ContactRequest): Flow<RequestDetailsUI?> =

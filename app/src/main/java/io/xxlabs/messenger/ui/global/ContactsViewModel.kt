@@ -399,17 +399,31 @@ class ContactsViewModel @Inject constructor(
         }
 
         repo.searchUd(factPair.first, factPair.second) { newContact, error ->
-            if (newContact == null) { //Fraudulent
+            if (!error.isNullOrEmpty()) {
+                continueVerificationStep(contact, newContact)
+            } else {
+                // An error occurred while searching UD, the contact is still unverified.
+                markAsFailed(contact)
+            }
+        }
+    }
+
+    private fun markAsFailed(contact: ContactData) {
+        // The verification couldn't be completed. Keep the contact as unverified to try again.
+        updateContactStatus(contact.userId, VERIFICATION_FAIL)
+    }
+
+    private fun continueVerificationStep(contact: ContactData, searchResult: ContactWrapperBase?) {
+        if (searchResult == null) { // Fraudulent
+            Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
+            deleteFraudulentContact(contact)
+        } else {
+            if (searchResult.getId().contentEquals(contact.userId)) { // Verified
+                Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
+                verifyContact(contact, searchResult)
+            } else { // Fraudulent
                 Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
                 deleteFraudulentContact(contact)
-            } else {
-                if (newContact.getId().contentEquals(contact.userId)) { //Verified
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
-                    verifyContact(contact, newContact)
-                } else { //Fraudulent
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
-                    deleteFraudulentContact(contact)
-                }
             }
         }
     }

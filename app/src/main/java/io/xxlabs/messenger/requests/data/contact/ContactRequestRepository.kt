@@ -93,7 +93,7 @@ class ContactRequestsRepository @Inject constructor(
             when (request.requestStatus) {
                 VERIFICATION_FAIL -> verify(request)
                 RESET_FAIL, RESET_SENT -> resetSession(request)
-                SENT -> resendRequest(request)
+                SEND_FAIL, SENT -> resendRequest(request)
                 CONFIRM_FAIL -> accept(request)
                 SENDING -> sendRequest(request)
                 else -> Timber.d("Unknown request status: ${request.requestStatus.value}")
@@ -101,13 +101,20 @@ class ContactRequestsRepository @Inject constructor(
         }
     }
 
-    override fun verify(request: ContactRequest) {
-        scope.launch {
-            update(request, VERIFYING)
-            when (requestsService.verifyContactRequest(request)) {
-                is VerificationResult.Verified -> update(request, VERIFIED)
-                is VerificationResult.Fraudulent -> handleFraudulentRequest(request)
-                else -> update(request, VERIFICATION_FAIL)
+    override suspend fun verify(request: ContactRequest): Boolean = withContext(Dispatchers.Default) {
+        update(request, VERIFYING)
+        when (requestsService.verifyContactRequest(request)) {
+            is VerificationResult.Verified -> {
+                update(request, VERIFIED)
+                true
+            }
+            is VerificationResult.Fraudulent -> {
+                handleFraudulentRequest(request)
+                false
+            }
+            else -> {
+                update(request, VERIFICATION_FAIL)
+                false
             }
         }
     }

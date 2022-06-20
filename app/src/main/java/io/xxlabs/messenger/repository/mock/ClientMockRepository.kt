@@ -622,6 +622,8 @@ class ClientMockRepository(
 
     override fun replayRequests() { }
 
+    override suspend fun getPartners(): List<String> = listOf()
+
     companion object {
         var isLoggedIn = false
     }
