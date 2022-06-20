@@ -106,7 +106,7 @@ class ChatsFragment : BaseFragment() {
     private fun navigateToUdSearch() {
         val udSearch = ChatsFragmentDirections.actionChatsToUdSearch()
         preferences.isFirstLaunch = false
-        findNavController().navigate(udSearch)
+        findNavController().navigateSafe(udSearch)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
