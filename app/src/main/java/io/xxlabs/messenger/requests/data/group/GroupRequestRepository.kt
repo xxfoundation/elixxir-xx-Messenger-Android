@@ -89,8 +89,9 @@ class GroupRequestsRepository @Inject constructor(
         }
     }
 
-    override fun verify(request: GroupInvitation) {
+    override suspend fun verify(request: GroupInvitation): Boolean {
         // Group invitations don't have verification at the moment.
+        return true
     }
 
     override fun failUnverifiedRequests() {

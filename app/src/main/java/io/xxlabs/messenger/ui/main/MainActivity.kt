@@ -392,7 +392,10 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
 //        }
         networkViewModel.networkStatus.observe(this) { statusMessage ->
             dismissNetworkStatusMessage()
-            statusMessage?.let { showCustomToast(it) }
+            statusMessage?.let {
+                cachedNetworkStatus.add(it)
+                showCustomToast(it)
+            }
         }
     }
 
