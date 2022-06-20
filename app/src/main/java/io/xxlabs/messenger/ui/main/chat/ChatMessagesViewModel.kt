@@ -252,7 +252,7 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
         return try {
             repo.areNodesReady()
         } catch (e: Exception) {
-            _errorMessage.value = e
+            _errorMessage.value = Exception("Securing proper node registration ratio, please try again shortly")
             false
         }
     }
