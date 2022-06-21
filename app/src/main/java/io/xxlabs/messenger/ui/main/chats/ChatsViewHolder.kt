@@ -20,6 +20,7 @@ import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.ListItemChatBinding
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
+import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.view.BitmapResolver
 import timber.log.Timber
 import java.util.regex.Pattern
@@ -54,7 +55,7 @@ class ChatsViewHolder(
                 )
 
                 Navigation.findNavController(itemView.context as Activity, R.id.mainNavHost)
-                    .navigate(R.id.action_global_groups_chat, bundle)
+                    .navigateSafe(R.id.action_global_groups_chat, bundle)
             } else if (currentObj is ContactData) {
                 val contact = currentObj as ContactData?
                 Timber.v("recipient ID BEING USED TO OPEN ${contact?.userId ?: bindingsId}")
@@ -63,7 +64,7 @@ class ChatsViewHolder(
                 )
 
                 Navigation.findNavController(itemView.context as Activity, R.id.mainNavHost)
-                    .navigate(R.id.action_global_chat, bundle)
+                    .navigateSafe(R.id.action_global_chat, bundle)
             }
         }
     }

@@ -18,6 +18,7 @@ import io.xxlabs.messenger.data.datatype.SelectionMode
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.support.RandomColor
+import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.selection.ItemDetailsLookup
 import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.support.view.RoundedCornerLayout
@@ -212,25 +213,25 @@ class ContactsViewHolder(
     private fun navigateFromChat(bundle: Bundle) {
         if (requestStatus == RequestStatus.VERIFIED) {
             Navigation.findNavController(parent)
-                .navigate(R.id.action_contacts_to_invitation, bundle)
+                .navigateSafe(R.id.action_contacts_to_invitation, bundle)
         } else {
             Navigation.findNavController(parent)
-                .navigate(R.id.action_global_chat, bundle)
+                .navigateSafe(R.id.action_global_chat, bundle)
         }
     }
 
     private fun navigateFromGroupChat(bundle: Bundle) {
         Navigation.findNavController(parent)
-            .navigate(R.id.action_global_groups_chat, bundle)
+            .navigateSafe(R.id.action_global_groups_chat, bundle)
     }
 
     private fun navigateFromContacts(bundle: Bundle) {
         if (requestStatus == RequestStatus.VERIFIED) {
             Navigation.findNavController(parent)
-                .navigate(R.id.action_contacts_to_invitation, bundle)
+                .navigateSafe(R.id.action_contacts_to_invitation, bundle)
         } else {
             Navigation.findNavController(parent)
-                .navigate(R.id.action_contacts_to_profile, bundle)
+                .navigateSafe(R.id.action_contacts_to_profile, bundle)
         }
     }
 
@@ -238,15 +239,15 @@ class ContactsViewHolder(
         when (requestStatus) {
             RequestStatus.VERIFIED -> {
                 Navigation.findNavController(parent)
-                    .navigate(R.id.action_contacts_selection_to_invitation, bundle)
+                    .navigateSafe(R.id.action_contacts_selection_to_invitation, bundle)
             }
             RequestStatus.ACCEPTED -> {
                 Navigation.findNavController(parent)
-                    .navigate(R.id.action_contacts_selection_to_chat, bundle)
+                    .navigateSafe(R.id.action_contacts_selection_to_chat, bundle)
             }
             else -> {
                 Navigation.findNavController(parent)
-                    .navigate(R.id.action_contacts_selection_to_profile, bundle)
+                    .navigateSafe(R.id.action_contacts_selection_to_profile, bundle)
             }
         }
     }
