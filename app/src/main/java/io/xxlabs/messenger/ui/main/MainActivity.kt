@@ -88,15 +88,16 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     var isBackBtnAllowed = true
     var isMenuOpened = false
 
+
     override fun onStart() {
         super.onStart()
+        showBiometrics()
         observeUI()
         watchObservables()
         mainViewModel.checkIsLoggedInReturn()
     }
 
     private fun doOnResume() {
-        showBiometrics()
         verifyFirebaseToken()
         initCallbacks()
         initGroupManager()
@@ -226,7 +227,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     private fun verifyFirebaseToken() {
-        MessagingService.notificationCount = 0
         mainViewModel.verifyFirebaseTokenChanged()
     }
 

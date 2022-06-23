@@ -92,7 +92,7 @@ class BiometricContainerProvider(
         if (hideCheckbox) {
             BottomSheetPopup.getInstance(
                 context,
-                description = "By enabling Biometrics, you will be required to authenticate every time the app is reopened.",
+                description = "By enabling biometrics, you will be required to authenticate every time the app is reopened.",
                 topButtonTitle = "Yes, enable",
                 topButtonClick = primaryBtnCallback,
                 topButtonDismiss = true,
