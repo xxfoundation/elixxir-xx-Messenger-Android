@@ -93,7 +93,7 @@ class BottomSheetPopup constructor(
 
         root?.setInsets(bottomMask = WindowInsetsCompat.Type.systemBars() + WindowInsetsCompat.Type.ime())
         setBehavior()
-//        bindTitleIcon()
+        bindTitleIcon()
         setBtnVisibility()
         bindListeners()
     }
