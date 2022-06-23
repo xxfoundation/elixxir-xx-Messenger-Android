@@ -70,8 +70,8 @@ class BindingsRequestVerifier @Inject constructor(
         }
 
         repo.searchUd(factPair.first, factPair.second) { result, error ->
-            error?.let {
-                if (it.isBlank()) continuation.resume(Unverified(user))
+            if (!error.isNullOrEmpty()) {
+                continuation.resume(Unverified(user))
                 return@searchUd
             }
 
@@ -102,6 +102,8 @@ class BindingsRequestVerifier @Inject constructor(
                 } else {
                     continuation.resume(Fraudulent(user))
                 }
+            } ?: run {
+                continuation.resume(Fraudulent(user))
             }
         }
     }
