@@ -70,8 +70,6 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     override fun onMessageReceived(remoteMessage: RemoteMessage) {
         if (XxMessengerApplication.isActivityVisible()) return
 
-        val notificationState = NotificationState()
-
         // Check if message contains a data payload.
         remoteMessage.data.isNotEmpty().let {
             Timber.v("[NOTIFICATION] Notification data payload: %s", remoteMessage.data)
@@ -86,10 +84,9 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
 
                 for (i in 0 until isNotificationForMeReport.len()) {
                     with (isNotificationForMeReport[i]) {
-                        if (this.shouldNotify() && !notificationState.alreadySent(this.type())) {
+                        if (this.shouldNotify()) {
                             scope.launch {
                                 pushNotification(this@with)
-                                notificationState.sent(this@with.type())
                             }
                         }
                     }
@@ -118,7 +115,6 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
      * Create and show a simple notification containing the received FCM message.
      */
     private suspend fun pushNotification(richNotification: NotificationForMeReport) {
-        increaseNotificationCount()
         val notificationText = getNotificationText(richNotification)
             ?: richNotification.notificationText()
 
@@ -180,11 +176,6 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
 
     private suspend fun lookupGroupName(groupId: ByteArray): String =
         repo.getGroupData(groupId).value().name
-
-    private fun increaseNotificationCount() {
-        notificationCount++
-        Timber.v("[NOTIFICATION] Notification count: $notificationCount")
-    }
 
     private fun generateIntent(richNotification: NotificationForMeReport): Intent {
         val intent = if (MainActivity.isActive()) Intent(this, MainActivity::class.java)
@@ -330,26 +321,7 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
 
     companion object {
         private const val NOTIFICATION_DATA = "notificationsTag"
-        var notificationCount = 0
         private val notificationId
             get() = System.currentTimeMillis().toInt()
     }
-}
-
-private class NotificationState {
-    private val notificationSentMap = hashMapOf(
-        "groupRq" to false,
-        "group" to false,
-        "request" to false,
-        "confirm" to false,
-        "e2e" to false,
-        "endFT" to false,
-        "reset" to false,
-    )
-
-    fun sent(type: String) {
-        notificationSentMap[type] = true
-    }
-
-    fun alreadySent(type: String) = notificationSentMap[type] ?: false
 }

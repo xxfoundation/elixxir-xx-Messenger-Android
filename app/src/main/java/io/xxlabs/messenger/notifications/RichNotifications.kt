@@ -34,7 +34,7 @@ class RichNotifications {
             .setAutoCancel(true)
             .setVibrate(longArrayOf(1000, 1000))
             .setLights(Color.WHITE, 1000, 2500)
-            .setNumber(MessagingService.notificationCount)
+            .setNumber(1)
             .setSound(defaultSoundUri)
             .setContentIntent(pendingIntent)
     }
