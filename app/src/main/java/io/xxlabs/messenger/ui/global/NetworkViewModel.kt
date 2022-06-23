@@ -270,7 +270,6 @@ class NetworkViewModel @Inject constructor(
     }
 
     private fun stopNetworkFollower() {
-        requestsDataSource.failUnverifiedRequests()
         subscriptions.add(
             repo.stopNetworkFollower()
                 .subscribeOn(schedulers.single)
@@ -280,6 +279,7 @@ class NetworkViewModel @Inject constructor(
                     isNetworkHealthy = false
                     isFirstTimeNetwork = true
                     resetNetworkState()
+                    requestsDataSource.failUnverifiedRequests()
                     Timber.v("[NETWORK VIEWMODEL] Network follower is NOT RUNNING")
                 }
                 .doOnError { err ->
