@@ -226,7 +226,6 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     private fun verifyFirebaseToken() {
-        MessagingService.notificationCount = 0
         mainViewModel.verifyFirebaseTokenChanged()
     }
 

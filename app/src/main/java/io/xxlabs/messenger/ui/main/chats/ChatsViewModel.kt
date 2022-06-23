@@ -2,13 +2,11 @@ package io.xxlabs.messenger.ui.main.chats
 
 import android.graphics.Bitmap
 import androidx.lifecycle.*
-import com.dropbox.core.v2.team.GroupSelector.groupId
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.data.ChatWrapper
 import io.xxlabs.messenger.data.room.model.*
-import io.xxlabs.messenger.notifications.MessagingService.Companion.notificationCount
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
