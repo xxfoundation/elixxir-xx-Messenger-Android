@@ -171,7 +171,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         val highlight = app.getColor(R.color.brand_default)
         val placeholderText = app.getString(
             R.string.chat_empty_placeholder,
-            contact.displayName
+            if (::contact.isInitialized) contact.displayName else "your connection"
         )
 
         val firstSpanText = "quantum-secure"
