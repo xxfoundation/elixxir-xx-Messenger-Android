@@ -447,8 +447,6 @@ class GroupMessagesViewModel @AssistedInject constructor(
         }
 
     override fun onSendMessage() {
-        if (!areNodesReady()) return
-
         sendTextMessage()
         onMessageSent()
     }

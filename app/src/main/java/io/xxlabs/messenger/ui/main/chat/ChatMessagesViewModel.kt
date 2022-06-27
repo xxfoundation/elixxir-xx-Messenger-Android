@@ -248,15 +248,6 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
 
     protected abstract fun getMessages(chatId: ByteArray)
 
-    protected fun areNodesReady(): Boolean {
-        return try {
-            repo.areNodesReady()
-        } catch (e: Exception) {
-            _errorMessage.value = Exception("Securing proper node registration ratio, please try again shortly")
-            false
-        }
-    }
-
     /**
      * Triggered when a chat message has been clicked.
      */

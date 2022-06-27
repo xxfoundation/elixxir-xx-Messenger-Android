@@ -999,7 +999,7 @@ class ClientRepository @Inject constructor(
         @Volatile
         private var instance: ClientRepository? = null
         const val NODES_READY_POLL_INTERVAL = 1_000L
-        const val NODES_READY_MAX_RETRIES = Int.MAX_VALUE
+        const val NODES_READY_MAX_RETRIES = 29
         const val NODES_READY_MINIMUM_RATE = 0.70
 
         lateinit var clientWrapper: ClientWrapperBindings
