@@ -9,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.data.ReplyWrapper
 import io.xxlabs.messenger.data.datatype.MessageStatus
@@ -274,12 +275,16 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
             return
         }
 
-        if (message.status == MessageStatus.FAILED.value) {
-            _vibrateEvent.value = HapticFeedbackConstants.CONTEXT_CLICK
-            message.status = MessageStatus.PENDING.value
-            message.timestamp = Utils.getCurrentTimeStamp()
-            updateMessage(message, true)
+        when (message.status) {
+            MessageStatus.FAILED.value, MessageStatus.TIMEOUT.value -> retryMessage(message)
         }
+    }
+
+    private fun retryMessage(message: T) {
+        _vibrateEvent.value = HapticFeedbackConstants.CONTEXT_CLICK
+        message.status = MessageStatus.PENDING.value
+        message.timestamp = Utils.getCurrentTimeStamp()
+        updateMessage(message, true)
     }
 
     /**
@@ -389,26 +394,31 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
         Timber.v("[MSG DELIVERY CALLBACK] Unmarshalled SendReport (Timestamp): ${sendReport.getTimestampMs()}")
         verifyingMsgs[msg.sendReport!!] = false
         when {
-            timedOut -> {
-                Timber.v("[MSG DELIVERY CALLBACK] Timed Out, resending callback")
-                waitForMessageDelivery(msg)
-            }
-
-            delivered && !timedOut -> {
-                Timber.v("[MSG DELIVERY CALLBACK] Successfully delivered")
-                msg.status = MessageStatus.SENT.value
-                msg.uniqueId = sendReport.getMessageId()
-                msg.timestamp = sendReport.getTimestampMs()
-
-                updateMessage(msg)
-            }
-
-            !delivered && !timedOut -> {
-                Timber.v("[DELIVERY CALLBACK] Not delivered")
-                msg.status = MessageStatus.FAILED.value
-                updateMessage(msg)
-            }
+            delivered -> onDeliverySuccess(msg, sendReport)
+            timedOut -> onDeliveryTimeout(msg)
+            else -> onDeliveryFailed(msg)
         }
+    }
+
+    private fun onDeliveryTimeout(msg: T) {
+        Timber.v("[MSG DELIVERY CALLBACK] Timed Out, updating message status")
+        msg.status = MessageStatus.TIMEOUT.value
+        updateMessage(msg)
+    }
+
+    private fun onDeliverySuccess(msg: T, sendReport: SendReportBase) {
+        Timber.v("[MSG DELIVERY CALLBACK] Successfully delivered")
+        msg.status = MessageStatus.SENT.value
+        msg.uniqueId = sendReport.getMessageId()
+        msg.timestamp = sendReport.getTimestampMs()
+
+        updateMessage(msg)
+    }
+
+    private fun onDeliveryFailed(msg: T) {
+        Timber.v("[DELIVERY CALLBACK] Not delivered")
+        msg.status = MessageStatus.FAILED.value
+        updateMessage(msg)
     }
 
     protected fun waitForMessageDelivery(msg: T) {
