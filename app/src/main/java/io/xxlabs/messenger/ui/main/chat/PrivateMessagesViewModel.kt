@@ -880,8 +880,6 @@ class PrivateMessagesViewModel @AssistedInject constructor(
      * Attempt to send a message.
      */
     override fun onSendMessage() {
-        if (!areNodesReady()) return
-
         sendAttachments()
         sendTextMessage()
         onMessageSent()
