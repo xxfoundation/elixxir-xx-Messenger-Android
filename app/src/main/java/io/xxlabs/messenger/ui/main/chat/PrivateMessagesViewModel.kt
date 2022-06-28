@@ -121,17 +121,9 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
-    override val replyMenuOptionEnabled = Transformations.map(selectedMessages) {
-        it.size == 1 && it.first().canBeReplied()
-    }
-
-    private fun PrivateMessage.canBeReplied(): Boolean {
+    override fun PrivateMessage.canBeReplied(): Boolean {
         return isTextMessage()
                 && (status == MessageStatus.SENT.value || status == MessageStatus.RECEIVED.value)
-    }
-
-    override fun onCreateReply(message: PrivateMessage) {
-        if (message.canBeReplied()) super.onCreateReply(message)
     }
 
     private fun PrivateMessage.isTextMessage(): Boolean = fileType.isNullOrEmpty()
