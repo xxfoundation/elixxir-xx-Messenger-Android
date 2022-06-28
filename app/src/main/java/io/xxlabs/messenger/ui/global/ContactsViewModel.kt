@@ -2,10 +2,7 @@ package io.xxlabs.messenger.ui.global
 
 import android.app.Application
 import android.util.Pair
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.reactivex.Single
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
@@ -73,6 +70,9 @@ class ContactsViewModel @Inject constructor(
     val combinedContactGroupsData = contactsData.combineWith(groupsData) { contacts, groups ->
         Pair(contacts ?: listOf(), groups ?: listOf())
     }
+
+    val navigateToGroup: LiveData<ByteArray?> by ::_navigateToGroup
+    private val _navigateToGroup = MutableLiveData<ByteArray?>(null)
 
     init {
         Timber.v("isAuthCallbackRegistered: ${isAuthCallbackRegistered()}")
@@ -608,8 +608,13 @@ class ContactsViewModel @Inject constructor(
                     newGroupRequestSent.value = DataRequestState.Error(err)
                 }.doOnSuccess {
                     newGroupRequestSent.value = DataRequestState.Success(true)
+                    _navigateToGroup.value = groupId
                 }.subscribe()
         )
+    }
+
+    fun onNavigateToGroupHandled() {
+        _navigateToGroup.value = null
     }
 
     fun acceptGroup(group: GroupData) {
