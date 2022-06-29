@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.core.view.postDelayed
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentRadiobuttonDialogBinding
+import io.xxlabs.messenger.support.view.XxBottomSheetDialog
 
-class RadioButtonDialog : BottomSheetDialogFragment() {
+class RadioButtonDialog : XxBottomSheetDialog() {
 
     private lateinit var binding: ComponentRadiobuttonDialogBinding
     private val dialogUI: RadioButtonDialogUI by lazy {
@@ -58,13 +56,6 @@ class RadioButtonDialog : BottomSheetDialogFragment() {
             }
         }
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     companion object Factory {
         private const val ARG_UI: String = "ui"

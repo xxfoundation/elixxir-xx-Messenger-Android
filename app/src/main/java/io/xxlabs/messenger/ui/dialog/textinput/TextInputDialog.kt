@@ -13,12 +13,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTextinputDialogBinding
+import io.xxlabs.messenger.support.view.XxBottomSheetDialog
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 
-class TextInputDialog : BottomSheetDialogFragment() {
+class TextInputDialog : XxBottomSheetDialog() {
 
     private lateinit var binding: ComponentTextinputDialogBinding
     private val dialogUI: TextInputDialogUI by lazy {
@@ -48,11 +48,6 @@ class TextInputDialog : BottomSheetDialogFragment() {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.ui = dialogUI
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
     }
 
     private fun initClickListeners() {
@@ -95,8 +90,6 @@ class TextInputDialog : BottomSheetDialogFragment() {
         }
         return builder
     }
-
-    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()

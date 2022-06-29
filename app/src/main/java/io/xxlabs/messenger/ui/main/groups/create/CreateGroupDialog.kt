@@ -7,14 +7,12 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_EXPANDED
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentCreateGroupDialogBinding
+import io.xxlabs.messenger.support.view.XxBottomSheetDialog
 
 class CreateGroupDialog :
-    BottomSheetDialogFragment(),
+    XxBottomSheetDialog(),
     CreateGroupDialogController
 {
     private lateinit var binding: ComponentCreateGroupDialogBinding
@@ -44,13 +42,6 @@ class CreateGroupDialog :
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (dialog as? BottomSheetDialog)?.behavior?.state = STATE_EXPANDED
-    }
-
-    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override val maxGroupNameLength: Int = MAX_GROUP_NAME_LENGTH
     override val maxDescriptionLength: Int =  MAX_DESCRIPTION_LENGTH
