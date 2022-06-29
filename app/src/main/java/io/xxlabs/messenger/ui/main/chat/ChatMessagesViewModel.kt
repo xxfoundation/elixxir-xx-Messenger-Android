@@ -78,8 +78,10 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
         it.isNotEmpty()
     }
     override val replyMenuOptionEnabled = Transformations.map(selectedMessages) {
-        it.size == 1
+        it.size == 1 && it.first().canBeReplied()
     }
+
+    abstract fun T.canBeReplied(): Boolean
 
     /**
      * Determines if the RecyclerView swipe selection should be enabled.
@@ -333,7 +335,7 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
      * Begin a reply to [message]. Called by MessageViewHolder.
      */
     override fun onCreateReply(message: T) {
-        reply.value = message
+        if (message.canBeReplied()) reply.value = message
     }
 
     /**
