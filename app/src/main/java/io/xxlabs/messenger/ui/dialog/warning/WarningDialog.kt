@@ -6,13 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentWarningDialogBinding
+import io.xxlabs.messenger.support.view.XxBottomSheetDialog
 
-class WarningDialog : BottomSheetDialogFragment() {
+class WarningDialog : XxBottomSheetDialog() {
 
     private lateinit var binding: ComponentWarningDialogBinding
     private val dialogUI: WarningDialogUI by lazy {
@@ -40,13 +38,6 @@ class WarningDialog : BottomSheetDialogFragment() {
 
         return binding.root
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
-    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()

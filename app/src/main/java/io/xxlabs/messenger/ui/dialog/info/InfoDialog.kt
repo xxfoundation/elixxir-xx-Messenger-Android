@@ -11,13 +11,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentInfoDialogBinding
+import io.xxlabs.messenger.support.view.XxBottomSheetDialog
 
-class InfoDialog : BottomSheetDialogFragment() {
+class InfoDialog : XxBottomSheetDialog() {
 
     private lateinit var binding: ComponentInfoDialogBinding
     private val dialogUI: InfoDialogUI by lazy {
@@ -48,11 +46,6 @@ class InfoDialog : BottomSheetDialogFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        (dialog as? BottomSheetDialog)?.behavior?.state = BottomSheetBehavior.STATE_EXPANDED
-    }
-
     private fun getSpannableBody(dialogUI: InfoDialogUI): Spannable {
         val builder = SpannableStringBuilder(dialogUI.body)
 
@@ -81,8 +74,6 @@ class InfoDialog : BottomSheetDialogFragment() {
         }
         return builder
     }
-
-    override fun getTheme(): Int = R.style.RoundedModalBottomSheetDialog
 
     override fun onDismiss(dialog: DialogInterface) {
         dialogUI.onDismissed?.invoke()
