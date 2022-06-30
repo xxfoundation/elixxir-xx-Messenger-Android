@@ -388,7 +388,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     /* Functions */
 
-    private fun onRecordingHandled() {
+    private fun showRecordingUi() {
         _messageInputVisible.value = false
         _startRecording.value = false
         _stopRecordingVisible.value = true
@@ -862,7 +862,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     fun onRecordingStarted() {
-        onRecordingHandled()
+        showRecordingUi()
         startTimer()
     }
 
