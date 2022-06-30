@@ -406,7 +406,7 @@ class PrivateMessagesFragment :
     private fun releaseMediaRecorder() {
         chatViewModel.onCancelRecording()
         try {
-            mediaRecorder?.stop()
+            mediaRecorder?.reset()
             mediaRecorder?.release()
             mediaRecorder = null
         } catch (e: Exception) {

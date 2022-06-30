@@ -699,7 +699,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     fun onCancelRecording() {
-        onStopRecording()
+        stopTimer()
         restoreMessagingUi()
     }
 
