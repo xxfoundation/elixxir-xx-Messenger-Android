@@ -221,7 +221,17 @@ class PrivateMessagesFragment :
         }
 
         chatViewModel.startRecording.observe(viewLifecycleOwner) { start ->
-            if (start) requestMicPermission()
+            if (start) {
+                requestMicPermission()
+                chatViewModel.onStartRecordingHandled()
+            }
+        }
+
+        chatViewModel.stopRecording.observe(viewLifecycleOwner) { stop ->
+            if (stop) {
+                stopRecording()
+                chatViewModel.onStopRecordingHandled()
+            }
         }
 
         chatViewModel.previewRecording.observe(viewLifecycleOwner) { preview ->
