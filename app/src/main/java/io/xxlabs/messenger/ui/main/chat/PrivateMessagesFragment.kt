@@ -340,19 +340,7 @@ class PrivateMessagesFragment :
         }
     }
 
-    private fun releaseMediaRecorder() {
-        try {
-            mediaRecorder?.stop()
-            mediaRecorder?.release()
-            mediaRecorder = null
-        } catch (e: Exception) {
-            FirebaseCrashlytics.getInstance().recordException(e)
-        }
-        chatViewModel.onCancelRecording()
-    }
-
     private fun initPreviewPlayer() {
-        releaseMediaRecorder()
         latestAudioFile?.let { recording ->
             audioPreviewPlayer.audioUri = FileProvider.getUriForFile(
                 requireActivity().applicationContext,
@@ -402,7 +390,18 @@ class PrivateMessagesFragment :
 
     override fun onPause() {
         super.onPause()
-        cancelRecording()
+        releaseMediaRecorder()
+    }
+
+    private fun releaseMediaRecorder() {
+        chatViewModel.onCancelRecording()
+        try {
+            mediaRecorder?.stop()
+            mediaRecorder?.release()
+            mediaRecorder = null
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
     }
 
     override fun receivedContent(contentInfo: InputContentInfoCompat) {
