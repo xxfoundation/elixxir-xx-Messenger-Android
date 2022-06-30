@@ -308,20 +308,28 @@ class PrivateMessagesFragment :
     private fun recordAudio() {
         latestAudioFile = tempAudioFile
 
+        try {
+            resetMediaRecorder()
+            initializeMediaRecorder()
+            chatViewModel.onRecordingStarted()
+        } catch (e: IOException) {
+            requireContext().toast("Failed to start audio recording")
+        }
+    }
+
+    private fun resetMediaRecorder() {
+        mediaRecorder?.reset()
+    }
+
+    private fun initializeMediaRecorder() {
         mediaRecorder  = MediaRecorder(requireContext()).apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(latestAudioFile?.absolutePath)
+            prepare()
+            start()
         }
-
-        try {
-            mediaRecorder?.prepare()
-        } catch (e: IOException) {
-            requireContext().toast("Failed to start audio recording")
-        }
-        mediaRecorder?.start()
-        chatViewModel.onRecordingStarted()
     }
 
     private fun cancelRecording() {
