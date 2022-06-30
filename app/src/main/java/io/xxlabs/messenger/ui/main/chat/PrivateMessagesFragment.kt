@@ -308,7 +308,7 @@ class PrivateMessagesFragment :
     private fun recordAudio() {
         latestAudioFile = tempAudioFile
 
-        mediaRecorder  = MediaRecorder().apply {
+        mediaRecorder  = MediaRecorder(requireContext()).apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
