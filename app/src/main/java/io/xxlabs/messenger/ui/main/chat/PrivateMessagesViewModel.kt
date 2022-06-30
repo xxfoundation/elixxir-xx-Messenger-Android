@@ -43,7 +43,6 @@ import timber.log.Timber
 import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
 import io.xxlabs.messenger.support.appContext
-import kotlinx.coroutines.*
 
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -383,6 +382,9 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
+    val stopRecording: LiveData<Boolean> by ::_stopRecording
+    private val _stopRecording = MutableLiveData(true)
+
     override val lastMessage: LiveData<PrivateMessage?> =
         Transformations.map(daoRepo.getLastMessageLiveData()) { it }
 
@@ -695,14 +697,17 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     fun onCancelRecording() {
-        _previewRecording.value = false
-        _stopRecordingVisible.value = false
-        _attachButtonEnabled.value = true
+        onStopRecording()
+        restoreMessagingUi()
+    }
+
+    fun onStopRecording() {
+        _stopRecording.value = true
         stopTimer()
     }
 
     override fun onStopRecordingClicked() {
-        stopTimer()
+        onStopRecording()
         showAudioPreview()
     }
 
