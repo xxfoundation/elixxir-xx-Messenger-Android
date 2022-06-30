@@ -338,7 +338,6 @@ class PrivateMessagesFragment :
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
-        chatViewModel.onCancelRecording()
     }
 
     private fun releaseMediaRecorder() {
@@ -349,6 +348,7 @@ class PrivateMessagesFragment :
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+        chatViewModel.onCancelRecording()
     }
 
     private fun initPreviewPlayer() {
