@@ -701,7 +701,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         restoreMessagingUi()
     }
 
-    fun onStopRecording() {
+    private fun onStopRecording() {
         _stopRecording.value = true
         stopTimer()
     }
