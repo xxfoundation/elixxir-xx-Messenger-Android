@@ -332,8 +332,12 @@ class PrivateMessagesFragment :
         }
     }
 
-    private fun cancelRecording() {
-        latestAudioFile = null
+    private fun stopRecording() {
+        try {
+            mediaRecorder?.stop()
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
         chatViewModel.onCancelRecording()
     }
 
