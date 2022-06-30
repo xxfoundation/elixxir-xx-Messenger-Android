@@ -867,6 +867,14 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
+    fun onStartRecordingHandled() {
+        _startRecording.value = false
+    }
+
+    fun onStopRecordingHandled() {
+        _stopRecording.value = false
+    }
+
     fun onRecordingStarted() {
         showRecordingUi()
         startTimer()
