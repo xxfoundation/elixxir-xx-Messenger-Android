@@ -3,6 +3,7 @@ package io.xxlabs.messenger.ui.main.chat
 import android.content.Context
 import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import android.os.Environment.DIRECTORY_MUSIC
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -319,7 +320,7 @@ class PrivateMessagesFragment :
         latestAudioFile = tempAudioFile
 
         try {
-            resetMediaRecorder()
+            mediaRecorder?.reset() ?: createMediaRecorder()
             initializeMediaRecorder()
             chatViewModel.onRecordingStarted()
         } catch (e: IOException) {
@@ -327,12 +328,16 @@ class PrivateMessagesFragment :
         }
     }
 
-    private fun resetMediaRecorder() {
-        mediaRecorder?.reset()
+    private fun createMediaRecorder() {
+        mediaRecorder = if (Build.VERSION.SDK_INT < 32) {
+            MediaRecorder()
+        } else {
+            MediaRecorder(requireContext())
+        }
     }
 
     private fun initializeMediaRecorder() {
-        mediaRecorder  = MediaRecorder(requireContext()).apply {
+        mediaRecorder?.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
