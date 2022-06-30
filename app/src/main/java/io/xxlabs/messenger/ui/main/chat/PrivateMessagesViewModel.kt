@@ -745,6 +745,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         _audioPreviewVisible.value = false
         _audioPreviewPauseVisible.value = false
         _attachButtonEnabled.value = true
+        _stopRecordingVisible.value = false
     }
 
     override fun resetMessageInput() {
