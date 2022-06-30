@@ -421,7 +421,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     override fun onCancelAttachmentClicked() {
         if (_audioPreviewVisible.value == true) {
-            hideAudioPreview()
+            restoreMessagingUi()
         } else {
             _selectAttachmentsVisible.value = false
             _attachButtonEnabled.value = true
@@ -725,10 +725,11 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     fun onAudioSent() {
         _sendAudioMessage.value = false
-        hideAudioPreview()
+        restoreMessagingUi()
     }
 
-    private fun hideAudioPreview() {
+    private fun restoreMessagingUi() {
+        _previewRecording.value = false
         _cancelAttachmentVisible.value = false
         _messageInputVisible.value = true
         _audioPreviewVisible.value = false
