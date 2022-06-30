@@ -44,6 +44,8 @@ import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
 import io.xxlabs.messenger.support.appContext
 
+private const val MINIMUM_RECORDING_DURATION_MS = 1000
+
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
     daoRepo: DaoRepository,
@@ -707,8 +709,11 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     override fun onStopRecordingClicked() {
+        val validDuration = (_recordingDuration.value ?: 0) > MINIMUM_RECORDING_DURATION_MS
         onStopRecording()
-        showAudioPreview()
+
+        if (validDuration) showAudioPreview()
+        else restoreMessagingUi()
     }
 
     private fun showAudioPreview() {
