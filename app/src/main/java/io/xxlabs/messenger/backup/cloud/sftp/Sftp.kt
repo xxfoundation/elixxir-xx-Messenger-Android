@@ -33,6 +33,7 @@ class Sftp private constructor(
                     }
                 } ?: run {
                     authResultCallback.onFailure("Failed to login. Please try again.")
+                    deleteCredentials()
                 }
             }
 
@@ -55,11 +56,11 @@ class Sftp private constructor(
     }
 
     private fun saveCredentials(sftpCredentials: SftpCredentials) {
-
+        preferences.sftpCredential = sftpCredentials.toJson()
     }
 
     private fun deleteCredentials() {
-
+        preferences.sftpCredential = null
     }
 
     private fun signInRequired(): Boolean = true
@@ -70,12 +71,14 @@ class Sftp private constructor(
         deleteCredentials()
     }
 
-    override fun isEnabled(): Boolean {
-        TODO("Check preferences if sftp is enabled")
-    }
+    override fun isEnabled(): Boolean = preferences.isSftpEnabled
 
     override fun backupNow() {
-        TODO("Start upload, if backup is enabled")
+        if (isEnabled()) backup()
+    }
+
+    private fun backup() {
+
     }
 
     override fun onAuthResultSuccess() {
