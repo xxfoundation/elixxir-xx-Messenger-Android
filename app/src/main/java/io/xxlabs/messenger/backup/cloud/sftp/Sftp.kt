@@ -29,6 +29,7 @@ class Sftp private constructor(
                 data?.getSerializableExtra(SftpAuthActivity.EXTRA_SFTP_CREDENTIAL)?.run {
                     (this as? SftpCredentials)?.let {
                         saveCredentials(it)
+                        initializeSftpClient(it)
                         authResultCallback.onSuccess()
                     }
                 } ?: run {
@@ -42,6 +43,8 @@ class Sftp private constructor(
             }
         }
     }
+
+    private var sftpClient: SftpClient? = null
 
     override val location: BackupLocation = BackupLocationData(
         R.drawable.ic_sftp,
@@ -57,6 +60,10 @@ class Sftp private constructor(
 
     private fun saveCredentials(sftpCredentials: SftpCredentials) {
         preferences.sftpCredential = sftpCredentials.toJson()
+    }
+
+    private fun initializeSftpClient(sftpCredentials: SftpCredentials) {
+        sftpClient = SftpTransfer(sftpCredentials)
     }
 
     private fun deleteCredentials() {
@@ -78,11 +85,11 @@ class Sftp private constructor(
     }
 
     private fun backup() {
-
+        sftpClient?.uploadBackup()
     }
 
     override fun onAuthResultSuccess() {
-        TODO("Get latest backup data, if it exists")
+        sftpClient?.downloadLatestBackup()
     }
 
     override suspend fun onRestore(environment: RestoreEnvironment) {
