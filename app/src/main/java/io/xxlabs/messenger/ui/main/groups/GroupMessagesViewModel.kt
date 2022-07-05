@@ -534,6 +534,11 @@ class GroupMessagesViewModel @AssistedInject constructor(
             daoRepo.getLastGroupMessageLiveData(it?.groupId ?: byteArrayOf())
                     as LiveData<GroupMessage?>
         }
+
+    override fun GroupMessage.canBeReplied(): Boolean {
+        return !roundUrl.isNullOrEmpty() &&
+        (status == MessageStatus.SENT.value || status == MessageStatus.RECEIVED.value)
+    }
 }
 
 @JvmInline
