@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.backup.cloud.sftp.SftpLoginUi" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".backup.cloud.sftp.SftpAuthActivity">
+
+        <TextView
+            android:id="@+id/sftp_login_title"
+            style="@style/dialog_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/sftp_login_title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <TextView
+            android:id="@+id/sftp_login_body"
+            style="@style/dialog_body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/stfp_login_body"
+            app:layout_constraintTop_toBottomOf="@id/sftp_login_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/stfp_login_host"
+            style="@style/registration_text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="@{ui.textInputEnabled}"
+            app:error="@{ui.hostError}"
+            app:layout_constraintTop_toBottomOf="@id/sftp_login_body"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/registration_text_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sftp_login_host_hint"
+                android:imeOptions="actionNext"
+                android:maxLength="@{ui.maxHostLength}"
+                android:afterTextChanged="@{ui::onHostInput}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/stfp_login_port"
+            style="@style/registration_text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="@{ui.textInputEnabled}"
+            app:error="@{ui.portError}"
+            app:layout_constraintTop_toBottomOf="@id/stfp_login_host"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/registration_text_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sftp_login_port_hint"
+                android:imeOptions="actionNext"
+                android:maxLength="@{ui.maxPortLength}"
+                android:afterTextChanged="@{ui::onPortInput}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sftp_login_username"
+            style="@style/registration_text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="@{ui.textInputEnabled}"
+            app:error="@{ui.usernameError}"
+            app:layout_constraintTop_toBottomOf="@id/stfp_login_port"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/registration_text_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sftp_login_username_hint"
+                android:imeOptions="actionNext"
+                android:maxLength="@{ui.maxUsernameLength}"
+                android:afterTextChanged="@{ui::onUsernameInput}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/sftp_login_password"
+            style="@style/registration_text_input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:enabled="@{ui.textInputEnabled}"
+            app:error="@{ui.passwordError}"
+            app:layout_constraintTop_toBottomOf="@id/sftp_login_username"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                style="@style/registration_text_input_edittext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/sftp_login_password_hint"
+                android:imeOptions="actionDone"
+                android:maxLength="@{ui.maxPasswordLength}"
+                android:afterTextChanged="@{ui::onPasswordInput}" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <io.xxlabs.messenger.support.view.SingleClickButton
+            android:id="@+id/sftp_login_button"
+            style="@style/registration_step_next_button"
+            android:layout_marginTop="24dp"
+            android:enabled="@{ui.submitButtonEnabled}"
+            android:onClick="@{() -> ui.onSubmitClicked()}"
+            android:text="@string/registration_flow_next"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/sftp_login_password"
+            app:layout_constraintVertical_bias="0.0"
+            tools:enabled="false" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
