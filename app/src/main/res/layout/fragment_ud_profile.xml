@@ -46,7 +46,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/udProfileBackBtn">
 
-            <ImageView
+            <io.xxlabs.messenger.support.view.SingleClickImageView
                 android:id="@+id/udProfilePhotoDefault"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -57,7 +57,7 @@
                 app:tint="@color/neutral_white"
                 tools:visibility="visible" />
 
-            <ImageView
+            <io.xxlabs.messenger.support.view.SingleClickImageView
                 android:id="@+id/udProfilePhoto"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -190,7 +190,7 @@
             app:layout_constraintWidth_min="@dimen/spacing_110"
             tools:text="aaa@aaa.com" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/udProfileEmailBtn"
             style="@style/XxTextStyle"
             android:layout_width="wrap_content"
@@ -245,7 +245,7 @@
             app:layout_constraintWidth_min="@dimen/spacing_110"
             tools:text="+1 991 2345 3" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/udProfilePhoneBtn"
             style="@style/XxTextStyle"
             android:layout_width="wrap_content"

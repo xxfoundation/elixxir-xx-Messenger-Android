@@ -41,7 +41,7 @@
                 tools:text="@string/registration_username_info_body"
                 style="@style/dialog_body" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/info_dialog_ok_button"
                 style="@style/dialog_button"
                 android:layout_marginTop="@dimen/registration_body_vertical_margin"
@@ -56,7 +56,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/info_dialog_body" />
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/info_dialog_cancel_button"
                 android:text="@{ui.negativeLabel}"
                 android:layout_marginEnd="@dimen/registration_horizontal_margin"

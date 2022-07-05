@@ -205,6 +205,8 @@ class ClientWrapperBindings(
         dummyTrafficManager.status = enabled
     }
 
+    override fun getPartners(): ByteArray = client.partners
+
     fun getNodeRegistrationStatus(): Pair<Long, Long> {
         val registeredNodes = client.nodeRegistrationStatus.registered
         val totalNodes = client.nodeRegistrationStatus.total

@@ -127,8 +127,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     private fun PrivateMessage.canBeReplied(): Boolean {
         return isTextMessage()
-                && status != MessageStatus.PENDING.value
-                && status != MessageStatus.FAILED.value
+                && (status == MessageStatus.SENT.value || status == MessageStatus.RECEIVED.value)
     }
 
     override fun onCreateReply(message: PrivateMessage) {
@@ -171,7 +170,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         val highlight = app.getColor(R.color.brand_default)
         val placeholderText = app.getString(
             R.string.chat_empty_placeholder,
-            contact.displayName
+            if (::contact.isInitialized) contact.displayName else "your connection"
         )
 
         val firstSpanText = "quantum-secure"
@@ -880,8 +879,6 @@ class PrivateMessagesViewModel @AssistedInject constructor(
      * Attempt to send a message.
      */
     override fun onSendMessage() {
-        if (!areNodesReady()) return
-
         sendAttachments()
         sendTextMessage()
         onMessageSent()
@@ -889,9 +886,15 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     override val PrivateMessage.failedDelivery: Boolean
         get() {
-            return if (status == MessageStatus.PENDING.value && fileType.isNullOrEmpty()) {
-                (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
-            } else false
+            if (!isTextMessage()) return false
+
+            return when (status) {
+                MessageStatus.TIMEOUT.value -> true
+                MessageStatus.PENDING.value -> {
+                    (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
+                }
+                else -> false
+            }
         }
 
     override fun deleteMessagesById(messageIds: List<Long>) {

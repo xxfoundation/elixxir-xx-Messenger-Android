@@ -398,39 +398,42 @@ class ContactsViewModel @Inject constructor(
             else -> return
         }
 
-        repo.searchUd(factPair.first, factPair.second) { newContact, error ->
-            if (newContact == null) { //Fraudulent
+        repo.searchUd(factPair.first, factPair.second) { searchResult, error ->
+            if (error.isNullOrEmpty()) {
+                continueVerificationStep(contact, searchResult)
+            } else {
+                // An error occurred while searching UD, the contact is still unverified.
+                Timber.d("Search UD error: $error")
+                onFailedToVerify(contact)
+            }
+        }
+    }
+
+    private fun continueVerificationStep(contact: ContactData, searchResult: ContactWrapperBase?) {
+        if (searchResult == null) { // Fraudulent
+            Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
+            deleteFraudulentContact(contact)
+        } else {
+            if (searchResult.getId().contentEquals(contact.userId)) { // Verified
+                Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
+                verifyContact(contact, searchResult)
+            } else { // Fraudulent
                 Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
                 deleteFraudulentContact(contact)
-            } else {
-                if (newContact.getId().contentEquals(contact.userId)) { //Verified
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
-                    verifyContact(contact, newContact)
-                } else { //Fraudulent
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
-                    deleteFraudulentContact(contact)
-                }
             }
         }
     }
 
     private fun verifyContactViaLookup(contact: ContactData) {
         Timber.v("[RECEIVED REQUEST] User does not have facts - UD Lookup")
-        repo.userLookup(contact.userId) { newContact, error ->
-            if (!error.isNullOrEmpty()) {
+        repo.userLookup(contact.userId) { searchResult, error ->
+            if (error.isNullOrEmpty()) {
+                continueVerificationStep(contact, searchResult)
+            } else {
                 Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is UNVERIFIED")
+                // An error occurred while searching UD, the contact is still unverified.
+                Timber.d("Search UD error: $error")
                 onFailedToVerify(contact)
-                return@userLookup
-            }
-
-            if (newContact != null) {
-                if (newContact.getId().contentEquals(contact.userId)) { // Verifying
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is VERIFIED")
-                    verifyContact(contact, newContact)
-                } else { //Fraudulent
-                    Timber.v("[RECEIVED REQUEST] Contact ${contact.userId.toBase64String()} is FRAUDULENT")
-                    deleteFraudulentContact(contact)
-                }
             }
         }
     }

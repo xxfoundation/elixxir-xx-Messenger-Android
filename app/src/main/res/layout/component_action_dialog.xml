@@ -54,7 +54,7 @@
         app:layout_constraintTop_toBottomOf="@id/actionDialogTitle"
         tools:text="You can\’t recover these messages later" />
 
-    <Button
+    <io.xxlabs.messenger.support.view.SingleClickButton
         android:id="@+id/actionDialogPositiveBtn"
         style="@style/XxButtonStyle.Teal"
         android:layout_width="wrap_content"
@@ -67,11 +67,12 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_20"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/actionDialogSubtitle"
         tools:text="Yes, Delete" />
 
-    <Button
+    <io.xxlabs.messenger.support.view.SingleClickButton
         android:id="@+id/actionDialogNegativeBtn"
         style="@style/XxButtonStyle.Outlined.Dark"
         android:layout_width="0dp"

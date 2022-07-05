@@ -16,13 +16,18 @@ import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.data.datatype.Environment
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.datatype.NetworkState
+import io.xxlabs.messenger.data.datatype.RequestStatus
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.Utils
+import io.xxlabs.messenger.support.util.value
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
@@ -66,7 +71,7 @@ class NetworkViewModel @Inject constructor(
     private var isNetworkHealthy: Boolean = false
         set(value) {
             if (value && checkForRequests) {
-                repo.replayRequests()
+                syncRequests()
                 checkForRequests = false
                 field = value
             }
@@ -75,6 +80,7 @@ class NetworkViewModel @Inject constructor(
     private var isInternetConnected = true
     private var isUdTryingToRun = false
     private var init = false
+    private lateinit var networkHealthCallback: NetworkHealthCallback
 
     init {
         if (init) {
@@ -87,7 +93,28 @@ class NetworkViewModel @Inject constructor(
         Timber.v("[NETWORK VIEWMODEL] isNetworkCallbackRegistered: ${isNetworkListenerRegistered()}")
     }
 
-    private lateinit var networkHealthCallback: NetworkHealthCallback
+    private fun syncRequests() {
+        viewModelScope.launch {
+            repo.replayRequests()
+            syncContacts(repo.getPartners())
+        }
+    }
+
+    private suspend fun syncContacts(partnerIds: List<String>) {
+        val contacts = daoRepo.getAllContacts().value()
+        partnerIds.forEach { partnerId ->
+            contacts
+                .filter { it.userId.toBase64String() == partnerId }
+                .forEach {
+                    if (it.status != RequestStatus.ACCEPTED.value) {
+                        updateToAccepted(it)
+                    }
+                }
+        }
+    }
+
+    private suspend fun updateToAccepted(contact: ContactData): Int =
+        daoRepo.updateContactState(contact.userId, RequestStatus.ACCEPTED).value()
 
     private fun getNetworkCallback() = NetworkHealthCallback { isHealthy ->
         subscriptions.add(Observable.fromCallable { onHealthChangeCallback(isHealthy) }
@@ -243,7 +270,6 @@ class NetworkViewModel @Inject constructor(
     }
 
     private fun stopNetworkFollower() {
-        requestsDataSource.failUnverifiedRequests()
         subscriptions.add(
             repo.stopNetworkFollower()
                 .subscribeOn(schedulers.single)
@@ -253,6 +279,7 @@ class NetworkViewModel @Inject constructor(
                     isNetworkHealthy = false
                     isFirstTimeNetwork = true
                     resetNetworkState()
+                    requestsDataSource.failUnverifiedRequests()
                     Timber.v("[NETWORK VIEWMODEL] Network follower is NOT RUNNING")
                 }
                 .doOnError { err ->

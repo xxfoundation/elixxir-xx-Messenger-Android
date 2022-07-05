@@ -164,7 +164,7 @@
             tools:hint="Nickname" />
     </io.xxlabs.messenger.support.view.TextInputLayoutXx>
 
-    <Button
+    <io.xxlabs.messenger.support.view.SingleClickButton
         android:id="@+id/actionDialogPositiveBtn"
         style="@style/ButtonStyle.Secondary"
         android:layout_width="0dp"
@@ -184,7 +184,7 @@
         app:layout_constraintTop_toBottomOf="@id/actionDialogSecondInputLayout"
         tools:text="Delete" />
 
-    <Button
+    <io.xxlabs.messenger.support.view.SingleClickButton
         android:id="@+id/actionDialogNegativeBtn"
         style="@style/XxButtonStyle.Outlined.Dark"
         android:layout_width="0dp"

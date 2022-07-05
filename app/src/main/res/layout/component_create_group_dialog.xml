@@ -92,7 +92,7 @@
                     style="@style/registration_text_input_edittext"/>
             </com.google.android.material.textfield.TextInputLayout>
 
-            <Button
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/action_dialog_button"
                 android:layout_width="0dp"
                 android:layout_marginTop="48dp"

@@ -13,7 +13,7 @@ interface RequestDataSource<T: Request> {
     fun delete(request: T)
     fun send(request: T)
     fun retry(request: T)
-    fun verify(request: T)
+    suspend fun verify(request: T): Boolean
     fun failUnverifiedRequests()
     fun resetResentRequests()
 }

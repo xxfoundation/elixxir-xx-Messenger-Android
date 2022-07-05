@@ -58,18 +58,34 @@ class SentImageViewHolder(
         sentIcon.setImageResource(R.drawable.ic_lock_white)
 
         when (status) {
-            MessageStatus.FAILED -> {
-                rootLayout.backgroundTintList =
-                    ContextCompat.getColorStateList(itemView.context, R.color.chatBgColorError)
-                errorText.visibility = View.VISIBLE
-                sentIcon.setImageResource(R.drawable.ic_send_failure)
-            }
-            else -> {
-                rootLayout.backgroundTintList =
-                    ContextCompat.getColorStateList(itemView.context, R.color.brand_dark)
-                errorText.visibility = View.GONE
-            }
+            MessageStatus.FAILED -> showFailedUi()
+            MessageStatus.TIMEOUT -> showTimeoutUi()
+            else -> showNormalUi()
         }
+    }
+
+    private fun showFailedUi() {
+        rootLayout.backgroundTintList =
+            ContextCompat.getColorStateList(itemView.context, R.color.chatBgColorError)
+        errorText.visibility = View.VISIBLE
+        sentIcon.setImageResource(R.drawable.ic_send_failure)
+    }
+
+    private fun showTimeoutUi() {
+        rootLayout.backgroundTintList =
+            ContextCompat.getColorStateList(itemView.context, R.color.chatBgColorError)
+        errorText.apply {
+            visibility = View.VISIBLE
+            setTextColor(context.getColor(R.color.accent_safe))
+            text = "Timed out, please tap to retry"
+        }
+        sentIcon.setImageResource(R.drawable.ic_send_failure)
+    }
+
+    private fun showNormalUi() {
+        rootLayout.backgroundTintList =
+            ContextCompat.getColorStateList(itemView.context, R.color.brand_dark)
+        errorText.visibility = View.GONE
     }
 
     companion object {

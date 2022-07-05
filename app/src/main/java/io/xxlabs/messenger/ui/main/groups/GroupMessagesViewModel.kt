@@ -441,14 +441,16 @@ class GroupMessagesViewModel @AssistedInject constructor(
 
     override val GroupMessage.failedDelivery: Boolean
         get() {
-            return if (status == MessageStatus.PENDING.value) {
-                (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
-            } else false
+            return when (status) {
+                MessageStatus.TIMEOUT.value -> true
+                MessageStatus.PENDING.value -> {
+                    (System.currentTimeMillis() - timestamp) > DELIVERY_TIMEOUT_MS
+                }
+                else -> false
+            }
         }
 
     override fun onSendMessage() {
-        if (!areNodesReady()) return
-
         sendTextMessage()
         onMessageSent()
     }

@@ -120,6 +120,8 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
         TODO("Not yet implemented")
     }
 
+    override fun getPartners(): ByteArray = byteArrayOf()
+
     override fun verifyOwnership(receivedContact: ByteArray, verifiedContact: ByteArray) = true
     override fun enableDummyTraffic(enabled: Boolean) { }
 }

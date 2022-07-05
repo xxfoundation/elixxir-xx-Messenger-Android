@@ -34,7 +34,7 @@
             style="@style/dialog_body"
             app:drawableBottomCompat="@drawable/ic_outline_info_24" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/registration_welcome_next_btn"
             android:text="@string/registration_welcome_continue"
             android:onClick="@{() -> ui.onWelcomeNextClicked()}"
@@ -44,7 +44,7 @@
             android:layout_marginBottom="@dimen/registration_body_vertical_margin"
             style="@style/registration_step_next_button" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/registration_welcome_skip_btn"
             android:text="@string/registration_welcome_skip"
             android:onClick="@{() -> ui.onWelcomeSkipClicked()}"

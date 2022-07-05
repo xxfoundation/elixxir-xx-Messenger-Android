@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/restore_status_restore_account"
             android:layout_marginTop="24dp"
             android:text="@string/backup_found_restore_account"
@@ -25,7 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             style="@style/registration_step_next_button" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/restore_status_cancel"
             android:text="@android:string/cancel"
             android:layout_marginTop="24dp"

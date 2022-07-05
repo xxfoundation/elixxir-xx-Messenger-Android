@@ -167,7 +167,7 @@
             app:layout_goneMarginTop="@dimen/spacing_20"
             tools:text="Resend Code (59 secs)" />
 
-        <Button
+        <io.xxlabs.messenger.support.view.SingleClickButton
             android:id="@+id/profileRegistrationDialogPositiveBtn"
             style="@style/ButtonStyle.Secondary"
             android:layout_width="0dp"

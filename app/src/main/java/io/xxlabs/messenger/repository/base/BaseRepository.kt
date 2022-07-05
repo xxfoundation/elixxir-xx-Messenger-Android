@@ -16,7 +16,6 @@ import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
-import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
 
@@ -179,4 +178,6 @@ interface BaseRepository {
     val fileRepository: FileTransferRepository
 
     fun replayRequests()
+
+    suspend fun getPartners(): List<String>
 }
