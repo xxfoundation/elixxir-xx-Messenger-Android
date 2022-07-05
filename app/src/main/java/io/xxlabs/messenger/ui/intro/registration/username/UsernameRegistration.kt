@@ -196,14 +196,24 @@ class UsernameRegistration @AssistedInject constructor(
                     .observeOn(scheduler.main)
                     .doOnError {
                         it.message?.let { error ->
-                            displayError(error)
+                            if (error.isNetworkNotHealthyError()) handleNetworkHealthError()
+                            else {
+                                displayError(error)
+                                enableUI()
+                            }
                         }
-                        enableUI()
                     }.doOnSuccess {
                         onSuccessfulRegistration(username, isDemoAcct)
                     }.subscribe()
             }
         }
+    }
+
+    private fun String.isNetworkNotHealthyError() =
+        contains("network is not healthy")
+
+    private fun handleNetworkHealthError() {
+        onUsernameNextClicked()
     }
 
     private fun displayError(errorMsg: String) {
