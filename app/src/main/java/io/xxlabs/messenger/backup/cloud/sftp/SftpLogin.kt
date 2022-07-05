@@ -3,6 +3,7 @@ package io.xxlabs.messenger.backup.cloud.sftp
 import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.gson.Gson
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
@@ -12,7 +13,15 @@ data class SftpCredentials(
     val host: String,
     val username: String,
     val password: String
-) : Serializable
+) : Serializable {
+
+    fun toJson(): String = Gson().toJson(this)
+
+    companion object {
+        fun fromJson(json: String): SftpCredentials =
+            Gson().fromJson(json, SftpCredentials::class.java)
+    }
+}
 
 interface SftpLoginListener {
     fun onLoginSuccess(credentials: SftpCredentials)
