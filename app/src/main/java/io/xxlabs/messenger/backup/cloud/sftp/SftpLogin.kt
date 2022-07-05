@@ -11,6 +11,7 @@ import java.io.Serializable
 
 data class SftpCredentials(
     val host: String,
+    val port: String,
     val username: String,
     val password: String
 ) : Serializable {
@@ -137,7 +138,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private fun onSuccess() {
-        listener.onLoginSuccess(SftpCredentials(host, username, password))
+        listener.onLoginSuccess(SftpCredentials(host, port, username, password))
         enableInput()
     }
 
