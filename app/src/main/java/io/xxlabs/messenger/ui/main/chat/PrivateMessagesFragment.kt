@@ -3,6 +3,7 @@ package io.xxlabs.messenger.ui.main.chat
 import android.content.Context
 import android.media.MediaRecorder
 import android.net.Uri
+import android.os.Build
 import android.os.Environment.DIRECTORY_MUSIC
 import android.view.HapticFeedbackConstants
 import android.view.View
@@ -221,7 +222,17 @@ class PrivateMessagesFragment :
         }
 
         chatViewModel.startRecording.observe(viewLifecycleOwner) { start ->
-            if (start) requestMicPermission()
+            if (start) {
+                requestMicPermission()
+                chatViewModel.onStartRecordingHandled()
+            }
+        }
+
+        chatViewModel.stopRecording.observe(viewLifecycleOwner) { stop ->
+            if (stop) {
+                stopRecording()
+                chatViewModel.onStopRecordingHandled()
+            }
         }
 
         chatViewModel.previewRecording.observe(viewLifecycleOwner) { preview ->
@@ -308,39 +319,43 @@ class PrivateMessagesFragment :
     private fun recordAudio() {
         latestAudioFile = tempAudioFile
 
-        mediaRecorder  = MediaRecorder().apply {
+        try {
+            mediaRecorder?.reset() ?: createMediaRecorder()
+            initializeMediaRecorder()
+            chatViewModel.onRecordingStarted()
+        } catch (e: IOException) {
+            requireContext().toast("Failed to start audio recording")
+        }
+    }
+
+    private fun createMediaRecorder() {
+        mediaRecorder = if (Build.VERSION.SDK_INT < 32) {
+            MediaRecorder()
+        } else {
+            MediaRecorder(requireContext())
+        }
+    }
+
+    private fun initializeMediaRecorder() {
+        mediaRecorder?.apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
             setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setOutputFile(latestAudioFile?.absolutePath)
+            prepare()
+            start()
         }
-
-        try {
-            mediaRecorder?.prepare()
-        } catch (e: IOException) {
-            requireContext().toast("Failed to start audio recording")
-        }
-        mediaRecorder?.start()
-        chatViewModel.onRecordingStarted()
     }
 
-    private fun cancelRecording() {
-        latestAudioFile = null
-        chatViewModel.onCancelRecording()
-    }
-
-    private fun releaseMediaRecorder() {
+    private fun stopRecording() {
         try {
             mediaRecorder?.stop()
-            mediaRecorder?.release()
-            mediaRecorder = null
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
     }
 
     private fun initPreviewPlayer() {
-        releaseMediaRecorder()
         latestAudioFile?.let { recording ->
             audioPreviewPlayer.audioUri = FileProvider.getUriForFile(
                 requireActivity().applicationContext,
@@ -390,7 +405,18 @@ class PrivateMessagesFragment :
 
     override fun onPause() {
         super.onPause()
-        cancelRecording()
+        releaseMediaRecorder()
+    }
+
+    private fun releaseMediaRecorder() {
+        chatViewModel.onCancelRecording()
+        try {
+            mediaRecorder?.reset()
+            mediaRecorder?.release()
+            mediaRecorder = null
+        } catch (e: Exception) {
+            FirebaseCrashlytics.getInstance().recordException(e)
+        }
     }
 
     override fun receivedContent(contentInfo: InputContentInfoCompat) {
