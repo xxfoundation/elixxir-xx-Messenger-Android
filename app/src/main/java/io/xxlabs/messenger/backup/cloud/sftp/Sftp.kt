@@ -8,6 +8,7 @@ import io.xxlabs.messenger.backup.cloud.CloudStorage
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.*
+import io.xxlabs.messenger.support.appContext
 
 /**
  * Encapsulates SFTP API.
@@ -20,14 +21,23 @@ class Sftp private constructor(
     private val authHandler: AuthHandler by lazy {
         object : AuthHandler {
             override val signInIntent: Intent
-                get() = TODO("Launch sftp sign in Activity")
+                get() = Intent(appContext(), SftpAuthActivity::class.java).apply {
+                    action = SftpAuthActivity.SFTP_AUTH_INTENT
+                }
 
             override fun handleSignInResult(data: Intent?) {
-                TODO("Check for success or an error")
+                data?.getSerializableExtra(SftpAuthActivity.EXTRA_SFTP_CREDENTIAL)?.run {
+                    (this as? SftpCredentials)?.let {
+                        saveCredentials(it)
+                        authResultCallback.onSuccess()
+                    }
+                } ?: run {
+                    authResultCallback.onFailure("Failed to login. Please try again.")
+                }
             }
 
             override fun signOut() {
-                TODO("Delete saved credentials")
+                deleteCredentials()
             }
         }
     }
@@ -44,12 +54,20 @@ class Sftp private constructor(
         authHandler
     }
 
+    private fun saveCredentials(sftpCredentials: SftpCredentials) {
+
+    }
+
+    private fun deleteCredentials() {
+
+    }
+
     private fun signInRequired(): Boolean = true
 
     private fun authBackgroundsApp() = false
 
     private fun signOut() {
-        TODO("Delete saved credentials")
+        deleteCredentials()
     }
 
     override fun isEnabled(): Boolean {
