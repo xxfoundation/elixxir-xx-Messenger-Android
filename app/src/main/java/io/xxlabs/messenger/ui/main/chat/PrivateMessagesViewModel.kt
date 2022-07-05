@@ -43,7 +43,8 @@ import timber.log.Timber
 import kotlin.NoSuchElementException
 import kotlin.collections.HashMap
 import io.xxlabs.messenger.support.appContext
-import kotlinx.coroutines.*
+
+private const val MINIMUM_RECORDING_DURATION_MS = 1000
 
 class PrivateMessagesViewModel @AssistedInject constructor(
     repo: BaseRepository,
@@ -121,17 +122,9 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
-    override val replyMenuOptionEnabled = Transformations.map(selectedMessages) {
-        it.size == 1 && it.first().canBeReplied()
-    }
-
-    private fun PrivateMessage.canBeReplied(): Boolean {
+    override fun PrivateMessage.canBeReplied(): Boolean {
         return isTextMessage()
                 && (status == MessageStatus.SENT.value || status == MessageStatus.RECEIVED.value)
-    }
-
-    override fun onCreateReply(message: PrivateMessage) {
-        if (message.canBeReplied()) super.onCreateReply(message)
     }
 
     private fun PrivateMessage.isTextMessage(): Boolean = fileType.isNullOrEmpty()
@@ -383,12 +376,15 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
+    val stopRecording: LiveData<Boolean> by ::_stopRecording
+    private val _stopRecording = MutableLiveData(true)
+
     override val lastMessage: LiveData<PrivateMessage?> =
         Transformations.map(daoRepo.getLastMessageLiveData()) { it }
 
     /* Functions */
 
-    private fun onRecordingHandled() {
+    private fun showRecordingUi() {
         _messageInputVisible.value = false
         _startRecording.value = false
         _stopRecordingVisible.value = true
@@ -421,7 +417,7 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     override fun onCancelAttachmentClicked() {
         if (_audioPreviewVisible.value == true) {
-            hideAudioPreview()
+            restoreMessagingUi()
         } else {
             _selectAttachmentsVisible.value = false
             _attachButtonEnabled.value = true
@@ -695,15 +691,21 @@ class PrivateMessagesViewModel @AssistedInject constructor(
     }
 
     fun onCancelRecording() {
-        _previewRecording.value = false
-        _stopRecordingVisible.value = false
-        _attachButtonEnabled.value = true
+        stopTimer()
+        restoreMessagingUi()
+    }
+
+    private fun onStopRecording() {
+        _stopRecording.value = true
         stopTimer()
     }
 
     override fun onStopRecordingClicked() {
-        stopTimer()
-        showAudioPreview()
+        val validDuration = (_recordingDuration.value ?: 0) > MINIMUM_RECORDING_DURATION_MS
+        onStopRecording()
+
+        if (validDuration) showAudioPreview()
+        else restoreMessagingUi()
     }
 
     private fun showAudioPreview() {
@@ -725,15 +727,17 @@ class PrivateMessagesViewModel @AssistedInject constructor(
 
     fun onAudioSent() {
         _sendAudioMessage.value = false
-        hideAudioPreview()
+        restoreMessagingUi()
     }
 
-    private fun hideAudioPreview() {
+    private fun restoreMessagingUi() {
+        _previewRecording.value = false
         _cancelAttachmentVisible.value = false
         _messageInputVisible.value = true
         _audioPreviewVisible.value = false
         _audioPreviewPauseVisible.value = false
         _attachButtonEnabled.value = true
+        _stopRecordingVisible.value = false
     }
 
     override fun resetMessageInput() {
@@ -861,8 +865,16 @@ class PrivateMessagesViewModel @AssistedInject constructor(
         }
     }
 
+    fun onStartRecordingHandled() {
+        _startRecording.value = false
+    }
+
+    fun onStopRecordingHandled() {
+        _stopRecording.value = false
+    }
+
     fun onRecordingStarted() {
-        onRecordingHandled()
+        showRecordingUi()
         startTimer()
     }
 

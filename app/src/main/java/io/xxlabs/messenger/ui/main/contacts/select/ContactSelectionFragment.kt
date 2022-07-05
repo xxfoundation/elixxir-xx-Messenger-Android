@@ -14,6 +14,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.databinding.FragmentContactSelectionBinding
 import io.xxlabs.messenger.support.extensions.navigateSafe
+import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
@@ -115,6 +116,13 @@ class ContactSelectionFragment : ContactsFragment() {
                 connectionsViewModel.onSearchNavigationHandled()
             }
         }
+
+        contactsViewModel.navigateToGroup.observe(viewLifecycleOwner) { groupId ->
+            groupId?.let {
+                navigateToGroup(it)
+                contactsViewModel.onNavigateToGroupHandled()
+            }
+        }
     }
 
     private fun showCreateGroupDialog() {
@@ -144,6 +152,14 @@ class ContactSelectionFragment : ContactsFragment() {
 
     private fun navigateToSearch() {
         val directions = ContactSelectionFragmentDirections.actionContactsSelectionToSearch()
+        findNavController().navigateSafe(directions)
+    }
+
+
+    private fun navigateToGroup(groupId: ByteArray) {
+        val directions = ContactSelectionFragmentDirections.actionGlobalGroupsChat().apply {
+            this.groupId = groupId.toBase64String()
+        }
         findNavController().navigateSafe(directions)
     }
 }
