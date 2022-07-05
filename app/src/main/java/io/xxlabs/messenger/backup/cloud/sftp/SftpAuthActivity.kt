@@ -43,7 +43,7 @@ class SftpAuthActivity : AppCompatActivity() {
     }
 
     companion object {
-        const val SFTP_AUTH_INTENT = "stfp_auth"
+        const val SFTP_AUTH_INTENT = "sftp_auth"
         const val EXTRA_SFTP_CREDENTIAL = "sftp_credential"
     }
 }
