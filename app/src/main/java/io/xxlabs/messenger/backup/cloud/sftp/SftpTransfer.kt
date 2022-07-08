@@ -14,6 +14,9 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
+const val UPLOAD_PATH = "/$BACKUP_DIRECTORY_NAME/temp_$BACKUP_FILE_NAME"
+const val BACKUP_PATH = "/$BACKUP_DIRECTORY_NAME/$BACKUP_FILE_NAME"
+
 interface SftpClient {
     suspend fun download(path: String): Pair<BackupSnapshot, AccountArchive>
     suspend fun upload(backup: File): FileSize
@@ -80,14 +83,19 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
         try {
             val sftp = ssh.authenticate()
             with(FileSystemFile(backup)) {
-                sftp.put(
-                    this,
-                    "/$BACKUP_DIRECTORY_NAME/$BACKUP_FILE_NAME"
-                )
+                sftp.put(this, UPLOAD_PATH)
+                sftp.deletePreviousBackup()
                 FileSize(length)
             }
         } finally {
             ssh.disconnect()
+        }
+    }
+
+    private fun SFTPClient.deletePreviousBackup() {
+        statExistence(BACKUP_PATH)?.let {
+            rm(BACKUP_PATH)
+            rename(UPLOAD_PATH, BACKUP_PATH)
         }
     }
 }
