@@ -18,7 +18,7 @@ const val UPLOAD_PATH = "/$BACKUP_DIRECTORY_NAME/temp_$BACKUP_FILE_NAME"
 const val BACKUP_PATH = "/$BACKUP_DIRECTORY_NAME/$BACKUP_FILE_NAME"
 
 interface SftpClient {
-    suspend fun download(path: String): Pair<BackupSnapshot, AccountArchive>
+    suspend fun download(path: String): Pair<BackupSnapshot, AccountArchive>?
     suspend fun upload(backup: File): FileSize
 }
 
@@ -31,15 +31,26 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
 
     override suspend fun download(
         path: String
-    ): Pair<BackupSnapshot, AccountArchive> = withContext(scope.coroutineContext) {
+    ): Pair<BackupSnapshot, AccountArchive>? = withContext(scope.coroutineContext) {
         val ssh = connect()
         try {
-            val sftp = ssh.authenticate()
-            val backupFile = fetchBackup(sftp, path)
-            Pair(backupFile.snapshot(), backupFile.readData())
+            ssh.authenticate().run {
+                if (backupExists()) {
+                    val backupFile = fetchBackup(this, path)
+                    Pair(backupFile.snapshot(), backupFile.readData())
+                } else {
+                    null
+                }
+            }
         } finally {
             ssh.disconnect()
         }
+    }
+
+    private fun SFTPClient.backupExists(): Boolean {
+        return statExistence(BACKUP_PATH)?.let {
+            it.size > 0
+        } ?: false
     }
 
     private suspend fun connect(): SSHClient = suspendCoroutine { continuation ->
