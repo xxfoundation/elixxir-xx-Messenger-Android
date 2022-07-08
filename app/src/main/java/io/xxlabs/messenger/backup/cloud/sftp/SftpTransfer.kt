@@ -9,6 +9,7 @@ import kotlinx.coroutines.*
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.SFTPClient
 import net.schmizz.sshj.xfer.FileSystemFile
+import org.apache.http.client.methods.RequestBuilder.put
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -93,10 +94,11 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
         val ssh = connect()
         try {
             val sftp = ssh.authenticate()
-            with(FileSystemFile(backup)) {
-                sftp.put(this, UPLOAD_PATH)
-                sftp.deletePreviousBackup()
-                FileSize(length)
+            val backupFile = FileSystemFile(backup)
+            with (sftp) {
+                put(backupFile, UPLOAD_PATH)
+                deletePreviousBackup()
+                FileSize(backupFile.length)
             }
         } finally {
             ssh.disconnect()
