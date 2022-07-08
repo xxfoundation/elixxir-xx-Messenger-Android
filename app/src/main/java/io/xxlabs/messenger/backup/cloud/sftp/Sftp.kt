@@ -2,6 +2,7 @@ package io.xxlabs.messenger.backup.cloud.sftp
 
 import android.content.Intent
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.backup.bindings.AccountArchive
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.CloudStorage
@@ -9,6 +10,9 @@ import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.*
 import io.xxlabs.messenger.support.appContext
+import kotlinx.coroutines.launch
+import java.io.File
+import kotlin.Exception
 
 /**
  * Encapsulates SFTP API.
@@ -85,15 +89,53 @@ class Sftp private constructor(
     }
 
     private fun backup() {
-        sftpClient?.uploadBackup()
+        scope.launch {
+            updateProgress()
+            File(backupService.backupFilePath).let {
+                if (it.exists()) {
+                    updateProgress(25)
+                    upload(it)
+                } else {
+                    with("No backup found.") {
+                        updateProgress(error = Exception(this))
+                    }
+                }
+            }
+        }
     }
 
+    private suspend fun upload(file: File) {
+        try {
+            sftpClient?.upload(file)
+            updateProgress(100)
+        } catch (e: Exception) {
+            updateProgress(error = e)
+        }
+    }
+
+    private val downloadPath = appContext().cacheDir.path
+
     override fun onAuthResultSuccess() {
-        sftpClient?.downloadLatestBackup()
+        scope.launch {
+            fetchData()
+        }
+    }
+
+    private var cachedBackupData: AccountArchive? = null
+
+    private suspend fun fetchData() {
+        sftpClient?.download(downloadPath)?.let {
+            updateLastBackup(it.first)
+            cachedBackupData = it.second
+        } ?: run {
+            updateLastBackup(null)
+            cachedBackupData = null
+        }
     }
 
     override suspend fun onRestore(environment: RestoreEnvironment) {
-        TODO("Download backup as an AccountArchive object")
+        updateProgress(25)
+        cachedBackupData?.restoreUsing(environment)
     }
 
     companion object {
