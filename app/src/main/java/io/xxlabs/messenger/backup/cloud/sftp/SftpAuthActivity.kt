@@ -14,6 +14,7 @@ class SftpAuthActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySftpAuthBinding.inflate(layoutInflater)
+        binding.lifecycleOwner = this
         setContentView(binding.root)
     }
 
