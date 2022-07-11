@@ -171,7 +171,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     companion object {
-        private const val DEFAULT_SSH_PORT = 23
+        private const val DEFAULT_SSH_PORT = 22
         private const val MIN_PORT_RANGE = 1024
         private const val MAX_PORT_RANGE = 32767
         private const val MAX_INPUT_LENGTH = 256
