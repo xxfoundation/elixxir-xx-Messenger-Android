@@ -65,6 +65,7 @@
             android:layout_height="wrap_content"
             android:enabled="@{ui.textInputEnabled}"
             android:layout_marginTop="18dp"
+            android:visibility="gone"
             app:error="@{ui.portError}"
             app:layout_constraintTop_toBottomOf="@id/stfp_login_host"
             app:layout_constraintStart_toStartOf="parent"
