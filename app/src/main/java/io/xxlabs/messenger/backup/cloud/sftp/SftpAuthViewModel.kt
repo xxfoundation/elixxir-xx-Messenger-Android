@@ -13,11 +13,15 @@ class SftpAuthViewModel : ViewModel(), SftpLoginListener {
     val loginSuccess: LiveData<SftpCredentials?> by ::_loginSuccess
     private val _loginSuccess = MutableLiveData<SftpCredentials?>(null)
 
+    val loginError: LiveData<String?> by ::_loginError
+    private val _loginError = MutableLiveData<String?>(null)
+
     override fun onLoginSuccess(credentials: SftpCredentials) {
         _loginSuccess.postValue(credentials)
     }
 
     override fun onLoginError(message: String) {
         Timber.d("Sftp error: $message")
+        _loginError.postValue(message)
     }
 }

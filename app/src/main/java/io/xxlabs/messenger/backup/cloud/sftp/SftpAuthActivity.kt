@@ -3,8 +3,10 @@ package io.xxlabs.messenger.backup.cloud.sftp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
+import io.xxlabs.messenger.support.extensions.toast
 
 class SftpAuthActivity : AppCompatActivity() {
 
@@ -29,9 +31,11 @@ class SftpAuthActivity : AppCompatActivity() {
         }
 
         sftpViewModel.loginSuccess.observe(this) { credentials ->
-            credentials?.let {
-                onLoginSuccess(credentials)
-            }
+            credentials?.let { onLoginSuccess(credentials) }
+        }
+
+        sftpViewModel.loginError.observe(this) { error ->
+            error?.let { toast(error) }
         }
     }
 
