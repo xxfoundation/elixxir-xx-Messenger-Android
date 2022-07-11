@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.xxlabs.messenger.backup.cloud.drive.GoogleDrive
 import io.xxlabs.messenger.backup.cloud.dropbox.Dropbox
+import io.xxlabs.messenger.backup.cloud.sftp.Sftp
 import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*
@@ -57,6 +58,7 @@ class BackupPreferencesDelegate(
         when (backup) {
             is GoogleDrive -> googleDriveEnabled(enabled)
             is Dropbox -> dropboxEnabled(enabled)
+            is Sftp -> sftpEnabled(enabled)
         }
         reflectChanges()
         if (enabled) tryBackup()
@@ -64,12 +66,26 @@ class BackupPreferencesDelegate(
 
     private fun googleDriveEnabled(enabled: Boolean) {
         preferences.isGoogleDriveEnabled = enabled
-        if (enabled) preferences.isDropboxEnabled = false
+        if (enabled) {
+            preferences.isDropboxEnabled = false
+            preferences.isSftpEnabled = false
+        }
     }
 
     private fun dropboxEnabled(enabled: Boolean) {
         preferences.isDropboxEnabled = enabled
-        if (enabled) preferences.isGoogleDriveEnabled = false
+        if (enabled) {
+            preferences.isGoogleDriveEnabled = false
+            preferences.isSftpEnabled = false
+        }
+    }
+
+    private fun sftpEnabled(enabled: Boolean) {
+        preferences.isSftpEnabled = enabled
+        if (enabled) {
+            preferences.isGoogleDriveEnabled = false
+            preferences.isDropboxEnabled = false
+        }
     }
 
     override fun setNetwork(network: BackupSettings.Network) {

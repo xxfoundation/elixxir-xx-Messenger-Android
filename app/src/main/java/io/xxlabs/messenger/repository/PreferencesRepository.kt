@@ -238,6 +238,12 @@ class PreferencesRepository @Inject constructor(
             field = value
             preferences.edit().putBoolean("dropbox_enabled", value).apply()
         }
+    override var isSftpEnabled: Boolean = preferences.getBoolean("sftp_enabled", false)
+        get() = preferences.getBoolean("sftp_enabled", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("sftp_enabled", value).apply()
+        }
 
     override var backupPassword: String? = preferences.getString("backup_pw", null)
         get() = preferences.getString("backup_pw", null)
@@ -272,6 +278,12 @@ class PreferencesRepository @Inject constructor(
         set(value) {
             field = value
             preferences.edit().putString("dbx_credential", value).apply()
+        }
+    override var sftpCredential: String? = preferences.getString("sftp_credential", null)
+        get() = preferences.getString("sftp_credential", null)
+        set(value) {
+            field = value
+            preferences.edit().putString("sftp_credential", value).apply()
         }
 
     override var isUserProfileBackedUp: Boolean = preferences.getBoolean("user_backed_up", false)

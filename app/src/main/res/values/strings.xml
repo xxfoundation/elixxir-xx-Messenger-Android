@@ -619,4 +619,10 @@
     <string name="share_contact_info_title">Select what you would like to share</string>
     <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
     <string name="chats_no_results_found_message">was not found in your connections or in a chat. Click below to search for them as a new connection.</string>
+    <string name="sftp_login_title">Login to your SFTP</string>
+    <string name="stfp_login_body">Login to your server. Your credentials will be automatically and securely saved locally on your device.</string>
+    <string name="sftp_login_host_hint">Host</string>
+    <string name="sftp_login_username_hint">Username</string>
+    <string name="sftp_login_password_hint">Password</string>
+    <string name="sftp_login_port_hint">Port (leave blank for default TCP 22)</string>
 </resources>
