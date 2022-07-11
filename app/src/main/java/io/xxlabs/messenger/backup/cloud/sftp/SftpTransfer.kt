@@ -9,7 +9,6 @@ import kotlinx.coroutines.*
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.SFTPClient
 import net.schmizz.sshj.xfer.FileSystemFile
-import org.apache.http.client.methods.RequestBuilder.put
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -57,7 +56,6 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
     private suspend fun connect(): SSHClient = suspendCoroutine { continuation ->
         try {
             val ssh = SSHClient().apply {
-                loadKnownHosts()
                 connect(credentials.host, credentials.port.toInt())
             }
             continuation.resume(ssh)

@@ -106,7 +106,6 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
 
     private fun login() {
         val ssh = SSHClient().apply {
-            loadKnownHosts()
             connect(host, port.toInt())
         }
         try {
