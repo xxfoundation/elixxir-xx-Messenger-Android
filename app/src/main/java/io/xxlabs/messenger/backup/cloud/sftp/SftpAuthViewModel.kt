@@ -14,7 +14,7 @@ class SftpAuthViewModel : ViewModel(), SftpLoginListener {
     private val _loginSuccess = MutableLiveData<SftpCredentials?>(null)
 
     override fun onLoginSuccess(credentials: SftpCredentials) {
-        _loginSuccess.value = credentials
+        _loginSuccess.postValue(credentials)
     }
 
     override fun onLoginError(message: String) {

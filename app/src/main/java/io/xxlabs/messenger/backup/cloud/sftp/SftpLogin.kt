@@ -4,6 +4,7 @@ import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
+import kotlinx.coroutines.*
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
@@ -30,6 +31,12 @@ interface SftpLoginListener {
 }
 
 class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
+
+    private val scope =  CoroutineScope(
+        CoroutineName("SftpLogin")
+                + Job()
+                + Dispatchers.Default
+    )
 
     override val maxHostLength: Int = MAX_INPUT_LENGTH
     override val hostError: LiveData<String?> by ::_hostError
@@ -86,15 +93,18 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
 
     override fun onSubmitClicked() {
         clearErrors()
-        try {
-            login()
-        } catch (e: Exception) {
-            onError(e.message)
+        disableInput()
+
+        scope.launch {
+            try {
+                login()
+            } catch (e: Exception) {
+                onError(e.message)
+            }
         }
     }
 
     private fun login() {
-        disableInput()
         val ssh = SSHClient().apply {
             loadKnownHosts()
             connect(host, port.toInt())
@@ -114,22 +124,22 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private fun showCredentialsError() {
-        _usernameError.value = ERROR_CREDENTIALS
-        _passwordError.value = ERROR_CREDENTIALS
+        _usernameError.postValue(ERROR_CREDENTIALS)
+        _passwordError.postValue(ERROR_CREDENTIALS)
         onError(ERROR_CREDENTIALS)
     }
 
     private fun showConnectionError() {
-        _hostError.value = ERROR_CONNECTION
-        _portError.value = ERROR_CONNECTION
+        _hostError.postValue(ERROR_CONNECTION)
+        _portError.postValue(ERROR_CONNECTION)
         onError(ERROR_CONNECTION)
     }
 
     private fun clearErrors() {
-        _hostError.value = null
-        _portError.value = null
-        _usernameError.value = null
-        _passwordError.value = null
+        _hostError.postValue(null)
+        _portError.postValue(null)
+        _usernameError.postValue(null)
+        _passwordError.postValue(null)
     }
 
     private fun disableInput() {
@@ -148,8 +158,8 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private fun enableInput() {
-        _textInputEnabled.value = true
-        _submitButtonEnabled.value = true
+        _textInputEnabled.postValue(true)
+        _submitButtonEnabled.postValue(true)
     }
 
     private fun maybeEnableSubmitButton() {
