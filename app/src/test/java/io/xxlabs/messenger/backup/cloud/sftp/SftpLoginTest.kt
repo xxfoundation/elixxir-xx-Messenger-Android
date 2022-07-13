@@ -11,12 +11,12 @@ import org.junit.Test
 class SftpLoginTest {
 
     private class TestListener : SftpLoginListener {
-        var credentials: SftpCredentials? = null
+        var credentials: SshCredentials? = null
             private set
         var error: String? = null
             private set
 
-        override fun onLoginSuccess(credentials: SftpCredentials) {
+        override fun onLoginSuccess(credentials: SshCredentials) {
             this.credentials = credentials
         }
 

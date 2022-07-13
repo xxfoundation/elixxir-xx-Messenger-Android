@@ -11,10 +11,10 @@ private const val devHost = "192.168.1.206"
 private const val devPort = 22
 
 /**
- * Attempt an remote connection with the provided [SftpCredentials].
+ * Attempt an remote connection with the provided [SshCredentials].
  * Returns an [SSHClient] reference if successful.
  */
-suspend fun connect(credentials: SftpCredentials): SSHClient = suspendCoroutine { continuation ->
+suspend fun connect(credentials: SshCredentials): SSHClient = suspendCoroutine { continuation ->
     try {
         // BouncyCastle is deprecated in Android P+
         SecurityUtils.setRegisterBouncyCastle(false)

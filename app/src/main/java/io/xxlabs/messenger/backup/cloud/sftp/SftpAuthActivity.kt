@@ -3,7 +3,6 @@ package io.xxlabs.messenger.backup.cloud.sftp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
 import io.xxlabs.messenger.support.extensions.toast
@@ -39,7 +38,7 @@ class SftpAuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun onLoginSuccess(credentials: SftpCredentials) {
+    private fun onLoginSuccess(credentials: SshCredentials) {
         val intent = Intent(SFTP_AUTH_INTENT).apply {
             putExtra(EXTRA_SFTP_CREDENTIAL, credentials)
         }

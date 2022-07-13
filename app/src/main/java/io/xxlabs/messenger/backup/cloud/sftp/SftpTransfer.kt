@@ -6,7 +6,6 @@ import io.xxlabs.messenger.backup.cloud.BACKUP_DIRECTORY_NAME
 import io.xxlabs.messenger.backup.model.BackupSnapshot
 import io.xxlabs.messenger.filetransfer.FileSize
 import kotlinx.coroutines.*
-import net.schmizz.sshj.AndroidConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.SFTPClient
 import net.schmizz.sshj.xfer.FileSystemFile
@@ -23,7 +22,7 @@ interface SftpClient {
     suspend fun upload(backup: File): FileSize
 }
 
-class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
+class SftpTransfer(private val credentials: SshCredentials) : SftpClient {
     private val scope =  CoroutineScope(
         CoroutineName("SftpTransfer")
                 + Job()

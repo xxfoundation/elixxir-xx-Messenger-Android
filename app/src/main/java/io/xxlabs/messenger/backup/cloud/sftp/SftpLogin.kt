@@ -9,7 +9,7 @@ import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
 import java.io.Serializable
 
-data class SftpCredentials(
+data class SshCredentials(
     val host: String,
     val port: String,
     val username: String,
@@ -19,13 +19,13 @@ data class SftpCredentials(
     fun toJson(): String = Gson().toJson(this)
 
     companion object {
-        fun fromJson(json: String): SftpCredentials =
-            Gson().fromJson(json, SftpCredentials::class.java)
+        fun fromJson(json: String): SshCredentials =
+            Gson().fromJson(json, SshCredentials::class.java)
     }
 }
 
 interface SftpLoginListener {
-    fun onLoginSuccess(credentials: SftpCredentials)
+    fun onLoginSuccess(credentials: SshCredentials)
     fun onLoginError(message: String)
 }
 
@@ -104,7 +104,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private suspend fun login() {
-        val ssh = connect(SftpCredentials(
+        val ssh = connect(SshCredentials(
             host = host,
             port = port,
             username = username,
@@ -149,7 +149,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private fun onSuccess() {
-        listener.onLoginSuccess(SftpCredentials(host, port, username, password))
+        listener.onLoginSuccess(SshCredentials(host, port, username, password))
         enableInput()
     }
 

@@ -31,7 +31,7 @@ class Sftp private constructor(
 
             override fun handleSignInResult(data: Intent?) {
                 data?.getSerializableExtra(SftpAuthActivity.EXTRA_SFTP_CREDENTIAL)?.run {
-                    (this as? SftpCredentials)?.let {
+                    (this as? SshCredentials)?.let {
                         saveCredentials(it)
                         initializeSftpClient(it)
                         authResultCallback.onSuccess()
@@ -62,11 +62,11 @@ class Sftp private constructor(
         authHandler
     }
 
-    private fun saveCredentials(sftpCredentials: SftpCredentials) {
+    private fun saveCredentials(sftpCredentials: SshCredentials) {
         preferences.sftpCredential = sftpCredentials.toJson()
     }
 
-    private fun initializeSftpClient(sftpCredentials: SftpCredentials) {
+    private fun initializeSftpClient(sftpCredentials: SshCredentials) {
         sftpClient = SftpTransfer(sftpCredentials)
     }
 
