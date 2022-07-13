@@ -10,7 +10,7 @@ import org.junit.Test
 
 class SftpLoginTest {
 
-    private class TestListener : SftpLoginListener {
+    private class TestListener : SshLoginListener {
         var credentials: SshCredentials? = null
             private set
         var error: String? = null

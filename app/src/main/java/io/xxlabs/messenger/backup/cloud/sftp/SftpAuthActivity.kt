@@ -10,7 +10,7 @@ import io.xxlabs.messenger.support.extensions.toast
 class SftpAuthActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySftpAuthBinding
-    private val sftpViewModel: SftpAuthViewModel by viewModels()
+    private val sftpViewModel: SshAuthViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

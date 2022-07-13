@@ -24,12 +24,12 @@ data class SshCredentials(
     }
 }
 
-interface SftpLoginListener {
+interface SshLoginListener {
     fun onLoginSuccess(credentials: SshCredentials)
     fun onLoginError(message: String)
 }
 
-class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
+class SftpLogin(private val listener: SshLoginListener) : SftpLoginUi {
 
     private val scope =  CoroutineScope(
         CoroutineName("SftpLogin")
