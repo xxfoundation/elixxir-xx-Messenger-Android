@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.*
-import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
 import java.io.Serializable
@@ -104,10 +103,13 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
         }
     }
 
-    private fun login() {
-        val ssh = SSHClient().apply {
-            connect(host, port.toInt())
-        }
+    private suspend fun login() {
+        val ssh = connect(SftpCredentials(
+            host = host,
+            port = port,
+            username = username,
+            password = password
+        ))
         try {
             ssh.authPassword(username, password)
             onSuccess()
@@ -179,6 +181,6 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
         private const val ERROR_CREDENTIALS = "Failed to login. Check your credentials and try again."
         private const val ERROR_CONNECTION = "Failed to connect to server. Check the hostname and port and try again."
         private const val ERROR_GENERIC = "Failed to login."
-        private const val ERROR_PORT_RANGE = "Enter a value between 1024 and 32,767."
+        private const val ERROR_PORT_RANGE = "Enter a value between 1024 and 65,535."
     }
 }

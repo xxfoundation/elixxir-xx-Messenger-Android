@@ -6,6 +6,7 @@ import io.xxlabs.messenger.backup.cloud.BACKUP_DIRECTORY_NAME
 import io.xxlabs.messenger.backup.model.BackupSnapshot
 import io.xxlabs.messenger.filetransfer.FileSize
 import kotlinx.coroutines.*
+import net.schmizz.sshj.AndroidConfig
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.sftp.SFTPClient
 import net.schmizz.sshj.xfer.FileSystemFile
@@ -32,7 +33,7 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
     override suspend fun download(
         path: String
     ): Pair<BackupSnapshot, AccountArchive>? = withContext(scope.coroutineContext) {
-        val ssh = connect()
+        val ssh = connect(credentials)
         try {
             ssh.authenticate().run {
                 if (backupExists()) {
@@ -51,17 +52,6 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
         return statExistence(BACKUP_PATH)?.let {
             it.size > 0
         } ?: false
-    }
-
-    private suspend fun connect(): SSHClient = suspendCoroutine { continuation ->
-        try {
-            val ssh = SSHClient().apply {
-                connect(credentials.host, credentials.port.toInt())
-            }
-            continuation.resume(ssh)
-        } catch(e: Exception) {
-            continuation.resumeWithException(e)
-        }
     }
 
     private suspend fun SSHClient.authenticate(): SFTPClient = suspendCoroutine { continuation ->
@@ -89,7 +79,7 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
     }
 
     override suspend fun upload(backup: File): FileSize = withContext(scope.coroutineContext) {
-        val ssh = connect()
+        val ssh = connect(credentials)
         try {
             val sftp = ssh.authenticate()
             val backupFile = FileSystemFile(backup)
@@ -110,7 +100,6 @@ class SftpTransfer(private val credentials: SftpCredentials) : SftpClient {
         }
     }
 }
-
 private data class SftpBackupData(
     val name: String,
     override val date: Long,
