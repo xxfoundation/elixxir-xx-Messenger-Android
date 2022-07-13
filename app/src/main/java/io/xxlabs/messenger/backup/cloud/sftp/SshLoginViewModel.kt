@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
-class SshAuthViewModel : ViewModel(), SshLoginListener {
+class SshLoginViewModel : ViewModel(), SshLoginListener {
 
     val sftpLoginUi: LiveData<SftpLoginUi> by ::_sftpLoginUi
     private val _sftpLoginUi = MutableLiveData<SftpLoginUi>(SftpLogin(this))
