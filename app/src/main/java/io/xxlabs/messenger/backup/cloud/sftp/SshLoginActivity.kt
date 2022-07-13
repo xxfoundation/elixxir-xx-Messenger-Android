@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
 import io.xxlabs.messenger.support.extensions.toast
 
-class SftpAuthActivity : AppCompatActivity() {
+class SshLoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySftpAuthBinding
     private val sftpViewModel: SshAuthViewModel by viewModels()

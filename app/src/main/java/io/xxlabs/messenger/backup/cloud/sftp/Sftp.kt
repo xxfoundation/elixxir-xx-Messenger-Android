@@ -25,12 +25,12 @@ class Sftp private constructor(
     private val authHandler: AuthHandler by lazy {
         object : AuthHandler {
             override val signInIntent: Intent
-                get() = Intent(appContext(), SftpAuthActivity::class.java).apply {
-                    action = SftpAuthActivity.SFTP_AUTH_INTENT
+                get() = Intent(appContext(), SshLoginActivity::class.java).apply {
+                    action = SshLoginActivity.SFTP_AUTH_INTENT
                 }
 
             override fun handleSignInResult(data: Intent?) {
-                data?.getSerializableExtra(SftpAuthActivity.EXTRA_SFTP_CREDENTIAL)?.run {
+                data?.getSerializableExtra(SshLoginActivity.EXTRA_SFTP_CREDENTIAL)?.run {
                     (this as? SshCredentials)?.let {
                         saveCredentials(it)
                         initializeSftpClient(it)
