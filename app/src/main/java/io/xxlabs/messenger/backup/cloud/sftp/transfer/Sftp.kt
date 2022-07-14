@@ -36,10 +36,10 @@ class Sftp private constructor(
                     (this as? SshCredentials)?.let {
                         saveCredentials(it)
                         initializeSftpClient(it)
-                        authResultCallback.onSuccess()
+                        _authResultCallback?.onSuccess()
                     }
                 } ?: run {
-                    authResultCallback.onFailure("Failed to login. Please try again.")
+                    _authResultCallback?.onFailure("Failed to login. Please try again.")
                     deleteCredentials()
                 }
             }
