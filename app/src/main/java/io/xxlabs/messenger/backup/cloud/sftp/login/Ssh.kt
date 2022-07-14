@@ -49,13 +49,16 @@ object Ssh : SshClient {
                 ssh.authPassword(credentials.username, credentials.password)
             } catch (e: Exception) {
                 continuation.resumeWithException(e)
+                return@suspendCoroutine
             }
 
             client = ssh
             cachedCredentials = credentials
             continuation.resume(ssh)
+            return@suspendCoroutine
         } catch (e: Exception) {
             continuation.resumeWithException(e)
+            return@suspendCoroutine
         }
     }
 
