@@ -37,11 +37,12 @@ object Ssh : SshClient {
             // BouncyCastle is deprecated in Android P+
             SecurityUtils.setRegisterBouncyCastle(false)
             val ssh = SSHClient(Config).apply {
-                if (BuildConfig.DEBUG) {
-                    addHostKeyVerifier(PromiscuousVerifier())
-                } else {
-                    addHostKeyVerifier(UserConsentVerifier())
-                }
+//                if (BuildConfig.DEBUG) {
+//                    addHostKeyVerifier(PromiscuousVerifier())
+//                } else {
+//                    addHostKeyVerifier(UserConsentVerifier())
+//                }
+                addHostKeyVerifier(PromiscuousVerifier())
                 connect(credentials.host, credentials.port.toInt())
             }
 
