@@ -7,8 +7,8 @@ import timber.log.Timber
 
 class SshLoginViewModel : ViewModel(), SshLoginListener {
 
-    val sftpLoginUi: LiveData<SftpLoginUi> by ::_sftpLoginUi
-    private val _sftpLoginUi = MutableLiveData<SftpLoginUi>(SftpLogin(this))
+    val sshLoginUi: LiveData<SshLoginUi> by ::_sshLoginUi
+    private val _sshLoginUi = MutableLiveData<SshLoginUi>(SshLogin(this))
 
     val loginSuccess: LiveData<SshCredentials?> by ::_loginSuccess
     private val _loginSuccess = MutableLiveData<SshCredentials?>(null)

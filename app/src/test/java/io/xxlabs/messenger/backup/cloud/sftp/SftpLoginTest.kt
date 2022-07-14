@@ -29,12 +29,12 @@ class SftpLoginTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var listener: TestListener
-    private lateinit var subject: SftpLogin
+    private lateinit var subject: SshLogin
 
     @Before
     fun setUp() {
         listener =  TestListener()
-        subject = SftpLogin(listener)
+        subject = SshLogin(listener)
     }
 
     @Test

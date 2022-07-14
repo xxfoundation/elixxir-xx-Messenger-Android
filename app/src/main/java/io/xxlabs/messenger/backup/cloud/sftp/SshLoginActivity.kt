@@ -25,7 +25,7 @@ class SshLoginActivity : AppCompatActivity() {
     }
 
     private fun observeUi() {
-        sftpViewModel.sftpLoginUi.observe(this) { ui ->
+        sftpViewModel.sshLoginUi.observe(this) { ui ->
             ui?.let { binding.ui = it }
         }
 

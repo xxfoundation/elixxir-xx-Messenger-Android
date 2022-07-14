@@ -29,10 +29,10 @@ interface SshLoginListener {
     fun onLoginError(message: String)
 }
 
-class SftpLogin(private val listener: SshLoginListener) : SftpLoginUi {
+class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
 
     private val scope =  CoroutineScope(
-        CoroutineName("SftpLogin")
+        CoroutineName("SshLogin")
                 + Job()
                 + Dispatchers.Default
     )
