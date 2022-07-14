@@ -114,6 +114,7 @@ abstract class BackupLocationsViewModel(
     }
 
     protected open fun onAuthSuccess(backupLocation: BackupLocation) {
+        setLoading(false)
         navigateToDetail(backupLocation)
     }
 

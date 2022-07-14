@@ -6,7 +6,7 @@ import io.xxlabs.messenger.backup.bindings.AccountArchive
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.CloudStorage
-import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginActivity
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
@@ -36,10 +36,10 @@ class Sftp private constructor(
                     (this as? SshCredentials)?.let {
                         saveCredentials(it)
                         initializeSftpClient(it)
-                        authResultCallback.onSuccess()
+                        _authResultCallback?.onSuccess()
                     }
                 } ?: run {
-                    authResultCallback.onFailure("Failed to login. Please try again.")
+                    _authResultCallback?.onFailure("Failed to login. Please try again.")
                     deleteCredentials()
                 }
             }

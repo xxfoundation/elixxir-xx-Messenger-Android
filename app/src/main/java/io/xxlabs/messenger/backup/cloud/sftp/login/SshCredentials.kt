@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp.login.ui
+package io.xxlabs.messenger.backup.cloud.sftp.login
 
 import com.google.gson.Gson
 import java.io.Serializable

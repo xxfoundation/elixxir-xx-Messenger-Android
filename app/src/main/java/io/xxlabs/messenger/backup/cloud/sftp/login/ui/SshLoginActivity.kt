@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
 import io.xxlabs.messenger.support.extensions.toast
 

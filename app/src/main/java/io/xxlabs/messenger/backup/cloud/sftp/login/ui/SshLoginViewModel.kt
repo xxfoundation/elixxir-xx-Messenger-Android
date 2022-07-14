@@ -3,6 +3,7 @@ package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import timber.log.Timber
 
 class SshLoginViewModel : ViewModel(), SshLoginListener {

@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.backup.cloud.sftp.login
 
 import io.xxlabs.messenger.BuildConfig
-import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.SSHClient
@@ -11,9 +10,6 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
-
-private const val devHost = "192.168.1.206"
-private const val devPort = 22
 
 interface SshClient {
     suspend fun connect(credentials: SshCredentials): SSHClient
@@ -43,24 +39,26 @@ object Ssh : SshClient {
             val ssh = SSHClient(Config).apply {
                 if (BuildConfig.DEBUG) {
                     addHostKeyVerifier(PromiscuousVerifier())
-                    connect(devHost, devPort)
                 } else {
                     addHostKeyVerifier(UserConsentVerifier())
-                    connect(credentials.host, credentials.port.toInt())
                 }
+                connect(credentials.host, credentials.port.toInt())
             }
 
             try {
                 ssh.authPassword(credentials.username, credentials.password)
             } catch (e: Exception) {
                 continuation.resumeWithException(e)
+                return@suspendCoroutine
             }
 
             client = ssh
             cachedCredentials = credentials
             continuation.resume(ssh)
+            return@suspendCoroutine
         } catch (e: Exception) {
             continuation.resumeWithException(e)
+            return@suspendCoroutine
         }
     }
 
