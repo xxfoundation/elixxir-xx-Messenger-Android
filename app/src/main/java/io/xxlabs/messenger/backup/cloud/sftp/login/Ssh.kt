@@ -6,6 +6,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.SecurityUtils
+import net.schmizz.sshj.transport.verification.PromiscuousVerifier
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -41,8 +42,10 @@ object Ssh : SshClient {
             SecurityUtils.setRegisterBouncyCastle(false)
             val ssh = SSHClient(Config).apply {
                 if (BuildConfig.DEBUG) {
+                    addHostKeyVerifier(PromiscuousVerifier())
                     connect(devHost, devPort)
                 } else {
+                    addHostKeyVerifier(UserConsentVerifier())
                     connect(credentials.host, credentials.port.toInt())
                 }
             }
