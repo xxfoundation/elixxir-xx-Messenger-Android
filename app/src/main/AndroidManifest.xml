@@ -35,7 +35,7 @@
         tools:replace="android:allowBackup"
         tools:targetApi="m">
         <activity
-            android:name=".backup.cloud.sftp.SftpAuthActivity"
+            android:name=".backup.cloud.sftp.login.ui.SshLoginActivity"
             android:exported="false"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTop"

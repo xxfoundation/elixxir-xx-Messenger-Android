@@ -2,6 +2,9 @@ package io.xxlabs.messenger.backup.cloud.sftp
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLogin
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginListener
 import io.xxlabs.messenger.randomString
 import io.xxlabs.messenger.test.utils.MockEditable
 import org.junit.Before
@@ -10,13 +13,13 @@ import org.junit.Test
 
 class SftpLoginTest {
 
-    private class TestListener : SftpLoginListener {
-        var credentials: SftpCredentials? = null
+    private class TestListener : SshLoginListener {
+        var credentials: SshCredentials? = null
             private set
         var error: String? = null
             private set
 
-        override fun onLoginSuccess(credentials: SftpCredentials) {
+        override fun onLoginSuccess(credentials: SshCredentials) {
             this.credentials = credentials
         }
 
@@ -29,12 +32,12 @@ class SftpLoginTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private lateinit var listener: TestListener
-    private lateinit var subject: SftpLogin
+    private lateinit var subject: SshLogin
 
     @Before
     fun setUp() {
         listener =  TestListener()
-        subject = SftpLogin(listener)
+        subject = SshLogin(listener)
     }
 
     @Test

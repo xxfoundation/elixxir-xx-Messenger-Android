@@ -1,39 +1,26 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
+import io.xxlabs.messenger.backup.cloud.sftp.login.Ssh
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshClient
 import kotlinx.coroutines.*
-import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
-import java.io.Serializable
 
-data class SftpCredentials(
-    val host: String,
-    val port: String,
-    val username: String,
-    val password: String
-) : Serializable {
-
-    fun toJson(): String = Gson().toJson(this)
-
-    companion object {
-        fun fromJson(json: String): SftpCredentials =
-            Gson().fromJson(json, SftpCredentials::class.java)
-    }
-}
-
-interface SftpLoginListener {
-    fun onLoginSuccess(credentials: SftpCredentials)
+interface SshLoginListener {
+    fun onLoginSuccess(credentials: SshCredentials)
     fun onLoginError(message: String)
 }
 
-class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
+class SshLogin(
+    private val listener: SshLoginListener,
+    private val sshClient: SshClient = Ssh
+) : SshLoginUi {
 
     private val scope =  CoroutineScope(
-        CoroutineName("SftpLogin")
+        CoroutineName("SshLogin")
                 + Job()
                 + Dispatchers.Default
     )
@@ -104,12 +91,16 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
         }
     }
 
-    private fun login() {
-        val ssh = SSHClient().apply {
-            connect(host, port.toInt())
-        }
+    private suspend fun login() {
         try {
-            ssh.authPassword(username, password)
+            sshClient.connect(
+                SshCredentials(
+                host = host,
+                port = port,
+                username = username,
+                password = password
+            )
+            )
             onSuccess()
         } catch (e: UserAuthException) {
             showCredentialsError()
@@ -118,7 +109,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
         } catch (e: Exception) {
             onError(e.message)
         } finally {
-            ssh.close()
+            sshClient.disconnect()
         }
     }
 
@@ -147,7 +138,7 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
     }
 
     private fun onSuccess() {
-        listener.onLoginSuccess(SftpCredentials(host, port, username, password))
+        listener.onLoginSuccess(SshCredentials(host, port, username, password))
         enableInput()
     }
 
@@ -179,6 +170,6 @@ class SftpLogin(private val listener: SftpLoginListener) : SftpLoginUi {
         private const val ERROR_CREDENTIALS = "Failed to login. Check your credentials and try again."
         private const val ERROR_CONNECTION = "Failed to connect to server. Check the hostname and port and try again."
         private const val ERROR_GENERIC = "Failed to login."
-        private const val ERROR_PORT_RANGE = "Enter a value between 1024 and 32,767."
+        private const val ERROR_PORT_RANGE = "Enter a value between 1024 and 65,535."
     }
 }

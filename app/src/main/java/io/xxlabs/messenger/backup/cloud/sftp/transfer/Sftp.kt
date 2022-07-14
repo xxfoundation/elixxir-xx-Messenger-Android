@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.transfer
 
 import android.content.Intent
 import io.xxlabs.messenger.R
@@ -6,6 +6,8 @@ import io.xxlabs.messenger.backup.bindings.AccountArchive
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.CloudStorage
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginActivity
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.*
@@ -25,13 +27,13 @@ class Sftp private constructor(
     private val authHandler: AuthHandler by lazy {
         object : AuthHandler {
             override val signInIntent: Intent
-                get() = Intent(appContext(), SftpAuthActivity::class.java).apply {
-                    action = SftpAuthActivity.SFTP_AUTH_INTENT
+                get() = Intent(appContext(), SshLoginActivity::class.java).apply {
+                    action = SshLoginActivity.SFTP_AUTH_INTENT
                 }
 
             override fun handleSignInResult(data: Intent?) {
-                data?.getSerializableExtra(SftpAuthActivity.EXTRA_SFTP_CREDENTIAL)?.run {
-                    (this as? SftpCredentials)?.let {
+                data?.getSerializableExtra(SshLoginActivity.EXTRA_SFTP_CREDENTIAL)?.run {
+                    (this as? SshCredentials)?.let {
                         saveCredentials(it)
                         initializeSftpClient(it)
                         authResultCallback.onSuccess()
@@ -62,11 +64,11 @@ class Sftp private constructor(
         authHandler
     }
 
-    private fun saveCredentials(sftpCredentials: SftpCredentials) {
+    private fun saveCredentials(sftpCredentials: SshCredentials) {
         preferences.sftpCredential = sftpCredentials.toJson()
     }
 
-    private fun initializeSftpClient(sftpCredentials: SftpCredentials) {
+    private fun initializeSftpClient(sftpCredentials: SshCredentials) {
         sftpClient = SftpTransfer(sftpCredentials)
     }
 

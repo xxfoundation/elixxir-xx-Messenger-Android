@@ -1,17 +1,16 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
 import io.xxlabs.messenger.support.extensions.toast
 
-class SftpAuthActivity : AppCompatActivity() {
+class SshLoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySftpAuthBinding
-    private val sftpViewModel: SftpAuthViewModel by viewModels()
+    private val sftpViewModel: SshLoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +25,7 @@ class SftpAuthActivity : AppCompatActivity() {
     }
 
     private fun observeUi() {
-        sftpViewModel.sftpLoginUi.observe(this) { ui ->
+        sftpViewModel.sshLoginUi.observe(this) { ui ->
             ui?.let { binding.ui = it }
         }
 
@@ -39,7 +38,7 @@ class SftpAuthActivity : AppCompatActivity() {
         }
     }
 
-    private fun onLoginSuccess(credentials: SftpCredentials) {
+    private fun onLoginSuccess(credentials: SshCredentials) {
         val intent = Intent(SFTP_AUTH_INTENT).apply {
             putExtra(EXTRA_SFTP_CREDENTIAL, credentials)
         }

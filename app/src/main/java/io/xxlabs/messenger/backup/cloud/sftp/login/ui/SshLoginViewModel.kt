@@ -1,22 +1,22 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import timber.log.Timber
 
-class SftpAuthViewModel : ViewModel(), SftpLoginListener {
+class SshLoginViewModel : ViewModel(), SshLoginListener {
 
-    val sftpLoginUi: LiveData<SftpLoginUi> by ::_sftpLoginUi
-    private val _sftpLoginUi = MutableLiveData<SftpLoginUi>(SftpLogin(this))
+    val sshLoginUi: LiveData<SshLoginUi> by ::_sshLoginUi
+    private val _sshLoginUi = MutableLiveData<SshLoginUi>(SshLogin(this))
 
-    val loginSuccess: LiveData<SftpCredentials?> by ::_loginSuccess
-    private val _loginSuccess = MutableLiveData<SftpCredentials?>(null)
+    val loginSuccess: LiveData<SshCredentials?> by ::_loginSuccess
+    private val _loginSuccess = MutableLiveData<SshCredentials?>(null)
 
     val loginError: LiveData<String?> by ::_loginError
     private val _loginError = MutableLiveData<String?>(null)
 
-    override fun onLoginSuccess(credentials: SftpCredentials) {
+    override fun onLoginSuccess(credentials: SshCredentials) {
         _loginSuccess.postValue(credentials)
     }
 
