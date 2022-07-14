@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.xxlabs.messenger.backup.cloud.sftp.login.Ssh
 import io.xxlabs.messenger.backup.cloud.sftp.login.SshClient
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import kotlinx.coroutines.*
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException

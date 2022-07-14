@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.backup.cloud.sftp.login
 
 import io.xxlabs.messenger.BuildConfig
-import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.SSHClient
