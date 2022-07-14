@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.*
+import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
 import java.io.Serializable
@@ -104,13 +105,14 @@ class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
     }
 
     private suspend fun login() {
-        val ssh = connect(SshCredentials(
-            host = host,
-            port = port,
-            username = username,
-            password = password
-        ))
+        var ssh: SSHClient? = null
         try {
+            ssh = Ssh.connect(SshCredentials(
+                host = host,
+                port = port,
+                username = username,
+                password = password
+            ))
             ssh.authPassword(username, password)
             onSuccess()
         } catch (e: UserAuthException) {
@@ -120,7 +122,7 @@ class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
         } catch (e: Exception) {
             onError(e.message)
         } finally {
-            ssh.close()
+            ssh?.close()
         }
     }
 

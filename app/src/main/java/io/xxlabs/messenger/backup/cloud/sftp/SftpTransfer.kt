@@ -32,7 +32,7 @@ class SftpTransfer(private val credentials: SshCredentials) : SftpClient {
     override suspend fun download(
         path: String
     ): Pair<BackupSnapshot, AccountArchive>? = withContext(scope.coroutineContext) {
-        val ssh = connect(credentials)
+        val ssh = Ssh.connect(credentials)
         try {
             ssh.authenticate().run {
                 if (backupExists()) {
@@ -78,7 +78,7 @@ class SftpTransfer(private val credentials: SshCredentials) : SftpClient {
     }
 
     override suspend fun upload(backup: File): FileSize = withContext(scope.coroutineContext) {
-        val ssh = connect(credentials)
+        val ssh = Ssh.connect(credentials)
         try {
             val sftp = ssh.authenticate()
             val backupFile = FileSystemFile(backup)
