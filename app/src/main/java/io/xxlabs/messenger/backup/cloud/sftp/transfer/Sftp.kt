@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.transfer
 
 import android.content.Intent
 import io.xxlabs.messenger.R

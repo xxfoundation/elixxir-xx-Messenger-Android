@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.xxlabs.messenger.backup.cloud.drive.GoogleDrive
 import io.xxlabs.messenger.backup.cloud.dropbox.Dropbox
-import io.xxlabs.messenger.backup.cloud.sftp.Sftp
+import io.xxlabs.messenger.backup.cloud.sftp.transfer.Sftp
 import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.*

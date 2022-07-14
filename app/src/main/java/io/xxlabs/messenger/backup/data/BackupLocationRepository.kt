@@ -3,7 +3,7 @@ package io.xxlabs.messenger.backup.data
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.cloud.drive.GoogleDrive
 import io.xxlabs.messenger.backup.cloud.dropbox.Dropbox
-import io.xxlabs.messenger.backup.cloud.sftp.Sftp
+import io.xxlabs.messenger.backup.cloud.sftp.transfer.Sftp
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.model.AccountBackup
 

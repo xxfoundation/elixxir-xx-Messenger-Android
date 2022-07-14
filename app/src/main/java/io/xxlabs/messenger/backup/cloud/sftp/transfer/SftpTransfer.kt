@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.transfer
 
 import io.xxlabs.messenger.backup.bindings.AccountArchive
 import io.xxlabs.messenger.backup.bindings.BACKUP_FILE_NAME
