@@ -11,9 +11,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-private const val devHost = "192.168.1.206"
-private const val devPort = 22
-
 interface SshClient {
     suspend fun connect(credentials: SshCredentials): SSHClient
     suspend fun disconnect()
@@ -42,11 +39,10 @@ object Ssh : SshClient {
             val ssh = SSHClient(Config).apply {
                 if (BuildConfig.DEBUG) {
                     addHostKeyVerifier(PromiscuousVerifier())
-                    connect(devHost, devPort)
                 } else {
                     addHostKeyVerifier(UserConsentVerifier())
-                    connect(credentials.host, credentials.port.toInt())
                 }
+                connect(credentials.host, credentials.port.toInt())
             }
 
             try {
