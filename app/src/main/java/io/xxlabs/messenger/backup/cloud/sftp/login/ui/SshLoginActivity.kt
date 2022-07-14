@@ -1,9 +1,9 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import io.xxlabs.messenger.databinding.ActivitySftpAuthBinding
 import io.xxlabs.messenger.support.extensions.toast
 

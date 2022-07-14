@@ -1,12 +1,11 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login
 
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.SecurityUtils
-import net.schmizz.sshj.transport.TransportException
-import net.schmizz.sshj.userauth.UserAuthException
 import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException

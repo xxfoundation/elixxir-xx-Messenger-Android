@@ -1,28 +1,13 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import android.text.Editable
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.gson.Gson
+import io.xxlabs.messenger.backup.cloud.sftp.login.Ssh
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshClient
 import kotlinx.coroutines.*
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
-import java.io.Serializable
-
-data class SshCredentials(
-    val host: String,
-    val port: String,
-    val username: String,
-    val password: String
-) : Serializable {
-
-    fun toJson(): String = Gson().toJson(this)
-
-    companion object {
-        fun fromJson(json: String): SshCredentials =
-            Gson().fromJson(json, SshCredentials::class.java)
-    }
-}
 
 interface SshLoginListener {
     fun onLoginSuccess(credentials: SshCredentials)
@@ -108,12 +93,14 @@ class SshLogin(
 
     private suspend fun login() {
         try {
-            sshClient.connect(SshCredentials(
+            sshClient.connect(
+                SshCredentials(
                 host = host,
                 port = port,
                 username = username,
                 password = password
-            ))
+            )
+            )
             onSuccess()
         } catch (e: UserAuthException) {
             showCredentialsError()

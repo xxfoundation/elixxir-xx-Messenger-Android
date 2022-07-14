@@ -2,6 +2,9 @@ package io.xxlabs.messenger.backup.cloud.sftp
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshCredentials
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLogin
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginListener
 import io.xxlabs.messenger.randomString
 import io.xxlabs.messenger.test.utils.MockEditable
 import org.junit.Before

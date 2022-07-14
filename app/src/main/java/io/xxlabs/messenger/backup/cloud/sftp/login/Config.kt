@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login
 
 import com.hierynomus.sshj.key.KeyAlgorithm
 import com.hierynomus.sshj.key.KeyAlgorithms

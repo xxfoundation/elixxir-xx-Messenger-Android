@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.backup.cloud.sftp
+package io.xxlabs.messenger.backup.cloud.sftp.login.ui
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
