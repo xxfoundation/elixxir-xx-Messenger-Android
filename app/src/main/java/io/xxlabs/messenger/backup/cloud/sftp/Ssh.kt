@@ -1,10 +1,13 @@
 package io.xxlabs.messenger.backup.cloud.sftp
 
 import io.xxlabs.messenger.BuildConfig
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.common.SecurityUtils
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
+import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
@@ -12,7 +15,12 @@ import kotlin.coroutines.suspendCoroutine
 private const val devHost = "192.168.1.206"
 private const val devPort = 22
 
-object Ssh {
+interface SshClient {
+    suspend fun connect(credentials: SshCredentials): SSHClient
+    suspend fun disconnect()
+}
+
+object Ssh : SshClient {
 
     private var client: SSHClient? = null
     private var cachedCredentials: SshCredentials? = null
@@ -21,7 +29,7 @@ object Ssh {
      * Attempt an remote connection with the provided [SshCredentials].
      * Returns an [SSHClient] reference if successful.
      */
-    suspend fun connect(credentials: SshCredentials): SSHClient = suspendCoroutine { continuation ->
+    override suspend fun connect(credentials: SshCredentials): SSHClient = suspendCoroutine { continuation ->
         client?.let {
             if (it.isConnectedWith(credentials)) {
                 continuation.resume(it)
@@ -56,4 +64,16 @@ object Ssh {
 
     private fun SSHClient.isConnectedWith(credentials: SshCredentials): Boolean =
         isConnected && cachedCredentials == credentials
+
+    override suspend fun disconnect() {
+        withContext(Dispatchers.IO) {
+            try {
+                client?.disconnect()
+            } catch (e: Exception) {
+                Timber.d("Caught exception closing SSH: ${e.message}")
+            } finally {
+                client = null
+            }
+        }
+    }
 }

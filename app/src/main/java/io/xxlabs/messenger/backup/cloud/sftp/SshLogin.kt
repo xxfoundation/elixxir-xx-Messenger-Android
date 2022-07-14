@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.gson.Gson
 import kotlinx.coroutines.*
-import net.schmizz.sshj.SSHClient
 import net.schmizz.sshj.transport.TransportException
 import net.schmizz.sshj.userauth.UserAuthException
 import java.io.Serializable
@@ -30,7 +29,10 @@ interface SshLoginListener {
     fun onLoginError(message: String)
 }
 
-class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
+class SshLogin(
+    private val listener: SshLoginListener,
+    private val sshClient: SshClient = Ssh
+) : SshLoginUi {
 
     private val scope =  CoroutineScope(
         CoroutineName("SshLogin")
@@ -105,15 +107,13 @@ class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
     }
 
     private suspend fun login() {
-        var ssh: SSHClient? = null
         try {
-            ssh = Ssh.connect(SshCredentials(
+            sshClient.connect(SshCredentials(
                 host = host,
                 port = port,
                 username = username,
                 password = password
             ))
-            ssh.authPassword(username, password)
             onSuccess()
         } catch (e: UserAuthException) {
             showCredentialsError()
@@ -122,7 +122,7 @@ class SshLogin(private val listener: SshLoginListener) : SshLoginUi {
         } catch (e: Exception) {
             onError(e.message)
         } finally {
-            ssh?.close()
+            sshClient.disconnect()
         }
     }
 
