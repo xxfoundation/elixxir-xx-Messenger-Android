@@ -35,7 +35,6 @@ class Sftp private constructor(
                 data?.getSerializableExtra(SshLoginActivity.EXTRA_SFTP_CREDENTIAL)?.run {
                     (this as? SshCredentials)?.let {
                         saveCredentials(it)
-                        initializeSftpClient(it)
                         _authResultCallback?.onSuccess()
                     }
                 } ?: run {
@@ -51,6 +50,14 @@ class Sftp private constructor(
     }
 
     private var sftpClient: SftpClient? = null
+        get() {
+            if (field == null) {
+                preferences.sftpCredential?.let {
+                    field = SftpTransfer(SshCredentials.fromJson(it))
+                }
+            }
+            return field
+        }
 
     override val location: BackupLocation = BackupLocationData(
         R.drawable.ic_sftp,
@@ -68,15 +75,16 @@ class Sftp private constructor(
         preferences.sftpCredential = sftpCredentials.toJson()
     }
 
-    private fun initializeSftpClient(sftpCredentials: SshCredentials) {
-        sftpClient = SftpTransfer(sftpCredentials)
-    }
-
     private fun deleteCredentials() {
         preferences.sftpCredential = null
     }
 
-    private fun signInRequired(): Boolean = true
+    private fun signInRequired(): Boolean {
+        scope.launch {
+            fetchData()
+        }
+        return preferences.sftpCredential.isNullOrEmpty()
+    }
 
     private fun authBackgroundsApp() = false
 
@@ -110,12 +118,16 @@ class Sftp private constructor(
         try {
             sftpClient?.upload(file)
             updateProgress(100)
+            fetchData()
         } catch (e: Exception) {
             updateProgress(error = e)
         }
     }
 
-    private val downloadPath = appContext().cacheDir.path
+    private val tempFile = File.createTempFile(
+        "${System.currentTimeMillis()}_backup",
+        ".xxm"
+    )
 
     override fun onAuthResultSuccess() {
         scope.launch {
@@ -126,7 +138,7 @@ class Sftp private constructor(
     private var cachedBackupData: AccountArchive? = null
 
     private suspend fun fetchData() {
-        sftpClient?.download(downloadPath)?.let {
+        sftpClient?.download(tempFile.path)?.let {
             updateLastBackup(it.first)
             cachedBackupData = it.second
         } ?: run {

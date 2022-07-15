@@ -9,15 +9,17 @@ import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import io.xxlabs.messenger.backup.model.BackupSnapshot
 import io.xxlabs.messenger.filetransfer.FileSize
 import kotlinx.coroutines.*
+import net.schmizz.sshj.sftp.Response
 import net.schmizz.sshj.sftp.SFTPClient
+import net.schmizz.sshj.sftp.SFTPException
 import net.schmizz.sshj.xfer.FileSystemFile
+import timber.log.Timber
 import java.io.File
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-const val UPLOAD_PATH = "/$BACKUP_DIRECTORY_NAME/temp_$BACKUP_FILE_NAME"
-const val BACKUP_PATH = "/$BACKUP_DIRECTORY_NAME/$BACKUP_FILE_NAME"
+const val BACKUP_PATH = "$BACKUP_DIRECTORY_NAME/$BACKUP_FILE_NAME"
 
 interface SftpClient {
     suspend fun download(path: String): Pair<BackupSnapshot, AccountArchive>?
@@ -52,9 +54,18 @@ class SftpTransfer(
     }
 
     private fun SFTPClient.backupExists(): Boolean {
-        return statExistence(BACKUP_PATH)?.let {
-            it.size > 0
-        } ?: false
+        try {
+            return statExistence(BACKUP_PATH)?.size?.let {
+                true
+            } ?: false
+        } catch (e: Exception) {
+            (e as? SFTPException)?.run {
+                if (statusCode == Response.StatusCode.NO_SUCH_FILE) {
+                    Timber.d("$BACKUP_PATH was not found on server.")
+                }
+            }
+        }
+        return false
     }
 
     private suspend fun fetchBackup(
@@ -63,7 +74,7 @@ class SftpTransfer(
     ): FileSystemFile = suspendCoroutine { continuation ->
         try {
             val backupFile = FileSystemFile(path)
-            sftp.get(BACKUP_FILE_NAME, backupFile)
+            sftp.get(BACKUP_PATH, backupFile)
             continuation.resume(backupFile)
         } catch(e: Exception) {
             continuation.resumeWithException(e)
@@ -77,8 +88,10 @@ class SftpTransfer(
             val sftp = sshClient.connect(credentials).newSFTPClient()
             val backupFile = FileSystemFile(backup)
             with (sftp) {
-                put(backupFile, UPLOAD_PATH)
-                deletePreviousBackup()
+                if (backupExists()) deletePreviousBackup()
+                else makeDirectory()
+
+                put(backupFile, BACKUP_PATH)
                 FileSize(backupFile.length)
             }
         } finally {
@@ -87,10 +100,11 @@ class SftpTransfer(
     }
 
     private fun SFTPClient.deletePreviousBackup() {
-        statExistence(BACKUP_PATH)?.let {
-            rm(BACKUP_PATH)
-            rename(UPLOAD_PATH, BACKUP_PATH)
-        }
+        rm(BACKUP_PATH)
+    }
+
+    private fun SFTPClient.makeDirectory() {
+        mkdir(BACKUP_DIRECTORY_NAME)
     }
 }
 private data class SftpBackupData(
