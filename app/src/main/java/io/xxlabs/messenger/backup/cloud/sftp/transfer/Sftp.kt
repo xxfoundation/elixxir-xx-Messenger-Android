@@ -12,7 +12,9 @@ import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.*
 import io.xxlabs.messenger.support.appContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.Exception
 
@@ -35,11 +37,11 @@ class Sftp private constructor(
                 data?.getSerializableExtra(SshLoginActivity.EXTRA_SFTP_CREDENTIAL)?.run {
                     (this as? SshCredentials)?.let {
                         saveCredentials(it)
-                        _authResultCallback?.onSuccess()
+                        authResultCallback.onSuccess()
                     }
                 } ?: run {
-                    _authResultCallback?.onFailure("Failed to login. Please try again.")
                     deleteCredentials()
+                    authResultCallback.onFailure("Failed to login. Please try again.")
                 }
             }
 
@@ -132,6 +134,9 @@ class Sftp private constructor(
     override fun onAuthResultSuccess() {
         scope.launch {
             fetchData()
+            withContext(Dispatchers.Main) {
+                _authResultCallback?.onSuccess()
+            }
         }
     }
 
