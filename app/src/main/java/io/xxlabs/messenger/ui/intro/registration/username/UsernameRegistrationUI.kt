@@ -13,6 +13,7 @@ interface UsernameRegistrationUI {
     val usernameNextButtonEnabled: LiveData<Boolean>
     val usernameInputEnabled: LiveData<Boolean>
     val usernameFilters: Array<InputFilter>
+    val restoreEnabled: LiveData<Boolean>
     fun onUsernameInfoClicked()
     fun onUsernameNextClicked()
     fun onRestoreAccountClicked()

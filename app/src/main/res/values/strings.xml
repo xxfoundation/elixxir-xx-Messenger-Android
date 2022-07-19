@@ -625,4 +625,5 @@
     <string name="sftp_login_username_hint">Username</string>
     <string name="sftp_login_password_hint">Password</string>
     <string name="sftp_login_port_hint">Port (leave blank for default TCP 22)</string>
+    <string name="registration_restore_disabled_error">A username has been submitted. Please reinstall to use restore.</string>
 </resources>

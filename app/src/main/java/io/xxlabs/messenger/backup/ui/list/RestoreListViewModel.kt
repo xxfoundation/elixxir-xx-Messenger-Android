@@ -16,7 +16,7 @@ import io.xxlabs.messenger.backup.model.BackupLocation
 import io.xxlabs.messenger.support.appContext
 
 class RestoreListViewModel @AssistedInject constructor(
-    restoreManager: RestoreManager,
+    private val restoreManager: RestoreManager,
     @Assisted cloudAuthSource: CloudAuthentication,
 ) : BackupLocationsViewModel(restoreManager, cloudAuthSource) {
 
@@ -53,6 +53,8 @@ class RestoreListViewModel @AssistedInject constructor(
         lastBackup.value?.run {
             sizeBytes > 0
         } ?: false
+
+    fun allowBackNavigation(): Boolean = !restoreManager.restoreAttempted
 
     companion object {
         fun provideFactory(

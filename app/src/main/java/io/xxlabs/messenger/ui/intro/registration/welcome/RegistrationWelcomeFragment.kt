@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
 import io.xxlabs.messenger.R
@@ -20,6 +21,27 @@ class RegistrationWelcomeFragment : RegistrationFlowFragment() {
     private val username: String by lazy {
         RegistrationWelcomeFragmentArgs.fromBundle(requireArguments()).username
     }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        preventBackNavigation()
+    }
+
+    /**
+     * Prevent users from going back to the username screen; the username can't be changed.
+     * Close the app instead.
+     */
+    private fun preventBackNavigation() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    requireActivity().finish()
+                }
+            }
+        )
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
