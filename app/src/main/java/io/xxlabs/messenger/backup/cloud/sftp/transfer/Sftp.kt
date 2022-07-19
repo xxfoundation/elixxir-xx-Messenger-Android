@@ -94,7 +94,11 @@ class Sftp private constructor(
         deleteCredentials()
     }
 
-    override fun isEnabled(): Boolean = preferences.isSftpEnabled
+    override fun isEnabled(): Boolean {
+        val enabled = preferences.isSftpEnabled
+        if (!enabled) deleteCredentials()
+        return enabled
+    }
 
     override fun backupNow() {
         if (isEnabled()) backup()
