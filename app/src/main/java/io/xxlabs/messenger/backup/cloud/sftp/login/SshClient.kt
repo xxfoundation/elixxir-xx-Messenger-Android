@@ -26,8 +26,10 @@ object Ssh : SshClient {
      * Returns an [SSHClient] reference if successful.
      */
     override suspend fun connect(credentials: SshCredentials): SSHClient = suspendCoroutine { continuation ->
+        Timber.d("Attempting SSH connection.")
         client?.let {
             if (it.isConnectedWith(credentials)) {
+                Timber.d("Already connected & authenticated with server.")
                 continuation.resume(it)
                 return@suspendCoroutine
             }
@@ -47,17 +49,21 @@ object Ssh : SshClient {
             }
 
             try {
+                Timber.d("Connected. Authenticating...")
                 ssh.authPassword(credentials.username, credentials.password)
             } catch (e: Exception) {
+                Timber.d("Failed to authenticate: ${e.message}")
                 continuation.resumeWithException(e)
                 return@suspendCoroutine
             }
 
             client = ssh
             cachedCredentials = credentials
+            Timber.d("Successfully connected & authenticated!")
             continuation.resume(ssh)
             return@suspendCoroutine
         } catch (e: Exception) {
+            Timber.d("Failed to connect: ${e.message}")
             continuation.resumeWithException(e)
             return@suspendCoroutine
         }
@@ -69,10 +75,13 @@ object Ssh : SshClient {
     override suspend fun disconnect() {
         withContext(Dispatchers.IO) {
             try {
+                Timber.d("Disconnecting from server.")
                 client?.disconnect()
             } catch (e: Exception) {
+                Timber.d("Exceptiuon thrown while disconnecting: ${e.message}")
                 Timber.d("Caught exception closing SSH: ${e.message}")
             } finally {
+                Timber.d("Successfully disconnected from server.")
                 client = null
             }
         }
