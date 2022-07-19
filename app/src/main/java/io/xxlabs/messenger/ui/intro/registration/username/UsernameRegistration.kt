@@ -114,6 +114,9 @@ class UsernameRegistration @AssistedInject constructor(
             }
         )
 
+    override val restoreEnabled: LiveData<Boolean> by ::_restoreEnabled
+    private val _restoreEnabled = MutableLiveData(true)
+
     override fun onUsernameInfoClicked() {
         if (infoClicked.value == true) return
         infoClicked.value = true
@@ -124,6 +127,7 @@ class UsernameRegistration @AssistedInject constructor(
     }
 
     override fun onUsernameNextClicked() {
+        disableAccountRestore()
         disableUI()
         username.value?.apply {
             when {
@@ -132,6 +136,14 @@ class UsernameRegistration @AssistedInject constructor(
                 else -> enableUI()
             }
         } ?: enableUI()
+    }
+
+    /**
+     * Prevent the restore account flow once a username has been submitted.
+     * Submitting a username instantiates a Client object that can't be replaced.
+     */
+    private fun disableAccountRestore() {
+        _restoreEnabled.value = false
     }
 
     override fun onUsernameInput(text: Editable) {
