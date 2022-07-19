@@ -86,7 +86,9 @@ class SftpTransfer(
     override suspend fun upload(backup: File): FileSize = withContext(scope.coroutineContext) {
         try {
             val sftp = sshClient.connect(credentials).newSFTPClient()
-            val backupFile = FileSystemFile(backup)
+            val backupFile = FileSystemFile(backup).apply {
+                lastModifiedTime = System.currentTimeMillis() / 1000
+            }
             with (sftp) {
                 if (backupExists()) deletePreviousBackup()
                 else makeDirectory()
@@ -115,7 +117,7 @@ private data class SftpBackupData(
 
     companion object Factory {
         fun from(file: FileSystemFile) = with(file) {
-            SftpBackupData(name, lastModifiedTime, length)
+            SftpBackupData(name, lastModifiedTime * 1000, length)
         }
     }
 }
