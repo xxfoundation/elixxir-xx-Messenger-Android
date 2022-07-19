@@ -168,8 +168,8 @@ class BindingsRestoreHandler(
 
                     udWrapperBindings = BindingsWrapperBindings.newUserDiscoveryFromBackup(
                         this,
-                        backupReport.userEmail ?: "",
-                        backupReport.userPhone ?: ""
+                        backupReport.emailStringified ?: "",
+                        backupReport.phoneStringified ?: ""
                     ) as UserDiscoveryWrapperBindings
                     log("User Discovery from backup initialized.")
 
@@ -265,6 +265,7 @@ class BindingsRestoreHandler(
         ud.userLookup(user.getId()) { contact, error ->
             if (!error.isNullOrEmpty()) {
                 scope.launch {
+                    Timber.d(error)
                     log("Retrying restoring user profile.")
                     val retry = withContext(coroutineContext) {
                         fetchUserProfile(user, ud, backupReport)
@@ -277,16 +278,14 @@ class BindingsRestoreHandler(
 
                 backupReport.userEmail?.let {
                     if (it.isNotBlank()) {
-                        val rawEmail = it.substring(1, it.length)
-                        user.addEmail(rawEmail)
-                        addEmail(rawEmail)
+                        user.addEmail(it)
+                        addEmail(it)
                     }
                 }
                 backupReport.userPhone?.let {
                     if (it.isNotBlank()) {
-                        val rawPhone = it.substring(1, it.length)
-                        user.addPhone(rawPhone)
-                        addPhone(rawPhone)
+                        user.addPhone(it)
+                        addPhone(it)
                     }
                 }
 

@@ -76,9 +76,9 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
             getEnabledBackup()?.run {
                 addJson(
                     ExtrasJson(
-                        user.getUsernameFact(true),
-                        user.getEmailFact(true),
-                        user.getPhoneFact(true)
+                        user.getUsernameFact(false),
+                        user.getEmailFact(false),
+                        user.getPhoneFact(false)
                     ).toString()
                 )
                 preferences.isUserProfileBackedUp = true
