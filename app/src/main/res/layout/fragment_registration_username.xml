@@ -51,7 +51,6 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/registration_choose_username_hint"
                 android:imeOptions="actionDone"
-                android:maxLength="@{ui.maxUsernameLength}"
                 android:afterTextChanged="@{ui::onUsernameInput}"
                 app:inputFilters="@{ui.usernameFilters}" />
         </com.google.android.material.textfield.TextInputLayout>
