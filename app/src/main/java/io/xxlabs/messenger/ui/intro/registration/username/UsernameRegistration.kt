@@ -277,7 +277,11 @@ class UsernameRegistration @AssistedInject constructor(
     }
 
     override fun onRestoreAccountClicked() {
-        navigateRestore.value = true
+        if (_restoreEnabled.value == false) {
+            error.value = appContext().getString(R.string.registration_restore_disabled_error)
+        } else {
+            navigateRestore.value = true
+        }
     }
 
     companion object {
