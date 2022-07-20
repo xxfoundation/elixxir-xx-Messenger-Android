@@ -20,7 +20,6 @@ import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
-import timber.log.Timber
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
@@ -68,16 +67,16 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
 
     override fun onStart() {
         super.onStart()
-        validateSession()
+        observeUi()
     }
 
-    private fun validateSession() {
-        if (preferencesRepository.name.isNotEmpty()) {
-            Timber.v("User session is already created")
-            navigateNext()
-        } else {
-            Timber.v("User session not present, creating new...")
-            newUserSession()
+    private fun observeUi() {
+        splashScreenViewModel.navigateNext.observe(this) { navigate ->
+            if (navigate) navigateNext()
+        }
+
+        splashScreenViewModel.appDataCleared.observe(this) { cleared ->
+            if (cleared) newUserSession()
         }
     }
 
