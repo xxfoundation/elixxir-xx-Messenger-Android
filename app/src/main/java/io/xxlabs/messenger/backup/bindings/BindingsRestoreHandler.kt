@@ -141,6 +141,7 @@ class BindingsRestoreHandler(
             val jsonBytes = Bindings.newClientFromBackup(
                 ndf, appDirectory, sessionPassword, backupPassword, account.data
             )
+            log("Successfully decrypted.")
             BackupReport.unmarshall(jsonBytes, backupReportPath)
         }
     }
@@ -148,6 +149,7 @@ class BindingsRestoreHandler(
     private suspend fun initializeClient(restoreParams: RestoreParams, backupReport: BackupReport) =
         withContext(scope.coroutineContext) {
             with (ClientRepository.Companion) {
+                log("Logging in...")
                 client = Bindings.login(
                     restoreParams.appDirectory,
                     restoreParams.sessionPassword,
