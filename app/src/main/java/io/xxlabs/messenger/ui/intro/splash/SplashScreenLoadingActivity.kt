@@ -2,8 +2,6 @@ package io.xxlabs.messenger.ui.intro.splash
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
@@ -49,16 +47,6 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
     }
 
     private fun loadAndGenerateKeys() {
-        splashScreenViewModel.onRegisterSession.observe(this) { registered ->
-            if (registered) {
-                Handler(Looper.getMainLooper()).postDelayed({
-                    navigateNext()
-                }, 1000)
-            } else {
-                createKeysGenerationErrorPopup()
-            }
-        }
-
         deletePreviousKeys()
         if (checkGenerateKeys()) {
             if (isHardwareBackedKeyStore()) {
