@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.main.ud.search.UdSearchUi" />
+    </data>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/neutral_white"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
+            android:descendantFocusability="beforeDescendants"
+            android:focusableInTouchMode="true">
+
+            <include layout="@layout/component_toolbar_generic" />
+
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/userSearchAppBarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:elevation="0dp"
+                app:layout_constraintTop_toBottomOf="@id/toolbarGeneric">
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/userSearchAppBarTabs"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/transparent"
+                    app:tabGravity="fill"
+                    app:tabIndicatorFullWidth="true"
+                    app:tabIndicatorHeight="@dimen/spacing_3"
+                    app:tabInlineLabel="false"
+                    app:tabMaxWidth="0dp"
+                    app:tabMode="fixed"
+                    app:tabPaddingEnd="@dimen/spacing_24"
+                    app:tabPaddingStart="@dimen/spacing_24"
+                    app:tabTextAppearance="@style/TabTextStyle"
+                    app:tabIconTint="@color/selector_qr_code_tab_secondary"
+                    app:tabTextColor="@color/selector_qr_code_tab_secondary" />
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/userSearchViewPager"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:paddingHorizontal="@dimen/spacing_14"
+                android:paddingBottom="@dimen/spacing_14"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/userSearchAppBarLayout" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+</layout>
