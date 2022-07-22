@@ -7,32 +7,35 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayoutMediator
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.databinding.FragmentUserSearchBinding
-import io.xxlabs.messenger.requests.ui.RequestsViewModel
+import io.xxlabs.messenger.requests.ui.RequestsFragment
+import io.xxlabs.messenger.requests.ui.list.FailedRequestsFragment
+import io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment
+import io.xxlabs.messenger.requests.ui.list.SentRequestsFragment
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
 import io.xxlabs.messenger.requests.ui.send.OutgoingRequest
 import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.toast.CustomToastActivity
-import io.xxlabs.messenger.ui.base.BaseFragment
+import io.xxlabs.messenger.ui.base.ViewPagerFragmentStateAdapter
 import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
+import kotlinx.android.synthetic.main.fragment_requests.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import java.lang.Exception
-import javax.inject.Inject
 
-class UserSearchFragment : BaseFragment() {
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
+class UserSearchFragment : RequestsFragment() {
 
     private val mainViewModel: MainViewModel by viewModels(
         ownerProducer = { requireActivity() },
@@ -40,10 +43,11 @@ class UserSearchFragment : BaseFragment() {
     )
     private val contactsViewModel: ContactsViewModel by viewModels { viewModelFactory }
     private val searchViewModel: UserSearchViewModel by viewModels { viewModelFactory }
-    private val requestsViewModel: RequestsViewModel by viewModels { viewModelFactory }
 
     private lateinit var binding: FragmentUserSearchBinding
-    private lateinit var toastHandler : CustomToastActivity
+    override val navController: NavController by lazy {
+        findNavController()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -67,20 +71,66 @@ class UserSearchFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
-        initViewPager()
+        initViewPager(view)
         showNewUserPopups()
     }
 
-    fun initToolbar() {
+    override fun initToolbar() {
         binding.userSearchAppBarLayout.apply {
             toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
             toolbarGenericActionText.visibility = View.VISIBLE
             toolbarGenericTitle.text = requireContext().getString(R.string.search_title)
+            toolbarGenericBackBtn.setOnClickListener { navController.navigateUp() }
         }
     }
 
-    private fun initViewPager() {
-        
+    override fun initViewPager(root: View) {
+        binding.userSearchViewPager.apply {
+            setupViewPager(this)
+            TabLayoutMediator(requestsAppBarTabs, requestsViewPager) { tab, position ->
+                tab.apply {
+                    text = stateAdapter.getPageTitle(position)
+                    icon = stateAdapter.getIcon(position)
+                    contentDescription = when (position) {
+                        SEARCH_USERNAME -> "search.tab.username"
+                        SEARCH_EMAIL -> "search.tab.email"
+                        SEARCH_PHONE -> "search.tab.phone"
+                        SEARCH_QR -> "search.tab.qr"
+                        else -> "search.tab.invalid"
+                    }
+                }
+            }.attach()
+        }
+    }
+
+    override fun setupViewPager(viewPager: ViewPager2) {
+        stateAdapter = ViewPagerFragmentStateAdapter(childFragmentManager, lifecycle)
+        stateAdapter.addFragment(
+            ReceivedRequestsFragment(),
+            "Username",
+            getTabIcon(R.drawable.ic_mail_received)
+        )
+        stateAdapter.addFragment(
+            SentRequestsFragment(),
+            "Email",
+            getTabIcon(R.drawable.ic_mail_sent)
+        )
+        stateAdapter.addFragment(
+            FailedRequestsFragment(),
+            "Phone",
+            getTabIcon(R.drawable.ic_danger)
+        )
+        stateAdapter.addFragment(
+            FailedRequestsFragment(),
+            "QR Code",
+            getTabIcon(R.drawable.ic_danger)
+        )
+
+        viewPager.adapter = stateAdapter
+        viewPager.offscreenPageLimit = 3
+
+        val selectedTab = arguments?.getInt("selectedTab") ?: 0
+        viewPager.setCurrentItem(selectedTab, false)
     }
 
     private fun showNewUserPopups() {
@@ -176,5 +226,12 @@ class UserSearchFragment : BaseFragment() {
         SendRequestDialog
             .newInstance(ContactData.from(user))
             .show(childFragmentManager, null)
+    }
+
+    companion object {
+        const val SEARCH_USERNAME = 0
+        const val SEARCH_EMAIL = 1
+        const val SEARCH_PHONE = 2
+        const val SEARCH_QR = 3
     }
 }

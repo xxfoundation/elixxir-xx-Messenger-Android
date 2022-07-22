@@ -137,5 +137,5 @@ abstract class FragmentMainBuildersModule {
     abstract fun contributeInvitationAcceptedDialog(): InvitationAcceptedDialog
 
     @ContributesAndroidInjector
-    abstract fun contributeUserSerachFragment(): UserSearchFragment
+    abstract fun contributeUserSearchFragment(): UserSearchFragment
 }
