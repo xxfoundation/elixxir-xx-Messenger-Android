@@ -88,7 +88,8 @@
         tools:layout="@layout/fragment_backup_locations" >
         <action
             android:id="@+id/action_restoreList_to_restoreDetail"
-            app:destination="@id/restoreDetailFragment" />
+            app:destination="@id/restoreDetailFragment"
+            app:popUpTo="@id/restoreAccountFragment" />
     </fragment>
 
     <fragment
