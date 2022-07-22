@@ -66,14 +66,21 @@ class UserSearchFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initToolbar(view)
+        initToolbar()
+        initViewPager()
         showNewUserPopups()
     }
 
-    fun initToolbar(root: View) {
-        toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
-        toolbarGenericActionText.visibility = View.VISIBLE
-        toolbarGenericTitle.text = requireContext().getString(R.string.search_title)
+    fun initToolbar() {
+        binding.userSearchAppBarLayout.apply {
+            toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
+            toolbarGenericActionText.visibility = View.VISIBLE
+            toolbarGenericTitle.text = requireContext().getString(R.string.search_title)
+        }
+    }
+
+    private fun initViewPager() {
+        
     }
 
     private fun showNewUserPopups() {
