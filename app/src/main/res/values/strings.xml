@@ -339,8 +339,14 @@
     <string name="search_info_dialog_link_url">https://links.xx.network/adrp</string>
     <string name="search_placeholder_text">
         Your searches are anonymous. Search information is never linked to your account or
-        personally identifiable.</string>
+        personally identifiable. ⓘ</string>
+    <string name="search_placeholder_span">ⓘ</string>
     <string name="search_hint">Search</string>
+    <string name="search_call_to_action">
+        Search for friends anonymously, add them to your connections to start a completely
+        private messaging channel.</string>
+    <string name="search_call_to_action_span_1">friends</string>
+    <string name="search_call_to_action_span_2">connections</string>
 
     <!-- Group Chat -->
 
