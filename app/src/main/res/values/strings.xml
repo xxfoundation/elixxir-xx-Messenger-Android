@@ -328,7 +328,8 @@
 
     <!-- Search -->
 
-    <string name="search_info_dialog_title">Search</string>
+    <string name="search_title">Search</string>
+    <string name="search_info_dialog_title">@string/search_title</string>
     <string name="search_info_dialog_body">
         You can search for users by their username, email, or phone number using the xx
         network’s Anonymous Data Retrieval protocol which keeps a user’s identity anonymous
