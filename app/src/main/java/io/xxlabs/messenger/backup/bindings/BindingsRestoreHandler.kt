@@ -25,6 +25,12 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
+ * Determines how many times to query nodes registration status before giving up.
+ * Set to [Integer.MAX_VALUE] since restore can't proceed without this.
+ */
+private const val NODES_READY_MAX_RETRIES = Integer.MAX_VALUE
+
+/**
  * Restores an account by calling methods exposed in Bindings.
  */
 class BindingsRestoreHandler(
@@ -237,7 +243,7 @@ class BindingsRestoreHandler(
             log("[NODE REGISTRATION STATUS]\n\nRegistration rate: ${(rate * 100).toInt()}%")
 
             return if (rate < ClientRepository.NODES_READY_MINIMUM_RATE
-                && retries <= ClientRepository.NODES_READY_MAX_RETRIES
+                && retries <= NODES_READY_MAX_RETRIES
             ) {
                 areNodesReady(clientWrapper, retries+1)
             } else {
