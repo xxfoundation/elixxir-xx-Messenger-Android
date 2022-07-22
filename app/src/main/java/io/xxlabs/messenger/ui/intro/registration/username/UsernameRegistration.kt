@@ -111,7 +111,8 @@ class UsernameRegistration @AssistedInject constructor(
                 val filtered = source?.subSequence(start, end)
                     ?.replace(Regex(USERNAME_FILTER_REGEX), "")
                 if (filtered == input) null else filtered
-            }
+            },
+            InputFilter.LengthFilter(MAX_USERNAME_LENGTH)
         )
 
     override val restoreEnabled: LiveData<Boolean> by ::_restoreEnabled
