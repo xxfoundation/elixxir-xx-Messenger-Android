@@ -360,6 +360,9 @@ dependencies {
 
     // Dropbox
     implementation("com.dropbox.core:dropbox-core-sdk:4.0.1")
+
+    // SSHJ library
+    implementation("com.hierynomus:sshj:0.31.0")
 }
 
 fun getNdf(): String {
