@@ -97,6 +97,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         mainViewModel.checkIsLoggedInReturn()
     }
 
+    override fun onResume() {
+        super.onResume()
+        networkViewModel.syncRequests()
+    }
+
     private fun doOnResume() {
         verifyFirebaseToken()
         initCallbacks()
