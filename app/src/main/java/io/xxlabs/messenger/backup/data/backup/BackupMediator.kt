@@ -23,6 +23,7 @@ class BackupMediator @Inject constructor(
         get() = when (backupLocation) {
             googleDrive.location.name -> googleDrive
             dropbox.location.name -> dropbox
+            sftp.location.name -> sftp
             else -> null
         }
 

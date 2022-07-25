@@ -27,9 +27,10 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     )
 
     private var backup: Backup? = null
-
     private val client: Client
         get() = ClientRepository.clientWrapper.client
+    private val userWrapper: ContactWrapperBase
+        get() = ClientRepository.userWrapper
 
     private val backupTaskCallback: BackupTaskCallback
         get() = object : BackupTaskCallback {
@@ -59,7 +60,7 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
             BackupCallback(backupTaskCallback),
             client
         )
-        backupUserFacts(ContactWrapperBindings(client.user.contact))
+        backupUserFacts(userWrapper)
     }
 
     fun initializeBackupDuringRestore(client: Client, backupPassword: String? = "") {
@@ -75,9 +76,9 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
             getEnabledBackup()?.run {
                 addJson(
                     ExtrasJson(
-                        user.getUsernameFact(true),
-                        user.getEmailFact(true),
-                        user.getPhoneFact(true)
+                        user.getUsernameFact(false),
+                        user.getEmailFact(false),
+                        user.getPhoneFact(false)
                     ).toString()
                 )
                 preferences.isUserProfileBackedUp = true

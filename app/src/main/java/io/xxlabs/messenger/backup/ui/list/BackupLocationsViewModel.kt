@@ -106,6 +106,7 @@ abstract class BackupLocationsViewModel(
 
     private fun onAuthFailure(errorMsg: String) {
         setError(errorMsg)
+        setLoading(false)
     }
 
     protected fun setError(errorMsg: String) {
@@ -113,6 +114,7 @@ abstract class BackupLocationsViewModel(
     }
 
     protected open fun onAuthSuccess(backupLocation: BackupLocation) {
+        setLoading(false)
         navigateToDetail(backupLocation)
     }
 

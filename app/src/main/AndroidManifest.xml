@@ -35,12 +35,18 @@
         tools:replace="android:allowBackup"
         tools:targetApi="m">
         <activity
+            android:name=".backup.cloud.sftp.login.ui.SshLoginActivity"
+            android:exported="false"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".ui.intro.splash.RegistrationIntroActivity"
             android:exported="false"
             android:label="@string/title_activity_intro"
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
-            android:theme="@style/IntroTheme"  />
+            android:theme="@style/IntroTheme" />
         <activity
             android:name=".ui.intro.splash.SplashScreenPlaceholderActivity"
             android:configChanges="orientation"
@@ -74,11 +80,13 @@
         <activity
             android:name="com.dropbox.core.android.AuthActivity"
             android:configChanges="orientation|keyboard"
-            android:launchMode="singleTask"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTask">
             <intent-filter>
                 <data android:scheme="db-${dropboxKey}" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
