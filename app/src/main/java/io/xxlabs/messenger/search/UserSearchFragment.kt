@@ -26,6 +26,8 @@ import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.toast.CustomToastActivity
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.ui.base.ViewPagerFragmentStateAdapter
+import io.xxlabs.messenger.ui.dialog.info.InfoDialog
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
@@ -134,6 +136,10 @@ class UserSearchFragment : RequestsFragment() {
     }
 
     private fun observeUi() {
+        searchViewModel.udSearchUi.observe(viewLifecycleOwner) { state ->
+            binding.ui = state
+        }
+
         super.observeUI()
 
         requestsViewModel.sendContactRequest.onEach { toUser ->
@@ -163,6 +169,13 @@ class UserSearchFragment : RequestsFragment() {
                 searchViewModel.onToastShown()
             }
         }
+
+        searchViewModel.searchInfoDialog.observe(viewLifecycleOwner) { ui ->
+            ui?.let {
+                showDialog(ui)
+                searchViewModel.onInfoDialogShown()
+            }
+        }
     }
 
     private fun showToast(ui: ToastUI) {
@@ -174,6 +187,14 @@ class UserSearchFragment : RequestsFragment() {
     private fun showDialog(ui: TwoButtonInfoDialogUI) {
         safelyInvoke {
             TwoButtonInfoDialog
+                .newInstance(ui)
+                .show(parentFragmentManager, null)
+        }
+    }
+
+    private fun showDialog(ui: InfoDialogUI) {
+        safelyInvoke {
+            InfoDialog
                 .newInstance(ui)
                 .show(parentFragmentManager, null)
         }

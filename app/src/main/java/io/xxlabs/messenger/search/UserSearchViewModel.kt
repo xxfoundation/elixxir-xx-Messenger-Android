@@ -1,18 +1,27 @@
 package io.xxlabs.messenger.search
 
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
+import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
+import io.xxlabs.messenger.ui.main.ud.search.SearchUiState
+import io.xxlabs.messenger.ui.main.ud.search.UdSearchUi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -21,8 +30,92 @@ import javax.inject.Inject
 
 class UserSearchViewModel @Inject constructor(
     private val repo: BaseRepository,
+    private val daoRepo: DaoRepository,
     private val preferences: PreferencesRepository
-): ViewModel() {
+): ViewModel(){
+
+    private val initialState: SearchUiState by lazy {
+        SearchUiState(
+            callToActionText = callToActionText,
+            placeholderText = placeholderText,
+            placeholderVisible = true,
+            placeHolderClicked = ::onPlaceholderClicked
+        )
+    }
+
+    private val searchingState: SearchUiState by lazy {
+        SearchUiState(
+            isSearching = true,
+            cancelClicked = ::onCancelSearchClicked
+        )
+    }
+
+    private val noResultsFoundState: SearchUiState by lazy {
+        SearchUiState(
+            isSearching = false
+        )
+    }
+
+    private val callToActionText: Spanned by lazy {
+        val highlight = appContext().getColor(R.color.brand_default)
+        val cta = appContext().getString(R.string.search_call_to_action)
+
+        val span1 = appContext().getString(R.string.search_call_to_action_span_1)
+        val span1Start = cta.indexOf(span1, ignoreCase = true)
+        val span1End = span1Start + span1.length
+
+        val span2 = appContext().getString(R.string.search_call_to_action_span_2)
+        val span2Start = cta.indexOf(span2, ignoreCase = true)
+        val span2End = span2Start + span2.length
+
+        SpannableString(cta).apply {
+            setSpan(
+                ForegroundColorSpan(highlight),
+                span1Start,
+                span1End,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+            setSpan(
+                ForegroundColorSpan(highlight),
+                span2Start,
+                span2End,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+    }
+
+    private val placeholderText: Spanned by lazy {
+        val highlight = appContext().getColor(R.color.brand_default)
+        val text = appContext().getString(R.string.search_placeholder_text)
+        val span = appContext().getString(R.string.search_placeholder_span)
+        val startIndex = text.indexOf(span, ignoreCase = true)
+
+        SpannableString(text).apply {
+            setSpan(
+                ForegroundColorSpan(highlight),
+                startIndex,
+                startIndex + span.length,
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
+        }
+    }
+
+    val searchInfoDialog: LiveData<InfoDialogUI?> by ::_searchInfoDialog
+    private val _searchInfoDialog = MutableLiveData<InfoDialogUI?>(null)
+
+    private val searchInfoDialogUi: InfoDialogUI by lazy {
+        createInfoDialog(
+            title = R.string.search_info_dialog_title,
+            body = R.string.search_info_dialog_body,
+            linkTextToUrlMap = mapOf(
+                appContext().getString(R.string.search_info_dialog_link_text)
+                        to appContext().getString(R.string.search_info_dialog_link_url)
+            )
+        )
+    }
+
+    val udSearchUi: LiveData<UdSearchUi> by ::_udSearchUi
+    private val _udSearchUi = MutableLiveData<UdSearchUi>(initialState)
 
     val dialogUi: LiveData<TwoButtonInfoDialogUI?> by ::_dialogUi
     private val _dialogUi = MutableLiveData<TwoButtonInfoDialogUI?>(null)
@@ -52,10 +145,6 @@ class UserSearchViewModel @Inject constructor(
                 onCountryCodeClicked()
             }
         }
-    }
-
-    private fun onCountryCodeClicked() {
-        // Launch country code picker
     }
 
     val usernameResults: Flow<List<RequestItem>> by ::_usernameResults
@@ -163,5 +252,21 @@ class UserSearchViewModel @Inject constructor(
 
     fun onDialogShown() {
         _dialogUi.value = null
+    }
+
+    private fun onPlaceholderClicked() {
+        _searchInfoDialog.value = searchInfoDialogUi
+    }
+
+    fun onInfoDialogShown() {
+        _searchInfoDialog.value = null
+    }
+
+    private fun onCancelSearchClicked() {
+        _udSearchUi.value = noResultsFoundState
+    }
+
+    private fun onCountryCodeClicked() {
+        showToast("Country code")
     }
 }

@@ -33,6 +33,30 @@ fun Fragment.showInfoDialog(
         .show(requireActivity().supportFragmentManager, null)
 }
 
+fun ViewModel.createInfoDialog(
+    title: Int,
+    body: Int,
+    linkTextToUrlMap: Map<String, String>? = null
+) : InfoDialogUI {
+    var spans: MutableList<SpanConfig>? = null
+    linkTextToUrlMap?.apply {
+        spans = mutableListOf()
+        for (entry in keys) {
+            val spanConfig = SpanConfig.create(
+                entry,
+                this[entry],
+            )
+            spans?.add(spanConfig)
+        }
+    }
+
+    return InfoDialogUI.create(
+        title = appContext().getString(title),
+        body = appContext().getString(body),
+        spans = spans,
+    )
+}
+
 /**
  * Launches an InfoDialog with a positive and negative button.
  */
