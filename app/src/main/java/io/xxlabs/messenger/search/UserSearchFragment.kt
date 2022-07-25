@@ -19,9 +19,6 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.databinding.FragmentUserSearchBinding
 import io.xxlabs.messenger.requests.ui.RequestsFragment
-import io.xxlabs.messenger.requests.ui.list.FailedRequestsFragment
-import io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment
-import io.xxlabs.messenger.requests.ui.list.SentRequestsFragment
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
 import io.xxlabs.messenger.requests.ui.send.OutgoingRequest
 import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
@@ -33,7 +30,6 @@ import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
-import kotlinx.android.synthetic.main.fragment_requests.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -73,12 +69,6 @@ class UserSearchFragment : RequestsFragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        initToolbar()
-        initViewPager(view)
-    }
-
     override fun initToolbar() {
         binding.userSearchAppBarLayout.apply {
             toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
@@ -89,9 +79,9 @@ class UserSearchFragment : RequestsFragment() {
     }
 
     override fun initViewPager(root: View) {
-        binding.userSearchViewPager.apply {
-            setupViewPager(this)
-            TabLayoutMediator(requestsAppBarTabs, requestsViewPager) { tab, position ->
+        binding.apply {
+            setupViewPager(userSearchViewPager)
+            TabLayoutMediator(userSearchAppBarTabs, userSearchViewPager) { tab, position ->
                 tab.apply {
                     text = stateAdapter.getPageTitle(position)
                     icon = stateAdapter.getIcon(position)
@@ -105,29 +95,30 @@ class UserSearchFragment : RequestsFragment() {
                 }
             }.attach()
         }
+
     }
 
     override fun setupViewPager(viewPager: ViewPager2) {
         stateAdapter = ViewPagerFragmentStateAdapter(childFragmentManager, lifecycle)
         stateAdapter.addFragment(
-            ReceivedRequestsFragment(),
+            UsernameSearchFragment(),
             "Username",
-            getTabIcon(R.drawable.ic_mail_received)
+            getTabIcon(R.drawable.ic_contact_light)
         )
         stateAdapter.addFragment(
-            SentRequestsFragment(),
+            EmailSearchFragment(),
             "Email",
-            getTabIcon(R.drawable.ic_mail_sent)
+            getTabIcon(R.drawable.ic_mail)
         )
         stateAdapter.addFragment(
-            FailedRequestsFragment(),
+            PhoneSearchFragment(),
             "Phone",
-            getTabIcon(R.drawable.ic_danger)
+            getTabIcon(R.drawable.ic_phone)
         )
         stateAdapter.addFragment(
-            FailedRequestsFragment(),
+            UsernameSearchFragment(),
             "QR Code",
-            getTabIcon(R.drawable.ic_danger)
+            getTabIcon(R.drawable.ic_qr_code_label)
         )
 
         viewPager.adapter = stateAdapter

@@ -309,9 +309,9 @@
     <!-- TODO: Add a global search action -->
     <fragment
         android:id="@+id/udPrivateSearchFragment"
-        android:name="io.xxlabs.messenger.ui.main.ud.search.UdSearchFragment"
+        android:name="io.xxlabs.messenger.search.UserSearchFragment"
         android:label="UdPrivateSearchFragment"
-        tools:layout="@layout/fragment_private_search">
+        tools:layout="@layout/fragment_user_search">
 
         <action
             android:id="@+id/action_ud_search_to_contact_success"

@@ -44,8 +44,8 @@
                     app:tabInlineLabel="false"
                     app:tabMaxWidth="0dp"
                     app:tabMode="fixed"
-                    app:tabPaddingEnd="@dimen/spacing_24"
-                    app:tabPaddingStart="@dimen/spacing_24"
+                    app:tabPaddingEnd="8dp"
+                    app:tabPaddingStart="8dp"
                     app:tabTextAppearance="@style/TabTextStyle"
                     app:tabIconTint="@color/selector_qr_code_tab_secondary"
                     app:tabTextColor="@color/selector_qr_code_tab_secondary" />

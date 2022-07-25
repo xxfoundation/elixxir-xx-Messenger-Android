@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.search.FactSearchUi" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/countryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="ud.search.input.dial.code"
+            android:textColor="@color/textInputFieldActive"
+            android:textSize="@dimen/text_14"
+            android:visibility="@{ui.countryCode}"
+            android:text="@{ui.countryCode}"
+            android:background="@drawable/bg_rectangle_rounded_corners_big_radius"
+            android:backgroundTint="@color/neutral_off_white"
+            android:padding="10dp"
+            android:paddingHorizontal="12dp"
+            android:onClick="@{() -> ui.onCountryClicked()}"
+            app:layout_constraintBottom_toBottomOf="@id/searchTextInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/searchTextInput"
+            tools:visibility="visible"
+            tools:text="🇺🇸 +1">
+        </com.google.android.material.textview.MaterialTextView>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchTextInput"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_16"
+            android:layout_marginStart="8dp"
+            app:layout_goneMarginStart="0dp"
+            app:endIconMode="clear_text"
+            app:errorEnabled="false"
+            app:helperTextEnabled="false"
+            app:hintEnabled="false"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/countryButton"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchTextInputEditText"
+                style="@style/InputEditText.Search"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_40"
+                android:layout_gravity="center"
+                android:contentDescription="chats.input.search"
+                android:hint="@{ui.searchHint}"
+                android:maxHeight="@dimen/spacing_40"
+                app:layout_goneMarginTop="@dimen/spacing_28" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchResultsRV"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@id/searchTextInput"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -11,8 +11,5 @@ interface UdSearchUi {
 
     fun onPlaceholderClicked()
     fun onUsernameSearchClicked()
-    fun onEmailSearchClicked()
-    fun onPhoneSearchClicked()
-    fun onQrCodeSearchClicked()
     fun onCancelSearchClicked()
 }

@@ -7,11 +7,14 @@ import androidx.lifecycle.viewModelScope
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,6 +29,43 @@ class UserSearchViewModel @Inject constructor(
 
     val toastUi: LiveData<ToastUI?> by ::_toastUi
     private val _toastUi = MutableLiveData<ToastUI?>(null)
+
+    val usernameSearchUi: FactSearchUi by lazy {
+        object : FactSearchUi {
+            override val countryCode: LiveData<String?> = MutableLiveData(null)
+            override val searchHint: String = "Search by username"
+            override fun onCountryClicked() {}
+        }
+    }
+    val emailSearchUi: FactSearchUi by lazy {
+        object : FactSearchUi {
+            override val countryCode: LiveData<String?> = MutableLiveData(null)
+            override val searchHint: String = "Search by email address"
+            override fun onCountryClicked() {}
+        }
+    }
+    val phoneSearchUi: FactSearchUi by lazy {
+        object : FactSearchUi {
+            override val countryCode: LiveData<String?> = MutableLiveData("🇺🇸 +1")
+            override val searchHint: String = "Search by phone number"
+            override fun onCountryClicked() {
+                onCountryCodeClicked()
+            }
+        }
+    }
+
+    private fun onCountryCodeClicked() {
+        // Launch country code picker
+    }
+
+    val usernameResults: Flow<List<RequestItem>> by ::_usernameResults
+    private val _usernameResults = MutableStateFlow<List<RequestItem>>(listOf())
+
+    val emailResults: Flow<List<RequestItem>> by ::_emailResults
+    private val _emailResults = MutableStateFlow<List<RequestItem>>(listOf())
+
+    val phoneResults: Flow<List<RequestItem>> by ::_phoneResults
+    private val _phoneResults = MutableStateFlow<List<RequestItem>>(listOf())
 
     init {
         showNewUserPopups()
@@ -55,7 +95,7 @@ class UserSearchViewModel @Inject constructor(
                 val notificationToken = enableNotifications()
                 onNotificationsEnabled(notificationToken)
             } catch (e: Exception) {
-                showError(
+                showToast(
                     e.message ?: "Failed to enable notifications. Please try again in Settings."
                 )
             }
@@ -92,7 +132,26 @@ class UserSearchViewModel @Inject constructor(
         repo.enableDummyTraffic(enabled)
     }
 
-    private fun showError(error: String) {
+    fun onUsernameSearch(username: String?) {
+        username?.let {
+            showToast(username)
+        }
+    }
+
+    fun onEmailSearch(email: String?) {
+        email?.let {
+            showToast(email)
+        }
+    }
+
+    fun onPhoneSearch(phone: String?) {
+        phone?.let {
+            // Get cached country code from country picker dialog
+            showToast("$phone")
+        }
+    }
+
+    private fun showToast(error: String) {
         _toastUi.postValue(
             ToastUI.create(body = error)
         )
