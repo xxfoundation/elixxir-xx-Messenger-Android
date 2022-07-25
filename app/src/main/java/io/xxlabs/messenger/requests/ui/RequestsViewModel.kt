@@ -160,7 +160,27 @@ class RequestsViewModel @Inject constructor(
         return flowOf(getMemberItems(fetchedProfiles, invitation.model))
     }
 
+    private fun GroupMember.toContactData() =
+        ContactData(userId = userId, username = username ?: "")
+
     private suspend fun fetchProfiles(
+        members: List<GroupMember>
+    ): List<ContactData> {
+        val cachedMembers = mutableListOf<ContactData>()
+        val unknownMembers = mutableListOf<GroupMember>()
+
+        members.forEach {
+            if (it.username.isNullOrBlank()) unknownMembers.add(it)
+            else cachedMembers.add(it.toContactData())
+        }
+
+        return if (unknownMembers.isEmpty()) cachedMembers
+        else cachedMembers + queryUserDiscovery(members)
+    }
+
+
+
+    private suspend fun queryUserDiscovery(
         members: List<GroupMember>
     ): List<ContactData> = suspendCoroutine { continuation ->
         val userIds = members.map { it.userId }
@@ -169,11 +189,29 @@ class RequestsViewModel @Inject constructor(
                 profiles?.map { user ->
                     ContactData.from(user, VERIFYING)
                 }?.run {
+                    saveMembersToDatabase(members, this)
                     continuation.resume(this)
                 } ?: continuation.resume(listOf())
             } else {
                 continuation.resume(listOf())
             }
+        }
+    }
+
+    private fun saveMembersToDatabase(
+        members: List<GroupMember>,
+        profiles: List<ContactData>
+    ) {
+        viewModelScope.launch {
+            val groupId = members.firstOrNull()?.groupId ?: return@launch
+            val membersToSave = profiles.map {
+               GroupMember(
+                   groupId = groupId,
+                   userId = it.userId,
+                   username = it.username
+               )
+            }
+            daoRepository.updateMemberNames(membersToSave).value()
         }
     }
 
