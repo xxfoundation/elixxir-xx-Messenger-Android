@@ -17,6 +17,7 @@ data class MemberItem(
     val name: String = "xxMessenger User",
     val isCreator: Boolean = false,
     private val isContact: Boolean = false,
+    val isMe: Boolean = false
 ) : ItemThumbnail {
 
     val description: String? = when {

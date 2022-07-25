@@ -32,6 +32,7 @@ import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameListener
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameUI
 import io.xxlabs.messenger.requests.ui.send.*
 import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
@@ -59,7 +60,7 @@ class RequestsViewModel @Inject constructor(
     SendRequestListener,
     SaveNicknameListener
 {
-
+    private val myUserId: ByteArray by lazy { preferences.userId.fromBase64toByteArray() }
     private val groupInviteCache: MutableMap<ByteArray, GroupInviteItem> = mutableMapOf()
     private val contactsCache = MutableStateFlow<List<ContactData>>(listOf())
     private val hiddenRequests = MutableStateFlow<List<RequestItem>>(listOf())
@@ -152,7 +153,9 @@ class RequestsViewModel @Inject constructor(
 
     suspend fun fetchMembers(invitation: GroupInvitation): Flow<List<MemberItem>> {
         isLoadingGroupMembers.value = true
-        val members = daoRepository.getAllMembers(invitation.model.groupId).value()
+        val members = daoRepository
+            .getAllMembers(invitation.model.groupId).value()
+            .filterNot { it.userId.contentEquals(myUserId) }
         val fetchedProfiles = fetchProfiles(members)
         return flowOf(getMemberItems(fetchedProfiles, invitation.model))
     }
@@ -181,7 +184,8 @@ class RequestsViewModel @Inject constructor(
         getContactOrNull(it.userId)?.let { contact ->
             memberFromContact(contact, group)
         } ?: memberFromContact(it, group)
-    }.sortedByDescending { it.isCreator }
+    }
+        .sortedByDescending { it.isCreator }
         .apply { isLoadingGroupMembers.value = false }
 
     private suspend fun getContactOrNull(
