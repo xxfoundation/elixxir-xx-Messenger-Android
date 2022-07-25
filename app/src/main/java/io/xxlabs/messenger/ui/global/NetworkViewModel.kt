@@ -71,9 +71,9 @@ class NetworkViewModel @Inject constructor(
     private var isNetworkHealthy: Boolean = false
         set(value) {
             if (value && checkForRequests) {
+                field = value
                 syncRequests()
                 checkForRequests = false
-                field = value
             }
         }
     private var wasNetworkHealthy: Boolean = false
@@ -93,10 +93,16 @@ class NetworkViewModel @Inject constructor(
         Timber.v("[NETWORK VIEWMODEL] isNetworkCallbackRegistered: ${isNetworkListenerRegistered()}")
     }
 
-    private fun syncRequests() {
+    fun syncRequests() {
         viewModelScope.launch {
-            repo.replayRequests()
-            syncContacts(repo.getPartners())
+            // Replay requests if the network is already healthy...
+            if (isNetworkHealthy) {
+                repo.replayRequests()
+                syncContacts(repo.getPartners())
+            } else {
+                // ...or set a flag to replay requests when it becomes healthy.
+                checkForRequests = true
+            }
         }
     }
 

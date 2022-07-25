@@ -56,7 +56,6 @@ class SftpTransfer(
     private fun SFTPClient.backupExists(): Boolean {
         try {
             return statExistence(BACKUP_PATH)?.size?.let {
-                Timber.d("Previous backup at path $BACKUP_PATH found.")
                 true
             } ?: false
         } catch (e: Exception) {
@@ -76,13 +75,10 @@ class SftpTransfer(
         try {
             val backupFile = FileSystemFile(path)
             sftp.get(BACKUP_PATH, backupFile)
-            Timber.d("File successfully fetched.")
             continuation.resume(backupFile)
         } catch(e: Exception) {
-            Timber.d("Exception when fetching file: ${e.message}")
             continuation.resumeWithException(e)
         } finally {
-            Timber.d("Closing SFTP client.")
             sftp.close()
         }
     }
@@ -97,9 +93,7 @@ class SftpTransfer(
                 if (backupExists()) deletePreviousBackup()
                 else makeDirectory()
 
-                Timber.d("Uploading file to $BACKUP_PATH...")
                 put(backupFile, BACKUP_PATH)
-                Timber.d("Successfully uploaded file to $BACKUP_PATH.")
                 FileSize(backupFile.length)
             }
         } finally {
@@ -108,14 +102,10 @@ class SftpTransfer(
     }
 
     private fun SFTPClient.deletePreviousBackup() {
-        Timber.d("Deleting previous backup...")
         rm(BACKUP_PATH)
-        Timber.d("Successfully deleted.")
-
     }
 
     private fun SFTPClient.makeDirectory() {
-        Timber.d("Creating new directory $BACKUP_DIRECTORY_NAME")
         mkdir(BACKUP_DIRECTORY_NAME)
     }
 }
