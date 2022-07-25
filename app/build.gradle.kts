@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 583
-        versionName = "2.5"
+        versionCode = 602
+        versionName = "2.7"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -360,6 +360,9 @@ dependencies {
 
     // Dropbox
     implementation("com.dropbox.core:dropbox-core-sdk:4.0.1")
+
+    // SSHJ library
+    implementation("com.hierynomus:sshj:0.31.0")
 }
 
 fun getNdf(): String {

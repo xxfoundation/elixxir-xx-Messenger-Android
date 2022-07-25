@@ -25,6 +25,12 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 /**
+ * Determines how many times to query nodes registration status before giving up.
+ * Set to [Integer.MAX_VALUE] since restore can't proceed without this.
+ */
+private const val NODES_READY_MAX_RETRIES = Integer.MAX_VALUE
+
+/**
  * Restores an account by calling methods exposed in Bindings.
  */
 class BindingsRestoreHandler(
@@ -162,8 +168,8 @@ class BindingsRestoreHandler(
 
                     udWrapperBindings = BindingsWrapperBindings.newUserDiscoveryFromBackup(
                         this,
-                        backupReport.userEmail ?: "",
-                        backupReport.userPhone ?: ""
+                        backupReport.emailStringified ?: "",
+                        backupReport.phoneStringified ?: ""
                     ) as UserDiscoveryWrapperBindings
                     log("User Discovery from backup initialized.")
 
@@ -237,7 +243,7 @@ class BindingsRestoreHandler(
             log("[NODE REGISTRATION STATUS]\n\nRegistration rate: ${(rate * 100).toInt()}%")
 
             return if (rate < ClientRepository.NODES_READY_MINIMUM_RATE
-                && retries <= ClientRepository.NODES_READY_MAX_RETRIES
+                && retries <= NODES_READY_MAX_RETRIES
             ) {
                 areNodesReady(clientWrapper, retries+1)
             } else {
@@ -259,6 +265,7 @@ class BindingsRestoreHandler(
         ud.userLookup(user.getId()) { contact, error ->
             if (!error.isNullOrEmpty()) {
                 scope.launch {
+                    Timber.d(error)
                     log("Retrying restoring user profile.")
                     val retry = withContext(coroutineContext) {
                         fetchUserProfile(user, ud, backupReport)
@@ -271,16 +278,14 @@ class BindingsRestoreHandler(
 
                 backupReport.userEmail?.let {
                     if (it.isNotBlank()) {
-                        val rawEmail = it.substring(1, it.length)
-                        user.addEmail(rawEmail)
-                        addEmail(rawEmail)
+                        user.addEmail(it)
+                        addEmail(it)
                     }
                 }
                 backupReport.userPhone?.let {
                     if (it.isNotBlank()) {
-                        val rawPhone = it.substring(1, it.length)
-                        user.addPhone(rawPhone)
-                        addPhone(rawPhone)
+                        user.addPhone(it)
+                        addPhone(it)
                     }
                 }
 

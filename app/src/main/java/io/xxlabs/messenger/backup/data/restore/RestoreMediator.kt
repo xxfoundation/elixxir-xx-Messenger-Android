@@ -12,10 +12,14 @@ class RestoreMediator @Inject constructor(
 ) : BackupLocationRepository(preferences, backupService),
     RestoreManager {
 
+    override var restoreAttempted = false
+        private set
+
     override fun getRestoreLog(backup: AccountBackup): RestoreLog? =
         (backup as? RestoreOption)?.restoreLog
 
     override suspend fun restore(backup: AccountBackup, environment: RestoreEnvironment) {
+        restoreAttempted = true
         (backup as? RestoreOption)?.restore(environment)
     }
 

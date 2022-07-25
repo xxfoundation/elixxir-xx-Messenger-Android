@@ -18,8 +18,24 @@ data class BackupReport(
     val extrasJson: String? = ExtrasJson().toString()
 ) {
     private val userData: ExtrasJson? by lazy { ExtrasJson.from(extrasJson) }
+
+    val userName: String? get() = userData?.userName
+    val nameStringified: String? get() = userName?.run {
+        if (isNotEmpty()) "U$this"
+        else this
+    }
+
     val userEmail: String? get() = userData?.userEmail
+    val emailStringified: String? get() = userEmail?.run {
+        if (isNotEmpty()) "E$this"
+        else this
+    }
+
     val userPhone: String? get() = userData?.userPhone
+    val phoneStringified: String? get() = userPhone?.run {
+        if (isNotEmpty()) "P$this"
+        else this
+    }
 
     fun getContacts(): ByteArray = Gson().toJson(contacts).encodeToByteArray()
 

@@ -901,6 +901,7 @@ class ClientRepository @Inject constructor(
         val facts = userWrapper.getStringifiedFacts()
         Timber.d("[CLIENT REPO] exporting user facts: $facts")
         if (wereFactsModified(facts, preferences.userData)) {
+            preferences.isUserProfileBackedUp = false
             preferences.userData = facts
             backupService.backupUserFacts(userWrapper)
         }
