@@ -32,6 +32,7 @@ import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameListener
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameUI
 import io.xxlabs.messenger.requests.ui.send.*
 import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
@@ -59,7 +60,7 @@ class RequestsViewModel @Inject constructor(
     SendRequestListener,
     SaveNicknameListener
 {
-
+    private val myUserId: ByteArray by lazy { preferences.userId.fromBase64toByteArray() }
     private val groupInviteCache: MutableMap<ByteArray, GroupInviteItem> = mutableMapOf()
     private val contactsCache = MutableStateFlow<List<ContactData>>(listOf())
     private val hiddenRequests = MutableStateFlow<List<RequestItem>>(listOf())
@@ -152,12 +153,34 @@ class RequestsViewModel @Inject constructor(
 
     suspend fun fetchMembers(invitation: GroupInvitation): Flow<List<MemberItem>> {
         isLoadingGroupMembers.value = true
-        val members = daoRepository.getAllMembers(invitation.model.groupId).value()
+        val members = daoRepository
+            .getAllMembers(invitation.model.groupId).value()
+            .filterNot { it.userId.contentEquals(myUserId) }
         val fetchedProfiles = fetchProfiles(members)
         return flowOf(getMemberItems(fetchedProfiles, invitation.model))
     }
 
+    private fun GroupMember.toContactData() =
+        ContactData(userId = userId, username = username ?: "")
+
     private suspend fun fetchProfiles(
+        members: List<GroupMember>
+    ): List<ContactData> {
+        val cachedMembers = mutableListOf<ContactData>()
+        val unknownMembers = mutableListOf<GroupMember>()
+
+        members.forEach {
+            if (it.username.isNullOrBlank()) unknownMembers.add(it)
+            else cachedMembers.add(it.toContactData())
+        }
+
+        return if (unknownMembers.isEmpty()) cachedMembers
+        else cachedMembers + queryUserDiscovery(members)
+    }
+
+
+
+    private suspend fun queryUserDiscovery(
         members: List<GroupMember>
     ): List<ContactData> = suspendCoroutine { continuation ->
         val userIds = members.map { it.userId }
@@ -166,11 +189,29 @@ class RequestsViewModel @Inject constructor(
                 profiles?.map { user ->
                     ContactData.from(user, VERIFYING)
                 }?.run {
+                    saveMembersToDatabase(members, this)
                     continuation.resume(this)
                 } ?: continuation.resume(listOf())
             } else {
                 continuation.resume(listOf())
             }
+        }
+    }
+
+    private fun saveMembersToDatabase(
+        members: List<GroupMember>,
+        profiles: List<ContactData>
+    ) {
+        viewModelScope.launch {
+            val groupId = members.firstOrNull()?.groupId ?: return@launch
+            val membersToSave = profiles.map {
+               GroupMember(
+                   groupId = groupId,
+                   userId = it.userId,
+                   username = it.username
+               )
+            }
+            daoRepository.updateMemberNames(membersToSave).value()
         }
     }
 
@@ -181,7 +222,8 @@ class RequestsViewModel @Inject constructor(
         getContactOrNull(it.userId)?.let { contact ->
             memberFromContact(contact, group)
         } ?: memberFromContact(it, group)
-    }.sortedByDescending { it.isCreator }
+    }
+        .sortedByDescending { it.isCreator }
         .apply { isLoadingGroupMembers.value = false }
 
     private suspend fun getContactOrNull(

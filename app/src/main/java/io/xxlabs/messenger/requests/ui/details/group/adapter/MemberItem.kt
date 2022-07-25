@@ -2,7 +2,6 @@ package io.xxlabs.messenger.requests.ui.details.group.adapter
 
 import android.graphics.Bitmap
 import androidx.annotation.ColorRes
-import androidx.annotation.StringRes
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.Contact
@@ -36,8 +35,8 @@ data class MemberItem(
             itemPhoto = bitmap,
             itemInitials = contact.initials,
             name = contact.displayName,
-            isContact = contact.status == RequestStatus.ACCEPTED.value,
-            isCreator = group.leader.contentEquals(contact.userId)
+            isCreator = group.leader.contentEquals(contact.userId),
+            isContact = contact.status == RequestStatus.ACCEPTED.value
         )
     }
 }
