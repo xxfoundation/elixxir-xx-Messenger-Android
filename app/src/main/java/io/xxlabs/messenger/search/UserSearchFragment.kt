@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -25,22 +27,20 @@ import io.xxlabs.messenger.requests.ui.send.OutgoingRequest
 import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.support.extensions.setInsets
 import io.xxlabs.messenger.support.toast.CustomToastActivity
+import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.ui.base.ViewPagerFragmentStateAdapter
-import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
+import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
-import io.xxlabs.messenger.ui.main.MainViewModel
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_requests.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 class UserSearchFragment : RequestsFragment() {
 
-    private val mainViewModel: MainViewModel by viewModels(
-        ownerProducer = { requireActivity() },
-        factoryProducer = { viewModelFactory }
-    )
     private val contactsViewModel: ContactsViewModel by viewModels { viewModelFactory }
     private val searchViewModel: UserSearchViewModel by viewModels { viewModelFactory }
 
@@ -61,6 +61,11 @@ class UserSearchFragment : RequestsFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeUI()
+            }
+        }
         binding = FragmentUserSearchBinding.inflate(
             inflater, container, false
         )
@@ -72,7 +77,6 @@ class UserSearchFragment : RequestsFragment() {
         super.onViewCreated(view, savedInstanceState)
         initToolbar()
         initViewPager(view)
-        showNewUserPopups()
     }
 
     override fun initToolbar() {
@@ -133,74 +137,14 @@ class UserSearchFragment : RequestsFragment() {
         viewPager.setCurrentItem(selectedTab, false)
     }
 
-    private fun showNewUserPopups() {
-        showNotificationDialog()
-    }
-
-    // TODO: This event should be launched by observing ViewModel.
-    private fun showNotificationDialog() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstTimeNotifications) {
-            showTwoButtonInfoDialog(
-                title = R.string.settings_push_notifications_dialog_title,
-                body = R.string.settings_push_notifications_dialog_body,
-                linkTextToUrlMap = null,
-                positiveClick = ::enablePushNotifications,
-                negativeClick = null,
-                onDismiss = ::showCoverMessageDialog
-            )
-            preferences.isFirstTimeNotifications = false
-        }
-    }
-
-    // TODO: This event should be launched by observing ViewModel.
-    private fun enablePushNotifications() {
-        mainViewModel.enableNotifications { error ->
-            error?.let { showError(error) }
-        }
-    }
-
-    // TODO: This event should be launched by observing ViewModel.
-    private fun showCoverMessageDialog() {
-        if (preferences.userData.isNotBlank() && preferences.isFirstTimeCoverMessages) {
-            showTwoButtonInfoDialog(
-                R.string.settings_cover_traffic_title,
-                R.string.settings_cover_traffic_dialog_body,
-                mapOf(
-                    getString(R.string.settings_cover_traffic_link_text)
-                            to getString(R.string.settings_cover_traffic_link_url)
-                ),
-                ::enableCoverMessages,
-                ::declineCoverMessages,
-            )
-            preferences.isFirstTimeCoverMessages = false
-        }
-    }
-
-    // TODO: Redundant, remove.
-    private fun enableCoverMessages() {
-        enableDummyTraffic(true)
-    }
-
-    // TODO: Redundant, remove.
-    private fun declineCoverMessages() {
-        enableDummyTraffic(false)
-    }
-
-    // TODO: This event should be launched by observing ViewModel.
-    private fun enableDummyTraffic(enabled: Boolean) {
-        try {
-            mainViewModel.enableDummyTraffic(enabled)
-        } catch (e: Exception) {
-            showError(e, true)
-        }
-    }
-
     override fun onStart() {
         super.onStart()
         observeUi()
     }
 
     private fun observeUi() {
+        super.observeUI()
+
         requestsViewModel.sendContactRequest.onEach { toUser ->
             toUser?.let {
                 contactsViewModel.updateAndRequestAuthChannel(toUser)
@@ -214,18 +158,50 @@ class UserSearchFragment : RequestsFragment() {
                 requestsViewModel.onShowCreateNicknameHandled()
             }
         }.launchIn(lifecycleScope)
+
+        searchViewModel.dialogUi.observe(viewLifecycleOwner) { ui ->
+            ui?.let {
+                showDialog(ui)
+                searchViewModel.onDialogShown()
+            }
+        }
+
+        searchViewModel.toastUi.observe(viewLifecycleOwner) { ui ->
+            ui?.let {
+                showToast(ui)
+                searchViewModel.onToastShown()
+            }
+        }
+    }
+
+    private fun showToast(ui: ToastUI) {
+        safelyInvoke {
+            toastHandler.showCustomToast(ui)
+        }
+    }
+
+    private fun showDialog(ui: TwoButtonInfoDialogUI) {
+        safelyInvoke {
+            TwoButtonInfoDialog
+                .newInstance(ui)
+                .show(parentFragmentManager, null)
+        }
     }
 
     private fun showSaveNicknameDialog(outgoingRequest: OutgoingRequest) {
-        SaveNicknameDialog
-            .newInstance(outgoingRequest)
-            .show(childFragmentManager, null)
+        safelyInvoke {
+            SaveNicknameDialog
+                .newInstance(outgoingRequest)
+                .show(childFragmentManager, null)
+        }
     }
 
     private fun showSendRequestDialog(user: ContactWrapperBase) {
-        SendRequestDialog
-            .newInstance(ContactData.from(user))
-            .show(childFragmentManager, null)
+        safelyInvoke {
+            SendRequestDialog
+                .newInstance(ContactData.from(user))
+                .show(childFragmentManager, null)
+        }
     }
 
     companion object {

@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.ui.dialog.info
 
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModel
+import io.xxlabs.messenger.support.appContext
 
 /**
  * Launches an InfoDialog with a neutral button.
@@ -67,4 +69,37 @@ fun Fragment.showTwoButtonInfoDialog(
     )
     TwoButtonInfoDialog.newInstance(twoButtonUI)
         .show(parentFragmentManager, null)
+}
+
+fun ViewModel.createTwoButtonDialogUi(
+    title: Int,
+    body: Int,
+    linkTextToUrlMap: Map<String, String>? = null,
+    positiveClick: ()-> Unit,
+    negativeClick: (()-> Unit)? = null,
+    onDismiss: ()-> Unit = { },
+) : TwoButtonInfoDialogUI {
+    var spans: MutableList<SpanConfig>? = null
+    linkTextToUrlMap?.apply {
+        spans = mutableListOf()
+        for (entry in keys) {
+            val spanConfig = SpanConfig.create(
+                entry,
+                this[entry],
+            )
+            spans?.add(spanConfig)
+        }
+    }
+    val infoDialogUI = InfoDialogUI.create(
+        title = appContext().getString(title),
+        body = appContext().getString(body),
+        spans = spans,
+        onDismiss
+    )
+
+    return TwoButtonInfoDialogUI.create(
+        infoDialogUI,
+        onPositiveClick = positiveClick,
+        onNegativeClick = negativeClick
+    )
 }
