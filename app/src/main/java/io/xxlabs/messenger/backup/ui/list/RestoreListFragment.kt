@@ -46,6 +46,7 @@ class RestoreListFragment : BackupLocationsFragment() {
                 override fun handleOnBackPressed() {
                     try {
                         if (backupViewModel.allowBackNavigation()) {
+                            isEnabled = false
                             requireActivity().onBackPressed()
                         } else {
                             requireActivity().finish()
