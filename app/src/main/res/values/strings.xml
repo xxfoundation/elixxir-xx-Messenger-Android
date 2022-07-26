@@ -627,7 +627,7 @@
     <string name="chats_show_mix_pending_message">The mix for this msg will be available shortly, please check again later</string>
     <string name="chats_no_results_found_message">was not found in your connections or in a chat. Click below to search for them as a new connection.</string>
     <string name="sftp_login_title">Login to your SFTP</string>
-    <string name="stfp_login_body">Login to your server. Your credentials will be automatically and securely saved locally on your device.</string>
+    <string name="stfp_login_body">Login to your server. Your credentials will be saved to secure storage locally on your device. Your backups are encrypted and protected by your backup password which is stored separately from these credentials.\n\nPlease Note: at this time, host key fingerprint checking is not implemented. If the server\'s fingerprint changes you will not be notified.</string>
     <string name="sftp_login_host_hint">Host</string>
     <string name="sftp_login_username_hint">Username</string>
     <string name="sftp_login_password_hint">Password</string>
