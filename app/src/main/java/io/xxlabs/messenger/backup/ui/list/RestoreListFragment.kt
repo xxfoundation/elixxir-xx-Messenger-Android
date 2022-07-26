@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.backup.ui.list
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.activity.OnBackPressedCallback
@@ -30,8 +31,8 @@ class RestoreListFragment : BackupLocationsFragment() {
 
     /* UI */
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
         maybePreventBackNavigation()
     }
 
@@ -46,6 +47,7 @@ class RestoreListFragment : BackupLocationsFragment() {
                 override fun handleOnBackPressed() {
                     try {
                         if (backupViewModel.allowBackNavigation()) {
+                            isEnabled = false
                             requireActivity().onBackPressed()
                         } else {
                             requireActivity().finish()
