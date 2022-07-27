@@ -262,6 +262,7 @@ class UserSearchViewModel @Inject constructor(
                 Two users can have the same displayName when
                 one username matches the other nickname.
             */
+            clearPreviousResults(resultsEmitter)
             searchConnections(factQuery).run {
                 if (isNotEmpty()) {
                     resultsEmitter.emitResults(this)
@@ -281,6 +282,10 @@ class UserSearchViewModel @Inject constructor(
         EmptyPlaceholderItem(
             text = "There are no users with that ${factQuery.type.name.lowercase()}."
         )
+
+    private suspend fun clearPreviousResults(resultsEmitter: MutableStateFlow<List<RequestItem>>) {
+        resultsEmitter.emit(listOf())
+    }
 
     private suspend fun MutableStateFlow<List<RequestItem>>.emitResults(results: List<RequestItem>) {
         emit(results)
