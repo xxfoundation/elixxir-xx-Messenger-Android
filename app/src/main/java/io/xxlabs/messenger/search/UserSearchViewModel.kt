@@ -286,6 +286,8 @@ class UserSearchViewModel @Inject constructor(
         factQuery: FactQuery,
         resultsEmitter: MutableStateFlow<List<RequestItem>>
     ) {
+        if (!isValidQuery(factQuery)) return
+
         _udSearchUi.value = searchRunningState
         viewModelScope.launch {
             /*  TODO: When the username matches a connections' nickname, search UD too.
@@ -303,6 +305,11 @@ class UserSearchViewModel @Inject constructor(
                 resultsEmitter.emitResults(listOf(this))
             } ?: resultsEmitter.emitResults(noResultsFor(factQuery))
         }
+    }
+
+    private fun isValidQuery(factQuery: FactQuery): Boolean {
+        // Prevent users from searching (and possibly requesting) themselves.
+        return preferences.userData.contains(factQuery.fact, true)
     }
 
     private fun noResultsFor(factQuery: FactQuery): List<RequestItem> =
@@ -432,17 +439,17 @@ private sealed class FactQuery {
     abstract val type: FactType
 
     class UsernameQuery(query: String): FactQuery() {
-        override val fact: String = "U$query"
+        override val fact: String = query
         override val type: FactType = FactType.USERNAME
     }
 
     class EmailQuery(query: String): FactQuery() {
-        override val fact: String = "E$query"
+        override val fact: String = query
         override val type: FactType = FactType.EMAIL
     }
 
     class PhoneQuery(query: String): FactQuery() {
-        override val fact: String = "P$query"
+        override val fact: String = query
         override val type: FactType = FactType.PHONE
     }
 }
