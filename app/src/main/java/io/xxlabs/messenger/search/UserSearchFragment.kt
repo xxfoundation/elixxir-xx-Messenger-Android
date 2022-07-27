@@ -31,6 +31,8 @@ import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
+import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
+import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -175,6 +177,20 @@ class UserSearchFragment : RequestsFragment() {
                 showDialog(ui)
                 searchViewModel.onInfoDialogShown()
             }
+        }
+
+        searchViewModel.selectCountry.observe(viewLifecycleOwner) { listener ->
+            listener?.let {
+                selectCountry(it)
+            }
+        }
+    }
+
+    private fun selectCountry(listener: CountrySelectionListener) {
+        safelyInvoke {
+            CountryFullscreenDialog
+                .getInstance(listener)
+                .show(parentFragmentManager, null)
         }
     }
 

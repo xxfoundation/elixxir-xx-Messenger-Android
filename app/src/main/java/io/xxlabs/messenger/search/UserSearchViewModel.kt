@@ -1,13 +1,13 @@
 package io.xxlabs.messenger.search
 
-import android.text.Editable
-import android.text.Spannable
-import android.text.SpannableString
-import android.text.Spanned
+import android.text.*
 import android.text.style.ForegroundColorSpan
+import androidx.databinding.BindingAdapter
 import androidx.lifecycle.*
+import com.google.android.material.textfield.TextInputEditText
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
+import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
@@ -24,6 +24,7 @@ import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
+import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -150,11 +151,28 @@ class UserSearchViewModel @Inject constructor(
     }
     val phoneSearchUi: FactSearchUi by lazy {
         object : FactSearchUi {
-            override val countryCode: LiveData<String?> = MutableLiveData("🇺🇸 +1")
+            override val countryCode: LiveData<String?> by ::dialCode
             override val searchHint: String = "Search by phone number"
             override val userInputEnabled: LiveData<Boolean> by ::_userInputEnabled
             override fun onCountryClicked() { onCountryCodeClicked() }
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
+        }
+    }
+
+    private var country: Country = Country.getDefaultCountry()
+        set(value) {
+            dialCode.value = "${value.flag}  ${value.dialCode}"
+            field = value
+        }
+    private val dialCode = MutableLiveData("${country.flag}  ${country.dialCode}")
+
+    val selectCountry: LiveData<CountrySelectionListener?> by ::_selectCountry
+    private val _selectCountry = MutableLiveData<CountrySelectionListener?>(null)
+
+    private val countryListener: CountrySelectionListener by lazy {
+        object : CountrySelectionListener {
+            override val onDismiss = { _selectCountry.value = null }
+            override fun onItemSelected(country: Country) = onCountrySelected(country)
         }
     }
 
@@ -248,8 +266,7 @@ class UserSearchViewModel @Inject constructor(
 
     fun onPhoneSearch(phone: String?) {
         phone?.let {
-            // TODO: Get cached country code from country picker dialog
-            val factQuery = FactQuery.PhoneQuery(it)
+            val factQuery = FactQuery.PhoneQuery(it+country.countryCode)
             search(factQuery, _phoneResults)
         }
     }
@@ -326,7 +343,6 @@ class UserSearchViewModel @Inject constructor(
             val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
             udResult.second?.let {
                 if (it.isNotEmpty()) {
-                    // TODO: Display search result error
                     showToast(it)
                     noResultPlaceholder(factQuery)
                 } else {
@@ -378,7 +394,11 @@ class UserSearchViewModel @Inject constructor(
     }
 
     private fun onCountryCodeClicked() {
-        showToast("Country code")
+        _selectCountry.value = countryListener
+    }
+
+    private fun onCountrySelected(selectedCountry: Country?) {
+        country = selectedCountry ?: return
     }
 
     fun onUserInput(input: String?) {
@@ -407,4 +427,3 @@ private sealed class FactQuery {
         override val type: FactType = FactType.PHONE
     }
 }
-
