@@ -120,3 +120,14 @@ data class AcceptedConnectionItem(
     override val itemInitials: String = contactRequest.model.initials
     override val itemIconRes: Int? = null
 }
+
+data class SearchResultItem(
+    val contactRequest: ContactRequest,
+    val photo: Bitmap? = null
+) : RequestItem(contactRequest) {
+    override val subtitle: String? = null
+    override val details: String? = contactRequest.getContactInfo()
+    override val itemPhoto: Bitmap? = photo
+    override val itemInitials: String = contactRequest.model.initials
+    override val itemIconRes: Int? = null
+}

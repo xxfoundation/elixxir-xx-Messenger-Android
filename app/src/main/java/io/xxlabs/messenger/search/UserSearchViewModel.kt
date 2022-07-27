@@ -3,9 +3,7 @@ package io.xxlabs.messenger.search
 import android.graphics.Bitmap
 import android.text.*
 import android.text.style.ForegroundColorSpan
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.*
-import com.google.android.material.textfield.TextInputEditText
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
@@ -17,9 +15,9 @@ import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.ui.list.adapter.AcceptedConnectionItem
-import io.xxlabs.messenger.requests.ui.list.adapter.ContactRequestItem
 import io.xxlabs.messenger.requests.ui.list.adapter.EmptyPlaceholderItem
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
+import io.xxlabs.messenger.requests.ui.list.adapter.SearchResultItem
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
@@ -340,25 +338,25 @@ class UserSearchViewModel @Inject constructor(
             FactType.USERNAME -> {
                 daoRepo.connectionsUsernameSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             FactType.EMAIL -> {
                 daoRepo.connectionsEmailSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             FactType.PHONE -> {
                 daoRepo.connectionsPhoneSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             else -> listOf()
         }
     }
 
-    private suspend fun List<ContactData>.asRequestItems(): List<RequestItem> {
+    private suspend fun List<ContactData>.asAcceptedConnections(): List<RequestItem> {
         return mapNotNull {
-            ContactRequestItem(
+            AcceptedConnectionItem(
                 ContactRequestData(it),
                 resolveBitmap(it.photo)
             )
@@ -377,22 +375,22 @@ class UserSearchViewModel @Inject constructor(
                     showToast(it)
                     noResultPlaceholder(factQuery)
                 } else { // Search result
-                    udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
+                    udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
                 }
-            } ?: udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
+            } ?: udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
         } catch (e: Exception) {
             e.message?.let { showToast(it) }
             noResultPlaceholder(factQuery)
         }
     }
 
-    private fun ContactWrapperBase.asRequestItem(): RequestItem {
+    private fun ContactWrapperBase.asSearchResult(): RequestItem {
         // ContactWrapperBase -> ContactRequestData
         val requestData = ContactRequestData(
             ContactData.from(this, RequestStatus.SEARCH)
         )
         // ContactRequestData -> RequestItem
-        return AcceptedConnectionItem(requestData)
+        return SearchResultItem(requestData)
     }
 
     private fun showToast(error: String) {

@@ -218,6 +218,13 @@ class UserSearchFragment : RequestsFragment() {
                 searchViewModel.onCountriesDismissed()
             }
         }
+
+        requestsViewModel.showContactRequestDialog.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                showSendRequestDialog(it)
+                requestsViewModel.onSendRequestDialogShown()
+            }
+        }
     }
 
     private var countryList: CountryFullscreenDialog? = null
@@ -268,10 +275,10 @@ class UserSearchFragment : RequestsFragment() {
         }
     }
 
-    private fun showSendRequestDialog(user: ContactWrapperBase) {
+    private fun showSendRequestDialog(user: ContactData) {
         safelyInvoke {
             SendRequestDialog
-                .newInstance(ContactData.from(user))
+                .newInstance(user)
                 .show(childFragmentManager, null)
         }
     }
