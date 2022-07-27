@@ -140,7 +140,7 @@ open class RequestsFragment : BaseFragment() {
      * Prevents crash caused by user closing/navigating away when a dialog is about to display.
      */
     protected open fun safelyInvoke(block: () -> Unit) {
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             block.invoke()
         }
     }
