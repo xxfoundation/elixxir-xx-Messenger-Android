@@ -35,8 +35,6 @@ import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
-import io.xxlabs.messenger.ui.main.qrcode.scan.QrCodeScanFragment
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -53,7 +51,7 @@ class UserSearchFragment : RequestsFragment() {
     override val navController: NavController by lazy {
         findNavController()
     }
-
+    
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (context as? CustomToastActivity)?.run {
@@ -106,17 +104,17 @@ class UserSearchFragment : RequestsFragment() {
 
             userSearchAppBarTabs.addOnTabSelectedListener(
                 object : OnTabSelectedListener {
+
                     override fun onTabSelected(tab: TabLayout.Tab?) {
-                        tab?.run {
-                            if (position == SEARCH_QR) {
-                                navigateToQrCode()
-//                                userSearchAppBarTabs.getTabAt(SEARCH_PHONE)?.select()
-                            }
+                        if (searchViewModel.previousTabPosition != SEARCH_QR && tab?.position == SEARCH_QR) {
+                            searchViewModel.previousTabPosition = SEARCH_QR
+                            navigateToQrCode()
+                        } else {
+                            searchViewModel.previousTabPosition = tab?.position ?: 0
                         }
                     }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
+                    override fun onTabUnselected(tab: TabLayout.Tab?) { searchViewModel }
                     override fun onTabReselected(tab: TabLayout.Tab?) {}
                 }
             )

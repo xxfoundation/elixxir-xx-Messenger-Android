@@ -36,6 +36,8 @@ class UserSearchViewModel @Inject constructor(
     private val preferences: PreferencesRepository
 ): ViewModel(){
 
+    var previousTabPosition: Int = UserSearchFragment.SEARCH_USERNAME
+
     private val initialState: SearchUiState by lazy {
         SearchUiState(
             callToActionText = callToActionText,
