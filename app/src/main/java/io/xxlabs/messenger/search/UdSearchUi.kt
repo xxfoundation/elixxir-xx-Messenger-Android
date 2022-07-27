@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.main.ud.search
+package io.xxlabs.messenger.search
 
 import android.text.Spanned
 

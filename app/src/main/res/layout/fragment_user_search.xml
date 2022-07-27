@@ -6,7 +6,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.ui.main.ud.search.UdSearchUi" />
+            type="io.xxlabs.messenger.search.UdSearchUi" />
     </data>
 
     <androidx.core.widget.NestedScrollView
