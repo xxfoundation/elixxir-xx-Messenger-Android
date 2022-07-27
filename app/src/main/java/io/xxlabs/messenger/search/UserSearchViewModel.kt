@@ -10,6 +10,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
@@ -371,11 +372,11 @@ class UserSearchViewModel @Inject constructor(
     private suspend fun searchUd(factQuery: FactQuery): RequestItem? {
         return try {
             val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
-            udResult.second?.let {
+            udResult.second?.let { // Error message
                 if (it.isNotEmpty()) {
                     showToast(it)
                     noResultPlaceholder(factQuery)
-                } else {
+                } else { // Search result
                     udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
                 }
             } ?: udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
@@ -388,7 +389,7 @@ class UserSearchViewModel @Inject constructor(
     private fun ContactWrapperBase.asRequestItem(): RequestItem {
         // ContactWrapperBase -> ContactRequestData
         val requestData = ContactRequestData(
-            ContactData.from(this)
+            ContactData.from(this, RequestStatus.SEARCH)
         )
         // ContactRequestData -> RequestItem
         return AcceptedConnectionItem(requestData)
