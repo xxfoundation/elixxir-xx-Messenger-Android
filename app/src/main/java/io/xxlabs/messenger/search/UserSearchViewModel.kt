@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.search
 
+import android.graphics.Bitmap
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import androidx.databinding.BindingAdapter
@@ -20,13 +21,16 @@ import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
+import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -350,10 +354,17 @@ class UserSearchViewModel @Inject constructor(
         }
     }
 
-    private fun List<ContactData>.asRequestItems(): List<RequestItem> {
+    private suspend fun List<ContactData>.asRequestItems(): List<RequestItem> {
         return mapNotNull {
-            ContactRequestItem(ContactRequestData(it))
+            ContactRequestItem(
+                ContactRequestData(it),
+                resolveBitmap(it.photo)
+            )
         }
+    }
+
+    private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
+        BitmapResolver.getBitmap(data)
     }
 
     private suspend fun searchUd(factQuery: FactQuery): RequestItem? {
