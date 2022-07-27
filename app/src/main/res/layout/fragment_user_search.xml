@@ -94,5 +94,47 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/userSearchCallToAction" />
+
+        <View
+            android:id="@+id/fadeView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:alpha="0.85"
+            android:background="@color/neutral_white"
+            android:visibility="@{ui.isSearching}"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:visibility="visible" />
+
+        <ProgressBar
+            android:id="@+id/progressbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="@{ui.isSearching}"
+            android:elevation="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <io.xxlabs.messenger.support.view.SingleClickButton
+            android:id="@+id/userSearchCancelButton"
+            style="@style/dialog_button"
+            android:layout_width="0dp"
+            android:layout_marginBottom="@dimen/registration_body_vertical_margin"
+            android:elevation="5dp"
+            android:onClick="@{() -> ui.onCancelSearchClicked()}"
+            android:stateListAnimator="@null"
+            android:text="@string/cancel"
+            android:visibility="@{ui.isSearching}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progressbar"
+            app:layout_constraintVertical_bias="0.75" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -5,10 +5,7 @@ import android.text.Spannable
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.datatype.FactType
@@ -129,10 +126,15 @@ class UserSearchViewModel @Inject constructor(
     val toastUi: LiveData<ToastUI?> by ::_toastUi
     private val _toastUi = MutableLiveData<ToastUI?>(null)
 
+    private val _userInputEnabled = Transformations.map(udSearchUi) { state ->
+        state != searchRunningState
+    }
+
     val usernameSearchUi: FactSearchUi by lazy {
         object : FactSearchUi {
             override val countryCode: LiveData<String?> = MutableLiveData(null)
             override val searchHint: String = "Search by username"
+            override val userInputEnabled: LiveData<Boolean> by ::_userInputEnabled
             override fun onCountryClicked() {}
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
         }
@@ -141,6 +143,7 @@ class UserSearchViewModel @Inject constructor(
         object : FactSearchUi {
             override val countryCode: LiveData<String?> = MutableLiveData(null)
             override val searchHint: String = "Search by email address"
+            override val userInputEnabled: LiveData<Boolean> by ::_userInputEnabled
             override fun onCountryClicked() {}
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
         }
@@ -149,9 +152,8 @@ class UserSearchViewModel @Inject constructor(
         object : FactSearchUi {
             override val countryCode: LiveData<String?> = MutableLiveData("🇺🇸 +1")
             override val searchHint: String = "Search by phone number"
-            override fun onCountryClicked() {
-                onCountryCodeClicked()
-            }
+            override val userInputEnabled: LiveData<Boolean> by ::_userInputEnabled
+            override fun onCountryClicked() { onCountryCodeClicked() }
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
         }
     }

@@ -59,6 +59,7 @@
                 android:contentDescription="chats.input.search"
                 android:hint="@{ui.searchHint}"
                 android:afterTextChanged="@{ui::onSearchInput}"
+                android:enabled="@{ui.userInputEnabled}"
                 android:maxHeight="@dimen/spacing_40"
                 app:layout_goneMarginTop="@dimen/spacing_28" />
         </com.google.android.material.textfield.TextInputLayout>
