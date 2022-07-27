@@ -23,6 +23,7 @@ class RequestViewHolder(
     override fun onBind(ui: RequestItem, listener: RequestItemListener) {
         binding.ui = ui
         binding.listener = listener
+        listener.markAsSeen(ui)
     }
 
     companion object {
@@ -33,6 +34,28 @@ class RequestViewHolder(
                 false
             )
             return RequestViewHolder(binding)
+        }
+    }
+}
+
+class ConnectionViewHolder(
+    private val binding: ListItemRequestBinding
+) : RequestItemViewHolder(binding.root) {
+
+    override fun onBind(ui: RequestItem, listener: RequestItemListener) {
+        binding.ui = ui
+        binding.listener = listener
+        binding.requestTimestamp.visibility = View.GONE
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ConnectionViewHolder {
+            val binding = ListItemRequestBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return ConnectionViewHolder(binding)
         }
     }
 }

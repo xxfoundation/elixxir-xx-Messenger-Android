@@ -11,6 +11,7 @@ class RequestsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestItemViewHolder {
         return when (ViewType.from(viewType)) {
+            CONNECTION -> ConnectionViewHolder.create(parent)
             REQUEST, INVITE -> RequestViewHolder.create(parent)
             PLACEHOLDER -> Placeholder.create(parent)
             SWITCH -> HiddenRequestToggle.create(parent)
@@ -21,7 +22,6 @@ class RequestsAdapter(
     override fun onBindViewHolder(holder: RequestItemViewHolder, position: Int) {
         with(currentList[position]) {
             holder.onBind(this, listener)
-            listener.markAsSeen(this)
         }
     }
 
@@ -33,6 +33,7 @@ class RequestsAdapter(
                 is GroupInviteItem -> INVITE.value
                 is EmptyPlaceholderItem -> PLACEHOLDER.value
                 is HiddenRequestToggleItem -> SWITCH.value
+                is AcceptedConnectionItem -> CONNECTION.value
                 else -> OTHER.value
             }
             status + model
@@ -44,7 +45,8 @@ class RequestsAdapter(
         INVITE(200),
         PLACEHOLDER(300),
         SWITCH(400),
-        OTHER(500);
+        CONNECTION(500),
+        OTHER(600);
 
         companion object {
             fun from(value: Int): ViewType {
