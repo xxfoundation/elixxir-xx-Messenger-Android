@@ -15,6 +15,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
+import io.xxlabs.messenger.requests.ui.list.adapter.AcceptedConnectionItem
 import io.xxlabs.messenger.requests.ui.list.adapter.ContactRequestItem
 import io.xxlabs.messenger.requests.ui.list.adapter.EmptyPlaceholderItem
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
@@ -390,7 +391,7 @@ class UserSearchViewModel @Inject constructor(
             ContactData.from(this)
         )
         // ContactRequestData -> RequestItem
-        return ContactRequestItem(requestData)
+        return AcceptedConnectionItem(requestData)
     }
 
     private fun showToast(error: String) {

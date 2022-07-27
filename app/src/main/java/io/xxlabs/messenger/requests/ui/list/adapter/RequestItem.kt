@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.annotation.IdRes
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.formattedEmail
 import io.xxlabs.messenger.data.room.model.formattedPhone
 import io.xxlabs.messenger.requests.model.ContactRequest
@@ -65,15 +66,15 @@ data class ContactRequestItem(
     override val itemPhoto: Bitmap? = photo
     override val itemInitials: String = contactRequest.model.initials
     override val itemIconRes: Int? = null
-
-    private fun ContactRequest.getContactInfo(): String? =
-        with ("${model.formattedEmail() ?: ""}\n${model.formattedPhone() ?: ""}") {
-            when {
-                isNullOrBlank() -> null
-                else -> trim()
-            }
-        }
 }
+
+private fun ContactRequest.getContactInfo(): String? =
+    with ("${model.formattedEmail() ?: ""}\n${model.formattedPhone() ?: ""}") {
+        when {
+            isNullOrBlank() -> null
+            else -> trim()
+        }
+    }
 
 data class GroupInviteItem(
     val invite: GroupInvitation,
@@ -107,4 +108,15 @@ data class HiddenRequestToggleItem(
     override val itemInitials: String? = null
     override val subtitle: String? = null
     override val details: String? = null
+}
+
+data class AcceptedConnectionItem(
+    val contactRequest: ContactRequest,
+    val photo: Bitmap? = null
+) : RequestItem(contactRequest) {
+    override val subtitle: String? = null
+    override val details: String? = contactRequest.getContactInfo()
+    override val itemPhoto: Bitmap? = photo
+    override val itemInitials: String = contactRequest.model.initials
+    override val itemIconRes: Int? = null
 }
