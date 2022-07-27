@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import java.lang.Exception
 
 class UserSearchFragment : RequestsFragment() {
@@ -184,13 +185,30 @@ class UserSearchFragment : RequestsFragment() {
                 selectCountry(it)
             }
         }
+
+        searchViewModel.dismissCountries.observe(viewLifecycleOwner) { dismiss ->
+            if (dismiss) {
+                dismissCountryList()
+                searchViewModel.onCountriesDismissed()
+            }
+        }
     }
+
+    private var countryList: CountryFullscreenDialog? = null
 
     private fun selectCountry(listener: CountrySelectionListener) {
         safelyInvoke {
-            CountryFullscreenDialog
-                .getInstance(listener)
-                .show(parentFragmentManager, null)
+            countryList = CountryFullscreenDialog.getInstance(listener)
+            countryList?.show(parentFragmentManager, null)
+        }
+    }
+
+    private fun dismissCountryList() {
+        try {
+            countryList?.dismiss()
+            countryList = null
+        } catch (e: Exception) {
+            Timber.d("Exception occured when dismissing countries list: ${e.message}")
         }
     }
 

@@ -397,8 +397,16 @@ class UserSearchViewModel @Inject constructor(
         _selectCountry.value = countryListener
     }
 
+    val dismissCountries: LiveData<Boolean> by ::_dismissCountries
+    private val _dismissCountries = MutableLiveData(false)
+
     private fun onCountrySelected(selectedCountry: Country?) {
+        _dismissCountries.value = true
         country = selectedCountry ?: return
+    }
+
+    fun onCountriesDismissed() {
+        _dismissCountries.value = false
     }
 
     fun onUserInput(input: String?) {
