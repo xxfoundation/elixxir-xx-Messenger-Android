@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.textfield.TextInputEditText
 import io.xxlabs.messenger.databinding.FragmentFactSearchBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
@@ -70,8 +71,15 @@ abstract class FactSearchFragment : Fragment(), Injectable {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = resultsAdapter
         }
+        binding.searchTextInputEditText.apply {
+            initKeyboardSearchButton()
+            initFocusListener()
+        }
+        binding.ui = getSearchTabUi()
+    }
 
-        binding.searchTextInputEditText.setOnEditorActionListener { v, actionId, _ ->
+    private fun TextInputEditText.initKeyboardSearchButton() {
+        setOnEditorActionListener { v, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 try {
                     onSearchClicked(v.text.toString())
@@ -84,8 +92,12 @@ abstract class FactSearchFragment : Fragment(), Injectable {
                 return@setOnEditorActionListener false
             }
         }
+    }
 
-        binding.ui = getSearchTabUi()
+    private fun TextInputEditText.initFocusListener() {
+        setOnFocusChangeListener { view, hasFocus ->
+            if (hasFocus) searchViewModel.onUserInput("")
+        }
     }
 
     abstract suspend fun getResults(): Flow<List<RequestItem>>
