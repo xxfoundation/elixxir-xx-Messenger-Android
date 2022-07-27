@@ -13,6 +13,8 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
@@ -33,6 +35,8 @@ import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
+import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
+import io.xxlabs.messenger.ui.main.qrcode.scan.QrCodeScanFragment
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -99,8 +103,29 @@ class UserSearchFragment : RequestsFragment() {
                     }
                 }
             }.attach()
-        }
 
+            userSearchAppBarTabs.addOnTabSelectedListener(
+                object : OnTabSelectedListener {
+                    override fun onTabSelected(tab: TabLayout.Tab?) {
+                        tab?.run {
+                            if (position == SEARCH_QR) {
+                                navigateToQrCode()
+//                                userSearchAppBarTabs.getTabAt(SEARCH_PHONE)?.select()
+                            }
+                        }
+                    }
+
+                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
+                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+                }
+            )
+        }
+    }
+
+    private fun navigateToQrCode() {
+        val qrCodeScreen = UserSearchFragmentDirections.actionGlobalQrCode()
+        findNavController().navigate(qrCodeScreen)
     }
 
     override fun setupViewPager(viewPager: ViewPager2) {
