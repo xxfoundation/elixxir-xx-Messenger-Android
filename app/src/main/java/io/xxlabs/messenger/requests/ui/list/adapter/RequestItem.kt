@@ -131,3 +131,15 @@ data class SearchResultItem(
     override val itemInitials: String = contactRequest.model.initials
     override val itemIconRes: Int? = null
 }
+
+data class ConnectionsDividerItem(
+    val placeholder: NullRequest = NullRequest(),
+    val text: String = "Local results"
+) : RequestItem(placeholder) {
+    override val title = text
+    override val itemPhoto: Bitmap? = null
+    override val itemIconRes: Int? = null
+    override val itemInitials: String? = null
+    override val subtitle: String? = null
+    override val details: String? = null
+}

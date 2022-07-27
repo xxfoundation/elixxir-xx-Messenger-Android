@@ -9,6 +9,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ListItemEmptyPlaceholderBinding
 import io.xxlabs.messenger.databinding.ListItemHiddenRequestsToggleBinding
 import io.xxlabs.messenger.databinding.ListItemRequestBinding
+import io.xxlabs.messenger.databinding.ListItemSectionDividerBinding
 import timber.log.Timber
 import java.io.InvalidObjectException
 
@@ -96,6 +97,26 @@ class HiddenRequestToggle(
                 false
             )
             return HiddenRequestToggle(binding)
+        }
+    }
+}
+
+class ConnectionsSectionDivider(
+    private val binding: ListItemSectionDividerBinding
+) : RequestItemViewHolder(binding.root) {
+
+    override fun onBind(ui: RequestItem, listener: RequestItemListener) {
+        binding.ui = ui
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ConnectionsSectionDivider {
+            val binding = ListItemSectionDividerBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return ConnectionsSectionDivider(binding)
         }
     }
 }

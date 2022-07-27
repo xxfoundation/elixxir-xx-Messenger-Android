@@ -14,10 +14,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
-import io.xxlabs.messenger.requests.ui.list.adapter.AcceptedConnectionItem
-import io.xxlabs.messenger.requests.ui.list.adapter.EmptyPlaceholderItem
-import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
-import io.xxlabs.messenger.requests.ui.list.adapter.SearchResultItem
+import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
@@ -355,12 +352,30 @@ class UserSearchViewModel @Inject constructor(
     }
 
     private suspend fun List<ContactData>.asAcceptedConnections(): List<RequestItem> {
-        return mapNotNull {
+        val requests = filter {
+            it.status != RequestStatus.ACCEPTED.value
+        }.toSet()
+        val contacts = this - requests
+
+        val requestItems = requests.map {
+            SearchResultItem(
+                ContactRequestData(it),
+                resolveBitmap(it.photo)
+            )
+        }
+        val contactItems = contacts.map {
             AcceptedConnectionItem(
                 ContactRequestData(it),
                 resolveBitmap(it.photo)
             )
         }
+        return requestItems.apply {
+            if (contactItems.isNotEmpty()) {
+                plus(ConnectionsDividerItem())
+                plus(contactItems)
+            }
+        }
+
     }
 
     private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {

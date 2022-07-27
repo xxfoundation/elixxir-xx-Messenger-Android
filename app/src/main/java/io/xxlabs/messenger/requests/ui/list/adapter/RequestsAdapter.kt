@@ -15,6 +15,7 @@ class RequestsAdapter(
             REQUEST, INVITE -> RequestViewHolder.create(parent)
             PLACEHOLDER -> Placeholder.create(parent)
             SWITCH -> HiddenRequestToggle.create(parent)
+            DIVIDER -> ConnectionsSectionDivider.create(parent)
             OTHER -> InvalidViewType.create(parent)
         }
     }
@@ -35,6 +36,7 @@ class RequestsAdapter(
                 is HiddenRequestToggleItem -> SWITCH.value
                 is AcceptedConnectionItem -> CONNECTION.value
                 is SearchResultItem -> SEARCH.value
+                is ConnectionsDividerItem -> DIVIDER.value
                 else -> OTHER.value
             }
             status + model
@@ -48,7 +50,8 @@ class RequestsAdapter(
         SWITCH(400),
         CONNECTION(500),
         SEARCH(600),
-        OTHER(700);
+        DIVIDER(700),
+        OTHER(800);
 
         companion object {
             fun from(value: Int): ViewType {
