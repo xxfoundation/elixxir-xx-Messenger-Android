@@ -20,6 +20,7 @@ import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestsAdapter
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -138,4 +139,10 @@ class PhoneSearchFragment : FactSearchFragment() {
     }
 
     override fun getSearchTabUi(): FactSearchUi = searchViewModel.phoneSearchUi
+}
+
+class QrSearchFragment : FactSearchFragment() {
+    override suspend fun getResults(): Flow<List<RequestItem>> = flowOf()
+    override fun onSearchClicked(query: String?) {}
+    override fun getSearchTabUi(): FactSearchUi = searchViewModel.qrSearchUi
 }

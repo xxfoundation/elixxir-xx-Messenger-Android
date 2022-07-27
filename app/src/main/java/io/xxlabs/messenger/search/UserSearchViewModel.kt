@@ -160,6 +160,15 @@ class UserSearchViewModel @Inject constructor(
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
         }
     }
+    val qrSearchUi: FactSearchUi by lazy {
+        object : FactSearchUi {
+            override val countryCode: LiveData<String?> = MutableLiveData(null)
+            override val searchHint: String = "Search by QR code"
+            override val userInputEnabled: LiveData<Boolean> = MutableLiveData(false)
+            override fun onCountryClicked() { }
+            override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
+        }
+    }
 
     private var country: Country = Country.getDefaultCountry()
         set(value) {

@@ -150,4 +150,7 @@ abstract class FragmentMainBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributePhoneSearchFragment(): PhoneSearchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeQrSearchFragment(): QrSearchFragment
 }

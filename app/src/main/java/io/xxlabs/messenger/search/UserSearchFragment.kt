@@ -36,6 +36,7 @@ import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -51,7 +52,7 @@ class UserSearchFragment : RequestsFragment() {
     override val navController: NavController by lazy {
         findNavController()
     }
-    
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         (context as? CustomToastActivity)?.run {
@@ -104,18 +105,20 @@ class UserSearchFragment : RequestsFragment() {
 
             userSearchAppBarTabs.addOnTabSelectedListener(
                 object : OnTabSelectedListener {
-
                     override fun onTabSelected(tab: TabLayout.Tab?) {
                         if (searchViewModel.previousTabPosition != SEARCH_QR && tab?.position == SEARCH_QR) {
                             searchViewModel.previousTabPosition = SEARCH_QR
-                            navigateToQrCode()
+                            lifecycleScope.launch {
+                                delay(500)
+                                navigateToQrCode()
+                            }
                         } else {
                             searchViewModel.previousTabPosition = tab?.position ?: 0
                         }
                     }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab?) { searchViewModel }
-                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+                    override fun onTabUnselected(tab: TabLayout.Tab?) { }
+                    override fun onTabReselected(tab: TabLayout.Tab?) { }
                 }
             )
         }
@@ -144,7 +147,7 @@ class UserSearchFragment : RequestsFragment() {
             getTabIcon(R.drawable.ic_phone)
         )
         stateAdapter.addFragment(
-            UsernameSearchFragment(),
+            QrSearchFragment(),
             "QR Code",
             getTabIcon(R.drawable.ic_qr_code_label)
         )
