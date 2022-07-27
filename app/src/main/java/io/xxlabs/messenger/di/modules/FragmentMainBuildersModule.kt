@@ -17,6 +17,7 @@ import io.xxlabs.messenger.requests.ui.list.ReceivedRequestsFragment
 import io.xxlabs.messenger.requests.ui.list.SentRequestsFragment
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
 import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
+import io.xxlabs.messenger.search.*
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment
@@ -134,4 +135,19 @@ abstract class FragmentMainBuildersModule {
 
     @ContributesAndroidInjector
     abstract fun contributeInvitationAcceptedDialog(): InvitationAcceptedDialog
+
+    @ContributesAndroidInjector
+    abstract fun contributeUserSearchFragment(): UserSearchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeFactSearchFragment(): FactSearchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeUsernameSearchFragment(): UsernameSearchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributeEmailSearchFragment(): EmailSearchFragment
+
+    @ContributesAndroidInjector
+    abstract fun contributePhoneSearchFragment(): PhoneSearchFragment
 }

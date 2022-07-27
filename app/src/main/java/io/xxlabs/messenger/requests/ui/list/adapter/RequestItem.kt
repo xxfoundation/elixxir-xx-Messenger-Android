@@ -58,7 +58,7 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
 
 data class ContactRequestItem(
     val contactRequest: ContactRequest,
-    val photo: Bitmap?,
+    val photo: Bitmap? = null,
 ) : RequestItem(contactRequest) {
     override val subtitle: String? = null
     override val details: String? = contactRequest.getContactInfo()
