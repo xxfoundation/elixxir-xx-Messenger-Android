@@ -89,6 +89,9 @@ class RequestsViewModel @Inject constructor(
     val sendContactRequest: StateFlow<ContactData?> by ::_sendContactRequest
     private val _sendContactRequest = MutableStateFlow<ContactData?>(null)
 
+    val showContactRequestDialog: LiveData<ContactData?> by ::_showContactRequestDialog
+    private val _showContactRequestDialog = MutableLiveData<ContactData?>(null)
+
     val showCreateNickname: StateFlow<OutgoingRequest?> by ::_showCreateNickname
     private val _showCreateNickname = MutableStateFlow<OutgoingRequest?>(null)
 
@@ -344,12 +347,27 @@ class RequestsViewModel @Inject constructor(
         when (request.request.requestStatus) {
             VERIFYING -> showVerifyingInfo()
             VERIFIED, HIDDEN -> showDetails(request)
+            ACCEPTED -> {
+                (request.request as? ContactRequest)?.model?.let { contact ->
+                    sendMessage(contact)
+                }
+            }
+            SEARCH -> {
+                (request.request as? ContactRequest)?.model?.let { user ->
+                    _showContactRequestDialog.value = user as ContactData
+                }
+            }
         }
+    }
+
+    fun onSendRequestDialogShown() {
+        _showContactRequestDialog.value = null
     }
 
     private fun showDetails(item: RequestItem) {
         when (item) {
             is ContactRequestItem -> showRequestDialog(item.contactRequest)
+            is SearchResultItem -> showRequestDialog(item.contactRequest)
             is GroupInviteItem -> showInvitationDialog(item.invite)
         }
     }

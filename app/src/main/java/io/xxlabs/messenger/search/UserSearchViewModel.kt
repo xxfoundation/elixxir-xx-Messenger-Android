@@ -1,32 +1,33 @@
 package io.xxlabs.messenger.search
 
+import android.graphics.Bitmap
 import android.text.*
 import android.text.style.ForegroundColorSpan
-import androidx.databinding.BindingAdapter
 import androidx.lifecycle.*
-import com.google.android.material.textfield.TextInputEditText
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
-import io.xxlabs.messenger.requests.ui.list.adapter.ContactRequestItem
-import io.xxlabs.messenger.requests.ui.list.adapter.EmptyPlaceholderItem
-import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
+import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
+import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -35,6 +36,8 @@ class UserSearchViewModel @Inject constructor(
     private val daoRepo: DaoRepository,
     private val preferences: PreferencesRepository
 ): ViewModel(){
+
+    var previousTabPosition: Int = UserSearchFragment.SEARCH_USERNAME
 
     private val initialState: SearchUiState by lazy {
         SearchUiState(
@@ -158,6 +161,15 @@ class UserSearchViewModel @Inject constructor(
             override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
         }
     }
+    val qrSearchUi: FactSearchUi by lazy {
+        object : FactSearchUi {
+            override val countryCode: LiveData<String?> = MutableLiveData(null)
+            override val searchHint: String = "Search by QR code"
+            override val userInputEnabled: LiveData<Boolean> = MutableLiveData(false)
+            override fun onCountryClicked() { }
+            override fun onSearchInput(editable: Editable?) = onUserInput(editable?.toString())
+        }
+    }
 
     private var country: Country = Country.getDefaultCountry()
         set(value) {
@@ -275,6 +287,8 @@ class UserSearchViewModel @Inject constructor(
         factQuery: FactQuery,
         resultsEmitter: MutableStateFlow<List<RequestItem>>
     ) {
+        if (!isValidQuery(factQuery)) return
+
         _udSearchUi.value = searchRunningState
         viewModelScope.launch {
             /*  TODO: When the username matches a connections' nickname, search UD too.
@@ -292,6 +306,11 @@ class UserSearchViewModel @Inject constructor(
                 resultsEmitter.emitResults(listOf(this))
             } ?: resultsEmitter.emitResults(noResultsFor(factQuery))
         }
+    }
+
+    private fun isValidQuery(factQuery: FactQuery): Boolean {
+        // Prevent users from searching (and possibly requesting) themselves.
+        return !preferences.userData.contains(factQuery.fact, true)
     }
 
     private fun noResultsFor(factQuery: FactQuery): List<RequestItem> =
@@ -316,52 +335,77 @@ class UserSearchViewModel @Inject constructor(
             FactType.USERNAME -> {
                 daoRepo.connectionsUsernameSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             FactType.EMAIL -> {
                 daoRepo.connectionsEmailSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             FactType.PHONE -> {
                 daoRepo.connectionsPhoneSearch(factQuery.fact)
                     .value()
-                    .asRequestItems()
+                    .asAcceptedConnections()
             }
             else -> listOf()
         }
     }
 
-    private fun List<ContactData>.asRequestItems(): List<RequestItem> {
-        return mapNotNull {
-            ContactRequestItem(ContactRequestData(it))
+    private suspend fun List<ContactData>.asAcceptedConnections(): List<RequestItem> {
+        val requests = filter {
+            it.status != RequestStatus.ACCEPTED.value
+        }.toSet()
+        val contacts = this - requests
+
+        val requestItems = requests.map {
+            SearchResultItem(
+                ContactRequestData(it),
+                resolveBitmap(it.photo)
+            )
         }
+        val contactItems = contacts.map {
+            AcceptedConnectionItem(
+                ContactRequestData(it),
+                resolveBitmap(it.photo)
+            )
+        }
+        return requestItems.apply {
+            if (contactItems.isNotEmpty()) {
+                plus(ConnectionsDividerItem())
+                plus(contactItems)
+            }
+        }
+
+    }
+
+    private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
+        BitmapResolver.getBitmap(data)
     }
 
     private suspend fun searchUd(factQuery: FactQuery): RequestItem? {
         return try {
             val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
-            udResult.second?.let {
+            udResult.second?.let { // Error message
                 if (it.isNotEmpty()) {
                     showToast(it)
                     noResultPlaceholder(factQuery)
-                } else {
-                    udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
+                } else { // Search result
+                    udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
                 }
-            } ?: udResult.first?.asRequestItem() ?: noResultPlaceholder(factQuery)
+            } ?: udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
         } catch (e: Exception) {
             e.message?.let { showToast(it) }
             noResultPlaceholder(factQuery)
         }
     }
 
-    private fun ContactWrapperBase.asRequestItem(): RequestItem {
+    private fun ContactWrapperBase.asSearchResult(): RequestItem {
         // ContactWrapperBase -> ContactRequestData
         val requestData = ContactRequestData(
-            ContactData.from(this)
+            ContactData.from(this, RequestStatus.SEARCH)
         )
         // ContactRequestData -> RequestItem
-        return ContactRequestItem(requestData)
+        return SearchResultItem(requestData)
     }
 
     private fun showToast(error: String) {
@@ -421,17 +465,17 @@ private sealed class FactQuery {
     abstract val type: FactType
 
     class UsernameQuery(query: String): FactQuery() {
-        override val fact: String = "U$query"
+        override val fact: String = query
         override val type: FactType = FactType.USERNAME
     }
 
     class EmailQuery(query: String): FactQuery() {
-        override val fact: String = "E$query"
+        override val fact: String = query
         override val type: FactType = FactType.EMAIL
     }
 
     class PhoneQuery(query: String): FactQuery() {
-        override val fact: String = "P$query"
+        override val fact: String = query
         override val type: FactType = FactType.PHONE
     }
 }

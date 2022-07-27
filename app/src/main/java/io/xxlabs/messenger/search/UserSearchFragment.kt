@@ -35,9 +35,8 @@ import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
-import io.xxlabs.messenger.ui.main.qrcode.QrCodeFragment
-import io.xxlabs.messenger.ui.main.qrcode.scan.QrCodeScanFragment
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -107,17 +106,19 @@ class UserSearchFragment : RequestsFragment() {
             userSearchAppBarTabs.addOnTabSelectedListener(
                 object : OnTabSelectedListener {
                     override fun onTabSelected(tab: TabLayout.Tab?) {
-                        tab?.run {
-                            if (position == SEARCH_QR) {
+                        if (searchViewModel.previousTabPosition != SEARCH_QR && tab?.position == SEARCH_QR) {
+                            searchViewModel.previousTabPosition = SEARCH_QR
+                            lifecycleScope.launch {
+                                delay(500)
                                 navigateToQrCode()
-//                                userSearchAppBarTabs.getTabAt(SEARCH_PHONE)?.select()
                             }
+                        } else {
+                            searchViewModel.previousTabPosition = tab?.position ?: 0
                         }
                     }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
-                    override fun onTabReselected(tab: TabLayout.Tab?) {}
+                    override fun onTabUnselected(tab: TabLayout.Tab?) { }
+                    override fun onTabReselected(tab: TabLayout.Tab?) { }
                 }
             )
         }
@@ -146,7 +147,7 @@ class UserSearchFragment : RequestsFragment() {
             getTabIcon(R.drawable.ic_phone)
         )
         stateAdapter.addFragment(
-            UsernameSearchFragment(),
+            QrSearchFragment(),
             "QR Code",
             getTabIcon(R.drawable.ic_qr_code_label)
         )
@@ -217,6 +218,13 @@ class UserSearchFragment : RequestsFragment() {
                 searchViewModel.onCountriesDismissed()
             }
         }
+
+        requestsViewModel.showContactRequestDialog.observe(viewLifecycleOwner) { user ->
+            user?.let {
+                showSendRequestDialog(it)
+                requestsViewModel.onSendRequestDialogShown()
+            }
+        }
     }
 
     private var countryList: CountryFullscreenDialog? = null
@@ -267,10 +275,10 @@ class UserSearchFragment : RequestsFragment() {
         }
     }
 
-    private fun showSendRequestDialog(user: ContactWrapperBase) {
+    private fun showSendRequestDialog(user: ContactData) {
         safelyInvoke {
             SendRequestDialog
-                .newInstance(ContactData.from(user))
+                .newInstance(user)
                 .show(childFragmentManager, null)
         }
     }
