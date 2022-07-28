@@ -379,9 +379,6 @@ class UserSearchViewModel @Inject constructor(
         } else {
             requestItems
         }
-        Timber.d("RequestItems: ${requestItems.size} entries")
-        Timber.d("ContactItems: ${contactItems.size} entries")
-        Timber.d("LocalResults: ${localResults.size} entries")
         return localResults
     }
 
