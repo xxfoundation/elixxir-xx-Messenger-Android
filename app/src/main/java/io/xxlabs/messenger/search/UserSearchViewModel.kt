@@ -358,9 +358,9 @@ class UserSearchViewModel @Inject constructor(
         // Separate into a sublist of accepted connections and requests.
         val contacts = this - requests
 
-        // Wrap the requests as SearchResultItems for UI layer.
+        // Wrap the requests as ContactRequestSearchResultItem for UI layer.
         val requestItems = requests.map {
-            SearchResultItem(
+            ContactRequestSearchResultItem(
                 ContactRequestData(it),
                 resolveBitmap(it.photo)
             )
