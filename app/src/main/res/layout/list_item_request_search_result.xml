@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="io.xxlabs.messenger.ui.main.chat.DrawablePosition"/>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.requests.ui.list.adapter.ContactRequestSearchResultItem" />
+        <variable
+            name="listener"
+            type="io.xxlabs.messenger.requests.ui.list.adapter.RequestItemListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/requestItemLayout"
+        android:padding="16dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="@{() -> listener.onItemClicked(ui)}" >
+
+        <include
+            android:id="@+id/requestProfilePhoto"
+            layout="@layout/component_item_thumbnail"
+            android:layout_width="@dimen/spacing_42"
+            android:layout_height="@dimen/spacing_42"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:ui="@{ui}" />
+
+        <TextView
+            android:id="@+id/requestTitle"
+            style="@style/request_item_header"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:text="@{ui.title}"
+            app:layout_constraintBottom_toTopOf="@+id/requestSubtitle"
+            app:layout_constraintEnd_toStartOf="@id/requestAction"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/requestProfilePhoto"
+            app:layout_constraintTop_toTopOf="@id/requestProfilePhoto"
+            tools:text="bartender007" />
+
+        <TextView
+            android:id="@+id/requestSubtitle"
+            style="@style/request_item_subheader"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ui.subtitle}"
+            android:visibility="@{ui.subtitle}"
+            android:textColor="@{ui.statusTextColor}"
+            app:layout_constraintEnd_toStartOf="@id/requestAction"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/requestProfilePhoto"
+            app:layout_constraintTop_toBottomOf="@id/requestTitle"
+            tools:text="Request pending"
+            tools:textColor="@color/neutral_weak"/>
+
+        <io.xxlabs.messenger.support.view.SingleClickTextView
+            android:id="@+id/requestAction"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{ui.actionLabel}"
+            android:padding="12dp"
+            android:layout_marginHorizontal="0dp"
+            android:drawablePadding="4dp"
+            android:onClick="@{() -> listener.onActionClicked(ui)}"
+            android:visibility="@{ui.actionLabel}"
+            android:singleLine="false"
+            android:gravity="center_vertical|end"
+            app:actionIcon="@{ui.actionIcon}"
+            app:iconColor="@{ui.actionIconColor}"
+            app:iconPosition="@{DrawablePosition.START}"
+            app:customStyle="@{ui.actionTextStyle}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:drawableLeft="@drawable/ic_retry"
+            tools:text="Resend"
+            style="@style/request_item_subheader"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

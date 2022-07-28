@@ -12,7 +12,8 @@ class RequestsAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestItemViewHolder {
         return when (ViewType.from(viewType)) {
             CONNECTION, UD_SEARCH_RESULT -> ConnectionViewHolder.create(parent)
-            REQUEST, INVITE, REQUEST_SEARCH_RESULT -> RequestViewHolder.create(parent)
+            REQUEST, INVITE -> RequestViewHolder.create(parent)
+            REQUEST_SEARCH_RESULT -> RequestSearchResultViewHolder.create(parent)
             PLACEHOLDER -> Placeholder.create(parent)
             SWITCH -> HiddenRequestToggle.create(parent)
             DIVIDER -> ConnectionsSectionDivider.create(parent)
