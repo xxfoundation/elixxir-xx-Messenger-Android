@@ -76,6 +76,17 @@ private fun ContactRequest.getContactInfo(): String? =
         }
     }
 
+data class ContactRequestSearchResultItem(
+    val contactRequest: ContactRequest,
+    val photo: Bitmap? = null,
+) : RequestItem(contactRequest) {
+    override val subtitle: String = "Request pending"
+    override val details: String? = null
+    override val itemPhoto: Bitmap? = photo
+    override val itemInitials: String = contactRequest.model.initials
+    override val itemIconRes: Int? = null
+}
+
 data class GroupInviteItem(
     val invite: GroupInvitation,
 //    val membersList: List<MemberItem>,
