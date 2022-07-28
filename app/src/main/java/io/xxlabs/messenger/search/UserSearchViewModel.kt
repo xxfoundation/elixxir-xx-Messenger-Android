@@ -355,27 +355,34 @@ class UserSearchViewModel @Inject constructor(
         val requests = filter {
             it.status != RequestStatus.ACCEPTED.value
         }.toSet()
+        // Separate into a sublist of accepted connections and requests.
         val contacts = this - requests
 
+        // Wrap the requests as SearchResultItems for UI layer.
         val requestItems = requests.map {
             SearchResultItem(
                 ContactRequestData(it),
                 resolveBitmap(it.photo)
             )
-        }
+        }.toMutableList()
+
+        // Wrap the connections as AcceptedConnectionItems for UI layer.
         val contactItems = contacts.map {
+            val requestData = ContactRequestData(it)
             AcceptedConnectionItem(
-                ContactRequestData(it),
+                requestData,
                 resolveBitmap(it.photo)
             )
         }
-        return requestItems.apply {
-            if (contactItems.isNotEmpty()) {
-                plus(ConnectionsDividerItem())
-                plus(contactItems)
-            }
+        val localResults = if (contacts.isNotEmpty()) {
+            requestItems + ConnectionsDividerItem() + contactItems
+        } else {
+            requestItems
         }
-
+        Timber.d("RequestItems: ${requestItems.size} entries")
+        Timber.d("ContactItems: ${contactItems.size} entries")
+        Timber.d("LocalResults: ${localResults.size} entries")
+        return localResults
     }
 
     private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
