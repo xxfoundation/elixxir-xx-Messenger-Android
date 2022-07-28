@@ -11,8 +11,9 @@ class RequestsAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestItemViewHolder {
         return when (ViewType.from(viewType)) {
-            CONNECTION, SEARCH -> ConnectionViewHolder.create(parent)
+            CONNECTION, UD_SEARCH_RESULT -> ConnectionViewHolder.create(parent)
             REQUEST, INVITE -> RequestViewHolder.create(parent)
+            REQUEST_SEARCH_RESULT -> RequestSearchResultViewHolder.create(parent)
             PLACEHOLDER -> Placeholder.create(parent)
             SWITCH -> HiddenRequestToggle.create(parent)
             DIVIDER -> ConnectionsSectionDivider.create(parent)
@@ -35,8 +36,9 @@ class RequestsAdapter(
                 is EmptyPlaceholderItem -> PLACEHOLDER.value
                 is HiddenRequestToggleItem -> SWITCH.value
                 is AcceptedConnectionItem -> CONNECTION.value
-                is SearchResultItem -> SEARCH.value
+                is SearchResultItem -> UD_SEARCH_RESULT.value
                 is ConnectionsDividerItem -> DIVIDER.value
+                is ContactRequestSearchResultItem -> REQUEST_SEARCH_RESULT.value
                 else -> OTHER.value
             }
             status + model
@@ -49,9 +51,10 @@ class RequestsAdapter(
         PLACEHOLDER(300),
         SWITCH(400),
         CONNECTION(500),
-        SEARCH(600),
+        UD_SEARCH_RESULT(600),
         DIVIDER(700),
-        OTHER(800);
+        REQUEST_SEARCH_RESULT(800),
+        OTHER(900);
 
         companion object {
             fun from(value: Int): ViewType {
