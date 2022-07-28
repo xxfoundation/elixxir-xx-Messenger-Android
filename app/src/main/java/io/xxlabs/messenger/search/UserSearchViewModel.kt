@@ -335,23 +335,23 @@ class UserSearchViewModel @Inject constructor(
             FactType.USERNAME -> {
                 daoRepo.connectionsUsernameSearch(factQuery.fact)
                     .value()
-                    .asAcceptedConnections()
+                    .asLocalResult()
             }
             FactType.EMAIL -> {
                 daoRepo.connectionsEmailSearch(factQuery.fact)
                     .value()
-                    .asAcceptedConnections()
+                    .asLocalResult()
             }
             FactType.PHONE -> {
                 daoRepo.connectionsPhoneSearch(factQuery.fact)
                     .value()
-                    .asAcceptedConnections()
+                    .asLocalResult()
             }
             else -> listOf()
         }
     }
 
-    private suspend fun List<ContactData>.asAcceptedConnections(): List<RequestItem> {
+    private suspend fun List<ContactData>.asLocalResult(): List<RequestItem> {
         val requests = filter {
             it.status != RequestStatus.ACCEPTED.value
         }.toSet()
@@ -361,8 +361,11 @@ class UserSearchViewModel @Inject constructor(
         // Wrap the requests as ContactRequestSearchResultItem for UI layer.
         val requestItems = requests.map {
             ContactRequestSearchResultItem(
-                ContactRequestData(it),
-                resolveBitmap(it.photo)
+                contactRequest = ContactRequestData(it),
+                photo = resolveBitmap(it.photo),
+                statusText = it.statusText(),
+                statusTextColor = it.statusTextColor(),
+                actionVisible= it.actionVisible()
             )
         }.toMutableList()
 
@@ -380,6 +383,39 @@ class UserSearchViewModel @Inject constructor(
             requestItems
         }
         return localResults
+    }
+
+    private fun ContactData.statusText(): String {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.SENT,
+            RequestStatus.VERIFIED,
+            RequestStatus.RESET_SENT -> "Request pending"
+
+            RequestStatus.SEND_FAIL,
+            RequestStatus.CONFIRM_FAIL,
+            RequestStatus.VERIFICATION_FAIL,
+            RequestStatus.RESET_FAIL -> "Request failed"
+
+            else -> ""
+        }
+    }
+
+    private fun ContactData.statusTextColor(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.SEND_FAIL,
+            RequestStatus.CONFIRM_FAIL,
+            RequestStatus.VERIFICATION_FAIL,
+            RequestStatus.RESET_FAIL ->  R.color.accent_danger
+
+            else -> R.color.neutral_weak
+        }
+    }
+
+    private fun ContactData.actionVisible(): Boolean {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.VERIFIED -> false
+            else -> true
+        }
     }
 
     private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {

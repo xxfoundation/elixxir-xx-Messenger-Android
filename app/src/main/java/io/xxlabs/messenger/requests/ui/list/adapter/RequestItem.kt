@@ -80,7 +80,8 @@ data class ContactRequestSearchResultItem(
     val contactRequest: ContactRequest,
     val photo: Bitmap? = null,
     val statusText: String = "Request pending",
-    val statusTextColor: Int = R.color.neutral_weak
+    val statusTextColor: Int = R.color.neutral_weak,
+    val actionVisible: Boolean = true
 ) : RequestItem(contactRequest) {
     override val subtitle: String = statusText
     override val details: String? = null
@@ -90,7 +91,7 @@ data class ContactRequestSearchResultItem(
 
     // Request search results always have the "SENT" UI even if it's failed.
     // Instead, the failed status is described in the statusText property.
-    override val actionLabel: String = appContext().getString(R.string.request_item_action_retry)
+    override val actionLabel: String = if (actionVisible) appContext().getString(R.string.request_item_action_retry) else ""
     override val actionIcon: Int = R.drawable.ic_retry
     override val actionIconColor: Int = R.color.brand_default
     override val actionTextStyle: Int = R.style.request_item_retry
