@@ -417,14 +417,19 @@ class UserSearchViewModel @Inject constructor(
             photo = resolveBitmap(model.photo),
             statusText = model.statusText(),
             statusTextColor = model.statusTextColor(),
-            actionVisible = model.actionVisible()
+            actionVisible = model.actionVisible(),
+            actionIcon = model.actionIcon(),
+            actionIconColor = model.actionIconColor(),
+            actionTextStyle = model.actionTextStyle(),
+            actionLabel = model.actionLabel()
         )
 
     private fun Contact.statusText(): String {
         return when (RequestStatus.from(status)) {
             RequestStatus.SENT,
             RequestStatus.VERIFIED,
-            RequestStatus.RESET_SENT -> "Request pending"
+            RequestStatus.RESET_SENT,
+            RequestStatus.RESENT-> "Request pending"
 
             RequestStatus.SEND_FAIL,
             RequestStatus.CONFIRM_FAIL,
@@ -452,6 +457,35 @@ class UserSearchViewModel @Inject constructor(
             else -> true
         }
     }
+
+    private fun Contact.actionIcon(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> R.drawable.ic_check_green
+            else -> R.drawable.ic_retry
+        }
+    }
+
+    private fun Contact.actionIconColor(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT ->  R.color.accent_success
+            else -> R.color.brand_default
+        }
+    }
+
+    private fun Contact.actionTextStyle(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> R.drawable.ic_check_green
+            else -> R.style.request_item_resent
+        }
+    }
+
+    private fun Contact.actionLabel(): String {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> appContext().getString(R.string.request_item_action_resent)
+            else -> appContext().getString(R.string.request_item_action_retry)
+        }
+    }
+
 
     private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
         BitmapResolver.getBitmap(data)

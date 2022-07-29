@@ -81,20 +81,17 @@ data class ContactRequestSearchResultItem(
     val photo: Bitmap? = null,
     val statusText: String = "Request pending",
     val statusTextColor: Int = R.color.neutral_weak,
-    val actionVisible: Boolean = true
+    val actionVisible: Boolean = true,
+    override val actionIcon: Int = R.drawable.ic_retry,
+    override val actionIconColor: Int = R.color.brand_default,
+    override val actionTextStyle: Int = R.style.request_item_retry,
+    override val actionLabel: String = if (actionVisible) appContext().getString(R.string.request_item_action_retry) else ""
 ) : RequestItem(contactRequest) {
     override val subtitle: String = statusText
     override val details: String? = null
     override val itemPhoto: Bitmap? = photo
     override val itemInitials: String = contactRequest.model.initials
     override val itemIconRes: Int? = null
-
-    // Request search results always have the "SENT" UI even if it's failed.
-    // Instead, the failed status is described in the statusText property.
-    override val actionLabel: String = if (actionVisible) appContext().getString(R.string.request_item_action_retry) else ""
-    override val actionIcon: Int = R.drawable.ic_retry
-    override val actionIconColor: Int = R.color.brand_default
-    override val actionTextStyle: Int = R.style.request_item_retry
 }
 
 data class GroupInviteItem(
