@@ -406,15 +406,6 @@ class DaoRepository @Inject constructor(
         }
     }
 
-    fun connectionsUsernameSearch(username: String): Single<List<ContactData>> =
-        contactsDao.queryAllContactsUsername(username)
-
-    fun connectionsEmailSearch(email: String): Single<List<ContactData>> =
-        contactsDao.queryAllContactsEmail(email)
-
-    fun connectionsPhoneSearch(phone: String): Single<List<ContactData>> =
-        contactsDao.queryAllContactsPhone(phone)
-
     companion object {
         @Volatile
         private var instance: DaoRepository? = null

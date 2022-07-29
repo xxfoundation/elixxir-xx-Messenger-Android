@@ -43,15 +43,6 @@ interface ContactsDao {
     @Query("SELECT * FROM Contacts WHERE status = :status")
     fun getAllContactsWithStatusLive(status: Int): LiveData<List<ContactData>>
 
-    @Query("SELECT * FROM Contacts WHERE username LIKE :username ORDER BY username")
-    fun queryAllContactsUsername(username: String): Single<List<ContactData>>
-
-    @Query("SELECT * FROM Contacts WHERE email LIKE :email ORDER BY email")
-    fun queryAllContactsEmail(email: String): Single<List<ContactData>>
-
-    @Query("SELECT * FROM Contacts WHERE phone LIKE :phone ORDER BY phone")
-    fun queryAllContactsPhone(phone: String): Single<List<ContactData>>
-
     @Query("SELECT * FROM Contacts WHERE username = :username LIMIT 1")
     fun queryContactByUsername(username: String): Maybe<ContactData>
 
