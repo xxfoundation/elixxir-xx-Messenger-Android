@@ -432,6 +432,7 @@ class RequestsViewModel @Inject constructor(
     private fun resendRequest(item: RequestItem) {
         when (item) {
             is ContactRequestItem -> requestsDataSource.send(item.request as ContactRequest)
+            is ContactRequestSearchResultItem -> requestsDataSource.send(item.request as ContactRequest)
             is GroupInviteItem -> invitationsDataSource.send(item.request as GroupInvitation)
         }
         onResend(item)
