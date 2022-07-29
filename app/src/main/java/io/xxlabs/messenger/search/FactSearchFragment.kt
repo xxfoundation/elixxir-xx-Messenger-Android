@@ -40,7 +40,7 @@ abstract class FactSearchFragment : Fragment(), Injectable {
         factoryProducer = { viewModelFactory }
     )
 
-    private val resultsAdapter: RequestsAdapter by lazy {
+    protected val resultsAdapter: RequestsAdapter by lazy {
         RequestsAdapter(requestsViewModel)
     }
     private lateinit var binding: FragmentFactSearchBinding
@@ -51,13 +51,13 @@ abstract class FactSearchFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFactSearchBinding.inflate(inflater, container, false)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                getResults().collect { results ->
-                    resultsAdapter.submitList(results)
-                }
-            }
-        }
+//        lifecycleScope.launch {
+//            repeatOnLifecycle(Lifecycle.State.STARTED) {
+//                getResults().collect { results ->
+//                    resultsAdapter.submitList(results)
+//                }
+//            }
+//        }
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -113,7 +113,11 @@ class UsernameSearchFragment : FactSearchFragment() {
         searchViewModel.usernameResults
 
     override fun onSearchClicked(query: String?) {
-        searchViewModel.onUsernameSearch(query)
+        lifecycleScope.launch {
+            searchViewModel.onUsernameSearch(query).collect { results ->
+                resultsAdapter.submitList(results)
+            }
+        }
     }
 
     override fun getSearchTabUi(): FactSearchUi = searchViewModel.usernameSearchUi
@@ -124,7 +128,11 @@ class EmailSearchFragment : FactSearchFragment() {
         searchViewModel.emailResults
 
     override fun onSearchClicked(query: String?) {
-        searchViewModel.onEmailSearch(query)
+        lifecycleScope.launch {
+            searchViewModel.onEmailSearch(query).collect { results ->
+                resultsAdapter.submitList(results)
+            }
+        }
     }
 
     override fun getSearchTabUi(): FactSearchUi = searchViewModel.emailSearchUi
@@ -135,7 +143,11 @@ class PhoneSearchFragment : FactSearchFragment() {
         searchViewModel.phoneResults
 
     override fun onSearchClicked(query: String?) {
-        searchViewModel.onPhoneSearch(query)
+        lifecycleScope.launch {
+            searchViewModel.onPhoneSearch(query).collect { results ->
+                resultsAdapter.submitList(results)
+            }
+        }
     }
 
     override fun getSearchTabUi(): FactSearchUi = searchViewModel.phoneSearchUi
