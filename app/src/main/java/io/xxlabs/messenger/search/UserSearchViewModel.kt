@@ -1,12 +1,17 @@
 package io.xxlabs.messenger.search
 
 import android.graphics.Bitmap
-import android.text.*
+import android.text.Editable
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.*
+import bindings.Fact
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
+import io.xxlabs.messenger.data.datatype.ContactRequestState
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ContactData
@@ -25,7 +30,8 @@ import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -291,20 +297,23 @@ class UserSearchViewModel @Inject constructor(
 
         _udSearchUi.value = searchRunningState
         viewModelScope.launch {
-            /*  TODO: When the username matches a connections' nickname, search UD too.
-                Two users can have the same displayName when
-                one username matches the other nickname.
-            */
             clearPreviousResults(resultsEmitter)
-            searchLocal(factQuery).run {
-                if (isNotEmpty()) {
-                    resultsEmitter.emitResults(this)
-                } else {
-                    null
-                }
-            } ?: searchUd(factQuery)?.run {
-                resultsEmitter.emitResults(listOf(this))
-            } ?: resultsEmitter.emitResults(noResultsFor(factQuery))
+            val udResult = searchUd(factQuery)
+            val requestResults = searchRequests(factQuery)
+            val connectionResults = searchConnections(factQuery)
+
+            val remoteResults = udResult?.let {
+                listOf(udResult) + requestResults
+            } ?: requestResults
+
+            val sortedResults = if (remoteResults.isEmpty()) {
+                connectionResults.ifEmpty { noResultsFor(factQuery) }
+            } else {
+                if (connectionResults.isEmpty()) remoteResults
+                else remoteResults + listOf(ConnectionsDividerItem()) + connectionResults
+            }
+
+            resultsEmitter.emitResults(sortedResults)
         }
     }
 
@@ -337,36 +346,66 @@ class UserSearchViewModel @Inject constructor(
     private suspend fun savedUsers(): List<ContactData> =
         daoRepo.getAllContacts().value()
 
-    private suspend fun searchLocal(factQuery: FactQuery): List<RequestItem> {
-        return when (factQuery.type) {
-            FactType.USERNAME -> {
-                savedUsers().filter {
-                    it.displayName.contains(factQuery.fact)
-                }.asLocalResult()
+    private fun ContactData.isConnection(): Boolean =
+        RequestStatus.from(status) == RequestStatus.ACCEPTED
+
+    private fun ContactData.isRequest(): Boolean = !isConnection()
+
+    private suspend fun searchConnections(factQuery: FactQuery): List<RequestItem> =
+        withContext(Dispatchers.IO) {
+            when (factQuery.type) {
+                FactType.USERNAME -> {
+                    savedUsers().filter {
+                        it.isConnection() && it.displayName.contains(factQuery.fact)
+                    }.asConnectionsSearchResult()
+                }
+                FactType.EMAIL -> {
+                    savedUsers().filter {
+                        it.isConnection() && it.email.contains(factQuery.fact)
+                    }.asConnectionsSearchResult()
+                }
+                FactType.PHONE -> {
+                    savedUsers().filter {
+                        it.isConnection() && it.phone.contains(factQuery.fact)
+                    }.asConnectionsSearchResult()
+                }
+                else -> listOf()
             }
-            FactType.EMAIL -> {
-                savedUsers().filter {
-                    it.email.contains(factQuery.fact)
-                }.asLocalResult()
-            }
-            FactType.PHONE -> {
-                savedUsers().filter {
-                    it.phone.contains(factQuery.fact)
-                }.asLocalResult()
-            }
-            else -> listOf()
         }
-    }
 
-    private suspend fun List<ContactData>.asLocalResult(): List<RequestItem> {
-        val requests = filter {
-            it.status != RequestStatus.ACCEPTED.value
-        }.toSet()
-        // Separate into a sublist of accepted connections and requests.
-        val contacts = this - requests
+    private suspend fun searchRequests(factQuery: FactQuery): List<RequestItem> =
+        withContext(Dispatchers.IO) {
+            when (factQuery.type) {
+                FactType.USERNAME -> {
+                    savedUsers().filter {
+                        it.isRequest() && it.displayName.contains(factQuery.fact)
+                    }.asRequestsSearchResult()
+                }
+                FactType.EMAIL -> {
+                    savedUsers().filter {
+                        it.isRequest() && it.email.contains(factQuery.fact)
+                    }.asRequestsSearchResult()
+                }
+                FactType.PHONE -> {
+                    savedUsers().filter {
+                        it.isRequest() && it.phone.contains(factQuery.fact)
+                    }.asRequestsSearchResult()
+                }
+                else -> listOf()
+            }
+        }
 
-        // Wrap the requests as ContactRequestSearchResultItem for UI layer.
-        val requestItems = requests.map {
+    private suspend fun List<ContactData>.asConnectionsSearchResult(): List<RequestItem> =
+        map {
+            val requestData = ContactRequestData(it)
+            AcceptedConnectionItem(
+                requestData,
+                resolveBitmap(it.photo)
+            )
+        }
+
+    private suspend fun List<ContactData>.asRequestsSearchResult(): List<RequestItem> =
+        map {
             ContactRequestSearchResultItem(
                 contactRequest = ContactRequestData(it),
                 photo = resolveBitmap(it.photo),
@@ -374,23 +413,7 @@ class UserSearchViewModel @Inject constructor(
                 statusTextColor = it.statusTextColor(),
                 actionVisible= it.actionVisible()
             )
-        }.toMutableList()
-
-        // Wrap the connections as AcceptedConnectionItems for UI layer.
-        val contactItems = contacts.map {
-            val requestData = ContactRequestData(it)
-            AcceptedConnectionItem(
-                requestData,
-                resolveBitmap(it.photo)
-            )
         }
-        val localResults = if (contacts.isNotEmpty()) {
-            requestItems + ConnectionsDividerItem() + contactItems
-        } else {
-            requestItems
-        }
-        return localResults
-    }
 
     private fun ContactData.statusText(): String {
         return when (RequestStatus.from(status)) {
