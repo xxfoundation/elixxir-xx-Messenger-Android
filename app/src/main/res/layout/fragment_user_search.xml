@@ -121,7 +121,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <io.xxlabs.messenger.support.view.SingleClickButton
+        <Button
             android:id="@+id/userSearchCancelButton"
             style="@style/dialog_button"
             android:layout_width="0dp"
