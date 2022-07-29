@@ -302,7 +302,14 @@ class UserSearchViewModel @Inject constructor(
             searchRequests(factQuery),
             searchConnections(factQuery)
         ) { ud, requests, connections ->
-            val nonConnections = listOf(ud) + requests
+            val nonConnections = listOf(ud)
+                .filter {
+                    // Remove UD results that are already requests
+                    it.id in requests.map { request ->
+                        request.id
+                    }
+                }.plus(requests)
+
             if (nonConnections.isEmpty()) {
                 connections.ifEmpty { noResultsFor(factQuery) }
             } else {
