@@ -31,7 +31,7 @@ fun Contact.formattedEmail(): String? =
     if (email.isNotBlank()) email.substring(1)
     else null
 
-fun Contact.formattedPhone(flagEmoji: Boolean = false): String? =
+fun Contact.formattedPhone(flagEmoji: Boolean = true): String? =
     if (phone.isNotBlank()) Country.toFormattedNumber(phone, flagEmoji)
     else null
 
