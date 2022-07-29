@@ -334,22 +334,25 @@ class UserSearchViewModel @Inject constructor(
         _udSearchUi.value = searchCompleteState
     }
 
+    private suspend fun savedUsers(): List<ContactData> =
+        daoRepo.getAllContacts().value()
+
     private suspend fun searchLocal(factQuery: FactQuery): List<RequestItem> {
         return when (factQuery.type) {
             FactType.USERNAME -> {
-                daoRepo.connectionsUsernameSearch(factQuery.fact)
-                    .value()
-                    .asLocalResult()
+                savedUsers().filter {
+                    it.displayName.contains(factQuery.fact)
+                }.asLocalResult()
             }
             FactType.EMAIL -> {
-                daoRepo.connectionsEmailSearch(factQuery.fact)
-                    .value()
-                    .asLocalResult()
+                savedUsers().filter {
+                    it.email.contains(factQuery.fact)
+                }.asLocalResult()
             }
             FactType.PHONE -> {
-                daoRepo.connectionsPhoneSearch(factQuery.fact)
-                    .value()
-                    .asLocalResult()
+                savedUsers().filter {
+                    it.phone.contains(factQuery.fact)
+                }.asLocalResult()
             }
             else -> listOf()
         }
