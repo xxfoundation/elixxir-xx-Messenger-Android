@@ -30,6 +30,7 @@ import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -289,6 +290,8 @@ class UserSearchViewModel @Inject constructor(
         }
     }
 
+    private var searchJob: Job? = null
+
     private fun search(
         factQuery: FactQuery,
         resultsEmitter: MutableStateFlow<List<RequestItem>>
@@ -296,7 +299,8 @@ class UserSearchViewModel @Inject constructor(
         if (!isValidQuery(factQuery)) return
 
         _udSearchUi.value = searchRunningState
-        viewModelScope.launch {
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
             clearPreviousResults(resultsEmitter)
             val udResult = searchUd(factQuery)
             val requestResults = searchRequests(factQuery)
@@ -506,6 +510,7 @@ class UserSearchViewModel @Inject constructor(
     }
 
     private fun onCancelSearchClicked() {
+        searchJob?.cancel()
         _udSearchUi.value = searchCompleteState
     }
 
