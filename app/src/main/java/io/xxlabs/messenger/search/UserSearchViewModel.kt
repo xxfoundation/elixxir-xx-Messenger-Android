@@ -296,7 +296,7 @@ class UserSearchViewModel @Inject constructor(
                 one username matches the other nickname.
             */
             clearPreviousResults(resultsEmitter)
-            searchConnections(factQuery).run {
+            searchLocal(factQuery).run {
                 if (isNotEmpty()) {
                     resultsEmitter.emitResults(this)
                 } else {
@@ -334,7 +334,7 @@ class UserSearchViewModel @Inject constructor(
         _udSearchUi.value = searchCompleteState
     }
 
-    private suspend fun searchConnections(factQuery: FactQuery): List<RequestItem> {
+    private suspend fun searchLocal(factQuery: FactQuery): List<RequestItem> {
         return when (factQuery.type) {
             FactType.USERNAME -> {
                 daoRepo.connectionsUsernameSearch(factQuery.fact)
