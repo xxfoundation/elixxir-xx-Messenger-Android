@@ -457,7 +457,9 @@ class UserSearchViewModel @Inject constructor(
             val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
             udResult.second?.let { // Error message
                 if (it.isNotEmpty()) {
-                    showToast(it)
+                    if (!it.contains("no results found", true)) {
+                        showToast(it)
+                    }
                     noResultPlaceholder(factQuery)
                 } else { // Search result
                     udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
