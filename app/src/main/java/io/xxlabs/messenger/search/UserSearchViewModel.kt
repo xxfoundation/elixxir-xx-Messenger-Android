@@ -310,7 +310,11 @@ class UserSearchViewModel @Inject constructor(
 
     private fun isValidQuery(factQuery: FactQuery): Boolean {
         // Prevent users from searching (and possibly requesting) themselves.
-        return !preferences.userData.contains(factQuery.fact, true)
+        return with (factQuery.fact) {
+            this != repo.getStoredUsername()
+                    && this != repo.getStoredEmail()
+                    && this !=  repo.getStoredPhone()
+        }
     }
 
     private fun noResultsFor(factQuery: FactQuery): List<RequestItem> =
