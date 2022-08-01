@@ -69,7 +69,7 @@
             android:layout_marginHorizontal="0dp"
             android:drawablePadding="4dp"
             android:onClick="@{() -> listener.onActionClicked(ui)}"
-            android:visibility="@{ui.actionLabel}"
+            android:visibility="@{ui.actionVisible}"
             android:singleLine="false"
             android:gravity="center_vertical|end"
             app:actionIcon="@{ui.actionIcon}"
