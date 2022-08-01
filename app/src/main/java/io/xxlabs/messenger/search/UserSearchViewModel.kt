@@ -318,8 +318,8 @@ class UserSearchViewModel @Inject constructor(
                 else {
                     // remove UD results that are already connections
                     nonConnections.filter {
-                        it.id in connections.map { connection ->
-                            connection.id
+                        it.id.toBase64String() !in connections.map { connection ->
+                            connection.id.toBase64String()
                         }
                     }.plus(
                         listOf(ConnectionsDividerItem())
