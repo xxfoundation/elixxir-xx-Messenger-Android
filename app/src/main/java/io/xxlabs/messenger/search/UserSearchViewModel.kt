@@ -516,7 +516,10 @@ class UserSearchViewModel @Inject constructor(
             RequestStatus.SENT,
             RequestStatus.VERIFIED,
             RequestStatus.RESET_SENT,
-            RequestStatus.RESENT-> "Request pending"
+            RequestStatus.RESENT,
+            RequestStatus.VERIFYING,
+            RequestStatus.HIDDEN,
+            RequestStatus.SENDING -> "Request pending"
 
             RequestStatus.SEND_FAIL,
             RequestStatus.CONFIRM_FAIL,
