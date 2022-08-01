@@ -395,7 +395,9 @@ class UserSearchViewModel @Inject constructor(
             }
             FactType.PHONE -> {
                 filterRequests {
-                    it.model.phone.contains(factQuery.fact)
+                    it.model.phone.contains(
+                        Country.toFormattedNumber(factQuery.fact, false) ?: factQuery.fact
+                    )
                 }
             }
             else -> flow { listOf<RequestItem>() }
