@@ -501,7 +501,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New request sent - UI - $result")
             when (result) {
                 is SimpleRequestState.Success -> {
-                    createSnackMessage("One of your contact requests was successfully sent!")
+                    createSnackMessage("One of your connection requests was successfully sent!")
                     contactsViewModel.newAuthRequestSent.postValue(SimpleRequestState.Completed())
                 }
                 is SimpleRequestState.Error -> {
@@ -531,7 +531,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         contactsViewModel.newIncomingRequestReceived.observe(this, Observer { result ->
             Timber.v("New incoming request - UI - $result")
             if (result is SimpleRequestState.Success) {
-                createSnackMessage("Private channel invitation received!")
+                createSnackMessage("New connection request received!")
                 contactsViewModel.newIncomingRequestReceived.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed new incoming contact")
@@ -542,7 +542,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New confirmation request - UI - $result")
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
-                createSnackMessage("A contact has accepted your private channel request!")
+                createSnackMessage("A connection has accepted your request!")
                 contactsViewModel.newConfirmationRequestReceived.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
@@ -565,7 +565,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New Group Request - UI - $result")
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
-                createSnackMessage("Private Group invitation received!")
+                createSnackMessage("New group invitation received!")
                 mainViewModel.newGroup.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
