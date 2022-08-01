@@ -30,6 +30,7 @@ import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
+import io.xxlabs.messenger.ui.main.contacts.list.ContactItem
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -379,7 +380,7 @@ class UserSearchViewModel @Inject constructor(
             else -> listOf()
         }
         emit(results)
-    }
+    }.stateIn(viewModelScope)
 
     private suspend fun searchRequests(factQuery: FactQuery) =
         when (factQuery.type) {
@@ -401,7 +402,7 @@ class UserSearchViewModel @Inject constructor(
                 }
             }
             else -> flow { listOf<RequestItem>() }
-        }
+        }.stateIn(viewModelScope)
 
     private suspend fun filterRequests(match: (contactRequest: ContactRequest) -> Boolean) =
         requestsDataSource.getRequests().map { requestsList ->
