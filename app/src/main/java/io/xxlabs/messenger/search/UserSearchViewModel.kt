@@ -22,6 +22,7 @@ import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.model.ContactRequest
 import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
@@ -302,14 +303,14 @@ class UserSearchViewModel @Inject constructor(
             searchRequests(factQuery),
             searchConnections(factQuery)
         ) { ud, requests, connections ->
-            val nonConnections = listOf(ud)
-                .filter {
-                    // Remove UD results that are already requests
-                    it.id in requests.map { request ->
-                        request.id
-                    }
-                }.plus(requests)
-
+            val nonConnections =
+                if (ud.id.toBase64String() in requests.map { request -> request.id.toBase64String() }) {
+                    // If the UD result's userID match a request's userID, only show the request
+                    requests
+                } else {
+                    // Otherwise show both
+                    listOf(ud) + requests
+                }
             if (nonConnections.isEmpty()) {
                 connections.ifEmpty { noResultsFor(factQuery) }
             } else {
