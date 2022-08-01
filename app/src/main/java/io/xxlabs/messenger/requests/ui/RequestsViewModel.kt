@@ -366,6 +366,7 @@ class RequestsViewModel @Inject constructor(
 
     private fun showDetails(item: RequestItem) {
         when (item) {
+            is ContactRequestSearchResultItem -> showRequestDialog(item.contactRequest)
             is ContactRequestItem -> showRequestDialog(item.contactRequest)
             is SearchResultItem -> showRequestDialog(item.contactRequest)
             is GroupInviteItem -> showInvitationDialog(item.invite)
