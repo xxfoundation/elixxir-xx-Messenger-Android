@@ -463,7 +463,7 @@ class UserSearchViewModel @Inject constructor(
 
     private fun Contact.actionVisible(): Boolean {
         return when (RequestStatus.from(status)) {
-            RequestStatus.VERIFIED -> false
+            RequestStatus.VERIFIED, RequestStatus.VERIFYING -> false
             else -> true
         }
     }
