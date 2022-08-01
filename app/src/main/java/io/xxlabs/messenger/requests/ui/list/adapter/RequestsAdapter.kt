@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestsAdapter.ViewType.*
+import io.xxlabs.messenger.support.extensions.toBase64String
 
 class RequestsAdapter(
     private val listener: RequestItemListener
@@ -68,7 +69,7 @@ class RequestsAdapter(
 
 class RequestsDiffCallback : DiffUtil.ItemCallback<RequestItem>() {
     override fun areItemsTheSame(oldItem: RequestItem, newItem: RequestItem): Boolean =
-        oldItem.id.contentEquals(newItem.id)
+        oldItem.id.toBase64String() == newItem.id.toBase64String()
 
     override fun areContentsTheSame(oldItem: RequestItem, newItem: RequestItem): Boolean =
         oldItem == newItem
