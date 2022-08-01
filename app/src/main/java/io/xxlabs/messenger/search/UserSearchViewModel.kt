@@ -20,9 +20,9 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.model.ContactRequest
+import io.xxlabs.messenger.requests.model.Request
 import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.toast.ToastUI
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.support.view.BitmapResolver
@@ -30,7 +30,6 @@ import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
-import io.xxlabs.messenger.ui.main.contacts.list.ContactItem
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -301,32 +300,100 @@ class UserSearchViewModel @Inject constructor(
 
         return combine(
             searchUd(factQuery),
-            searchRequests(factQuery),
-            searchConnections(factQuery)
-        ) { ud, requests, connections ->
+            allRequests(),
+            allConnections()
+        ) { ud, allRequests, allConnections ->
+            val foundRequests = allRequests.matching(factQuery).toMutableSet()
+            val foundConnections = allConnections.matching(factQuery).toMutableSet()
+
+            // Add identical request to request results, if not already there.
+            allRequests.identicalTo(ud.username)?.let {
+                foundRequests.add(it)
+            }
+
+            // Add identical connection to connection results, if not already there.
+            allConnections.identicalTo(ud.username)?.let {
+                foundConnections.add(it)
+            }
+
+            val alreadyRequested = ud.username in foundRequests.map { request ->
+                request.username
+            }
+
+            val alreadyAdded = ud.username in foundConnections.map { connection ->
+                connection.username
+            }
+
             val nonConnections =
-                if (ud.id.toBase64String() in requests.map { request -> request.id.toBase64String() }) {
+                if (alreadyRequested || alreadyAdded) {
                     // If the UD result's userID match a request's userID, only show the request
-                    requests
+                    foundRequests.toList().sortedBy { it.username }
                 } else {
                     // Otherwise show both
-                    listOf(ud) + requests
+                    listOf(ud) + foundRequests.sortedBy { it.username }
                 }
+
+
             if (nonConnections.isEmpty()) {
-                connections.ifEmpty { noResultsFor(factQuery) }
+                // If there's no UD result or Requests, just show the Connections with no divider.
+                foundConnections.toList().sortedBy {
+                    it.username
+                }.ifEmpty {
+                    // Show a "no results found" placeholder if there's nothing at all.
+                    noResultsFor(factQuery)
+                }
             } else {
-                if (connections.isEmpty()) nonConnections
-                else {
-                    // remove UD results that are already connections
-                    nonConnections.filter {
-                        it.id.toBase64String() !in connections.map { connection ->
-                            connection.id.toBase64String()
-                        }
-                    }.plus(
-                        listOf(ConnectionsDividerItem())
-                    ).plus(connections)
+                if (foundConnections.isEmpty()) {
+                    // If there's no Connections, show the UD & Request results.
+                    nonConnections
+                } else {
+                    // Or show the UD results, Requests, a divider, and finally Connections.
+                    nonConnections
+                        .plus(listOf(ConnectionsDividerItem()))
+                        .plus(foundConnections.toList().sortedBy { it.username })
                 }
             }
+        }
+    }
+
+    private val RequestItem.username: String
+        get() = (request as ContactRequest).model.username
+
+    private suspend fun allRequests(): Flow<List<RequestItem>> =
+        requestsDataSource.getRequests().mapNotNull { requestsList ->
+            requestsList.map {
+                it.asRequestSearchResult()
+            }
+        }.stateIn(viewModelScope)
+
+    private suspend fun allConnections() = flow {
+        val connectionsList = savedUsers().filter {
+            it.isConnection()
+        }.asConnectionsSearchResult()
+        emit(connectionsList)
+    }.stateIn(viewModelScope)
+
+    private fun List<RequestItem>.identicalTo(username: String): RequestItem? =
+        firstOrNull { it.username == username }
+
+    private fun List<RequestItem>.matching(factQuery: FactQuery): List<RequestItem> {
+        return when (factQuery.type) {
+            FactType.USERNAME -> {
+                filter {
+                    (it.request as ContactRequest).model.displayName.contains(factQuery.fact)
+                }
+            }
+            FactType.EMAIL -> {
+                filter {
+                    (it.request as ContactRequest).model.email.contains(factQuery.fact)
+                }
+            }
+            FactType.PHONE -> {
+                filter {
+                    (it.request as ContactRequest).model.phone.contains(factQuery.fact)
+                }
+            }
+            else -> listOf()
         }
     }
 
