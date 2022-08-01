@@ -357,7 +357,7 @@ class UserSearchViewModel @Inject constructor(
     }
 
     private val RequestItem.username: String
-        get() = (request as ContactRequest).model.username
+        get() = (request as? ContactRequest)?.model?.username ?: ""
 
     private suspend fun allRequests(): Flow<List<RequestItem>> =
         requestsDataSource.getRequests().mapNotNull { requestsList ->
@@ -380,17 +380,26 @@ class UserSearchViewModel @Inject constructor(
         return when (factQuery.type) {
             FactType.USERNAME -> {
                 filter {
-                    (it.request as ContactRequest).model.displayName.contains(factQuery.fact, true)
+                    (it.request as? ContactRequest)?.model?.displayName?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
                 }
             }
             FactType.EMAIL -> {
                 filter {
-                    (it.request as ContactRequest).model.email.contains(factQuery.fact, true)
+                    (it.request as? ContactRequest)?.model?.email?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
                 }
             }
             FactType.PHONE -> {
                 filter {
-                    (it.request as ContactRequest).model.phone.contains(factQuery.fact, true)
+                    (it.request as? ContactRequest)?.model?.phone?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
                 }
             }
             else -> listOf()
