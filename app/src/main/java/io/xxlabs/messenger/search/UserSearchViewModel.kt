@@ -380,17 +380,17 @@ class UserSearchViewModel @Inject constructor(
         return when (factQuery.type) {
             FactType.USERNAME -> {
                 filter {
-                    (it.request as ContactRequest).model.displayName.contains(factQuery.fact)
+                    (it.request as ContactRequest).model.displayName.contains(factQuery.fact, true)
                 }
             }
             FactType.EMAIL -> {
                 filter {
-                    (it.request as ContactRequest).model.email.contains(factQuery.fact)
+                    (it.request as ContactRequest).model.email.contains(factQuery.fact, true)
                 }
             }
             FactType.PHONE -> {
                 filter {
-                    (it.request as ContactRequest).model.phone.contains(factQuery.fact)
+                    (it.request as ContactRequest).model.phone.contains(factQuery.fact, true)
                 }
             }
             else -> listOf()
@@ -429,19 +429,19 @@ class UserSearchViewModel @Inject constructor(
         val results = when (factQuery.type) {
             FactType.USERNAME -> {
                 savedUsers().filter {
-                    it.isConnection() && it.displayName.contains(factQuery.fact)
+                    it.isConnection() && it.displayName.contains(factQuery.fact, true)
                 }.asConnectionsSearchResult()
 
             }
             FactType.EMAIL -> {
                 savedUsers().filter {
-                    it.isConnection() && it.email.contains(factQuery.fact)
+                    it.isConnection() && it.email.contains(factQuery.fact, true)
                 }.asConnectionsSearchResult()
 
             }
             FactType.PHONE -> {
                 savedUsers().filter {
-                    it.isConnection() && it.phone.contains(factQuery.fact)
+                    it.isConnection() && it.phone.contains(factQuery.fact, true)
                 }.asConnectionsSearchResult()
             }
             else -> listOf()
@@ -453,12 +453,12 @@ class UserSearchViewModel @Inject constructor(
         when (factQuery.type) {
             FactType.USERNAME -> {
                 filterRequests {
-                    it.model.displayName.contains(factQuery.fact)
+                    it.model.displayName.contains(factQuery.fact, true)
                 }
             }
             FactType.EMAIL -> {
                 filterRequests {
-                    it.model.email.contains(factQuery.fact)
+                    it.model.email.contains(factQuery.fact, true)
                 }
             }
             FactType.PHONE -> {
