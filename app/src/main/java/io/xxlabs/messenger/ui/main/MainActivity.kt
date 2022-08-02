@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -25,7 +24,6 @@ import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.NavMainDirections
@@ -33,11 +31,9 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
-import io.xxlabs.messenger.notifications.MessagingService
 import io.xxlabs.messenger.support.callback.NetworkWatcher
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.extensions.*
@@ -61,7 +57,6 @@ import kotlinx.android.synthetic.main.component_menu.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 private val Bundle.isPrivateMessage: Boolean
@@ -168,12 +163,12 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     private fun handleIntent(intent: Intent) {
-        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
-            handleDeepLink(it)
+        intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
+            handleNotification(it)
         }
     }
 
-    private fun handleDeepLink(bundle: Bundle) {
+    private fun handleNotification(bundle: Bundle) {
         with (bundle) {
             when {
                 isPrivateMessage -> privateMessageIntent(this)
@@ -812,7 +807,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     companion object : BaseInstance {
-        const val INTENT_DEEP_LINK_BUNDLE = "nav_bundle"
+        const val INTENT_NOTIFICATION_CLICK = "nav_bundle"
         const val INTENT_PRIVATE_CHAT = "private_message"
         const val INTENT_GROUP_CHAT = "group_message"
         const val INTENT_REQUEST = "request"

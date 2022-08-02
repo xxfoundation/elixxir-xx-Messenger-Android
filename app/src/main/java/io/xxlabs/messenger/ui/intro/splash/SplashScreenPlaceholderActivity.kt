@@ -19,7 +19,7 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
@@ -55,12 +55,12 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
 
     private fun handleIntent(intent: Intent) {
         // Pass this intent on to MainActivity.
-        mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+        mainIntent = intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
             Intent(
                 this@SplashScreenPlaceholderActivity,
                 MainActivity::class.java
             ).apply {
-                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
+                putExtra(INTENT_NOTIFICATION_CLICK, it)
             }
         }
     }
