@@ -361,6 +361,37 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             hideMenu()
             mainNavController.navigateSafe(R.id.action_global_ud_profile)
         }
+
+        menuShareText?.setOnSingleClickListener {
+            hideMenu()
+            sendInvitation()
+        }
+    }
+
+    private fun sendInvitation() {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_invitation_message, preferences.name)
+            )
+            type = "text/plain"
+        }
+
+        val title: String = getString(R.string.share_chooser_title)
+        val chooser: Intent = Intent.createChooser(sendIntent, title)
+
+        if (sendIntent.resolveActivity(packageManager) != null) {
+            startActivity(chooser)
+        } else {
+            showCustomToast(
+                ToastUI.create(
+                    body = getString(R.string.share_no_activity_error),
+                    leftIcon = R.drawable.ic_alert,
+                    iconTint = R.color.accent_danger
+                )
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

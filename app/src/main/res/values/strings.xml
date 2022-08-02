@@ -633,4 +633,14 @@
     <string name="sftp_login_password_hint">Password</string>
     <string name="sftp_login_port_hint">Port (leave blank for default TCP 22)</string>
     <string name="registration_restore_disabled_error">A username has been submitted. Please reinstall to use restore.</string>
+
+    <string name="share_profile_label">Share profile</string>
+    <string name="share_invitation_message">
+        Hi, I\'m using xx messenger, you can download it here:
+        \nhttps://invite.xx.network
+        \n\nAnd you can add me here:
+        \nxxnetwork://messenger?invitation=%s
+    </string>
+    <string name="share_chooser_title">@string/share_profile_label</string>
+    <string name="share_no_activity_error">There are no apps installed to share to.</string>
 </resources>
