@@ -129,8 +129,7 @@
             app:layout_constraintEnd_toEndOf="@id/menuGuideEnd"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@id/menuBarrierUsername"
-            app:layout_constraintTop_toTopOf="@id/menuTopText"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintTop_toTopOf="@id/menuTopText" />
 
         <!-- CHATS -->
         <ImageView

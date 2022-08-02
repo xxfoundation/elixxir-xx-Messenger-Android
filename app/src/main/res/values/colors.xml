@@ -194,5 +194,5 @@
     <color name="accent_success">#2CC069</color>
     <color name="accent_safe">#FE7751</color>
 
-    <color name="menu_background">#252525</color>
+    <color name="menu_background">@color/neutral_dark</color>
 </resources>
