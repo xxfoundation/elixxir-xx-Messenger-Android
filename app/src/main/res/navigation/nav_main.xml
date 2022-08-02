@@ -320,6 +320,11 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+        <argument
+            android:name="username"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 
     <fragment
@@ -353,6 +358,15 @@
         android:name="io.xxlabs.messenger.ui.main.ud.profile.UdProfileFragment"
         android:label="UdProfileFragment"
         tools:layout="@layout/fragment_ud_profile" />
+
+    <action
+        android:id="@+id/action_global_connection_invitation"
+        app:destination="@id/udPrivateSearchFragment"
+        app:enterAnim="@anim/slide_in_right"
+        app:exitAnim="@anim/slide_out_left"
+        app:popEnterAnim="@anim/slide_in_left"
+        app:popExitAnim="@anim/slide_out_right" />
+
 
     <action
         android:id="@+id/action_global_contact_invitation"

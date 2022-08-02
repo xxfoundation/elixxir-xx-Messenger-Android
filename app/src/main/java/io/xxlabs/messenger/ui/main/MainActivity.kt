@@ -19,6 +19,7 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
@@ -164,8 +165,23 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
 
     private fun handleIntent(intent: Intent) {
         intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
+            // PendingIntent from notifications
             handleNotification(it)
+            return
         }
+
+        intent.getStringExtra(INTENT_INVITATION)?.let { username ->
+            // Implicit intent from an invitation link
+            invitationIntent(username)
+            return
+        }
+    }
+
+    private fun invitationIntent(username: String) {
+        val userSearch = NavMainDirections.actionGlobalConnectionInvitation().apply {
+            this.username = username
+        }
+        mainNavController.navigateSafe(userSearch)
     }
 
     private fun handleNotification(bundle: Bundle) {
@@ -811,6 +827,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         const val INTENT_PRIVATE_CHAT = "private_message"
         const val INTENT_GROUP_CHAT = "group_message"
         const val INTENT_REQUEST = "request"
+        const val INTENT_INVITATION = "invitation"
 
         private var activeInstances = 0
         override fun activeInstancesCount(): Int {

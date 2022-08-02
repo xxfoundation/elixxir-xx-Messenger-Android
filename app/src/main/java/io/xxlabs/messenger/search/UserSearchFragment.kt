@@ -52,6 +52,9 @@ class UserSearchFragment : RequestsFragment() {
     override val navController: NavController by lazy {
         findNavController()
     }
+    private val invitationUsername: String? by lazy {
+        UserSearchFragmentArgs.fromBundle(requireArguments()).username
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -161,7 +164,14 @@ class UserSearchFragment : RequestsFragment() {
 
     override fun onStart() {
         super.onStart()
+        handleInvitation()
         observeUi()
+    }
+
+    private fun handleInvitation() {
+        invitationUsername?.let {
+            searchViewModel.onInvitationReceived(it)
+        }
     }
 
     private fun observeUi() {
