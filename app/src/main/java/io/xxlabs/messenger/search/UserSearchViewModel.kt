@@ -206,6 +206,9 @@ class UserSearchViewModel @Inject constructor(
 
     private var searchJob: Job? = null
 
+    val invitationFrom: LiveData<String?> by ::_invitationFrom
+    private val _invitationFrom = MutableLiveData<String?>(null)
+
     init {
         showNewUserPopups()
     }
@@ -269,6 +272,14 @@ class UserSearchViewModel @Inject constructor(
     private fun enableDummyTraffic(enabled: Boolean) {
         preferences.isCoverTrafficOn = enabled
         repo.enableDummyTraffic(enabled)
+    }
+
+    fun onInvitationReceived(username: String) {
+        _invitationFrom.value = username
+    }
+
+    fun onInvitationHandled() {
+        _invitationFrom.value = null
     }
 
     suspend fun onUsernameSearch(username: String?): Flow<List<RequestItem>> {

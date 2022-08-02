@@ -121,6 +121,16 @@ class UsernameSearchFragment : FactSearchFragment() {
     }
 
     override fun getSearchTabUi(): FactSearchUi = searchViewModel.usernameSearchUi
+
+    override fun onResume() {
+        super.onResume()
+        searchViewModel.invitationFrom.observe(viewLifecycleOwner) { username ->
+            username?.let {
+                onSearchClicked(it)
+                searchViewModel.onInvitationHandled()
+            }
+        }
+    }
 }
 
 class EmailSearchFragment : FactSearchFragment() {
