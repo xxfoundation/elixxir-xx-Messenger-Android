@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.search
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.SpannableString
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,7 +45,7 @@ abstract class FactSearchFragment : Fragment(), Injectable {
     protected val resultsAdapter: RequestsAdapter by lazy {
         RequestsAdapter(requestsViewModel)
     }
-    private lateinit var binding: FragmentFactSearchBinding
+    protected lateinit var binding: FragmentFactSearchBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,13 +53,6 @@ abstract class FactSearchFragment : Fragment(), Injectable {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentFactSearchBinding.inflate(inflater, container, false)
-//        lifecycleScope.launch {
-//            repeatOnLifecycle(Lifecycle.State.STARTED) {
-//                getResults().collect { results ->
-//                    resultsAdapter.submitList(results)
-//                }
-//            }
-//        }
         binding.lifecycleOwner = viewLifecycleOwner
         return binding.root
     }
@@ -126,7 +121,8 @@ class UsernameSearchFragment : FactSearchFragment() {
         super.onResume()
         searchViewModel.invitationFrom.observe(viewLifecycleOwner) { username ->
             username?.let {
-                onSearchClicked(it)
+                binding.searchTextInputEditText.setText(username)
+                onSearchClicked(username)
                 searchViewModel.onInvitationHandled()
             }
         }

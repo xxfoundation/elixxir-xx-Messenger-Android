@@ -7,8 +7,6 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.*
-import com.google.android.material.snackbar.BaseTransientBottomBar
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
@@ -19,6 +17,7 @@ import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.repository.client.NodeErrorException
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.model.ContactRequest
@@ -37,7 +36,6 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
-import kotlin.time.Duration
 
 class UserSearchViewModel @Inject constructor(
     private val repo: BaseRepository,
@@ -45,6 +43,10 @@ class UserSearchViewModel @Inject constructor(
     private val preferences: PreferencesRepository,
     private val requestsDataSource: ContactRequestsRepository,
 ): ViewModel(){
+
+    private val genericSearchError: String by lazy {
+        appContext().getString(R.string.search_generic_error_message)
+    }
 
     var previousTabPosition: Int = UserSearchFragment.SEARCH_USERNAME
 
@@ -239,7 +241,7 @@ class UserSearchViewModel @Inject constructor(
                 val notificationToken = enableNotifications()
                 onNotificationsEnabled(notificationToken)
             } catch (e: Exception) {
-                showToast(
+                showError(
                     e.message ?: "Failed to enable notifications. Please try again in Settings."
                 )
             }
@@ -277,30 +279,11 @@ class UserSearchViewModel @Inject constructor(
     }
 
     fun onInvitationReceived(username: String) {
-        _udSearchUi.value = searchRunningState
-        viewModelScope.launch {
-            if (repo.areNodesReady()) {
-                _invitationFrom.postValue(username)
-            } else {
-                showNetworkError(username)
-            }
-        }
+        _invitationFrom.value = username
     }
 
     fun onInvitationHandled() {
         _invitationFrom.value = null
-    }
-
-    private fun showNetworkError(username: String) {
-        val errorUi = ToastUI.create(
-            header = "Nodes Registration",
-            body = "Could not connect to network. Please try again.",
-            leftIcon = R.drawable.ic_alert,
-            actionText = "Retry",
-            duration = LENGTH_INDEFINITE,
-            actionClick = { onInvitationReceived(username) }
-        )
-        _toastUi.postValue(errorUi)
     }
 
     suspend fun onUsernameSearch(username: String?): Flow<List<RequestItem>> {
@@ -326,9 +309,8 @@ class UserSearchViewModel @Inject constructor(
         searchJob?.cancel()
         searchJob = coroutineContext.job
 
-        if (!isValidQuery(factQuery)) flowOf(listOf<RequestItem?>())
-
-        _udSearchUi.value = searchRunningState
+        if (!isValidQuery(factQuery)) return flowOf(listOf())
+        changeStateTo(searchRunningState)
 
         return combine(
             searchUd(factQuery),
@@ -365,7 +347,6 @@ class UserSearchViewModel @Inject constructor(
                     listOf(ud) + foundRequests.sortedBy { it.username }
                 }
 
-
             if (nonConnections.isEmpty()) {
                 // If there's no UD result or Requests, just show the Connections with no divider.
                 foundConnections.toList().sortedBy {
@@ -392,7 +373,7 @@ class UserSearchViewModel @Inject constructor(
         get() = (request as? ContactRequest)?.model?.username ?: ""
 
     private suspend fun allRequests(): Flow<List<RequestItem>> =
-        requestsDataSource.getRequests().mapNotNull { requestsList ->
+        requestsDataSource.getRequests().map { requestsList ->
             requestsList.map {
                 it.asRequestSearchResult()
             }
@@ -402,6 +383,7 @@ class UserSearchViewModel @Inject constructor(
         val connectionsList = savedUsers().filter {
             it.isConnection()
         }.asConnectionsSearchResult()
+
         emit(connectionsList)
     }.stateIn(viewModelScope)
 
@@ -459,6 +441,9 @@ class UserSearchViewModel @Inject constructor(
         EmptyPlaceholderItem(
             text = "There are no users with that ${factQuery.type.name.lowercase()}."
         )
+
+    private fun couldNotCompletePlaceholder(error: String): RequestItem =
+        EmptyPlaceholderItem(text = error)
 
     private suspend fun savedUsers(): List<ContactData> =
         daoRepo.getAllContacts().value()
@@ -615,29 +600,41 @@ class UserSearchViewModel @Inject constructor(
 
     private suspend fun searchUd(factQuery: FactQuery) = flow {
         val result = try {
-            val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
+            val udResult = fetchUser(factQuery)
             udResult.second?.let { // Error message
                 if (it.isNotEmpty()) {
                     if (!it.contains("no results found", true)) {
-                        showToast(it)
+                        showError(it)
                     }
-                    _udSearchUi.value = searchCompleteState
                     noResultPlaceholder(factQuery)
                 } else { // Search result
-                    _udSearchUi.value = searchCompleteState
                     udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
                 }
             } ?: run {
-                _udSearchUi.value = searchCompleteState
                 udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
             }
         } catch (e: Exception) {
-            e.message?.let { showToast(it) }
-            _udSearchUi.value = searchCompleteState
-            noResultPlaceholder(factQuery)
+            e.message?.let {
+                showError(genericSearchError)
+                couldNotCompletePlaceholder(it)
+            } ?: run {
+                couldNotCompletePlaceholder(genericSearchError)
+            }
         }
+
+        changeStateTo(searchCompleteState)
+
         emit(result)
     }.stateIn(viewModelScope)
+
+    private suspend fun fetchUser(factQuery: FactQuery): Pair<ContactWrapperBase?, String?> {
+        return try {
+            repo.searchUd(factQuery.fact, factQuery.type).value()
+        } catch (e: NodeErrorException) {
+            delay(5000)
+            fetchUser(factQuery)
+        }
+    }
 
     private fun ContactWrapperBase.asSearchResult(): RequestItem {
         // ContactWrapperBase -> ContactRequestData
@@ -648,7 +645,11 @@ class UserSearchViewModel @Inject constructor(
         return SearchResultItem(requestData)
     }
 
-    private fun showToast(error: String) {
+    private fun changeStateTo(ui: UdSearchUi) {
+        _udSearchUi.postValue(ui)
+    }
+
+    private fun showError(error: String) {
         _toastUi.postValue(
             ToastUI.create(
                 body = error,
@@ -675,7 +676,7 @@ class UserSearchViewModel @Inject constructor(
 
     private fun onCancelSearchClicked() {
         searchJob?.cancel()
-        _udSearchUi.value = searchCompleteState
+        changeStateTo(searchCompleteState)
     }
 
     private fun onCountryCodeClicked() {
@@ -695,9 +696,10 @@ class UserSearchViewModel @Inject constructor(
     }
 
     fun onUserInput(input: String?) {
-        _udSearchUi.value = input?.let {
-            userInputState
-        } ?: initialState
+        _udSearchUi.value =
+            input?.let {
+                userInputState
+            } ?: initialState
     }
 }
 
