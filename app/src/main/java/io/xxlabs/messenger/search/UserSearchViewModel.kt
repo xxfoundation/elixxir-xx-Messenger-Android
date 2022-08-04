@@ -7,6 +7,8 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.*
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
@@ -20,7 +22,6 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.model.ContactRequest
-import io.xxlabs.messenger.requests.model.Request
 import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
@@ -36,6 +37,7 @@ import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.coroutineContext
+import kotlin.time.Duration
 
 class UserSearchViewModel @Inject constructor(
     private val repo: BaseRepository,
@@ -295,6 +297,7 @@ class UserSearchViewModel @Inject constructor(
             body = "Could not connect to network. Please try again.",
             leftIcon = R.drawable.ic_alert,
             actionText = "Retry",
+            duration = LENGTH_INDEFINITE,
             actionClick = { onInvitationReceived(username) }
         )
         _toastUi.postValue(errorUi)
