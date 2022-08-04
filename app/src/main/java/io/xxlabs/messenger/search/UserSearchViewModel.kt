@@ -275,11 +275,29 @@ class UserSearchViewModel @Inject constructor(
     }
 
     fun onInvitationReceived(username: String) {
-        _invitationFrom.value = username
+        _udSearchUi.value = searchRunningState
+        viewModelScope.launch {
+            if (repo.areNodesReady()) {
+                _invitationFrom.postValue(username)
+            } else {
+                showNetworkError(username)
+            }
+        }
     }
 
     fun onInvitationHandled() {
         _invitationFrom.value = null
+    }
+
+    private fun showNetworkError(username: String) {
+        val errorUi = ToastUI.create(
+            header = "Nodes Registration",
+            body = "Could not connect to network. Please try again.",
+            leftIcon = R.drawable.ic_alert,
+            actionText = "Retry",
+            actionClick = { onInvitationReceived(username) }
+        )
+        _toastUi.postValue(errorUi)
     }
 
     suspend fun onUsernameSearch(username: String?): Flow<List<RequestItem>> {
