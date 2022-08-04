@@ -64,8 +64,8 @@
                 <action android:name="android.intent.action.VIEW" />
                 <data
                     android:scheme="https"
-                    android:host="xx.network"
-                    android:pathPrefix="/messenger/invitation"
+                    android:host="elixxir.io"
+                    android:pathPrefix="/connect"
                     />
             </intent-filter>
         </activity>

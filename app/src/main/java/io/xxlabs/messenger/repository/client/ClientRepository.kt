@@ -38,6 +38,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.repository.client.NodeErrorException.Companion.isNodeError
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
@@ -953,7 +954,13 @@ class ClientRepository @Inject constructor(
     override fun areNodesReady(): Boolean = recursiveAreNodesReady()
 
     private fun recursiveAreNodesReady(retries: Int = 0): Boolean {
-        val status = clientWrapper.getNodeRegistrationStatus()
+        val status = try {
+             clientWrapper.getNodeRegistrationStatus()
+        } catch (e: Exception) {
+            if (e.isNodeError()) return false
+            else throw e
+        }
+
         val rate: Double = ((status.first.toDouble() / status.second))
         Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
 
@@ -1054,4 +1061,10 @@ class ClientRepository @Inject constructor(
 }
 
 
-class NodeErrorException : Exception()
+class NodeErrorException : Exception() {
+    companion object {
+        fun Exception.isNodeError(): Boolean =
+            message?.contains("network is not healthy", false)
+                ?: false
+    }
+}

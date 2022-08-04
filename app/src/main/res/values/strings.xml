@@ -639,8 +639,9 @@
         Hi, I\'m using xx messenger, you can download it here:
         \nhttps://invite.xx.network
         \n\nAnd you can add me here:
-        \nhttps://xx.network/messenger/invitation?username=%s
+        \nhttps://elixxir.io/connect?username=%s
     </string>
     <string name="share_chooser_title">@string/share_profile_label</string>
     <string name="share_no_activity_error">There are no apps installed to share to.</string>
+    <string name="search_generic_error_message">Couldn\'t complete search. Please try again.</string>
 </resources>
