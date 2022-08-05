@@ -39,6 +39,7 @@ import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.repository.client.NodeErrorException.Companion.isNodeError
+import io.xxlabs.messenger.repository.client.UninitializedPropertyException.Companion.isUninitializedPropertyException
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
@@ -500,19 +501,33 @@ class ClientRepository @Inject constructor(
     override fun registerUdUsername(username: String): Single<String> {
         return Single.create { emitter ->
             try {
-                if (!areNodesReady()) {
-                    emitter.onError(throwNodeError())
-                    return@create
-                }
-
-                udWrapperBindings.registerUdUsername(username)
-                udWrapperBindings.addUsernameToContact(username)
-                userWrapper.addUsername(username)
-                Timber.v("[CLIENT REPO] Username: ${udWrapperBindings.getUdUsername()}")
-                exportUserContact()
+                recursiveRegisterUdUsername(username)
                 emitter.onSuccess(username)
             } catch (e: Exception) {
                 emitter.onError(e)
+            }
+        }
+    }
+
+    private fun recursiveRegisterUdUsername(username: String, retries: Int = 0): String {
+        return try {
+            if (!areNodesReady()) {
+               throw throwNodeError()
+            }
+
+            udWrapperBindings.registerUdUsername(username)
+            udWrapperBindings.addUsernameToContact(username)
+            userWrapper.addUsername(username)
+            Timber.v("[CLIENT REPO] Username: ${udWrapperBindings.getUdUsername()}")
+            exportUserContact()
+
+            username
+        } catch (e: Exception) {
+            if (e.isUninitializedPropertyException() && retries < MAX_UNINITIALIZED_PROP_RETRIES) {
+                Thread.sleep(1000)
+                recursiveRegisterUdUsername(username, retries+1)
+            } else {
+                throw e
             }
         }
     }
@@ -957,7 +972,7 @@ class ClientRepository @Inject constructor(
         val status = try {
              clientWrapper.getNodeRegistrationStatus()
         } catch (e: Exception) {
-            if (e.isNodeError()) return false
+            if (e.isNodeError()) return recursiveAreNodesReady()
             else throw e
         }
 
@@ -1009,6 +1024,7 @@ class ClientRepository @Inject constructor(
         const val NODES_READY_POLL_INTERVAL = 1_000L
         const val NODES_READY_MAX_RETRIES = 29
         const val NODES_READY_MINIMUM_RATE = 0.70
+        const val MAX_UNINITIALIZED_PROP_RETRIES = 29
 
         lateinit var clientWrapper: ClientWrapperBindings
         lateinit var userWrapper: ContactWrapperBindings
@@ -1060,6 +1076,13 @@ class ClientRepository @Inject constructor(
     }
 }
 
+class UninitializedPropertyException : Exception() {
+    companion object {
+        fun Exception.isUninitializedPropertyException(): Boolean =
+            message?.contains("has not been initialized", false)
+                ?: false
+    }
+}
 
 class NodeErrorException : Exception() {
     companion object {
