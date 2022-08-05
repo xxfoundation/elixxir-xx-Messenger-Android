@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
@@ -50,11 +51,13 @@ import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.BaseInstance
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
+import io.xxlabs.messenger.ui.main.chat.setVisibility
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.component_menu.*
+import kotlinx.android.synthetic.main.fragment_delete_account.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
@@ -84,6 +87,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     var isBackBtnAllowed = true
     var isMenuOpened = false
 
+    private val intentQueue: MutableList<Intent> = mutableListOf()
 
     override fun onStart() {
         super.onStart()
@@ -163,17 +167,22 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         handleIntent(intent)
     }
 
-    private fun handleIntent(intent: Intent) {
-        intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
-            // PendingIntent from notifications
-            handleNotification(it)
-            return
-        }
 
-        intent.getStringExtra(INTENT_INVITATION)?.let { username ->
-            // Implicit intent from an invitation link
-            invitationIntent(username)
-            return
+    private fun handleIntent(intent: Intent) {
+        if (mainViewModel.areComponentsInitialized.value == true) {
+            intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
+                // PendingIntent from notifications
+                handleNotification(it)
+                return
+            }
+
+            intent.getStringExtra(INTENT_INVITATION)?.let { username ->
+                // Implicit intent from an invitation link
+                invitationIntent(username)
+                return
+            }
+        } else {
+            intentQueue.add(intent)
         }
     }
 
@@ -417,6 +426,17 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     private fun observeUI() {
+        mainViewModel.areComponentsInitialized.observe(this) { ready ->
+            enableUi(ready)
+
+            if (ready) {
+                // LIFO ordering.
+                intentQueue.removeLastOrNull()?.run {
+                    handleIntent(this)
+                }
+            }
+        }
+
         contactsViewModel.showToast.onEach { toast ->
             toast?.let {
                 showCustomToast(toast)
@@ -445,6 +465,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             }
         }
     }
+
+    private fun enableUi(enabled: Boolean) {
+        initializingBackground?.setVisibility(!enabled)
+        initializingProgressBar?.setVisibility(!enabled)
+   }
 
     private fun dismissNetworkStatusMessage() {
         for (status in cachedNetworkStatus) {
