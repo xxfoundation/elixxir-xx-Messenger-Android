@@ -972,7 +972,10 @@ class ClientRepository @Inject constructor(
         val status = try {
              clientWrapper.getNodeRegistrationStatus()
         } catch (e: Exception) {
-            if (e.isNodeError()) return recursiveAreNodesReady()
+            return if (e.isNodeError()) {
+                Thread.sleep(NODES_READY_POLL_INTERVAL)
+                recursiveAreNodesReady()
+            }
             else throw e
         }
 
