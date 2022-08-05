@@ -91,6 +91,8 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     var isBackBtnAllowed = true
     var isMenuOpened = false
 
+    private val intentQueue: MutableList<Intent> = mutableListOf()
+
     override fun onStart() {
         super.onStart()
         showBiometrics()
@@ -169,9 +171,14 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         handleIntent(intent)
     }
 
+
     private fun handleIntent(intent: Intent) {
-        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
-            handleDeepLink(it)
+        if (mainViewModel.areComponentsInitialized.value == true) {
+            intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+                handleDeepLink(it)
+            }
+        } else {
+            intentQueue.add(intent)
         }
     }
 
@@ -379,6 +386,13 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     private fun observeUI() {
         mainViewModel.areComponentsInitialized.observe(this) { ready ->
             enableUi(ready)
+
+            if (ready) {
+                // LIFO ordering.
+                intentQueue.removeLastOrNull()?.run {
+                    handleIntent(this)
+                }
+            }
         }
 
         contactsViewModel.showToast.onEach { toast ->
