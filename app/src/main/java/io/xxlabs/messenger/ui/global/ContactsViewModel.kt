@@ -304,7 +304,7 @@ class ContactsViewModel @Inject constructor(
             marshaled = marshalledData,
             email = contactEmail,
             phone = contactPhone,
-            status = VERIFYING.value
+            status = RECEIVED.value
         )
 
         subscriptions.add(
@@ -382,11 +382,13 @@ class ContactsViewModel @Inject constructor(
     fun verifyNewRequest(
         contact: ContactData
     ) {
-        Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
-        if (contact.hasFacts()) { //UD Search
-            verifyContactViaSearch(contact)
-        } else { // UD Lookup
-            verifyContactViaLookup(contact)
+        updateContactStatus(contact.userId, VERIFYING) {
+            Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
+            if (contact.hasFacts()) { //UD Search
+                verifyContactViaSearch(contact)
+            } else { // UD Lookup
+                verifyContactViaLookup(contact)
+            }
         }
     }
 
