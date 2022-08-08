@@ -289,6 +289,7 @@ class NetworkViewModel @Inject constructor(
                     Timber.v("[NETWORK VIEWMODEL] Network follower is NOT RUNNING")
                 }
                 .doOnError { err ->
+                    requestsDataSource.failUnverifiedRequests()
                     Timber.v("[NETWORK VIEWMODEL] Network follower ERROR - could not stop properly: ${err.localizedMessage}")
                 }
                 .subscribe()
