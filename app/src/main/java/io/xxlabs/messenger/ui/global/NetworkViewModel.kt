@@ -265,8 +265,7 @@ class NetworkViewModel @Inject constructor(
                 .doOnSuccess {
                     Timber.v("[NETWORK VIEWMODEL] Network follower is RUNNING")
                     Timber.v("[NETWORK VIEWMODEL] Started network follower in: ${elapsedTime - System.currentTimeMillis()}ms")
-                    onStartCallback?.invoke(it)
-                    newUserDiscovery()
+                    newUserDiscovery(onStartCallback)
                 }
                 .doOnError { err ->
                     Timber.v("[NETWORK VIEWMODEL] Network follower ERROR - could not start properly: ${err.localizedMessage}")
@@ -370,7 +369,7 @@ class NetworkViewModel @Inject constructor(
         }
     }
 
-    fun newUserDiscovery() {
+    private fun newUserDiscovery(onCompleteCallback: ((Boolean) -> Unit)? = null) {
         if (!isUdTryingToRun && !isUserDiscoveryRunning()) {
             isUdTryingToRun = true
             Timber.v("Starting user discovery...")
@@ -382,11 +381,13 @@ class NetworkViewModel @Inject constructor(
                         Timber.e("[NETWORK VIEWMODEL] Failed to register user discovery: ${err.localizedMessage}")
                         isUdTryingToRun = false
                         userDiscoveryStatus.value = false
+                        onCompleteCallback?.invoke(false)
                     }.doOnSuccess {
                         Timber.v("[NETWORK VIEWMODEL] User discovery registered with success!")
                         setUserDiscoveryRunning()
                         isUdTryingToRun = false
                         userDiscoveryStatus.value = true
+                        onCompleteCallback?.invoke(true)
                     }.subscribe()
             )
         }
