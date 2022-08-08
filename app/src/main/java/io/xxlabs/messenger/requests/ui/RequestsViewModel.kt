@@ -342,6 +342,7 @@ class RequestsViewModel @Inject constructor(
 
     override fun onItemClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            RECEIVED -> retryVerification(request)
             VERIFYING -> showVerifyingInfo()
             VERIFIED, HIDDEN -> showDetails(request)
         }
@@ -359,6 +360,7 @@ class RequestsViewModel @Inject constructor(
         else actionQueue.add(request.id)
 
         when (request.request.requestStatus) {
+            RECEIVED -> retryVerification(request).also { actionQueue.remove(request.id) }
             VERIFYING -> showVerifyingInfo().also { actionQueue.remove(request.id) }
             SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
