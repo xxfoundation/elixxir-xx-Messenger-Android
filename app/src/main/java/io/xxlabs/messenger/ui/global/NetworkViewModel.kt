@@ -229,6 +229,7 @@ class NetworkViewModel @Inject constructor(
         Timber.v("[NETWORK VIEWMODEL] has network follower already started: $networkStatus")
         if (networkStatus == NetworkFollowerStatus.RUNNING) {
             checkStopNetworkTimer()
+            onStartCallback?.invoke(true)
         } else if (networkStatus == NetworkFollowerStatus.STOPPED) {
             startNetworkFollower(onStartCallback)
         }
@@ -390,6 +391,8 @@ class NetworkViewModel @Inject constructor(
                         onCompleteCallback?.invoke(true)
                     }.subscribe()
             )
+        } else {
+            onCompleteCallback?.invoke(true)
         }
     }
 
