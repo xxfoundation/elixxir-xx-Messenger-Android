@@ -121,13 +121,12 @@ class ContactRequestsRepository @Inject constructor(
 
     override fun failUnverifiedRequests() {
         scope.launch {
-            getRequests().cancellable().collect { requests ->
+            getRequests().take(1).collect { requests ->
                 requests.filter {
                     it.requestStatus == VERIFYING
                 }.forEach {
                     update(it, VERIFICATION_FAIL)
                 }
-                this.coroutineContext.job.cancel()
             }
         }
     }

@@ -97,6 +97,10 @@ class ContactsViewModel @Inject constructor(
     fun registerAuthCallback() {
         Timber.v("[MAIN] Registering auth callback...")
         if (!isAuthCallbackRegistered()) {
+            // The app has presumably had a fresh launch.
+            // Fail requests that haven't verified yet, so they may be retried manually by user.
+            failVerifyingRequests()
+
             Timber.v("[MAIN] nor initialized, initializing network callback...")
             subscriptions.add(
                 repo.registerAuthCallback(
@@ -115,6 +119,10 @@ class ContactsViewModel @Inject constructor(
         } else {
             Timber.v("[MAIN] Authcallback is already initialized...")
         }
+    }
+
+    private fun failVerifyingRequests() {
+        requestsDataSource.failUnverifiedRequests()
     }
 
     private fun onRequestReceived(contact: ByteArray) {
@@ -304,7 +312,7 @@ class ContactsViewModel @Inject constructor(
             marshaled = marshalledData,
             email = contactEmail,
             phone = contactPhone,
-            status = VERIFYING.value
+            status = RECEIVED.value
         )
 
         subscriptions.add(
@@ -382,11 +390,13 @@ class ContactsViewModel @Inject constructor(
     fun verifyNewRequest(
         contact: ContactData
     ) {
-        Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
-        if (contact.hasFacts()) { //UD Search
-            verifyContactViaSearch(contact)
-        } else { // UD Lookup
-            verifyContactViaLookup(contact)
+        updateContactStatus(contact.userId, VERIFYING) {
+            Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
+            if (contact.hasFacts()) { //UD Search
+                verifyContactViaSearch(contact)
+            } else { // UD Lookup
+                verifyContactViaLookup(contact)
+            }
         }
     }
 
