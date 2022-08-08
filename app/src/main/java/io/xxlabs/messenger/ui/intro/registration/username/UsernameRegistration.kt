@@ -31,7 +31,6 @@ import kotlin.random.Random.Default.nextInt
 
 private const val MAX_NETWORK_RETRIES = 29
 private const val NETWORK_POLL_INTERVAL_MS = 1000L
-private const val GENERIC_ERROR_MSG = "Failed to connect to network. Please try again."
 
 /**
  * Encapsulates username registration logic.
@@ -260,6 +259,7 @@ class UsernameRegistration @AssistedInject constructor(
                     onUsernameNextClicked()
                 }
             } else {
+                delay(NETWORK_POLL_INTERVAL_MS)
                 Timber.d("Attempting to start network follower, attempt #${retries + 1}.")
                 connectToCmix(retries + 1)
             }
