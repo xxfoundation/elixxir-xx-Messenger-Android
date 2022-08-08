@@ -308,7 +308,7 @@ class RequestsViewModel @Inject constructor(
 
     private fun RequestItem.isIncoming(): Boolean {
         return when (request.requestStatus) {
-            VERIFYING, VERIFIED, VERIFICATION_FAIL -> true
+            RECEIVED, VERIFYING, VERIFIED, VERIFICATION_FAIL -> true
             else -> false
         }
     }
