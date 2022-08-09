@@ -328,7 +328,8 @@
 
     <!-- Search -->
 
-    <string name="search_info_dialog_title">Search</string>
+    <string name="search_title">Search</string>
+    <string name="search_info_dialog_title">@string/search_title</string>
     <string name="search_info_dialog_body">
         You can search for users by their username, email, or phone number using the xx
         network’s Anonymous Data Retrieval protocol which keeps a user’s identity anonymous
@@ -339,8 +340,14 @@
     <string name="search_info_dialog_link_url">https://links.xx.network/adrp</string>
     <string name="search_placeholder_text">
         Your searches are anonymous. Search information is never linked to your account or
-        personally identifiable.</string>
+        personally identifiable. ⓘ</string>
+    <string name="search_placeholder_span">ⓘ</string>
     <string name="search_hint">Search</string>
+    <string name="search_call_to_action">
+        Search for friends anonymously, add them to your connections to start a completely
+        private messaging channel.</string>
+    <string name="search_call_to_action_span_1">friends</string>
+    <string name="search_call_to_action_span_2">connections</string>
 
     <!-- Group Chat -->
 
@@ -626,4 +633,15 @@
     <string name="sftp_login_password_hint">Password</string>
     <string name="sftp_login_port_hint">Port (leave blank for default TCP 22)</string>
     <string name="registration_restore_disabled_error">A username has been submitted. Please reinstall to use restore.</string>
+
+    <string name="share_profile_label">Share profile</string>
+    <string name="share_invitation_message">
+        Hi, I\'m using xx messenger, you can download it here:
+        \nhttps://invite.xx.network
+        \n\nAnd you can add me here:
+        \nhttps://elixxir.io/connect?username=%s
+    </string>
+    <string name="share_chooser_title">@string/share_profile_label</string>
+    <string name="share_no_activity_error">There are no apps installed to share to.</string>
+    <string name="search_generic_error_message">Couldn\'t complete search. Please try again.</string>
 </resources>

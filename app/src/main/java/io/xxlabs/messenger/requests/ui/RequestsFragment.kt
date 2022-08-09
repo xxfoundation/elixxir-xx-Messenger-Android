@@ -48,16 +48,15 @@ import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
 
-class RequestsFragment : BaseFragment() {
+open class RequestsFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    private val requestsViewModel: RequestsViewModel by viewModels { viewModelFactory }
+    protected val requestsViewModel: RequestsViewModel by viewModels { viewModelFactory }
 
-    private lateinit var navController: NavController
-    private lateinit var stateAdapter: ViewPagerFragmentStateAdapter
-
-    private lateinit var toastHandler : CustomToastActivity
+    protected open val navController: NavController by lazy { findNavController() }
+    protected lateinit var stateAdapter: ViewPagerFragmentStateAdapter
+    protected lateinit var toastHandler : CustomToastActivity
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -78,7 +77,7 @@ class RequestsFragment : BaseFragment() {
         return inflater.inflate(R.layout.fragment_requests, container, false)
     }
 
-    private fun observeUI() {
+    protected open fun observeUI() {
         requestsViewModel.showReceivedRequestDetails.onEach { request ->
             request?.let {
                 safelyInvoke { showRequestDetails(request) }
@@ -140,24 +139,25 @@ class RequestsFragment : BaseFragment() {
     /**
      * Prevents crash caused by user closing/navigating away when a dialog is about to display.
      */
-    private fun safelyInvoke(block: () -> Unit) {
-        if (lifecycle.currentState.isAtLeast(Lifecycle.State.RESUMED)) {
+    protected open fun safelyInvoke(block: () -> Unit) {
+        if (lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
             block.invoke()
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        navController = findNavController()
-
-        initComponents(view)
+        initToolbar()
+        initViewPager(view)
     }
 
-    fun initComponents(root: View) {
+    protected open fun initToolbar() {
         toolbarGeneric.setInsets(topMask = WindowInsetsCompat.Type.systemBars())
         toolbarGenericTitle.text = "Requests"
         bindListeners()
+    }
 
+    protected open fun initViewPager(root: View) {
         root.apply {
             setupViewPager(requestsViewPager)
             TabLayoutMediator(requestsAppBarTabs, requestsViewPager) { tab, position ->
@@ -180,7 +180,7 @@ class RequestsFragment : BaseFragment() {
         }
     }
 
-    private fun setupViewPager(viewPager: ViewPager2) {
+    protected open fun setupViewPager(viewPager: ViewPager2) {
         stateAdapter = ViewPagerFragmentStateAdapter(childFragmentManager, lifecycle)
         stateAdapter.addFragment(
             ReceivedRequestsFragment(),
@@ -205,7 +205,7 @@ class RequestsFragment : BaseFragment() {
         viewPager.setCurrentItem(selectedTab, false)
     }
 
-    private fun getTabIcon(resourceId: Int): Drawable? {
+    protected fun getTabIcon(resourceId: Int): Drawable? {
         return try {
             ResourcesCompat.getDrawable(resources, resourceId, null)
         } catch (e: Exception) {
@@ -244,7 +244,7 @@ class RequestsFragment : BaseFragment() {
             .show(childFragmentManager, null)
     }
 
-    private fun showCustomToast(ui: ToastUI) {
+    protected fun showCustomToast(ui: ToastUI) {
         toastHandler.showCustomToast(ui)
     }
 

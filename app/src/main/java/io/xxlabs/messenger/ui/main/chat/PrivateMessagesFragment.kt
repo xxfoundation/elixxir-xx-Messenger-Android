@@ -313,7 +313,15 @@ class PrivateMessagesFragment :
     }
 
     override fun onMicrophonePermissionGranted() {
-        recordAudio()
+        try {
+            recordAudio()
+        } catch (e: Exception) {
+            Timber.e("Exception occured during audio recording: $e")
+            requireContext().toast("Failed to start audio recording")
+            FirebaseCrashlytics.getInstance().recordException(e)
+            cancelRecording()
+            releaseMediaRecorder()
+        }
     }
 
     private fun recordAudio() {
@@ -353,6 +361,11 @@ class PrivateMessagesFragment :
         } catch (e: Exception) {
             FirebaseCrashlytics.getInstance().recordException(e)
         }
+    }
+
+    private fun cancelRecording() {
+        latestAudioFile = null
+        chatViewModel.onCancelRecording()
     }
 
     private fun initPreviewPlayer() {

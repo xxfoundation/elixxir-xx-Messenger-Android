@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface LocalRequestsDataSource {
     val unreadCount: Flow<Int>
 
+    suspend fun getContactRequestsOnce(): List<RequestData>
     suspend fun getContactRequests(): Flow<List<RequestData>>
     suspend fun getGroupInvitations(): Flow<List<RequestData>>
     suspend fun getRequest(requestId: ByteArray): RequestData?
