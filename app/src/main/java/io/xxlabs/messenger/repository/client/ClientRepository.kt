@@ -501,6 +501,7 @@ class ClientRepository @Inject constructor(
         return Single.create { emitter ->
             try {
                 if (!areNodesReady()) {
+                    Timber.d("Failed to register-- nodes aren't ready.")
                     emitter.onError(throwNodeError())
                     return@create
                 }
@@ -512,6 +513,7 @@ class ClientRepository @Inject constructor(
                 exportUserContact()
                 emitter.onSuccess(username)
             } catch (e: Exception) {
+                Timber.d("Failed to register: ${e.message}")
                 emitter.onError(e)
             }
         }
@@ -959,7 +961,11 @@ class ClientRepository @Inject constructor(
         val status = try {
              clientWrapper.getNodeRegistrationStatus()
         } catch (e: Exception) {
-            if (e.isNodeError()) return false
+            return if (e.isNodeError()) {
+                Timber.d("Network is not healthy. Waiting $NODES_READY_POLL_INTERVAL before retry.")
+                Thread.sleep(NODES_READY_POLL_INTERVAL)
+                recursiveAreNodesReady()
+            }
             else throw e
         }
 
@@ -967,6 +973,10 @@ class ClientRepository @Inject constructor(
         Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
 
         return if (rate < NODES_READY_MINIMUM_RATE && retries <= NODES_READY_MAX_RETRIES) {
+            Timber.d(
+                "Nodes not ready after ${retries + 1} attempts. " +
+                        "Waiting $NODES_READY_POLL_INTERVAL before next retry."
+            )
             Thread.sleep(NODES_READY_POLL_INTERVAL)
             recursiveAreNodesReady(retries+1)
         } else {
