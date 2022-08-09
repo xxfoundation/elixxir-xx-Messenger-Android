@@ -27,7 +27,6 @@ import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.data.contact.RequestMigrator
-import io.xxlabs.messenger.requests.data.group.InvitationMigrator
 import io.xxlabs.messenger.support.extensions.combineWith
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
@@ -77,6 +76,11 @@ class ContactsViewModel @Inject constructor(
     init {
         Timber.v("isAuthCallbackRegistered: ${isAuthCallbackRegistered()}")
         migrateOldRequests()
+
+        // The app has presumably had a fresh launch.
+        // Fail requests that haven't verified yet, so they may be retried manually by user.
+        failVerifyingRequests()
+
         if (BuildConfig.DEBUG) listContacts()
     }
 
@@ -97,10 +101,6 @@ class ContactsViewModel @Inject constructor(
     fun registerAuthCallback() {
         Timber.v("[MAIN] Registering auth callback...")
         if (!isAuthCallbackRegistered()) {
-            // The app has presumably had a fresh launch.
-            // Fail requests that haven't verified yet, so they may be retried manually by user.
-            failVerifyingRequests()
-
             Timber.v("[MAIN] nor initialized, initializing network callback...")
             subscriptions.add(
                 repo.registerAuthCallback(
