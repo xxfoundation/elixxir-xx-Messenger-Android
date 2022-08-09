@@ -342,6 +342,7 @@
             android:layout_height="@dimen/spacing_24"
             android:layout_marginTop="@dimen/spacing_24"
             android:src="@drawable/ic_share"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
             app:layout_constraintTop_toBottomOf="@id/menuJoinXxTxt"
             style="@style/menu_icon" />
@@ -357,6 +358,7 @@
             android:text="Share my profile"
             android:textColor="@color/neutral_weak"
             android:textSize="@dimen/text_14"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/menuShareIcon"
             app:layout_constraintStart_toEndOf="@id/menuShareIcon"
             app:layout_constraintTop_toTopOf="@id/menuShareIcon" />
