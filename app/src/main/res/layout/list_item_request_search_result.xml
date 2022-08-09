@@ -8,7 +8,7 @@
         <import type="io.xxlabs.messenger.ui.main.chat.DrawablePosition"/>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.requests.ui.list.adapter.RequestItem" />
+            type="io.xxlabs.messenger.requests.ui.list.adapter.ContactRequestSearchResultItem" />
         <variable
             name="listener"
             type="io.xxlabs.messenger.requests.ui.list.adapter.RequestItemListener" />
@@ -22,11 +22,14 @@
         android:onClick="@{() -> listener.onItemClicked(ui)}" >
 
         <include
-            layout="@layout/component_item_thumbnail"
             android:id="@+id/requestProfilePhoto"
-            app:ui="@{ui}"
+            layout="@layout/component_item_thumbnail"
+            android:layout_width="@dimen/spacing_42"
+            android:layout_height="@dimen/spacing_42"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:ui="@{ui}" />
 
         <TextView
             android:id="@+id/requestTitle"
@@ -49,42 +52,13 @@
             android:layout_height="wrap_content"
             android:text="@{ui.subtitle}"
             android:visibility="@{ui.subtitle}"
-            app:layout_constraintBottom_toTopOf="@+id/requestDetails"
+            android:textColor="@{ui.statusTextColor}"
             app:layout_constraintEnd_toStartOf="@id/requestAction"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@id/requestProfilePhoto"
             app:layout_constraintTop_toBottomOf="@id/requestTitle"
-            tools:text="Bill Gates" />
-
-        <TextView
-            android:id="@+id/requestDetails"
-            style="@style/request_item_body"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            android:lineSpacingExtra="2sp"
-            android:text="@{ui.details}"
-            android:visibility="@{ui.details}"
-            app:layout_constraintBottom_toTopOf="@+id/requestTimestamp"
-            app:layout_constraintEnd_toStartOf="@id/requestAction"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/requestProfilePhoto"
-            app:layout_constraintTop_toBottomOf="@id/requestSubtitle"
-            tools:text="+0 123-456-7890" />
-
-        <TextView
-            android:id="@+id/requestTimestamp"
-            style="@style/request_item_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="4dp"
-            app:date="@{ui.timestamp}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@id/requestAction"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@id/requestProfilePhoto"
-            app:layout_constraintTop_toBottomOf="@id/requestDetails"
-            tools:text="5 minutes ago" />
+            tools:text="Request pending"
+            tools:textColor="@color/neutral_weak"/>
 
         <io.xxlabs.messenger.support.view.SingleClickTextView
             android:id="@+id/requestAction"
@@ -95,7 +69,7 @@
             android:layout_marginHorizontal="0dp"
             android:drawablePadding="4dp"
             android:onClick="@{() -> listener.onActionClicked(ui)}"
-            android:visibility="@{ui.actionLabel}"
+            android:visibility="@{ui.actionVisible}"
             android:singleLine="false"
             android:gravity="center_vertical|end"
             app:actionIcon="@{ui.actionIcon}"
@@ -105,8 +79,8 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
-            tools:drawableLeft="@drawable/ic_check_green"
-            tools:text="Verified"
+            tools:drawableLeft="@drawable/ic_retry"
+            tools:text="Resend"
             style="@style/request_item_subheader"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

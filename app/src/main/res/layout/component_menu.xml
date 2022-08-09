@@ -129,8 +129,7 @@
             app:layout_constraintEnd_toEndOf="@id/menuGuideEnd"
             app:layout_constraintHorizontal_bias="1"
             app:layout_constraintStart_toEndOf="@id/menuBarrierUsername"
-            app:layout_constraintTop_toTopOf="@id/menuTopText"
-            app:layout_constraintVertical_bias="0"/>
+            app:layout_constraintTop_toTopOf="@id/menuTopText" />
 
         <!-- CHATS -->
         <ImageView
@@ -163,7 +162,7 @@
         <!-- CONTACTS -->
         <ImageView
             android:id="@+id/menuContactsIcon"
-            android:src="@drawable/ic_menu_contacts"
+            android:src="@drawable/ic_connections"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
             app:layout_constraintTop_toBottomOf="@id/menuChatsText"
             style="@style/menu_icon" />
@@ -188,7 +187,7 @@
         <!-- REQUESTS -->
         <ImageView
             android:id="@+id/menuContactRequestsIcon"
-            android:src="@drawable/ic_mail"
+            android:src="@drawable/ic_requests"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
             app:layout_constraintTop_toBottomOf="@id/menuContactsTxt"
             style="@style/menu_icon" />
@@ -262,11 +261,12 @@
         <!-- SCAN -->
 
         <!-- SETTINGS -->
+
         <ImageView
             android:id="@+id/menuSettingsIcon"
             android:src="@drawable/ic_menu_settings"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
-            app:layout_constraintTop_toBottomOf="@id/menuJoinXxTxt"
+            app:layout_constraintTop_toBottomOf="@id/menuScanText"
             style="@style/menu_icon" />
 
         <TextView
@@ -290,9 +290,9 @@
             android:layout_height="@dimen/spacing_24"
             android:layout_marginTop="@dimen/spacing_24"
             android:padding="@dimen/spacing_3"
-            android:src="@drawable/ic_dashboard"
+            android:src="@drawable/ic_dashboard_24px"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
-            app:layout_constraintTop_toBottomOf="@id/menuScanText"
+            app:layout_constraintTop_toBottomOf="@id/menuSettingsTxt"
             style="@style/menu_icon" />
 
         <TextView
@@ -336,6 +336,31 @@
             app:layout_constraintStart_toEndOf="@id/menuJoinXxIcon"
             app:layout_constraintTop_toTopOf="@id/menuJoinXxIcon" />
 
+        <ImageView
+            android:id="@+id/menuShareIcon"
+            android:layout_width="@dimen/spacing_24"
+            android:layout_height="@dimen/spacing_24"
+            android:layout_marginTop="@dimen/spacing_24"
+            android:src="@drawable/ic_share"
+            app:layout_constraintStart_toEndOf="@id/menuGuideStart"
+            app:layout_constraintTop_toBottomOf="@id/menuJoinXxTxt"
+            style="@style/menu_icon" />
+
+        <TextView
+            android:id="@+id/menuShareText"
+            style="@style/XxTextStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_10"
+            android:contentDescription="menu.option.dashboard"
+            android:padding="@dimen/spacing_8"
+            android:text="Share my profile"
+            android:textColor="@color/neutral_weak"
+            android:textSize="@dimen/text_14"
+            app:layout_constraintBottom_toBottomOf="@id/menuShareIcon"
+            app:layout_constraintStart_toEndOf="@id/menuShareIcon"
+            app:layout_constraintTop_toTopOf="@id/menuShareIcon" />
+
         <TextView
             android:id="@+id/menuBottomBuildTxt"
             style="@style/XxTextStyle.SemiBold"
@@ -348,7 +373,7 @@
             android:textSize="@dimen/text_12"
             app:layout_constraintBottom_toTopOf="@id/menuBottomVersionTxt"
             app:layout_constraintStart_toEndOf="@id/menuGuideStart"
-            app:layout_constraintTop_toBottomOf="@id/menuSettingsTxt"
+            app:layout_constraintTop_toBottomOf="@id/menuShareText"
             app:layout_constraintVertical_bias="1"
             app:layout_constraintVertical_chainStyle="packed"
             tools:text="Build 1.1.0" />

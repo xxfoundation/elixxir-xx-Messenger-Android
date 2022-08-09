@@ -5,7 +5,6 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
-import android.media.RingtoneManager.isDefault
 import android.os.Build
 import android.os.Bundle
 import android.os.PowerManager
@@ -28,7 +27,7 @@ import io.xxlabs.messenger.requests.ui.RequestsFragment
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_GROUP_CHAT
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_PRIVATE_CHAT
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_REQUEST
@@ -196,7 +195,7 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
                 }
             }
         }
-        intent.putExtra(INTENT_DEEP_LINK_BUNDLE, deepLinkBundle)
+        intent.putExtra(INTENT_NOTIFICATION_CLICK, deepLinkBundle)
         return intent
     }
 

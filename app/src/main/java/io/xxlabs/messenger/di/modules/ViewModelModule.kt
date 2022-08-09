@@ -8,6 +8,7 @@ import dagger.multibindings.IntoMap
 import io.xxlabs.messenger.di.utils.DaggerViewModelFactory
 import io.xxlabs.messenger.di.utils.ViewModelKey
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
+import io.xxlabs.messenger.search.UserSearchViewModel
 import io.xxlabs.messenger.ui.base.ContactDetailsViewModel
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
@@ -96,6 +97,11 @@ abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(ConnectionsViewModel::class)
     abstract fun bindConnectionsViewModel(connectionsViewModel: ConnectionsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(UserSearchViewModel::class)
+    abstract fun bindUserSearchViewModel(userSearchViewModel: UserSearchViewModel): ViewModel
 
     @Binds
     abstract fun bindViewModelFactory(factory: DaggerViewModelFactory): ViewModelProvider.Factory
