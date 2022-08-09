@@ -4,7 +4,6 @@ import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
@@ -12,6 +11,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
@@ -20,12 +20,12 @@ import androidx.lifecycle.*
 import androidx.lifecycle.Observer
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_INDEFINITE
-import com.google.android.material.snackbar.BaseTransientBottomBar.LENGTH_LONG
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.NavMainDirections
@@ -33,11 +33,9 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.databinding.ComponentCustomToastBinding
 import io.xxlabs.messenger.media.MediaProviderActivity
-import io.xxlabs.messenger.notifications.MessagingService
 import io.xxlabs.messenger.support.callback.NetworkWatcher
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.extensions.*
@@ -53,15 +51,16 @@ import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.global.BaseInstance
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
+import io.xxlabs.messenger.ui.main.chat.setVisibility
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.component_menu.*
+import kotlinx.android.synthetic.main.fragment_delete_account.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 private val Bundle.isPrivateMessage: Boolean
@@ -88,6 +87,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     var isBackBtnAllowed = true
     var isMenuOpened = false
 
+    private val intentQueue: MutableList<Intent> = mutableListOf()
 
     override fun onStart() {
         super.onStart()
@@ -167,13 +167,33 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         handleIntent(intent)
     }
 
+
     private fun handleIntent(intent: Intent) {
-        intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
-            handleDeepLink(it)
+        if (mainViewModel.areComponentsInitialized.value == true) {
+            intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
+                // PendingIntent from notifications
+                handleNotification(it)
+                return
+            }
+
+            intent.getStringExtra(INTENT_INVITATION)?.let { username ->
+                // Implicit intent from an invitation link
+                invitationIntent(username)
+                return
+            }
+        } else {
+            intentQueue.add(intent)
         }
     }
 
-    private fun handleDeepLink(bundle: Bundle) {
+    private fun invitationIntent(username: String) {
+        val userSearch = NavMainDirections.actionGlobalConnectionInvitation().apply {
+            this.username = username
+        }
+        mainNavController.navigateSafe(userSearch)
+    }
+
+    private fun handleNotification(bundle: Bundle) {
         with (bundle) {
             when {
                 isPrivateMessage -> privateMessageIntent(this)
@@ -361,6 +381,37 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             hideMenu()
             mainNavController.navigateSafe(R.id.action_global_ud_profile)
         }
+
+        menuShareText?.setOnSingleClickListener {
+            hideMenu()
+            sendInvitation()
+        }
+    }
+
+    private fun sendInvitation() {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                getString(R.string.share_invitation_message, preferences.name)
+            )
+            type = "text/plain"
+        }
+
+        val title: String = getString(R.string.share_chooser_title)
+        val chooser: Intent = Intent.createChooser(sendIntent, title)
+
+        if (sendIntent.resolveActivity(packageManager) != null) {
+            startActivity(chooser)
+        } else {
+            showCustomToast(
+                ToastUI.create(
+                    body = getString(R.string.share_no_activity_error),
+                    leftIcon = R.drawable.ic_alert,
+                    iconTint = R.color.accent_danger
+                )
+            )
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -375,6 +426,17 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     private fun observeUI() {
+        mainViewModel.areComponentsInitialized.observe(this) { ready ->
+            enableUi(ready)
+
+            if (ready) {
+                // LIFO ordering.
+                intentQueue.removeLastOrNull()?.run {
+                    handleIntent(this)
+                }
+            }
+        }
+
         contactsViewModel.showToast.onEach { toast ->
             toast?.let {
                 showCustomToast(toast)
@@ -403,6 +465,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             }
         }
     }
+
+    private fun enableUi(enabled: Boolean) {
+        initializingBackground?.setVisibility(!enabled)
+        initializingProgressBar?.setVisibility(!enabled)
+   }
 
     private fun dismissNetworkStatusMessage() {
         for (status in cachedNetworkStatus) {
@@ -501,7 +568,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New request sent - UI - $result")
             when (result) {
                 is SimpleRequestState.Success -> {
-                    createSnackMessage("One of your contact requests was successfully sent!")
+                    createSnackMessage("One of your connection requests was successfully sent!")
                     contactsViewModel.newAuthRequestSent.postValue(SimpleRequestState.Completed())
                 }
                 is SimpleRequestState.Error -> {
@@ -531,7 +598,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
         contactsViewModel.newIncomingRequestReceived.observe(this, Observer { result ->
             Timber.v("New incoming request - UI - $result")
             if (result is SimpleRequestState.Success) {
-                createSnackMessage("Private channel invitation received!")
+                createSnackMessage("New connection request received!")
                 contactsViewModel.newIncomingRequestReceived.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed new incoming contact")
@@ -542,7 +609,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New confirmation request - UI - $result")
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
-                createSnackMessage("A contact has accepted your private channel request!")
+                createSnackMessage("A connection has accepted your request!")
                 contactsViewModel.newConfirmationRequestReceived.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
@@ -565,7 +632,7 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
             Timber.v("New Group Request - UI - $result")
             if (result is SimpleRequestState.Success) {
                 Timber.v("Request is success")
-                createSnackMessage("Private Group invitation received!")
+                createSnackMessage("New group invitation received!")
                 mainViewModel.newGroup.postValue(SimpleRequestState.Completed())
             } else {
                 Timber.v("Completed confirm contact post")
@@ -781,10 +848,11 @@ class MainActivity : MediaProviderActivity(), SnackBarActivity, CustomToastActiv
     }
 
     companion object : BaseInstance {
-        const val INTENT_DEEP_LINK_BUNDLE = "nav_bundle"
+        const val INTENT_NOTIFICATION_CLICK = "nav_bundle"
         const val INTENT_PRIVATE_CHAT = "private_message"
         const val INTENT_GROUP_CHAT = "group_message"
         const val INTENT_REQUEST = "request"
+        const val INTENT_INVITATION = "invitation"
 
         private var activeInstances = 0
         override fun activeInstancesCount(): Int {
