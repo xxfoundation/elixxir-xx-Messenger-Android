@@ -84,6 +84,7 @@ class MainViewModel @Inject constructor(
                     Timber.e("[LOGIN] is logged in: $isLoggingIn")
                     wasLoggedIn = isLoggingIn
                     loginStatus.value = (DataRequestState.Success(isLoggingIn))
+                    _areComponentsInitialized.value = isLoggingIn
                 }.subscribe()
         )
     }
