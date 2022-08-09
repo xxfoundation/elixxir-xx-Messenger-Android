@@ -10,6 +10,8 @@ import io.xxlabs.messenger.requests.bindings.VerificationResult
 import io.xxlabs.messenger.requests.data.LocalRequestsDataSource
 import io.xxlabs.messenger.requests.data.RequestDataSource
 import io.xxlabs.messenger.requests.model.ContactRequest
+import io.xxlabs.messenger.support.appContext
+import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.support.util.value
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -121,13 +123,19 @@ class ContactRequestsRepository @Inject constructor(
 
     override fun failUnverifiedRequests() {
         scope.launch {
-            getRequests().cancellable().collect { requests ->
-                requests.filter {
+            localDataSource.getContactRequestsOnce().let { requestDataList ->
+                requestDataList.mapNotNull { requestData ->
+                    val contactData = daoRepository
+                        .getContactByUserId(requestData.requestId)
+                        .value()
+                    contactData?.let {
+                        ContactRequestData(it, requestData.unread)
+                    }
+                }.filter {
                     it.requestStatus == VERIFYING
                 }.forEach {
                     update(it, VERIFICATION_FAIL)
                 }
-                this.coroutineContext.job.cancel()
             }
         }
     }

@@ -829,6 +829,8 @@ class ClientRepository @Inject constructor(
                 }
                 Timber.v("[USER LOOKUP] Total execution time: ${Utils.getCurrentTimeStamp() - executionTime}")
             }
+        } else {
+            callback.invoke(null, "Failed to establish secure connection to network")
         }
     }
 
