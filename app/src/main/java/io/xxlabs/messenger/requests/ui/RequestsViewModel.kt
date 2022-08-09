@@ -366,6 +366,7 @@ class RequestsViewModel @Inject constructor(
 
     private fun showDetails(item: RequestItem) {
         when (item) {
+            is ContactRequestSearchResultItem -> showRequestDialog(item.contactRequest)
             is ContactRequestItem -> showRequestDialog(item.contactRequest)
             is SearchResultItem -> showRequestDialog(item.contactRequest)
             is GroupInviteItem -> showInvitationDialog(item.invite)
@@ -432,6 +433,7 @@ class RequestsViewModel @Inject constructor(
     private fun resendRequest(item: RequestItem) {
         when (item) {
             is ContactRequestItem -> requestsDataSource.send(item.request as ContactRequest)
+            is ContactRequestSearchResultItem -> requestsDataSource.send(item.request as ContactRequest)
             is GroupInviteItem -> invitationsDataSource.send(item.request as GroupInvitation)
         }
         onResend(item)

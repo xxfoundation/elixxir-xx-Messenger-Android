@@ -7,18 +7,20 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import androidx.lifecycle.*
-import bindings.Fact
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
-import io.xxlabs.messenger.data.datatype.ContactRequestState
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.RequestStatus
+import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
+import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
+import io.xxlabs.messenger.requests.model.ContactRequest
+import io.xxlabs.messenger.requests.model.Request
 import io.xxlabs.messenger.requests.ui.list.adapter.*
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.toast.ToastUI
@@ -29,18 +31,17 @@ import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.createInfoDialog
 import io.xxlabs.messenger.ui.dialog.info.createTwoButtonDialogUi
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 class UserSearchViewModel @Inject constructor(
     private val repo: BaseRepository,
     private val daoRepo: DaoRepository,
-    private val preferences: PreferencesRepository
+    private val preferences: PreferencesRepository,
+    private val requestsDataSource: ContactRequestsRepository,
 ): ViewModel(){
 
     var previousTabPosition: Int = UserSearchFragment.SEARCH_USERNAME
@@ -203,6 +204,8 @@ class UserSearchViewModel @Inject constructor(
     val phoneResults: Flow<List<RequestItem>> by ::_phoneResults
     private val _phoneResults = MutableStateFlow<List<RequestItem>>(listOf())
 
+    private var searchJob: Job? = null
+
     init {
         showNewUserPopups()
     }
@@ -268,61 +271,152 @@ class UserSearchViewModel @Inject constructor(
         repo.enableDummyTraffic(enabled)
     }
 
-    fun onUsernameSearch(username: String?) {
-        username?.let {
-            val factQuery = FactQuery.UsernameQuery(it)
-            search(factQuery, _usernameResults)
-        }
+    suspend fun onUsernameSearch(username: String?): Flow<List<RequestItem>> {
+        _usernameResults.value = listOf()
+        val factQuery = FactQuery.UsernameQuery(username)
+        return search(factQuery).cancellable()
     }
 
-    fun onEmailSearch(email: String?) {
-        email?.let {
-            val factQuery = FactQuery.EmailQuery(it)
-            search(factQuery, _emailResults)
-        }
+    suspend fun onEmailSearch(email: String?): Flow<List<RequestItem>> {
+        _emailResults.value = listOf()
+        val factQuery = FactQuery.EmailQuery(email)
+        return search(factQuery).cancellable()
     }
 
-    fun onPhoneSearch(phone: String?) {
-        phone?.let {
-            val factQuery = FactQuery.PhoneQuery(it+country.countryCode)
-            search(factQuery, _phoneResults)
-        }
+    suspend fun onPhoneSearch(phone: String?): Flow<List<RequestItem>> {
+        _phoneResults.value = listOf()
+        val factQuery = FactQuery.PhoneQuery(phone + country.countryCode)
+        return search(factQuery).cancellable()
     }
 
-    private fun search(
-        factQuery: FactQuery,
-        resultsEmitter: MutableStateFlow<List<RequestItem>>
-    ) {
-        if (!isValidQuery(factQuery)) return
+    private suspend fun search(factQuery: FactQuery): Flow<List<RequestItem>> {
+        // Cancel previous searches, save a reference to this one.
+        searchJob?.cancel()
+        searchJob = coroutineContext.job
+
+        if (!isValidQuery(factQuery)) flowOf(listOf<RequestItem?>())
 
         _udSearchUi.value = searchRunningState
-        viewModelScope.launch {
-            clearPreviousResults(resultsEmitter)
-            val udResult = searchUd(factQuery)
-            val requestResults = searchRequests(factQuery)
-            val connectionResults = searchConnections(factQuery)
 
-            val remoteResults = udResult?.let {
-                listOf(udResult) + requestResults
-            } ?: requestResults
+        return combine(
+            searchUd(factQuery),
+            allRequests(),
+            allConnections()
+        ) { ud, allRequests, allConnections ->
+            val foundRequests = allRequests.matching(factQuery).toMutableSet()
+            val foundConnections = allConnections.matching(factQuery).toMutableSet()
 
-            val sortedResults = if (remoteResults.isEmpty()) {
-                connectionResults.ifEmpty { noResultsFor(factQuery) }
-            } else {
-                if (connectionResults.isEmpty()) remoteResults
-                else remoteResults + listOf(ConnectionsDividerItem()) + connectionResults
+            // Add identical request to request results, if not already there.
+            allRequests.identicalTo(ud.username)?.let {
+                foundRequests.add(it)
             }
 
-            resultsEmitter.emitResults(sortedResults)
+            // Add identical connection to connection results, if not already there.
+            allConnections.identicalTo(ud.username)?.let {
+                foundConnections.add(it)
+            }
+
+            val alreadyRequested = ud.username in foundRequests.map { request ->
+                request.username
+            }
+
+            val alreadyAdded = ud.username in foundConnections.map { connection ->
+                connection.username
+            }
+
+            val nonConnections =
+                if (alreadyRequested || alreadyAdded) {
+                    // If the UD result's userID match a request's userID, only show the request
+                    foundRequests.toList().sortedBy { it.username }
+                } else {
+                    // Otherwise show both
+                    listOf(ud) + foundRequests.sortedBy { it.username }
+                }
+
+
+            if (nonConnections.isEmpty()) {
+                // If there's no UD result or Requests, just show the Connections with no divider.
+                foundConnections.toList().sortedBy {
+                    it.username
+                }.ifEmpty {
+                    // Show a "no results found" placeholder if there's nothing at all.
+                    noResultsFor(factQuery)
+                }
+            } else {
+                if (foundConnections.isEmpty()) {
+                    // If there's no Connections, show the UD & Request results.
+                    nonConnections
+                } else {
+                    // Or show the UD results, Requests, a divider, and finally Connections.
+                    nonConnections
+                        .plus(listOf(ConnectionsDividerItem()))
+                        .plus(foundConnections.toList().sortedBy { it.username })
+                }
+            }
+        }
+    }
+
+    private val RequestItem.username: String
+        get() = (request as? ContactRequest)?.model?.username ?: ""
+
+    private suspend fun allRequests(): Flow<List<RequestItem>> =
+        requestsDataSource.getRequests().mapNotNull { requestsList ->
+            requestsList.map {
+                it.asRequestSearchResult()
+            }
+        }.stateIn(viewModelScope)
+
+    private suspend fun allConnections() = flow {
+        val connectionsList = savedUsers().filter {
+            it.isConnection()
+        }.asConnectionsSearchResult()
+        emit(connectionsList)
+    }.stateIn(viewModelScope)
+
+    private fun List<RequestItem>.identicalTo(username: String): RequestItem? =
+        firstOrNull { it.username == username }
+
+    private fun List<RequestItem>.matching(factQuery: FactQuery): List<RequestItem> {
+        return when (factQuery.type) {
+            FactType.USERNAME -> {
+                filter {
+                    (it.request as? ContactRequest)?.model?.displayName?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
+                }
+            }
+            FactType.EMAIL -> {
+                filter {
+                    (it.request as? ContactRequest)?.model?.email?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
+                }
+            }
+            FactType.PHONE -> {
+                filter {
+                    (it.request as? ContactRequest)?.model?.phone?.contains(
+                        factQuery.fact,
+                        true
+                    ) ?: false
+                }
+            }
+            else -> listOf()
         }
     }
 
     private fun isValidQuery(factQuery: FactQuery): Boolean {
-        // Prevent users from searching (and possibly requesting) themselves.
         return with (factQuery.fact) {
-            this != repo.getStoredUsername()
-                    && this != repo.getStoredEmail()
-                    && this !=  repo.getStoredPhone()
+            if (isNullOrBlank()) {
+                // Prevent blank text
+                false
+            } else {
+                // Prevent users from searching (and possibly requesting) themselves.
+                this != repo.getStoredUsername()
+                        && this != repo.getStoredEmail()
+                        && this != repo.getStoredPhone()
+            }
         }
     }
 
@@ -334,66 +428,66 @@ class UserSearchViewModel @Inject constructor(
             text = "There are no users with that ${factQuery.type.name.lowercase()}."
         )
 
-    private suspend fun clearPreviousResults(resultsEmitter: MutableStateFlow<List<RequestItem>>) {
-        resultsEmitter.emit(listOf())
-    }
-
-    private suspend fun MutableStateFlow<List<RequestItem>>.emitResults(results: List<RequestItem>) {
-        emit(results)
-        _udSearchUi.value = searchCompleteState
-    }
-
     private suspend fun savedUsers(): List<ContactData> =
         daoRepo.getAllContacts().value()
 
     private fun ContactData.isConnection(): Boolean =
         RequestStatus.from(status) == RequestStatus.ACCEPTED
 
-    private fun ContactData.isRequest(): Boolean = !isConnection()
+    private suspend fun searchConnections(factQuery: FactQuery) = flow {
+        val results = when (factQuery.type) {
+            FactType.USERNAME -> {
+                savedUsers().filter {
+                    it.isConnection() && it.displayName.contains(factQuery.fact, true)
+                }.asConnectionsSearchResult()
 
-    private suspend fun searchConnections(factQuery: FactQuery): List<RequestItem> =
-        withContext(Dispatchers.IO) {
-            when (factQuery.type) {
-                FactType.USERNAME -> {
-                    savedUsers().filter {
-                        it.isConnection() && it.displayName.contains(factQuery.fact)
-                    }.asConnectionsSearchResult()
-                }
-                FactType.EMAIL -> {
-                    savedUsers().filter {
-                        it.isConnection() && it.email.contains(factQuery.fact)
-                    }.asConnectionsSearchResult()
-                }
-                FactType.PHONE -> {
-                    savedUsers().filter {
-                        it.isConnection() && it.phone.contains(factQuery.fact)
-                    }.asConnectionsSearchResult()
-                }
-                else -> listOf()
             }
-        }
+            FactType.EMAIL -> {
+                savedUsers().filter {
+                    it.isConnection() && it.email.contains(factQuery.fact, true)
+                }.asConnectionsSearchResult()
 
-    private suspend fun searchRequests(factQuery: FactQuery): List<RequestItem> =
-        withContext(Dispatchers.IO) {
-            when (factQuery.type) {
-                FactType.USERNAME -> {
-                    savedUsers().filter {
-                        it.isRequest() && it.displayName.contains(factQuery.fact)
-                    }.asRequestsSearchResult()
-                }
-                FactType.EMAIL -> {
-                    savedUsers().filter {
-                        it.isRequest() && it.email.contains(factQuery.fact)
-                    }.asRequestsSearchResult()
-                }
-                FactType.PHONE -> {
-                    savedUsers().filter {
-                        it.isRequest() && it.phone.contains(factQuery.fact)
-                    }.asRequestsSearchResult()
-                }
-                else -> listOf()
             }
+            FactType.PHONE -> {
+                savedUsers().filter {
+                    it.isConnection() && it.phone.contains(factQuery.fact, true)
+                }.asConnectionsSearchResult()
+            }
+            else -> listOf()
         }
+        emit(results)
+    }.stateIn(viewModelScope)
+
+    private suspend fun searchRequests(factQuery: FactQuery) =
+        when (factQuery.type) {
+            FactType.USERNAME -> {
+                filterRequests {
+                    it.model.displayName.contains(factQuery.fact, true)
+                }
+            }
+            FactType.EMAIL -> {
+                filterRequests {
+                    it.model.email.contains(factQuery.fact, true)
+                }
+            }
+            FactType.PHONE -> {
+                filterRequests {
+                    it.model.phone.contains(
+                        Country.toFormattedNumber(factQuery.fact, false) ?: factQuery.fact
+                    )
+                }
+            }
+            else -> flow { listOf<RequestItem>() }
+        }.stateIn(viewModelScope)
+
+    private suspend fun filterRequests(match: (contactRequest: ContactRequest) -> Boolean) =
+        requestsDataSource.getRequests().map { requestsList ->
+            requestsList.filter {
+                match(it)
+            }.map {
+                it.asRequestSearchResult()
+            }
+        }.flowOn(Dispatchers.IO)
 
     private suspend fun List<ContactData>.asConnectionsSearchResult(): List<RequestItem> =
         map {
@@ -404,22 +498,28 @@ class UserSearchViewModel @Inject constructor(
             )
         }
 
-    private suspend fun List<ContactData>.asRequestsSearchResult(): List<RequestItem> =
-        map {
-            ContactRequestSearchResultItem(
-                contactRequest = ContactRequestData(it),
-                photo = resolveBitmap(it.photo),
-                statusText = it.statusText(),
-                statusTextColor = it.statusTextColor(),
-                actionVisible= it.actionVisible()
-            )
-        }
+    private suspend fun ContactRequest.asRequestSearchResult(): RequestItem =
+        ContactRequestSearchResultItem(
+            contactRequest = this,
+            photo = resolveBitmap(model.photo),
+            statusText = model.statusText(),
+            statusTextColor = model.statusTextColor(),
+            actionVisible = model.actionVisible(),
+            actionIcon = model.actionIcon(),
+            actionIconColor = model.actionIconColor(),
+            actionTextStyle = model.actionTextStyle(),
+            actionLabel = model.actionLabel()
+        )
 
-    private fun ContactData.statusText(): String {
+    private fun Contact.statusText(): String {
         return when (RequestStatus.from(status)) {
             RequestStatus.SENT,
             RequestStatus.VERIFIED,
-            RequestStatus.RESET_SENT -> "Request pending"
+            RequestStatus.RESET_SENT,
+            RequestStatus.RESENT,
+            RequestStatus.VERIFYING,
+            RequestStatus.HIDDEN,
+            RequestStatus.SENDING -> "Request pending"
 
             RequestStatus.SEND_FAIL,
             RequestStatus.CONFIRM_FAIL,
@@ -430,7 +530,7 @@ class UserSearchViewModel @Inject constructor(
         }
     }
 
-    private fun ContactData.statusTextColor(): Int {
+    private fun Contact.statusTextColor(): Int {
         return when (RequestStatus.from(status)) {
             RequestStatus.SEND_FAIL,
             RequestStatus.CONFIRM_FAIL,
@@ -441,35 +541,71 @@ class UserSearchViewModel @Inject constructor(
         }
     }
 
-    private fun ContactData.actionVisible(): Boolean {
+    private fun Contact.actionVisible(): Boolean {
         return when (RequestStatus.from(status)) {
-            RequestStatus.VERIFIED -> false
+            RequestStatus.VERIFIED, RequestStatus.VERIFYING, RequestStatus.HIDDEN -> false
             else -> true
         }
     }
+
+    private fun Contact.actionIcon(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> R.drawable.ic_check_green
+            else -> R.drawable.ic_retry
+        }
+    }
+
+    private fun Contact.actionIconColor(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT ->  R.color.accent_success
+            else -> R.color.brand_default
+        }
+    }
+
+    private fun Contact.actionTextStyle(): Int {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> R.drawable.ic_check_green
+            else -> R.style.request_item_resent
+        }
+    }
+
+    private fun Contact.actionLabel(): String {
+        return when (RequestStatus.from(status)) {
+            RequestStatus.RESENT -> appContext().getString(R.string.request_item_action_resent)
+            else -> appContext().getString(R.string.request_item_action_retry)
+        }
+    }
+
 
     private suspend fun resolveBitmap(data: ByteArray?): Bitmap? = withContext(Dispatchers.IO) {
         BitmapResolver.getBitmap(data)
     }
 
-    private suspend fun searchUd(factQuery: FactQuery): RequestItem? {
-        return try {
+    private suspend fun searchUd(factQuery: FactQuery) = flow {
+        val result = try {
             val udResult = repo.searchUd(factQuery.fact, factQuery.type).value()
             udResult.second?.let { // Error message
                 if (it.isNotEmpty()) {
                     if (!it.contains("no results found", true)) {
                         showToast(it)
                     }
+                    _udSearchUi.value = searchCompleteState
                     noResultPlaceholder(factQuery)
                 } else { // Search result
+                    _udSearchUi.value = searchCompleteState
                     udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
                 }
-            } ?: udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
+            } ?: run {
+                _udSearchUi.value = searchCompleteState
+                udResult.first?.asSearchResult() ?: noResultPlaceholder(factQuery)
+            }
         } catch (e: Exception) {
             e.message?.let { showToast(it) }
+            _udSearchUi.value = searchCompleteState
             noResultPlaceholder(factQuery)
         }
-    }
+        emit(result)
+    }.stateIn(viewModelScope)
 
     private fun ContactWrapperBase.asSearchResult(): RequestItem {
         // ContactWrapperBase -> ContactRequestData
@@ -506,6 +642,7 @@ class UserSearchViewModel @Inject constructor(
     }
 
     private fun onCancelSearchClicked() {
+        searchJob?.cancel()
         _udSearchUi.value = searchCompleteState
     }
 
@@ -536,18 +673,18 @@ private sealed class FactQuery {
     abstract val fact: String
     abstract val type: FactType
 
-    class UsernameQuery(query: String): FactQuery() {
-        override val fact: String = query
+    class UsernameQuery(query: String?): FactQuery() {
+        override val fact: String = query ?: ""
         override val type: FactType = FactType.USERNAME
     }
 
-    class EmailQuery(query: String): FactQuery() {
-        override val fact: String = query
+    class EmailQuery(query: String?): FactQuery() {
+        override val fact: String = query ?: ""
         override val type: FactType = FactType.EMAIL
     }
 
-    class PhoneQuery(query: String): FactQuery() {
-        override val fact: String = query
+    class PhoneQuery(query: String?): FactQuery() {
+        override val fact: String = query ?: ""
         override val type: FactType = FactType.PHONE
     }
 }
