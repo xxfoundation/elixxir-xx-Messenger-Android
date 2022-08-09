@@ -21,6 +21,9 @@ interface RequestsDao {
     @Query("SELECT * FROM Requests WHERE requestId IN (SELECT userId FROM Contacts)")
     fun getContactRequests(): Flow<List<RequestData>>
 
+    @Query("SELECT * FROM Requests WHERE requestId IN (SELECT userId FROM Contacts)")
+    fun getContactRequestsOnce(): List<RequestData>
+
     @Query("SELECT * FROM Requests WHERE requestId IN (SELECT groupId FROM Groups)")
     fun getGroupInvitations(): Flow<List<RequestData>>
 

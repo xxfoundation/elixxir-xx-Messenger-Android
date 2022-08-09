@@ -52,6 +52,9 @@ class RequestsDatabase @Inject constructor(
         }
     }
 
+    override suspend fun getContactRequestsOnce(): List<RequestData> =
+        requestsDao.getContactRequestsOnce()
+
     override suspend fun getContactRequests(): Flow<List<RequestData>> =
         requestsDao.getContactRequests()
             .stateIn(scope, SharingStarted.Eagerly, listOf())
