@@ -13,7 +13,8 @@ enum class RequestStatus(val value: Int) {
     RESENT(7),
     SENDING(10),
     DELETING(11),
-    HIDDEN(12);
+    HIDDEN(12),
+    SEARCH(99);
 
     companion object {
         fun from(value: Int) = values().first { it.value == value }

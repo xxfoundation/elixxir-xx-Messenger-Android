@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.annotation.IdRes
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
+import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.formattedEmail
 import io.xxlabs.messenger.data.room.model.formattedPhone
 import io.xxlabs.messenger.requests.model.ContactRequest
@@ -58,22 +59,22 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
 
 data class ContactRequestItem(
     val contactRequest: ContactRequest,
-    val photo: Bitmap?,
+    val photo: Bitmap? = null,
 ) : RequestItem(contactRequest) {
     override val subtitle: String? = null
     override val details: String? = contactRequest.getContactInfo()
     override val itemPhoto: Bitmap? = photo
     override val itemInitials: String = contactRequest.model.initials
     override val itemIconRes: Int? = null
-
-    private fun ContactRequest.getContactInfo(): String? =
-        with ("${model.formattedEmail() ?: ""}\n${model.formattedPhone() ?: ""}") {
-            when {
-                isNullOrBlank() -> null
-                else -> trim()
-            }
-        }
 }
+
+private fun ContactRequest.getContactInfo(): String? =
+    with ("${model.formattedEmail() ?: ""}\n${model.formattedPhone() ?: ""}") {
+        when {
+            isNullOrBlank() -> null
+            else -> trim()
+        }
+    }
 
 data class GroupInviteItem(
     val invite: GroupInvitation,
@@ -102,6 +103,40 @@ data class EmptyPlaceholderItem(
 data class HiddenRequestToggleItem(
     val placeholder: NullRequest = NullRequest(),
 ) : RequestItem(placeholder) {
+    override val itemPhoto: Bitmap? = null
+    override val itemIconRes: Int? = null
+    override val itemInitials: String? = null
+    override val subtitle: String? = null
+    override val details: String? = null
+}
+
+data class AcceptedConnectionItem(
+    val contactRequest: ContactRequest,
+    val photo: Bitmap? = null
+) : RequestItem(contactRequest) {
+    override val subtitle: String? = null
+    override val details: String? = contactRequest.getContactInfo()
+    override val itemPhoto: Bitmap? = photo
+    override val itemInitials: String = contactRequest.model.initials
+    override val itemIconRes: Int? = null
+}
+
+data class SearchResultItem(
+    val contactRequest: ContactRequest,
+    val photo: Bitmap? = null
+) : RequestItem(contactRequest) {
+    override val subtitle: String? = null
+    override val details: String? = contactRequest.getContactInfo()
+    override val itemPhoto: Bitmap? = photo
+    override val itemInitials: String = contactRequest.model.initials
+    override val itemIconRes: Int? = null
+}
+
+data class ConnectionsDividerItem(
+    val placeholder: NullRequest = NullRequest(),
+    val text: String = "Local results"
+) : RequestItem(placeholder) {
+    override val title = text
     override val itemPhoto: Bitmap? = null
     override val itemIconRes: Int? = null
     override val itemInitials: String? = null

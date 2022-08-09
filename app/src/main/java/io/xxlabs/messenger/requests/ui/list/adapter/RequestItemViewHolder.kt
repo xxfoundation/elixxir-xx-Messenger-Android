@@ -9,6 +9,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ListItemEmptyPlaceholderBinding
 import io.xxlabs.messenger.databinding.ListItemHiddenRequestsToggleBinding
 import io.xxlabs.messenger.databinding.ListItemRequestBinding
+import io.xxlabs.messenger.databinding.ListItemSectionDividerBinding
 import timber.log.Timber
 import java.io.InvalidObjectException
 
@@ -23,6 +24,7 @@ class RequestViewHolder(
     override fun onBind(ui: RequestItem, listener: RequestItemListener) {
         binding.ui = ui
         binding.listener = listener
+        listener.markAsSeen(ui)
     }
 
     companion object {
@@ -33,6 +35,28 @@ class RequestViewHolder(
                 false
             )
             return RequestViewHolder(binding)
+        }
+    }
+}
+
+class ConnectionViewHolder(
+    private val binding: ListItemRequestBinding
+) : RequestItemViewHolder(binding.root) {
+
+    override fun onBind(ui: RequestItem, listener: RequestItemListener) {
+        binding.ui = ui
+        binding.listener = listener
+        binding.requestTimestamp.visibility = View.GONE
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ConnectionViewHolder {
+            val binding = ListItemRequestBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return ConnectionViewHolder(binding)
         }
     }
 }
@@ -73,6 +97,26 @@ class HiddenRequestToggle(
                 false
             )
             return HiddenRequestToggle(binding)
+        }
+    }
+}
+
+class ConnectionsSectionDivider(
+    private val binding: ListItemSectionDividerBinding
+) : RequestItemViewHolder(binding.root) {
+
+    override fun onBind(ui: RequestItem, listener: RequestItemListener) {
+        binding.ui = ui
+    }
+
+    companion object {
+        fun create(parent: ViewGroup): ConnectionsSectionDivider {
+            val binding = ListItemSectionDividerBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+            return ConnectionsSectionDivider(binding)
         }
     }
 }

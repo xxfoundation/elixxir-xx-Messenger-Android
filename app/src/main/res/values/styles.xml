@@ -371,6 +371,9 @@
         <item name="android:textSize">@dimen/text_14</item>
     </style>
 
+    <style name="SmallTextTabStyle" parent="XxTextStyle">
+        <item name="android:textSize">12sp</item>
+    </style>
 
     <!-- New Styles -->
     <style name="InputLayout" parent="Widget.Design.TextInputLayout">
