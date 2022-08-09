@@ -14,6 +14,7 @@ enum class RequestStatus(val value: Int) {
     SENDING(10),
     DELETING(11),
     HIDDEN(12),
+    RECEIVED(13),
     SEARCH(99);
 
     companion object {
