@@ -103,24 +103,26 @@ class UserSearchFragment : RequestsFragment() {
                 }
             }.attach()
 
-            userSearchAppBarTabs.addOnTabSelectedListener(
-                object : OnTabSelectedListener {
-                    override fun onTabSelected(tab: TabLayout.Tab?) {
-                        if (searchViewModel.previousTabPosition != SEARCH_QR && tab?.position == SEARCH_QR) {
-                            searchViewModel.previousTabPosition = SEARCH_QR
-                            lifecycleScope.launch {
-                                delay(500)
-                                navigateToQrCode()
+            userSearchAppBarTabs.apply {
+                addOnTabSelectedListener(
+                    object : OnTabSelectedListener {
+                        override fun onTabSelected(tab: TabLayout.Tab?) {
+                            if (searchViewModel.previousTabPosition != SEARCH_QR && tab?.position == SEARCH_QR) {
+                                searchViewModel.previousTabPosition = SEARCH_QR
+                                lifecycleScope.launch {
+                                    delay(500)
+                                    navigateToQrCode()
+                                }
+                            } else {
+                                searchViewModel.previousTabPosition = tab?.position ?: 0
                             }
-                        } else {
-                            searchViewModel.previousTabPosition = tab?.position ?: 0
                         }
-                    }
 
-                    override fun onTabUnselected(tab: TabLayout.Tab?) { }
-                    override fun onTabReselected(tab: TabLayout.Tab?) { }
-                }
-            )
+                        override fun onTabUnselected(tab: TabLayout.Tab?) { }
+                        override fun onTabReselected(tab: TabLayout.Tab?) { }
+                    }
+                )
+            }
         }
     }
 
@@ -162,6 +164,16 @@ class UserSearchFragment : RequestsFragment() {
     override fun onStart() {
         super.onStart()
         observeUi()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        resetTabPosition()
+    }
+
+    private fun resetTabPosition() {
+        binding.userSearchAppBarTabs.setScrollPosition(SEARCH_USERNAME, 0f, true)
+        binding.userSearchViewPager.currentItem = SEARCH_USERNAME
     }
 
     private fun observeUi() {
