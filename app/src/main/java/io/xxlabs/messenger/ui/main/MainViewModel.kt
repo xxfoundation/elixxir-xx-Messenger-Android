@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.ui.main
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -54,6 +55,9 @@ class MainViewModel @Inject constructor(
     private var isLoggingIn: Boolean = false
     private var hasManagerStarted: Boolean = false
 
+    val areComponentsInitialized: LiveData<Boolean> by ::_areComponentsInitialized
+    private val _areComponentsInitialized = MutableLiveData(false)
+
     @Volatile
     var wasLoggedIn = false
 
@@ -80,6 +84,7 @@ class MainViewModel @Inject constructor(
                     Timber.e("[LOGIN] is logged in: $isLoggingIn")
                     wasLoggedIn = isLoggingIn
                     loginStatus.value = (DataRequestState.Success(isLoggingIn))
+                    _areComponentsInitialized.value = isLoggingIn
                 }.subscribe()
         )
     }
@@ -331,6 +336,7 @@ class MainViewModel @Inject constructor(
             wasLoggedIn = true
             enableDummyTraffic(preferences.isCoverTrafficOn)
             loginProcess.postValue(DataRequestState.Success(true))
+            _areComponentsInitialized.value = true
         } else {
             loginProcess.postValue(DataRequestState.Error(err))
         }

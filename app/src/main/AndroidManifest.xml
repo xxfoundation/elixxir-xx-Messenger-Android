@@ -56,8 +56,17 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="https"
+                    android:host="elixxir.io"
+                    android:pathPrefix="/connect"
+                    />
             </intent-filter>
         </activity>
         <activity
@@ -84,9 +93,7 @@
             android:launchMode="singleTask">
             <intent-filter>
                 <data android:scheme="db-${dropboxKey}" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

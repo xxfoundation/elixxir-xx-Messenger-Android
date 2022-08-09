@@ -38,6 +38,7 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.repository.client.NodeErrorException.Companion.isNodeError
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
@@ -500,6 +501,7 @@ class ClientRepository @Inject constructor(
         return Single.create { emitter ->
             try {
                 if (!areNodesReady()) {
+                    Timber.d("Failed to register-- nodes aren't ready.")
                     emitter.onError(throwNodeError())
                     return@create
                 }
@@ -511,6 +513,7 @@ class ClientRepository @Inject constructor(
                 exportUserContact()
                 emitter.onSuccess(username)
             } catch (e: Exception) {
+                Timber.d("Failed to register: ${e.message}")
                 emitter.onError(e)
             }
         }
@@ -828,6 +831,8 @@ class ClientRepository @Inject constructor(
                 }
                 Timber.v("[USER LOOKUP] Total execution time: ${Utils.getCurrentTimeStamp() - executionTime}")
             }
+        } else {
+            callback.invoke(null, "Failed to establish secure connection to network")
         }
     }
 
@@ -953,11 +958,25 @@ class ClientRepository @Inject constructor(
     override fun areNodesReady(): Boolean = recursiveAreNodesReady()
 
     private fun recursiveAreNodesReady(retries: Int = 0): Boolean {
-        val status = clientWrapper.getNodeRegistrationStatus()
+        val status = try {
+             clientWrapper.getNodeRegistrationStatus()
+        } catch (e: Exception) {
+            return if (e.isNodeError()) {
+                Timber.d("Network is not healthy. Waiting $NODES_READY_POLL_INTERVAL before retry.")
+                Thread.sleep(NODES_READY_POLL_INTERVAL)
+                recursiveAreNodesReady()
+            }
+            else throw e
+        }
+
         val rate: Double = ((status.first.toDouble() / status.second))
         Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
 
         return if (rate < NODES_READY_MINIMUM_RATE && retries <= NODES_READY_MAX_RETRIES) {
+            Timber.d(
+                "Nodes not ready after ${retries + 1} attempts. " +
+                        "Waiting $NODES_READY_POLL_INTERVAL before next retry."
+            )
             Thread.sleep(NODES_READY_POLL_INTERVAL)
             recursiveAreNodesReady(retries+1)
         } else {
@@ -1054,4 +1073,10 @@ class ClientRepository @Inject constructor(
 }
 
 
-class NodeErrorException : Exception()
+class NodeErrorException : Exception() {
+    companion object {
+        fun Exception.isNodeError(): Boolean =
+            message?.contains("network is not healthy", false)
+                ?: false
+    }
+}

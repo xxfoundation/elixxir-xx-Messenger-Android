@@ -19,7 +19,9 @@ import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_DEEP_LINK_BUNDLE
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_INVITATION
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
+import timber.log.Timber
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
@@ -54,13 +56,33 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun handleIntent(intent: Intent) {
+        if (Intent.ACTION_VIEW == intent.action) {
+            // Implicit Intent from an invitation link
+            intent.data?.getQueryParameter("username")?.let { username ->
+                invitationIntent(username)
+            }
+        } else notificationIntent(intent)
+    }
+
+    private fun invitationIntent(username: String) {
+        // Invitations can only be handled if the user has an account.
+        if (preferencesRepository.name.isNotEmpty()) {
+            val intent = Intent(this, MainActivity::class.java).apply {
+                putExtra(INTENT_INVITATION, username)
+            }
+            startActivity(intent)
+            finish()
+        }
+    }
+
+    private fun notificationIntent(intent: Intent) {
         // Pass this intent on to MainActivity.
-        mainIntent = intent.getBundleExtra(INTENT_DEEP_LINK_BUNDLE)?.let {
+        mainIntent = intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
             Intent(
                 this@SplashScreenPlaceholderActivity,
                 MainActivity::class.java
             ).apply {
-                putExtra(INTENT_DEEP_LINK_BUNDLE, it)
+                putExtra(INTENT_NOTIFICATION_CLICK, it)
             }
         }
     }

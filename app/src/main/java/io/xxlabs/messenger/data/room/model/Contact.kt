@@ -32,8 +32,7 @@ fun Contact.formattedEmail(): String? =
     else null
 
 fun Contact.formattedPhone(flagEmoji: Boolean = false): String? =
-    if (phone.isNotBlank()) Country.toFormattedNumber(phone, flagEmoji)
-    else null
+    phone.ifBlank { null }
 
 suspend fun Contact.resolveBitmap(): Bitmap? = withContext(Dispatchers.IO) {
     BitmapResolver.getBitmap(photo)

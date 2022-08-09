@@ -27,7 +27,6 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.data.datatype.NetworkState
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
 import io.xxlabs.messenger.requests.ui.nickname.SaveNicknameDialog
@@ -44,7 +43,6 @@ import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 import kotlinx.android.synthetic.main.component_toolbar_generic.*
 import kotlinx.android.synthetic.main.fragment_private_search.*
-import io.xxlabs.messenger.ui.dialog.info.showTwoButtonInfoDialog
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -418,14 +416,6 @@ class UdSearchFragment : BaseFragment() {
     }
 
     private fun watchForChanges() {
-//        networkViewModel.networkState.observe(viewLifecycleOwner, { networkState ->
-//            if (networkState != NetworkState.HAS_CONNECTION) {
-//                snackBar.show()
-//            } else {
-//                snackBar.dismiss()
-//            }
-//        })
-
         networkViewModel.userDiscoveryStatus.observe(
             viewLifecycleOwner,
             { isUdCompletelyInitialized ->

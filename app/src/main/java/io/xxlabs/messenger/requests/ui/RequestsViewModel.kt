@@ -89,6 +89,9 @@ class RequestsViewModel @Inject constructor(
     val sendContactRequest: StateFlow<ContactData?> by ::_sendContactRequest
     private val _sendContactRequest = MutableStateFlow<ContactData?>(null)
 
+    val showContactRequestDialog: LiveData<ContactData?> by ::_showContactRequestDialog
+    private val _showContactRequestDialog = MutableLiveData<ContactData?>(null)
+
     val showCreateNickname: StateFlow<OutgoingRequest?> by ::_showCreateNickname
     private val _showCreateNickname = MutableStateFlow<OutgoingRequest?>(null)
 
@@ -308,7 +311,7 @@ class RequestsViewModel @Inject constructor(
 
     private fun RequestItem.isIncoming(): Boolean {
         return when (request.requestStatus) {
-            VERIFYING, VERIFIED, VERIFICATION_FAIL -> true
+            RECEIVED, VERIFYING, VERIFIED, VERIFICATION_FAIL -> true
             else -> false
         }
     }
@@ -342,14 +345,31 @@ class RequestsViewModel @Inject constructor(
 
     override fun onItemClicked(request: RequestItem) {
         when (request.request.requestStatus) {
+            RECEIVED -> retryVerification(request)
             VERIFYING -> showVerifyingInfo()
             VERIFIED, HIDDEN -> showDetails(request)
+            ACCEPTED -> {
+                (request.request as? ContactRequest)?.model?.let { contact ->
+                    sendMessage(contact)
+                }
+            }
+            SEARCH -> {
+                (request.request as? ContactRequest)?.model?.let { user ->
+                    _showContactRequestDialog.value = user as ContactData
+                }
+            }
         }
+    }
+
+    fun onSendRequestDialogShown() {
+        _showContactRequestDialog.value = null
     }
 
     private fun showDetails(item: RequestItem) {
         when (item) {
+            is ContactRequestSearchResultItem -> showRequestDialog(item.contactRequest)
             is ContactRequestItem -> showRequestDialog(item.contactRequest)
+            is SearchResultItem -> showRequestDialog(item.contactRequest)
             is GroupInviteItem -> showInvitationDialog(item.invite)
         }
     }
@@ -359,6 +379,7 @@ class RequestsViewModel @Inject constructor(
         else actionQueue.add(request.id)
 
         when (request.request.requestStatus) {
+            RECEIVED -> retryVerification(request).also { actionQueue.remove(request.id) }
             VERIFYING -> showVerifyingInfo().also { actionQueue.remove(request.id) }
             SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
@@ -414,6 +435,7 @@ class RequestsViewModel @Inject constructor(
     private fun resendRequest(item: RequestItem) {
         when (item) {
             is ContactRequestItem -> requestsDataSource.send(item.request as ContactRequest)
+            is ContactRequestSearchResultItem -> requestsDataSource.send(item.request as ContactRequest)
             is GroupInviteItem -> invitationsDataSource.send(item.request as GroupInvitation)
         }
         onResend(item)
