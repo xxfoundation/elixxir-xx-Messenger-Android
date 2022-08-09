@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 627
+        versionCode = 626
         versionName = "2.9"
         minSdk = 26
         targetSdk = 31
