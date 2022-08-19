@@ -179,12 +179,11 @@ class UsernameRegistration @AssistedInject constructor(
         this.equals(PLAY_STORE_DEMO_USERNAME, true)
 
     private fun String?.isValidUsername(): Boolean {
-        if (isNullOrEmpty() || !isMinimumLength()) {
-            minimumLengthError()
-            return false
-        }
-
-        return when {
+       return when {
+            isNullOrEmpty() || !isMinimumLength() -> {
+                minimumLengthError()
+                false
+            }
             matches(USERNAME_VALIDATION_REGEX.toRegex()) -> {
                 error.value = null
                 true
