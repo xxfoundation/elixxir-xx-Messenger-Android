@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 628
-        versionName = "2.91"
+        versionCode = 629
+        versionName = "2.92"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
