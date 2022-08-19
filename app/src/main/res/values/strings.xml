@@ -521,6 +521,7 @@
     <string name="label_edit">Edit</string>
     <string name="notification_group_request_text">Group request received</string>
     <string name="registration_error_username_invalid">Username must start and end with an alphanumeric character.</string>
+    <string name="registration_error_username_invalid_chars">Username contains invalid characters.</string>
     <string name="settings_confirm_delete_button">Confirm Delete</string>
     <string name="settings_delete_account_confirm_username_hint">Username</string>
     <string name="settings_account_recovery_dialog_title">Please note</string>
