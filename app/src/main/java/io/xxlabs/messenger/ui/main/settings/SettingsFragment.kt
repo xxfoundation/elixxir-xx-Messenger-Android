@@ -146,7 +146,7 @@ class SettingsFragment : BaseFragment() {
             DialogUtils.getWebPopup(
                 requireContext(),
                 getString(R.string.settings_disclosures),
-                "https://xx.network/privategrity-corporation-terms-of-use"
+                requireContext().getString(R.string.settings_disclosures_url)
             ).show()
         }
 
@@ -154,7 +154,7 @@ class SettingsFragment : BaseFragment() {
             DialogUtils.getWebPopup(
                 requireContext(),
                 getString(R.string.settings_privacy_policy),
-                "https://xx.network/privategrity-corporation-privacy-policy"
+                requireContext().getString(R.string.settings_privacy_policy_url)
             ).show()
         }
 
@@ -162,7 +162,7 @@ class SettingsFragment : BaseFragment() {
             DialogUtils.getWebPopup(
                 requireContext(),
                 "Terms of Use",
-                "https://xx.network/terms-of-use"
+                requireContext().getString(R.string.settings_disclosures_url)
             ).show()
         }
 
