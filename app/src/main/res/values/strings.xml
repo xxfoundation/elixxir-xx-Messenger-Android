@@ -485,7 +485,9 @@
     <string name="contacts_max_members_msg">You have reached the maximum amount of members.</string>
     <string name="contacts_requests">Requests</string>
     <string name="settings_disclosures">Disclosures</string>
+    <string name="settings_disclosures_url">https://elixxir.io/privategrity-corporation-terms-of-use/</string>
     <string name="settings_privacy_policy">Privacy Policy</string>
+    <string name="settings_privacy_policy_url">https://elixxir.io/privategrity-corporation-privacy-policy/</string>
     <string name="settings_cover_traffic_title">Cover Traffic</string>
     <string name="settings_cover_traffic_description">Hide when you send messages.</string>
     <string name="settings_cover_traffic_dialog_body">
