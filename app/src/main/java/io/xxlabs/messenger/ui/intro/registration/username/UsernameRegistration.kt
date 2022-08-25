@@ -113,12 +113,12 @@ class UsernameRegistration @AssistedInject constructor(
 
     override val usernameFilters: Array<InputFilter> =
         arrayOf(
-            InputFilter { source, start, end, _, _, _ ->
-                val input = source?.subSequence(start, end)
-                val filtered = source?.subSequence(start, end)
-                    ?.replace(Regex(USERNAME_FILTER_REGEX), "")
-                if (filtered == input) null else filtered
-            },
+//            InputFilter { source, start, end, _, _, _ ->
+//                val input = source?.subSequence(start, end)
+//                val filtered = source?.subSequence(start, end)
+//                    ?.replace(Regex(USERNAME_FILTER_REGEX), "")
+//                if (filtered == input) null else filtered
+//            },
             InputFilter.LengthFilter(MAX_USERNAME_LENGTH)
         )
 
@@ -179,17 +179,23 @@ class UsernameRegistration @AssistedInject constructor(
         this.equals(PLAY_STORE_DEMO_USERNAME, true)
 
     private fun String?.isValidUsername(): Boolean {
-        if (isNullOrEmpty() || !isMinimumLength()) {
-            minimumLengthError()
-            return false
-        }
-
-        return if (this.matches(USERNAME_VALIDATION_REGEX.toRegex())) {
-            error.value = null
-            true
-        } else {
-            invalidUsernameError()
-            false
+       return when {
+            isNullOrEmpty() || !isMinimumLength() -> {
+                minimumLengthError()
+                false
+            }
+            matches(USERNAME_VALIDATION_REGEX.toRegex()) -> {
+                error.value = null
+                true
+            }
+            contains(Regex(USERNAME_FILTER_REGEX)) -> {
+                invalidCharsInUsernameError()
+                false
+            }
+            else -> {
+                invalidUsernameError()
+                false
+            }
         }
     }
 
@@ -201,6 +207,12 @@ class UsernameRegistration @AssistedInject constructor(
 
     private fun invalidUsernameError() {
         error.value = application.getString(R.string.registration_error_username_invalid)
+    }
+
+    private fun invalidCharsInUsernameError() {
+        error.postValue(
+            application.getString(R.string.registration_error_username_invalid_chars)
+        )
     }
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
