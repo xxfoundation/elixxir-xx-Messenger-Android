@@ -25,7 +25,7 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
         when (request.requestStatus) {
             VERIFYING -> appContext().getString(R.string.request_item_action_verifying)
             VERIFICATION_FAIL -> appContext().getString(R.string.request_item_action_failed_verification)
-            SEND_FAIL, SENT -> appContext().getString(R.string.request_item_action_retry)
+            RESET_FAIL, RESET_SENT, SEND_FAIL, SENT -> appContext().getString(R.string.request_item_action_retry)
             RESENT -> appContext().getString(R.string.request_item_action_resent)
             else -> null
         }
@@ -33,7 +33,7 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
     open val actionIcon: Int? =
         when (request.requestStatus) {
             VERIFICATION_FAIL -> R.drawable.ic_info_outline_24dp
-            SEND_FAIL, SENT -> R.drawable.ic_retry
+            RESET_FAIL, RESET_SENT, SEND_FAIL, SENT -> R.drawable.ic_retry
             RESENT -> R.drawable.ic_check_green
             else -> null
         }
@@ -41,7 +41,7 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
     open val actionIconColor: Int? =
         when (request.requestStatus) {
             VERIFICATION_FAIL -> R.color.accent_danger
-            SEND_FAIL, SENT-> R.color.brand_default
+            RESET_FAIL, RESET_SENT, SEND_FAIL, SENT-> R.color.brand_default
             RESENT -> R.color.accent_success
             else -> null
         }
@@ -51,7 +51,7 @@ sealed class RequestItem(val request: Request) : ItemThumbnail {
         when (request.requestStatus) {
             VERIFYING -> R.style.request_item_verifying
             VERIFICATION_FAIL -> R.style.request_item_error
-            SEND_FAIL, SENT -> R.style.request_item_retry
+            RESET_FAIL, RESET_SENT, SEND_FAIL, SENT -> R.style.request_item_retry
             RESENT -> R.style.request_item_resent
             else -> null
         }

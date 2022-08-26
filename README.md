@@ -1,6 +1,6 @@
 # xxmessenger (Android)
 
-***Current Version:*** 2.9/627 (MainNet)<br>
+***Current Version:*** 2.92/629 (MainNet)<br>
 ***Device Orientation:*** Portrait<br>
 ***API Target:*** Android 26+ (Oreo)
 
