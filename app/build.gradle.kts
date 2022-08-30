@@ -203,6 +203,9 @@ dependencies {
     implementation(project(":xx_bindings"))
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.31")
 
+    // Android wrapper
+    implementation(project(":xxclient"))
+
     // Url Preview
     implementation(project(":linkpreview"))
 
