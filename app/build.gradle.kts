@@ -200,7 +200,6 @@ kapt {
 
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation(project(":xx_bindings"))
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.31")
 
     // Android wrapper

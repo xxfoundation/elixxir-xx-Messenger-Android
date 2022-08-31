@@ -1,5 +1,4 @@
 include(":app")
-include(":xx_bindings")
 include(":linkpreview")
 include(":proto")
 
