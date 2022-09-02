@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.start
+package io.xxlabs.messenger.start.model
 
 enum class AppVersionStatus {
     Ok, UpdateRecommended, UpdateRequired
