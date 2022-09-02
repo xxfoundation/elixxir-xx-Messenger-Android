@@ -14,8 +14,8 @@ import io.xxlabs.messenger.MainActivity.Companion.INTENT_INVITATION
 import io.xxlabs.messenger.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.registration.RegistrationStartActivity
-import io.xxlabs.messenger.start.model.AppVersionStatus.*
 import io.xxlabs.messenger.util.getTransition
+import io.xxlabs.messenger.util.openLink
 
 /**
  * The app entry point when initially launched. Has no UI.
@@ -89,11 +89,17 @@ class ColdStartActivity : AppCompatActivity() {
 
     private fun observeUi() {
         viewModel.navigateToRegistration.observe(this) { go ->
-            if (go) navigateToRegistration()
+            if (go) {
+                navigateToRegistration()
+                viewModel.onNavigationHandled()
+            }
         }
 
         viewModel.navigateToMain.observe(this) { go ->
-            if (go) navigateToMain()
+            if (go) {
+                navigateToMain()
+                viewModel.onNavigationHandled()
+            }
         }
 
         viewModel.versionAlert.observe(this) { alert ->
@@ -106,6 +112,13 @@ class ColdStartActivity : AppCompatActivity() {
         viewModel.error.observe(this) { error ->
             error?.let {
                 showError(error)
+            }
+        }
+
+        viewModel.navigateToUrl.observe(this) { url ->
+            url?.let {
+                openLink(url)
+                viewModel.onUrlHandled()
             }
         }
     }
@@ -138,39 +151,5 @@ class ColdStartActivity : AppCompatActivity() {
 
     private fun showError(error: String) {
 
-    }
-
-    fun showUpdateRecommended(downloadUrl: String) {
-        PopupActionDialog.getInstance(
-            this,
-            icon = R.drawable.ic_alert_rounded,
-            titleText = "App Update",
-            subtitleText = "There is a new version available that enhance the current performance and usability.",
-            positiveBtnText = "Update",
-            onClickPositive = {
-                Utils.openLink(this, downloadUrl)
-            },
-            negativeBtnText = "Not now",
-            onClickNegative = {
-                navigateMain()
-            },
-            onDismissOnly = {
-                navigateMain()
-            },
-            isCancellable = true
-        ).show()
-    }
-
-    fun showUpdateRequired(downloadUrl: String, popupMessage: String) {
-        PopupActionDialog.getInstance(
-            this,
-            icon = R.drawable.ic_alert_rounded,
-            titleText = "App Update",
-            subtitleText = popupMessage,
-            positiveBtnText = "Okay",
-            onClickPositive = {
-                Utils.openLink(this, downloadUrl)
-            }
-        ).show()
     }
 }

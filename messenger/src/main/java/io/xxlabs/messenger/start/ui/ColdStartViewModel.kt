@@ -1,16 +1,14 @@
 package io.xxlabs.messenger.start.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import bindings.Bindings
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import io.xxlabs.messenger.start.model.VersionData
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -18,7 +16,7 @@ import java.io.File
 /**
  * Responsible for minimum version enforcement and initializing core app components.
  */
-class ColdStartViewModel(application: Application) : AndroidViewModel(application) {
+class ColdStartViewModel : ViewModel() {
 
     val navigateToRegistration: LiveData<Boolean> by ::_navigateToRegistration
     private val _navigateToRegistration = MutableLiveData(false)
@@ -32,28 +30,31 @@ class ColdStartViewModel(application: Application) : AndroidViewModel(applicatio
     val error: LiveData<String?> by ::_error
     private val _error = MutableLiveData<String?>(null)
 
+    val navigateToUrl: LiveData<String?> by ::_navigateToUrl
+    private val _navigateToUrl = MutableLiveData<String?>(null)
+
     init {
         initializeApp()
     }
 
     private fun initializeApp() {
-        maybeClearData()
-        fetchCommonErrors()
-        parseJson(downloadRegistrationJson())
+        viewModelScope.launch(Dispatchers.IO) {
+            maybeClearData()
+            fetchCommonErrors()
+            parseJson(downloadRegistrationJson())
+        }
     }
 
-    private fun maybeClearData() {
-        if (userExists()) {
-            _navigateToMain.value = true
-        } else {
-            clearAppData()
-        }
+    private suspend fun maybeClearData(): Boolean{
+        return if (!userExists()) {
+            clearAppDataAsync().await()
+        } else true
     }
 
     fun userExists(): Boolean = false
 
-    private fun clearAppData() {
-        viewModelScope.launch(Dispatchers.IO) {
+    private fun clearAppDataAsync() : Deferred<Boolean> {
+        return viewModelScope.async {
             File("Session folder").apply {
                 if (exists()) {
                     Timber.v("Bindings folder from previous installation was found.")
@@ -61,22 +62,24 @@ class ColdStartViewModel(application: Application) : AndroidViewModel(applicatio
                     Timber.v("Deleting!")
                     deleteRecursively()
                 }
-                _navigateToRegistration.postValue(true)
             }
+            true
         }
     }
 
     private fun fetchCommonErrors() {
-
+        TODO()
     }
 
     private fun downloadRegistrationJson(): JsonObject {
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
+//        val gson = GsonBuilder()
+//            .setLenient()
+//            .create()
+//
+//        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
+//        return gson.fromJson(db, JsonObject::class.java)
 
-        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
-        return gson.fromJson(db, JsonObject::class.java)
+        TODO()
     }
 
     private fun parseJson(json: JsonElement) {
@@ -97,7 +100,9 @@ class ColdStartViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     private fun updateRecommendedAlert(downloadUrl: String): VersionAlertUi {
-        return VersionAlert()
+        return VersionAlert(
+
+        )
     }
 
     private fun updateRequiredAlert(message: String, downloadUrl: String): VersionAlertUi {
@@ -106,9 +111,45 @@ class ColdStartViewModel(application: Application) : AndroidViewModel(applicatio
 
     private fun versionOk() {
         _versionAlert.value = null
+        determineNavigation()
+    }
+
+    private fun determineNavigation() {
+        if (userExists()) {
+            _navigateToMain.value = true
+            _navigateToRegistration.value = false
+        } else {
+            _navigateToRegistration.value = true
+            _navigateToMain.value = false
+        }
+    }
+
+    fun onNavigationHandled() {
+        _navigateToMain.value = null
+        _navigateToRegistration.value = null
     }
 
     fun onVersionAlertShown() {
         _versionAlert.value = null
+    }
+
+    fun onUrlHandled() {
+        _navigateToUrl.value = null
+    }
+
+    private fun onUpdateRecommendedPositiveClick(url: String) {
+        _navigateToUrl.value = url
+    }
+
+    private fun onUpdateRecommendedNegativeClick() {
+        determineNavigation()
+    }
+
+    private fun onUpdateRecommendedDismissed() {
+        determineNavigation()
+    }
+
+    private fun onUpdateRequiredPositiveClick(url: String) {
+        onUpdateRecommendedPositiveClick(url)
     }
 }

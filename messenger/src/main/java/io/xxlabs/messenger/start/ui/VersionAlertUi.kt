@@ -9,6 +9,7 @@ interface VersionAlertUi {
     val onNegativeClick: () -> Unit
     val onDismiss: () -> Unit
     val dismissable: Boolean
+    val downloadUrl: String?
 }
 
 
@@ -20,5 +21,6 @@ data class VersionAlert(
     override val onPositiveClick: () -> Unit = {},
     override val onNegativeClick: () -> Unit = {},
     override val onDismiss: () -> Unit = {},
-    override val dismissable: Boolean = true
+    override val dismissable: Boolean = true,
+    override val downloadUrl: String? = null
 ) : VersionAlertUi

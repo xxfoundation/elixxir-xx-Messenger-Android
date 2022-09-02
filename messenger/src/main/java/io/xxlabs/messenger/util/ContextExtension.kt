@@ -1,12 +1,12 @@
 package io.xxlabs.messenger.util
 
 import android.app.ActivityOptions
-import android.app.Application
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import io.xxlabs.messenger.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -31,11 +31,11 @@ fun Context.openLink(url: String) {
     webIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
     try {
         webIntent.data = Uri.parse(url)
-        val title = "Choose your browser"
+        val title = getString(R.string.url_intent_launcher_title)
         val chooser = Intent.createChooser(webIntent, title)
         startActivity(chooser)
     } catch (e: Exception) {
-        toast("You have no browser apps available.")
+        toast(getString(R.string.url_intent_launcher_no_browser_found))
         Timber.e(e, "Error on loading link $e")
     }
 }

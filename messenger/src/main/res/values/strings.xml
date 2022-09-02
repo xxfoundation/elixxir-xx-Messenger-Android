@@ -9,4 +9,11 @@
     <string name="version_alert_update_required_positive_label">OK</string>
     <string name="version_alert_update_recommended_positive_label">Update</string>
     <string name="version_alert_update_recommended_negative_label">Not now</string>
+
+    <!-- URL intent launcher-->
+
+    <string name="url_intent_launcher_title">Choose your browser</string>
+    <string name="url_intent_launcher_no_browser_found">You have no browser apps available.</string>
+
+
 </resources>
