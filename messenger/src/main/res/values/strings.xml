@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">xx messenger</string>
+
+    <!-- Version enforcement message -->
+
+    <string name="version_alert_update_required_title">App Update</string>
+    <string name="version_alert_update_recommended_title">@string/version_alert_update_required_title</string>
+    <string name="version_alert_update_recommended_subtitle">App Update</string>
+    <string name="version_alert_update_required_positive_label">OK</string>
+    <string name="version_alert_update_recommended_positive_label">Update</string>
+    <string name="version_alert_update_recommended_negative_label">Not now</string>
 </resources>
