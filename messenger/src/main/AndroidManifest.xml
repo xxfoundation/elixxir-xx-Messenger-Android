@@ -18,6 +18,27 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:allowBackup" >
 
+        <activity android:name=".start.ColdStartActivity"
+            android:configChanges="orientation"
+            android:exported="true"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:autoVerify="true">
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <action android:name="android.intent.action.VIEW" />
+                <data
+                    android:scheme="https"
+                    android:host="elixxir.io"
+                    android:pathPrefix="/connect"
+                    />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
