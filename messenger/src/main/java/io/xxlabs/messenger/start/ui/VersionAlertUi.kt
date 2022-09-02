@@ -1,10 +1,12 @@
 package io.xxlabs.messenger.start.ui
 
+import io.xxlabs.messenger.util.UiText
+
 interface VersionAlertUi {
-    val title: String
-    val subtitle: String
-    val positiveLabel: String
-    val negativeLabel: String
+    val title: UiText
+    val subtitle: UiText
+    val positiveLabel: UiText
+    val negativeLabel: UiText
     val onPositiveClick: () -> Unit
     val onNegativeClick: () -> Unit
     val onDismiss: () -> Unit
@@ -14,10 +16,10 @@ interface VersionAlertUi {
 
 
 data class VersionAlert(
-    override val title: String,
-    override val subtitle: String,
-    override val positiveLabel: String,
-    override val negativeLabel: String,
+    override val title: UiText,
+    override val subtitle: UiText,
+    override val positiveLabel: UiText,
+    override val negativeLabel: UiText,
     override val onPositiveClick: () -> Unit = {},
     override val onNegativeClick: () -> Unit = {},
     override val onDismiss: () -> Unit = {},
