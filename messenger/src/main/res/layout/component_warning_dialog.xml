@@ -22,7 +22,7 @@
 
             <TextView
                 android:id="@+id/confirm_dialog_title"
-                android:text="@{ui.title}"
+                app:uiText="@{ui.title}"
                 android:layout_marginBottom="@dimen/inner_view_marginVertical"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +33,7 @@
 
             <TextView
                 android:id="@+id/confirm_dialog_body"
-                android:text="@{ui.body}"
+                app:uiText="@{ui.body}"
                 android:layout_marginBottom="@dimen/inner_view_marginVertical"
                 app:layout_constraintTop_toBottomOf="@id/confirm_dialog_title"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -47,7 +47,7 @@
                 style="@style/FilledButton"
                 android:layout_width="0dp"
                 android:layout_marginTop="@dimen/inner_view_marginVertical"
-                android:text="@{ui.buttonText}"
+                app:uiText="@{ui.buttonText}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

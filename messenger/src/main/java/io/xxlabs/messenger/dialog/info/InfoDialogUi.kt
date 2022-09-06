@@ -1,24 +1,25 @@
 package io.xxlabs.messenger.dialog.info
 
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.util.UiText
 import java.io.Serializable
 
 interface InfoDialogUi : Serializable {
-    val title: String
-    val body: String
+    val title: UiText
+    val body: UiText
     val spans: List<SpanConfig>?
     val onDismissed: (() -> Unit)?
 
     companion object Factory {
         fun create(
-            title: String,
-            body: String,
+            title: UiText,
+            body: UiText,
             spans: List<SpanConfig>? = null,
             onDismissed: () -> Unit = { }
         ): InfoDialogUi {
             return object : InfoDialogUi {
                 override val title = title
-                override val body = body
+                override val body: UiText = body
                 override val spans = spans
                 override val onDismissed = onDismissed
             }
@@ -27,18 +28,18 @@ interface InfoDialogUi : Serializable {
 }
 
 interface SpanConfig : Serializable {
-    val text: String
+    val text: UiText
     val color: Int
     val url: String?
 
     companion object Factory {
         fun create(
-            text: String,
+            text: UiText,
             url: String?,
             color: Int = R.color.brand_default
         ): SpanConfig {
             return object : SpanConfig {
-                override val text = text
+                override val text: UiText = text
                 override val color = color
                 override val url: String? = url
             }
