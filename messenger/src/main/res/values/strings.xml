@@ -16,4 +16,10 @@
     <string name="url_intent_launcher_no_browser_found">You have no browser apps available.</string>
 
 
+    <!-- Lorem dummy text -->
+    <string name="lorem_title">Lorem Ipsum</string>
+    <string name="lorem_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+    <string name="lorem_paragraph">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum egestas nisl eu neque iaculis, at consequat nisl sollicitudin. Nulla suscipit sit amet erat feugiat luctus. Sed luctus et risus eu sodales. Donec tincidunt semper sapien, vel tristique lorem laoreet ut. Curabitur dictum tempor magna, ac condimentum nisl tincidunt nec.
+    </string>
 </resources>

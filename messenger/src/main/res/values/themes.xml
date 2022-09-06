@@ -5,7 +5,7 @@
         <item name="colorPrimaryDark">@color/brand_dark</item>
         <item name="colorAccent">@color/brand_light</item>
         <item name="android:windowBackground">@color/neutral_white</item>
-        <item name="android:textAppearance">@style/XxTextStyle</item>
+        <item name="android:textAppearance">@style/BasicText</item>
         <item name="android:homeAsUpIndicator">@drawable/ic_back</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
@@ -13,14 +13,19 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
-    <style name="XxTextStyle" parent="TextAppearance.AppCompat">
-        <item name="android:textColor">@color/neutral_body</item>
-        <item name="android:textColorLink">@color/accent_safe</item>
-        <item name="android:textColorHint">@color/neutral_weak</item>
+    <style name="AppFont" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/mulish_regular</item>
         <item name="fontFamily">@font/mulish_regular</item>
     </style>
 
+    <!-- Base text style -->
+    <style name="BasicText" parent="AppFont">
+        <item name="android:textColor">@color/neutral_body</item>
+        <item name="android:textColorLink">@color/accent_safe</item>
+        <item name="android:textColorHint">@color/neutral_weak</item>
+    </style>
+
+    <!-- Theme for rounded bottom sheets -->
     <style name="RoundedModalBottomSheetDialog" parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="colorPrimary">@color/brand_default</item>
         <item name="colorPrimaryDark">@color/brand_dark</item>
@@ -30,5 +35,50 @@
 
     <style name="BottomSheetDialogStyle" parent="Widget.Design.BottomSheet.Modal">
         <item name="android:background">@android:color/transparent</item>
+    </style>
+
+    <!-- Was: dialog_title -->
+    <style name="SubtitleText" parent="AppFont">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/inner_view_marginVertical</item>
+        <item name="android:layout_marginEnd">@dimen/inner_view_marginHorizontal</item>
+        <item name="android:layout_marginTop">@dimen/top_view_marginTop</item>
+        <item name="android:textSize">@dimen/dialog_title_textSize</item>
+        <item name="android:textColor">@color/neutral_active</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Was: dialog_button -->
+    <style name="OutlinedButton" parent="AppFont">
+        <item name="android:layout_width">@dimen/button_layoutWidth</item>
+        <item name="android:layout_height">@dimen/button_layoutHeight</item>
+        <item name="android:layout_marginStart">@dimen/inner_view_marginHorizontal</item>
+        <item name="android:layout_marginEnd">@dimen/inner_view_marginHorizontal</item>
+        <item name="android:layout_marginBottom">@dimen/inner_view_marginVertical</item>
+        <item name="android:textColor">@color/brand_default</item>
+        <item name="android:background">@drawable/bg_btn_outline</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Was: confirm_dialog_button -->
+    <style name="FilledButton" parent="OutlinedButton">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:background">@drawable/bg_rectangle_rounded_corners_big_radius</item>
+        <item name="android:backgroundTint">@color/accent_danger</item>
+        <item name="android:textColor">@color/neutral_off_white</item>
+    </style>
+
+    <!-- Was: dialog_body -->
+    <style name="BodyText" parent="AppFont">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/inner_view_marginHorizontal</item>
+        <item name="android:layout_marginTop">@dimen/inner_view_marginVertical</item>
+        <item name="android:layout_marginEnd">@dimen/inner_view_marginHorizontal</item>
+        <item name="android:textSize">@dimen/body_textSize</item>
+        <item name="android:textColor">@color/neutral_dark</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
     </style>
 </resources>
