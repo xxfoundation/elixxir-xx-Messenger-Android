@@ -15,7 +15,6 @@
     <string name="url_intent_launcher_title">Choose your browser</string>
     <string name="url_intent_launcher_no_browser_found">You have no browser apps available.</string>
 
-
     <!-- Lorem dummy text -->
     <string name="lorem_title">Lorem Ipsum</string>
     <string name="lorem_subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>

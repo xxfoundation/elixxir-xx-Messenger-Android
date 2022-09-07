@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.dialog.info
+package io.xxlabs.messenger.dialog.info
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -13,12 +13,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTwoButtonDialogBinding
-import io.xxlabs.messenger.support.view.XxBottomSheetDialog
+import io.xxlabs.messenger.dialog.XxBottomSheetDialog
+import io.xxlabs.messenger.util.setUiText
 
+/**
+ * An info dialog with positive and negative buttons.
+ */
 class TwoButtonInfoDialog : XxBottomSheetDialog() {
 
     private lateinit var binding: ComponentTwoButtonDialogBinding
-    private val dialogUi: TwoButtonInfoDialogUi by lazy {
+    private val dialogUI: TwoButtonInfoDialogUi by lazy {
         requireArguments().get(ARG_UI) as TwoButtonInfoDialogUi
     }
 
@@ -38,7 +42,7 @@ class TwoButtonInfoDialog : XxBottomSheetDialog() {
             binding.infoDialogBody.text = getSpannableBody(dialogUI)
             binding.infoDialogBody.movementMethod = LinkMovementMethod.getInstance()
         } ?: run {
-            binding.infoDialogBody.text= dialogUI.body
+            binding.infoDialogBody.setUiText(dialogUI.body)
         }
 
         initClickListeners()
@@ -48,23 +52,24 @@ class TwoButtonInfoDialog : XxBottomSheetDialog() {
 
     private fun initClickListeners() {
         binding.infoDialogOkButton.setOnClickListener {
-            dialogUi.onPositiveClick()
+            dialogUI.onPositiveClick()
             dismiss()
         }
 
         binding.infoDialogCancelButton.setOnClickListener {
-            dialogUi.onNegativeClick()
+            dialogUI.onNegativeClick()
             dismiss()
         }
     }
 
-    private fun getSpannableBody(dialogUI: InfoDialogUI): Spannable {
-        val builder = SpannableStringBuilder(dialogUI.body)
+    private fun getSpannableBody(dialogUi: InfoDialogUi): Spannable {
+        val bodyText = dialogUi.body.asString(requireContext())
+        val builder = SpannableStringBuilder(bodyText)
 
-        dialogUi.spans?.forEach {
+        dialogUI.spans?.forEach {
             val highlight = requireContext().getColor(it.color)
-            val text = it.text
-            val startIndex = dialogUI.body.indexOf(text, ignoreCase = true)
+            val text = it.text.asString(requireContext())
+            val startIndex = bodyText.indexOf(text, ignoreCase = true)
             val endIndex = startIndex + text.length
 
             builder.apply {
@@ -95,10 +100,10 @@ class TwoButtonInfoDialog : XxBottomSheetDialog() {
     companion object Factory {
         private const val ARG_UI: String = "ui"
 
-        fun newInstance(dialogUI: TwoButtonInfoDialogUI): TwoButtonInfoDialog =
+        fun newInstance(dialogUi: TwoButtonInfoDialogUi): TwoButtonInfoDialog =
             TwoButtonInfoDialog().apply {
                 arguments = Bundle().apply {
-                    putSerializable(ARG_UI, dialogUI)
+                    putSerializable(ARG_UI, dialogUi)
                 }
             }
     }
