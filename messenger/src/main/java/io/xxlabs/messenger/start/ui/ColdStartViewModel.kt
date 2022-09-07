@@ -1,10 +1,10 @@
 package io.xxlabs.messenger.start.ui
 
 import androidx.lifecycle.*
-import bindings.Bindings
-import com.google.gson.GsonBuilder
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import io.xxlabs.messenger.config.ClientBridge
+import io.xxlabs.messenger.start.data.SessionManager
 import io.xxlabs.messenger.start.model.VersionData
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -16,7 +16,10 @@ import java.io.File
 /**
  * Responsible for minimum version enforcement and initializing core app components.
  */
-class ColdStartViewModel : ViewModel() {
+class ColdStartViewModel(
+    private val client: ClientBridge,
+    private val sessionManager: SessionManager
+) : ViewModel() {
 
     val navigateToRegistration: LiveData<Boolean> by ::_navigateToRegistration
     private val _navigateToRegistration = MutableLiveData(false)
@@ -40,8 +43,9 @@ class ColdStartViewModel : ViewModel() {
     private fun initializeApp() {
         viewModelScope.launch(Dispatchers.IO) {
             maybeClearData()
-            fetchCommonErrors()
-            parseJson(downloadRegistrationJson())
+//            fetchCommonErrors()
+//            parseJson(downloadRegistrationJson())
+            versionOk()
         }
     }
 
@@ -51,7 +55,7 @@ class ColdStartViewModel : ViewModel() {
         } else true
     }
 
-    fun userExists(): Boolean = false
+    fun userExists(): Boolean = sessionManager.doesUserExist()
 
     private fun clearAppDataAsync() : Deferred<Boolean> {
         return viewModelScope.async {
@@ -72,13 +76,6 @@ class ColdStartViewModel : ViewModel() {
     }
 
     private fun downloadRegistrationJson(): JsonObject {
-//        val gson = GsonBuilder()
-//            .setLenient()
-//            .create()
-//
-//        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
-//        return gson.fromJson(db, JsonObject::class.java)
-
         TODO()
     }
 
@@ -100,13 +97,11 @@ class ColdStartViewModel : ViewModel() {
     }
 
     private fun updateRecommendedAlert(downloadUrl: String): VersionAlertUi {
-        return VersionAlert(
-
-        )
+        TODO()
     }
 
     private fun updateRequiredAlert(message: String, downloadUrl: String): VersionAlertUi {
-        return VersionAlert()
+        TODO()
     }
 
     private fun versionOk() {
