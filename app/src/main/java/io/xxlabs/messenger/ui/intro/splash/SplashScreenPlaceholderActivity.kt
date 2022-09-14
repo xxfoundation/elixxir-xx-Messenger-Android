@@ -114,44 +114,46 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun navigateNext() {
-        try {
-            if (isMockVersion()) {
-                navigateMain()
-                return
-            }
+//        try {
+//            if (isMockVersion()) {
+//                navigateMain()
+//                return
+//            }
+//
+//            val jsonObject = downloadRegistrationJson()
+//            val registrationWrapper = RegistrationJsonWrapper.from(jsonObject)
+//            val appVersion = registrationWrapper.appVersion
+//            val minVersion = registrationWrapper.minVersion
+//            val recommendedVersion = registrationWrapper.recommendedVersion
+//            val downloadUrl = registrationWrapper.downloadUrl
+//            val popupMessage = registrationWrapper.minPopupMessage
+//
+//            when {
+//                appVersion < minVersion -> {
+//                    createForcedUpdatePopup(downloadUrl, popupMessage)
+//                }
+//                appVersion >= minVersion && appVersion < recommendedVersion -> {
+//                    createRecommendedUpdatePopup(downloadUrl)
+//                }
+//                else -> {
+//                    navigateMain()
+//                }
+//            }
+//        } catch (err: Exception) {
+//            showError(err)
+//        }
 
-            val jsonObject = downloadRegistrationJson()
-            val registrationWrapper = RegistrationJsonWrapper.from(jsonObject)
-            val appVersion = registrationWrapper.appVersion
-            val minVersion = registrationWrapper.minVersion
-            val recommendedVersion = registrationWrapper.recommendedVersion
-            val downloadUrl = registrationWrapper.downloadUrl
-            val popupMessage = registrationWrapper.minPopupMessage
-
-            when {
-                appVersion < minVersion -> {
-                    createForcedUpdatePopup(downloadUrl, popupMessage)
-                }
-                appVersion >= minVersion && appVersion < recommendedVersion -> {
-                    createRecommendedUpdatePopup(downloadUrl)
-                }
-                else -> {
-                    navigateMain()
-                }
-            }
-        } catch (err: Exception) {
-            showError(err)
-        }
+        navigateMain()
     }
 
-    private fun downloadRegistrationJson(): JsonObject {
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-
-        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
-        return gson.fromJson(db, JsonObject::class.java)
-    }
+//    private fun downloadRegistrationJson(): JsonObject {
+//        val gson = GsonBuilder()
+//            .setLenient()
+//            .create()
+//
+//        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
+//        return gson.fromJson(db, JsonObject::class.java)
+//    }
 
     private fun navigateMain() {
         val activity = mainIntent ?: Intent(

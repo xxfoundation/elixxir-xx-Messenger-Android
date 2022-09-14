@@ -4,6 +4,7 @@ import android.content.Context
 import bindings.Bindings
 import bindings.TimeSource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import io.elixxir.xxclient.BuildConfig
 import io.reactivex.Single
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
@@ -87,16 +88,16 @@ class BindingsWrapperBindings {
 
         override fun newClient(path: String, password: ByteArray) {
             val ndf = getNdf()
-            Bindings.newClient(
-                ndf,
-                path,
-                password,
-                ""
-            )
+//            Bindings.newClient(
+//                ndf,
+//                path,
+//                password,
+//                ""
+//            )
         }
 
         override fun login(storageDir: String, password: ByteArray): ClientWrapperBase {
-            return ClientWrapperBindings(Bindings.login(storageDir, password, ""))
+            return ClientWrapperBindings()
         }
 
         override fun newUserDiscovery(clientWrapper: ClientWrapperBase): UserDiscoveryWrapperBase {
@@ -158,7 +159,7 @@ class BindingsWrapperBindings {
             }
 
         override fun setTimeSource(kronosFunction: () -> Long) {
-            Bindings.setTimeSource(TimeSource(kronosFunction))
+            Bindings.setTimeSource(kotlin.time.TimeSource(kronosFunction))
         }
 
         override fun unmarshallContact(rawData: ByteArray): Any {

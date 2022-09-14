@@ -1,0 +1,74 @@
+package io.xxlabs.messenger.registration
+
+import android.content.Intent
+import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import com.google.android.material.snackbar.Snackbar
+import io.xxlabs.messenger.MainActivity
+import io.xxlabs.messenger.R
+import io.xxlabs.messenger.cipher.KeyStoreManager
+import io.xxlabs.messenger.cipher.XxmKeystore
+import io.xxlabs.messenger.databinding.ActivityRegistrationFlowBinding
+import io.xxlabs.messenger.util.getTransition
+import io.xxlabs.messenger.view.SnackBarActivity
+
+/**
+ * Presents and handles navigation for registration and restore account UI.
+ */
+class RegistrationFlowActivity : AppCompatActivity(), RegistrationHandler, SnackBarActivity {
+
+    private lateinit var binding: ActivityRegistrationFlowBinding
+    private val keyStoreManager: KeyStoreManager by lazy {
+        XxmKeystore()
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        hideSystemBars()
+        binding = ActivityRegistrationFlowBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+    }
+
+    private fun hideSystemBars() {
+        val windowInsetsController =
+            ViewCompat.getWindowInsetsController(window.decorView) ?: return
+        // Configure the behavior of the hidden system bars
+        windowInsetsController.systemBarsBehavior =
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        // Hide both the status bar and the navigation bar
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun onRegistrationComplete() {
+        val activity = Intent(
+            this@RegistrationFlowActivity,
+            MainActivity::class.java
+        )
+
+        val options = getTransition(R.anim.fade_in, R.anim.fade_out)
+        startActivity(activity, options)
+        ActivityCompat.finishAfterTransition(this)
+    }
+
+    override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar {
+        return Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).apply {
+            view.translationZ = 10f
+            show()
+        }
+    }
+
+    override fun rsaDecryptPwd(): ByteArray {
+        return keyStoreManager.rsaDecryptPwd()
+    }
+}
+
+interface RegistrationHandler {
+    fun onRegistrationComplete()
+    fun rsaDecryptPwd(): ByteArray
+}

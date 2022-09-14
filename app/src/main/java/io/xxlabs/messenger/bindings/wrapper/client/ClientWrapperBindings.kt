@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.*
+import io.xxlabs.messenger.backup.cloud.sftp.login.Ssh.client
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
@@ -13,7 +14,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
 
 class ClientWrapperBindings(
-    override var client: Client
+//    override var client: Client
 ) : ClientWrapperBase {
 
     private val dummyTrafficManager: DummyTraffic = Bindings.newDummyTrafficManager(

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="tfaCredentials"
+            type="io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials"/>
+        <variable
+            name="ui"
+            type="io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistrationUI" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/registration_flow_root_view">
+
+        <TextView
+            android:id="@+id/registration_email_2fa_title_text"
+            android:text="@{ui.getTfaTitle(tfaCredentials)}"
+            tools:text="@string/registration_2fa_title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/bold_title" />
+
+        <TextView
+            android:id="@+id/registration_email_2fa_body_text"
+            android:text="@{ui.getTfaBody(tfaCredentials)}"
+            tools:text="@string/registration_2fa_body"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_email_2fa_title_text"
+            style="@style/dialog_body" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/registration_email_2fa_input"
+            android:enabled="@{ui.isTfaInputEnabled(tfaCredentials)}"
+            app:error="@{ui.tfaError}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/registration_email_2fa_body_text"
+            app:endIconMode="custom"
+            app:endIconDrawable="@drawable/ic_outline_info_24"
+            app:endIconTint="@color/brand_default"
+            app:endIconOnClickListener="@{() -> ui.onTfaInfoClicked()}"
+            style="@style/registration_text_input">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:gravity="center_horizontal"
+                android:text="@={ui.tfaInput}"
+                android:maxLength="@{ui.maxTfaInputLength}"
+                android:imeOptions="actionDone"
+                style="@style/registration_text_input_edittext" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/registration_email_2fa_next_btn"
+            android:text="@string/registration_flow_next"
+            android:onClick="@{() -> ui.onTfaNextClicked(tfaCredentials)}"
+            android:enabled="@{ui.isTfaNextButtonEnabled(tfaCredentials)}"
+            app:layout_constraintBottom_toTopOf="@id/registration_email_2fa_retry_btn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_step_next_button" />
+
+        <Button
+            android:id="@+id/registration_email_2fa_retry_btn"
+            android:text="@{ui.resendText}"
+            tools:text="@string/registration_2fa_resend"
+            android:enabled="@{ui.isResendEnabled(tfaCredentials)}"
+            android:onClick="@{() -> ui.onResendClicked(tfaCredentials)}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            style="@style/registration_borderless_text_button" />
+
+        <ProgressBar
+            android:id="@+id/registration_2fa_progressbar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:progressTint="@color/brand_default"
+            android:visibility="@{!ui.isTfaInputEnabled(tfaCredentials)}"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

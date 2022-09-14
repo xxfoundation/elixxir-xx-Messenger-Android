@@ -156,7 +156,7 @@ class BindingsRestoreHandler(
                     ""
                 )
 
-                clientWrapper = ClientWrapperBindings(client).apply {
+                clientWrapper = ClientWrapperBindings().apply {
                     log("Logged in.")
                     userWrapper = getUser().getContact() as ContactWrapperBindings
                     log("Getting user.")
@@ -177,7 +177,7 @@ class BindingsRestoreHandler(
 
                     if (areNodesReady(this)) {
                         log("Starting new backup process to handoff restored profile.")
-                        backupHandler.initializeBackupDuringRestore(client)
+                        backupHandler.initializeBackupDuringRestore()
                         fetchUserProfile(userWrapper, udWrapperBindings, backupReport)
                     }
                 }
