@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.cipher
 
 interface KeyStoreManager {
-    fun rsaDecryptPwd(): ByteArray
+    suspend fun generatePassword(): Result<Unit>
+    fun rsaDecryptPwd(): Result<ByteArray>
 }
