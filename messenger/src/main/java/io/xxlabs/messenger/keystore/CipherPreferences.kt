@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.cipher
+package io.xxlabs.messenger.keystore
 
 interface CipherPreferences {
     var userSecret: String

@@ -1,6 +1,5 @@
-package io.xxlabs.messenger.cipher
+package io.xxlabs.messenger.keystore
 
-import android.security.KeyChain.getPrivateKey
 import android.security.keystore.KeyProperties
 import bindings.Bindings
 import io.xxlabs.messenger.util.fromBase64toByteArray

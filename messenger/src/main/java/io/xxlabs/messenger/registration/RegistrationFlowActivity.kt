@@ -11,8 +11,8 @@ import androidx.core.view.WindowInsetsControllerCompat
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.MainActivity
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.cipher.KeyStoreManager
-import io.xxlabs.messenger.cipher.XxmKeystore
+import io.xxlabs.messenger.keystore.KeyStoreManager
+import io.xxlabs.messenger.keystore.XxmKeystore
 import io.xxlabs.messenger.databinding.ActivityRegistrationFlowBinding
 import io.xxlabs.messenger.util.getTransition
 import io.xxlabs.messenger.view.SnackBarActivity
@@ -64,11 +64,6 @@ class RegistrationFlowActivity : AppCompatActivity(), RegistrationHandler, Snack
     }
 
     override fun rsaDecryptPwd(): ByteArray {
-        return keyStoreManager.rsaDecryptPwd()
+        return keyStoreManager.rsaDecryptPwd().getOrDefault(byteArrayOf())
     }
-}
-
-interface RegistrationHandler {
-    fun onRegistrationComplete()
-    fun rsaDecryptPwd(): ByteArray
 }

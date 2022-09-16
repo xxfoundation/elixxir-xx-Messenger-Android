@@ -42,8 +42,4 @@ abstract class RegistrationFlowFragment : Fragment() {
             registrationHandler = this
         } ?: throw Exception("Activity must implement RegistrationHandler!")
     }
-
-    protected fun onRegistrationComplete() {
-        registrationHandler.onRegistrationComplete()
-    }
 }
