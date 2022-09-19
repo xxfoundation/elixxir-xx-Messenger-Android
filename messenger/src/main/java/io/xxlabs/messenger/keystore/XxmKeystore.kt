@@ -1,11 +1,14 @@
 package io.xxlabs.messenger.keystore
 
+import android.os.Build
+import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import io.elixxir.xxclient.bindings.Bindings
 import io.xxlabs.messenger.util.fromBase64toByteArray
 import io.xxlabs.messenger.util.toBase64String
 import java.security.*
 import java.security.spec.MGF1ParameterSpec
+import java.security.spec.RSAKeyGenParameterSpec
 import javax.crypto.Cipher
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource
@@ -16,6 +19,44 @@ class XxmKeystore(
     private val preferences: CipherPreferences,
     private val log: (String) -> Unit
 ) : KeyStoreManager {
+
+    private val keystore: KeyStore by lazy {
+        KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
+    }
+
+    private val publicKey: PublicKey by lazy {
+        keystore.getCertificate(KEY_ALIAS).publicKey
+    }
+
+    private val privateKey: PrivateKey?
+        get() = keystore.getKey(KEY_ALIAS, null) as PrivateKey?
+
+    private val keyPairGenerator: KeyPairGenerator by lazy {
+        KeyPairGenerator.getInstance(
+            KeyProperties.KEY_ALGORITHM_RSA, "AndroidKeyStore"
+        ).apply {
+            initialize(keyGenParamSpec)
+        }
+    }
+
+    private val keyGenParamSpec: KeyGenParameterSpec by lazy {
+        KeyGenParameterSpec.Builder(KEY_ALIAS, KEY_PURPOSE)
+            .setAlgorithmParameterSpec(RSAKeyGenParameterSpec(KEY_SIZE, RSAKeyGenParameterSpec.F4))
+            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_OAEP)
+            .setBlockModes(KeyProperties.BLOCK_MODE_ECB)
+            .setDigests(KeyProperties.DIGEST_SHA1)
+            .setRandomizedEncryptionRequired(true)
+            .apply {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    setUserAuthenticationParameters(
+                        1000,
+                        KeyProperties.AUTH_BIOMETRIC_STRONG or KeyProperties.AUTH_DEVICE_CREDENTIAL
+                    )
+                } else {
+                    setUserAuthenticationValidityDurationSeconds(1000)
+                }
+            }.build()
+    }
 
     override suspend fun generatePassword(): Result<Unit> {
         deletePreviousKeys()
@@ -48,7 +89,6 @@ class XxmKeystore(
     }
 
     private fun deletePreviousKeys() {
-        val keystore = getKeystore()
         if (keystore.containsAlias(KEY_ALIAS)) {
             log("Deleting key alias")
             keystore.deleteEntry(KEY_ALIAS)
@@ -58,15 +98,32 @@ class XxmKeystore(
     private fun rsaEncryptPwd(pwd: ByteArray): ByteArray {
         log("Byte count: ${pwd.size}")
         log("Before encryption: ${pwd.toBase64String()}")
-        val secretKey = getPublicKey()
 
         val cipher = Cipher.getInstance(KEYSTORE_ALGORITHM)
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, cipherMode)
+        cipher.init(Cipher.ENCRYPT_MODE, publicKey, cipherMode)
         val encryptedBytes = cipher.doFinal(pwd)
         log("Encrypted: ${encryptedBytes.toBase64String()}")
         preferences.userSecret = encryptedBytes.toBase64String()
 
         return encryptedBytes
+    }
+
+    override suspend fun generateKeys(): Result<Unit> {
+        return try {
+            generateIfMissing()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun generateIfMissing() {
+        if (!keystore.containsAlias(KEY_ALIAS)) {
+            log("Keystore alias does not exist, creating new one.")
+            keyPairGenerator.genKeyPair()
+        } else {
+            log("Keystore alias already exists")
+        }
     }
 
     override fun rsaDecryptPwd(): Result<ByteArray> {
@@ -79,27 +136,11 @@ class XxmKeystore(
 
     private fun decryptSecret(): ByteArray {
         val encryptedBytes = preferences.userSecret.fromBase64toByteArray()
-        val key = getPrivateKey()
         val cipher = Cipher.getInstance(KEYSTORE_ALGORITHM)
-        println("Initializing Decrypt")
-        cipher.init(Cipher.DECRYPT_MODE, key, cipherMode)
+        log("Initializing Decrypt")
+        cipher.init(Cipher.DECRYPT_MODE, privateKey, cipherMode)
 
         return cipher.doFinal(encryptedBytes)
-    }
-
-    private fun getPrivateKey(): PrivateKey? {
-        val keyStore: KeyStore = getKeystore()
-        return keyStore.getKey(KEY_ALIAS, null) as PrivateKey?
-    }
-
-    private fun getPublicKey(): PublicKey {
-        return getKeystore().getCertificate(KEY_ALIAS).publicKey
-    }
-
-    private fun getKeystore(): KeyStore {
-        val keyStore = KeyStore.getInstance(ANDROID_KEYSTORE)
-        keyStore.load(null)
-        return keyStore
     }
 
     companion object {
@@ -111,8 +152,10 @@ class XxmKeystore(
         private const val KEYSTORE_ALGORITHM = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding"
         private const val KEY_SIZE = 2048
         private val cipherMode = OAEPParameterSpec(
-            "SHA-1", "MGF1",
-            MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT
-        );
+            "SHA-1",
+            "MGF1",
+            MGF1ParameterSpec.SHA1,
+            PSource.PSpecified.DEFAULT
+        )
     }
 }
