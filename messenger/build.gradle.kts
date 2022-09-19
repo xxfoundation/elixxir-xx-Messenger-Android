@@ -211,6 +211,10 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:27.0.0"))
     implementation("com.google.firebase:firebase-crashlytics-ktx")
 
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+
     // Logging assistant Timber
     implementation("com.jakewharton.timber:timber:4.7.1")
 

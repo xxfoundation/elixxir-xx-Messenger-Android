@@ -29,4 +29,9 @@
     <!-- Was: registration_dialog_button_width -->
     <dimen name="button_layoutWidth">150dp</dimen>
     <dimen name="button_corner_radius">@dimen/rounded_corner_medium_radius</dimen>
+
+    <!-- Uncategorized -->
+
+    <dimen name="splash_text_vertical_margin">40dp</dimen>
+    <dimen name="splash_text_horizontal_margin">20dp</dimen>
 </resources>

@@ -81,4 +81,16 @@
         <item name="android:clickable">true</item>
         <item name="android:focusable">true</item>
     </style>
+
+    <style name="SplashText" parent="AppFont">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/splash_text_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/splash_text_vertical_margin</item>
+        <item name="android:layout_marginEnd">@dimen/splash_text_horizontal_margin</item>
+        <item name="android:layout_marginBottom">@dimen/splash_text_vertical_margin</item>
+        <item name="android:textSize">@dimen/body_textSize</item>
+        <item name="android:textColor">@color/neutral_off_white</item>
+        <item name="android:gravity">center</item>
+    </style>
 </resources>
