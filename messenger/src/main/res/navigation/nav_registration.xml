@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_registration"
-    app:startDestination="@id/registrationUsernameFragment">
+    app:startDestination="@id/keyGenFragment">
 
     <fragment
         android:id="@+id/registrationUsernameFragment"
@@ -76,5 +76,13 @@
         <argument
             android:name="tfaCredentials"
             app:argType="io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials" />
+    </fragment>
+    <fragment
+        android:id="@+id/keyGenFragment"
+        android:name="io.xxlabs.messenger.registration.keygen.KeyGenFragment"
+        android:label="KeyGenFragment" >
+        <action
+            android:id="@+id/action_keyGenFragment_to_registrationUsernameFragment"
+            app:destination="@id/registrationUsernameFragment" />
     </fragment>
 </navigation>

@@ -9,11 +9,11 @@ interface WarningDialogUi : InfoDialogUi {
 
     companion object Factory {
         fun create(
-            infoDialogUI: InfoDialogUi,
+            infoDialogUi: InfoDialogUi,
             buttonText: UiText,
             buttonOnClick: () -> Unit
         ): WarningDialogUi {
-            return object : WarningDialogUi, InfoDialogUi by infoDialogUI {
+            return object : WarningDialogUi, InfoDialogUi by infoDialogUi {
                 override val buttonText: UiText = buttonText
                 override val buttonOnClick = buttonOnClick
             }

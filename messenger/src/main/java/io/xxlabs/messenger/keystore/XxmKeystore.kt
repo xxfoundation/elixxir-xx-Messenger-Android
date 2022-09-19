@@ -63,9 +63,8 @@ class XxmKeystore(
     }
 
     override suspend fun generatePassword(): Result<Unit> = withContext(dispatcher) {
-        deletePreviousKeys()
-
         try {
+            generateNewKeys()
             val duration = measureTimeMillis {
                 generateSecret()
             }
@@ -73,6 +72,18 @@ class XxmKeystore(
             Result.success(Unit)
         } catch (e: Exception) {
             Result.failure(e)
+        }
+    }
+
+    private fun generateNewKeys() {
+        deletePreviousKeys()
+        keyPairGenerator.genKeyPair()
+    }
+
+    private fun deletePreviousKeys() {
+        if (keystore.containsAlias(KEY_ALIAS)) {
+            log("Deleting key alias")
+            keystore.deleteEntry(KEY_ALIAS)
         }
     }
 
@@ -92,13 +103,6 @@ class XxmKeystore(
         rsaEncryptPwd(secret)
     }
 
-    private fun deletePreviousKeys() {
-        if (keystore.containsAlias(KEY_ALIAS)) {
-            log("Deleting key alias")
-            keystore.deleteEntry(KEY_ALIAS)
-        }
-    }
-
     private fun rsaEncryptPwd(pwd: ByteArray): ByteArray {
         log("Byte count: ${pwd.size}")
         log("Before encryption: ${pwd.toBase64String()}")
@@ -110,24 +114,6 @@ class XxmKeystore(
         preferences.userSecret = encryptedBytes.toBase64String()
 
         return encryptedBytes
-    }
-
-    private suspend fun generateKeys(): Result<Unit> = withContext(dispatcher) {
-        try {
-            generateIfMissing()
-            Result.success(Unit)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    private fun generateIfMissing() {
-        if (!keystore.containsAlias(KEY_ALIAS)) {
-            log("Keystore alias does not exist, creating new one.")
-            keyPairGenerator.genKeyPair()
-        } else {
-            log("Keystore alias already exists")
-        }
     }
 
     override suspend fun decryptPassword(): Result<ByteArray> = withContext(dispatcher) {

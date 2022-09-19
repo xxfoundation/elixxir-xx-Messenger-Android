@@ -8,6 +8,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import io.xxlabs.messenger.databinding.FragmentKeygenBinding
+import io.xxlabs.messenger.dialog.warning.WarningDialog
+import io.xxlabs.messenger.dialog.warning.WarningDialogUi
+import io.xxlabs.messenger.util.navigateSafe
 import kotlinx.coroutines.flow.collect
 
 class KeyGenFragment : Fragment() {
@@ -45,10 +48,12 @@ class KeyGenFragment : Fragment() {
     }
 
     private fun continueRegistration() {
-
+        navigateSafe(
+            KeyGenFragmentDirections.actionKeyGenFragmentToRegistrationUsernameFragment()
+        )
     }
 
-    private fun displayError(exception: Exception) {
-
+    private fun displayError(errorUi: WarningDialogUi) {
+        WarningDialog.newInstance(errorUi).show(childFragmentManager, null)
     }
 }

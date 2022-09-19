@@ -26,4 +26,7 @@
     <!-- KeyGenFragment -->
 
     <string name="keygen_generating_text">Generating secured cryptographic keys…</string>
+    <string name="keygen_generation_error_title">Failed to generate secure keys</string>
+    <string name="keygen_generation_error_body">An error occurred while generating keys. Please try again.</string>
+    <string name="keygen_generation_error_button">Try again</string>
 </resources>
