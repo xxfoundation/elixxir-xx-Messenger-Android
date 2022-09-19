@@ -112,7 +112,7 @@ class XxmKeystore(
         return encryptedBytes
     }
 
-    override suspend fun generateKeys(): Result<Unit> = withContext(dispatcher) {
+    private suspend fun generateKeys(): Result<Unit> = withContext(dispatcher) {
         try {
             generateIfMissing()
             Result.success(Unit)
@@ -130,7 +130,7 @@ class XxmKeystore(
         }
     }
 
-    override suspend fun rsaDecryptPwd(): Result<ByteArray> = withContext(dispatcher) {
+    override suspend fun decryptPassword(): Result<ByteArray> = withContext(dispatcher) {
         try {
             Result.success(decryptSecret())
         } catch (e: Exception) {
