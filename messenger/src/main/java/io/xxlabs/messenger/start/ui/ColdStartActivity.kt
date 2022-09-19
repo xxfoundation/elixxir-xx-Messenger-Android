@@ -13,7 +13,7 @@ import io.xxlabs.messenger.MainActivity
 import io.xxlabs.messenger.MainActivity.Companion.INTENT_INVITATION
 import io.xxlabs.messenger.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.registration.RegistrationStartActivity
+import io.xxlabs.messenger.registration.RegistrationFlowActivity
 import io.xxlabs.messenger.util.getTransition
 import io.xxlabs.messenger.util.openLink
 
@@ -126,7 +126,7 @@ class ColdStartActivity : AppCompatActivity() {
     private fun navigateToRegistration() {
         val activity = Intent(
             this@ColdStartActivity,
-            RegistrationStartActivity::class.java
+            RegistrationFlowActivity::class.java
         )
 
         val options = getTransition(R.anim.hold, R.anim.hold)

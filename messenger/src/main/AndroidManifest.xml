@@ -40,7 +40,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity" />
-        <activity android:name=".registration.RegistrationStartActivity" />
+        <activity android:name=".registration.RegistrationFlowActivity" />
     </application>
 
 </manifest>

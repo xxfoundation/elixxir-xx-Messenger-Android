@@ -2,33 +2,37 @@ package io.xxlabs.messenger.registration
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.xxlabs.messenger.MainActivity
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.keystore.KeyStoreManager
-import io.xxlabs.messenger.keystore.XxmKeystore
 import io.xxlabs.messenger.databinding.ActivityRegistrationFlowBinding
 import io.xxlabs.messenger.util.getTransition
 import io.xxlabs.messenger.view.SnackBarActivity
+import kotlinx.coroutines.flow.collect
 
 /**
  * Presents and handles navigation for registration and restore account UI.
  */
-class RegistrationFlowActivity : AppCompatActivity(), RegistrationHandler, SnackBarActivity {
+class RegistrationFlowActivity : AppCompatActivity(), SnackBarActivity {
 
     private lateinit var binding: ActivityRegistrationFlowBinding
-    private val keyStoreManager: KeyStoreManager by lazy {
-        XxmKeystore()
-    }
+    private val viewModel: RegistrationViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launchWhenResumed {
+            observeEvents()
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         hideSystemBars()
         binding = ActivityRegistrationFlowBinding.inflate(layoutInflater)
@@ -45,7 +49,13 @@ class RegistrationFlowActivity : AppCompatActivity(), RegistrationHandler, Snack
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
     }
 
-    override fun onRegistrationComplete() {
+    private suspend fun observeEvents() {
+        viewModel.registrationComplete.collect { complete ->
+            if (complete) onRegistrationComplete()
+        }
+    }
+
+    private fun onRegistrationComplete() {
         val activity = Intent(
             this@RegistrationFlowActivity,
             MainActivity::class.java
@@ -61,9 +71,5 @@ class RegistrationFlowActivity : AppCompatActivity(), RegistrationHandler, Snack
             view.translationZ = 10f
             show()
         }
-    }
-
-    override fun rsaDecryptPwd(): ByteArray {
-        return keyStoreManager.rsaDecryptPwd().getOrDefault(byteArrayOf())
     }
 }
