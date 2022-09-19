@@ -6,6 +6,9 @@ import android.security.keystore.KeyProperties
 import io.elixxir.xxclient.bindings.Bindings
 import io.xxlabs.messenger.util.fromBase64toByteArray
 import io.xxlabs.messenger.util.toBase64String
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.security.*
 import java.security.spec.MGF1ParameterSpec
 import java.security.spec.RSAKeyGenParameterSpec
@@ -17,7 +20,8 @@ import kotlin.system.measureTimeMillis
 class XxmKeystore(
     private val bindings: Bindings,
     private val preferences: CipherPreferences,
-    private val log: (String) -> Unit
+    private val log: (String) -> Unit,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : KeyStoreManager {
 
     private val keystore: KeyStore by lazy {
@@ -58,10 +62,10 @@ class XxmKeystore(
             }.build()
     }
 
-    override suspend fun generatePassword(): Result<Unit> {
+    override suspend fun generatePassword(): Result<Unit> = withContext(dispatcher) {
         deletePreviousKeys()
 
-        return try {
+        try {
             val duration = measureTimeMillis {
                 generateSecret()
             }
@@ -108,8 +112,8 @@ class XxmKeystore(
         return encryptedBytes
     }
 
-    override suspend fun generateKeys(): Result<Unit> {
-        return try {
+    override suspend fun generateKeys(): Result<Unit> = withContext(dispatcher) {
+        try {
             generateIfMissing()
             Result.success(Unit)
         } catch (e: Exception) {
@@ -126,8 +130,8 @@ class XxmKeystore(
         }
     }
 
-    override fun rsaDecryptPwd(): Result<ByteArray> {
-        return try {
+    override suspend fun rsaDecryptPwd(): Result<ByteArray> = withContext(dispatcher) {
+        try {
             Result.success(decryptSecret())
         } catch (e: Exception) {
             Result.failure(e)
