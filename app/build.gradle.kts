@@ -1,14 +1,14 @@
 plugins {
     id("com.android.application")
     kotlin("android")
-    id("kotlin-kapt")
+    kotlin("kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs")
 }
 
 android {
-    compileSdk = 31
+    compileSdk = Versions.COMPILE_SDK
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -27,10 +27,10 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 629
-        versionName = "3.0"
-        minSdk = 26
-        targetSdk = 31
+        versionCode = Versions.VERSION_CODE
+        versionName = Versions.VERSION_NAME
+        minSdk = Versions.MIN_SDK
+        targetSdk = Versions.TARGET_SDK
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
         multiDexEnabled = true
         vectorDrawables.useSupportLibrary = true
@@ -184,77 +184,36 @@ kapt {
 
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation("com.googlecode.libphonenumber:libphonenumber:8.12.31")
-
-    // Android wrapper
     implementation(project(":xxclient"))
+    implementation(project(":depconstraints"))
 
-    implementation(project(":data:proto")) {
-        exclude("com.google.protobuf")
-    }
+    implementation(Libs.Core.ANDROIDX_APPCOMPAT)
+    implementation(Libs.Core.CORE_KTX)
+    implementation(Libs.Core.CORE_COROUTINES)
 
-    // Core
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.work:work-runtime:2.7.0")
+    implementation(Libs.Ui.MATERIAL)
+    implementation(Libs.Ui.BIOMETRIC)
+    implementation(Libs.Ui.RECYCLERVIEW)
+    implementation(Libs.Ui.CONSTRAINT_LAYOUT)
+    implementation(Libs.Ui.NAVIGATION)
+    implementation(Libs.Ui.NAVIGATION_UI)
 
-    // AndroidX Components
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
-    implementation("androidx.preference:preference-ktx:1.1.1")
-    implementation("androidx.biometric:biometric:1.2.0-alpha03")
-    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation(Libs.Data.PREFERENCE)
+    implementation(Libs.Data.PHONE_NUMBER)
+    implementation(Libs.Data.GSON)
+    implementation(Libs.Data.PROTOBUF)
 
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:27.0.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    implementation(Libs.Media.GLIDE)
+    kapt(Libs.Media.GLIDE_KAPT)
 
-    // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation(platform(Libs.Logging.FIREBASE_BOM))
+    implementation(Libs.Logging.CRASHLYTICS)
+    implementation(Libs.Logging.TIMBER)
 
-    // Logging assistant Timber
-    implementation("com.jakewharton.timber:timber:4.7.1")
-
-    // Gson
-    implementation("com.google.code.gson:gson:2.8.6")
-
-    // Image
-    implementation("com.github.bumptech.glide:glide:4.12.0")
-    kapt("com.github.bumptech.glide:compiler:4.12.0")
-    implementation("io.github.florent37:shapeofview:1.4.7")
-    implementation("id.zelory:compressor:3.0.1")
-
-    // Protobuf
-    implementation("com.google.protobuf:protobuf-javalite:3.15.3")
-
-    // Local unit testing
-    testImplementation("junit:junit:4.13.2")
-
-    // AndroidX Test - Instrumented testing
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-
-    // Dependencies for Android instrumented unit tests
-    androidTestImplementation("junit:junit:4.13.2")
-    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt")
-    androidTestImplementation("org.mockito:mockito-core:4.1.0")
-    androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
-
-    androidTestImplementation("androidx.fragment:fragment-testing:1.3.6")
-    testImplementation("androidx.test:core:1.4.0")
-
-    // AndroidX Test - JVM testing
-    testImplementation("androidx.test.ext:junit-ktx:1.1.3")
-    testImplementation("androidx.test:core-ktx:1.4.0")
-    testImplementation("org.robolectric:robolectric:4.7.1")
-
-    // Other test dependencies
-    testImplementation("com.google.truth:truth:1.1.3")
-    testImplementation("androidx.arch.core:core-testing:2.1.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt")
+    implementation(Libs.Testing.CORE_TEST)
+    implementation(Libs.Testing.JUNIT)
+    implementation(Libs.Testing.EXT_JUNIT)
+    implementation(Libs.Testing.TRUTH)
 }
 
 fun getNdf(): String {
