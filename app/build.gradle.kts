@@ -189,7 +189,7 @@ dependencies {
     // Android wrapper
     implementation(project(":xxclient"))
 
-    implementation(project(":proto")) {
+    implementation(project(":data:proto")) {
         exclude("com.google.protobuf")
     }
 
