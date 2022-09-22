@@ -210,10 +210,10 @@ dependencies {
     implementation(Libs.Logging.CRASHLYTICS)
     implementation(Libs.Logging.TIMBER)
 
-    implementation(Libs.Testing.CORE_TEST)
-    implementation(Libs.Testing.JUNIT)
-    implementation(Libs.Testing.EXT_JUNIT)
-    implementation(Libs.Testing.TRUTH)
+    testImplementation(Libs.Testing.CORE_TEST)
+    testImplementation(Libs.Testing.TRUTH)
+    testImplementation(Libs.Testing.JUNIT)
+    androidTestImplementation(Libs.Testing.EXT_JUNIT)
 }
 
 fun getNdf(): String {
