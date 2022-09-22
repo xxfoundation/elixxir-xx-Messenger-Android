@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.dialog.info.TwoButtonInfoDialogUi" />
+            type="io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -22,50 +22,50 @@
 
             <TextView
                 android:id="@+id/info_dialog_title"
-                app:uiText="@{ui.title}"
-                android:layout_marginBottom="@dimen/inner_view_marginVertical"
+                android:text="@{ui.title}"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/info_dialog_body"
-                style="@style/SubtitleText"
-                tools:text="@string/lorem_title"/>
+                style="@style/dialog_title"
+                tools:text="@string/registration_username_info_title"/>
 
             <TextView
                 android:id="@+id/info_dialog_body"
-                android:layout_marginBottom="@dimen/inner_view_marginVertical"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
                 app:layout_constraintTop_toBottomOf="@id/info_dialog_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/info_dialog_ok_button"
-                tools:text="@string/lorem_paragraph"
-                style="@style/BodyText" />
+                tools:text="@string/registration_username_info_body"
+                style="@style/dialog_body" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/info_dialog_ok_button"
-                style="@style/FilledButton"
-                android:layout_marginTop="@dimen/inner_view_marginVertical"
-                app:uiText="@{ui.positiveLabel}"
+                style="@style/dialog_button"
+                android:layout_marginTop="@dimen/registration_body_vertical_margin"
+                android:text="@{ui.positiveLabel}"
                 android:textColor="@color/neutral_white"
-                android:background="@drawable/btn_rounded_filled_white"
+                android:background="@drawable/bg_btn_white"
                 android:backgroundTint="@color/brand_default"
-                android:layout_marginStart="@dimen/inner_view_marginHorizontal"
+                android:layout_marginStart="@dimen/registration_horizontal_margin"
                 app:layout_constraintHorizontal_chainStyle="packed"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/info_dialog_cancel_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/info_dialog_body" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/info_dialog_cancel_button"
-                app:uiText="@{ui.negativeLabel}"
-                android:layout_marginEnd="@dimen/inner_view_marginHorizontal"
+                android:text="@{ui.negativeLabel}"
+                android:layout_marginEnd="@dimen/registration_horizontal_margin"
                 android:layout_marginStart="0dp"
                 app:layout_constraintTop_toTopOf="@id/info_dialog_ok_button"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/info_dialog_ok_button"
                 app:layout_constraintEnd_toEndOf="parent"
-                style="@style/FilledButton" />
+                style="@style/dialog_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>

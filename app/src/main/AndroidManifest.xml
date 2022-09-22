@@ -1,59 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="io.xxlabs.messenger"
     tools:ignore="LockedOrientationActivity">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.USE_BIOMETRIC" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <uses-feature
-        android:name="android.hardware.camera"
-        android:required="false" />
-
     <application
-        android:name=".application.XxMessengerApplication"
-        android:allowBackup="false"
-        android:fullBackupContent="false"
         android:icon="@mipmap/ic_launcher"
-        android:label="${appName}"
-        android:requestLegacyExternalStorage="true"
+        android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/AppTheme"
+        android:allowBackup="false"
+        android:fullBackupContent="false"
+        android:requestLegacyExternalStorage="true"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning"
-        tools:replace="android:allowBackup"
-        tools:targetApi="m">
-        <activity
-            android:name=".backup.cloud.sftp.login.ui.SshLoginActivity"
-            android:exported="false"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.intro.splash.RegistrationIntroActivity"
-            android:exported="false"
-            android:label="@string/title_activity_intro"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/IntroTheme" />
-        <activity
-            android:name=".ui.intro.splash.SplashScreenPlaceholderActivity"
+        tools:replace="android:allowBackup" >
+
+        <activity android:name=".start.ui.ColdStartActivity"
             android:configChanges="orientation"
             android:exported="true"
             android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme">
+            android:screenOrientation="portrait">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -69,83 +39,8 @@
                     />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.intro.splash.SplashScreenLoadingActivity"
-            android:configChanges="orientation"
-            android:exported="true"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait"
-            android:theme="@style/SplashTheme" />
-        <activity
-            android:name=".ui.main.MainActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".ui.intro.registration.RegistrationFlowActivity"
-            android:configChanges="orientation"
-            android:launchMode="singleTop"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name="com.dropbox.core.android.AuthActivity"
-            android:configChanges="orientation|keyboard"
-            android:exported="true"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <data android:scheme="db-${dropboxKey}" />
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".backup.cloud.dropbox.DropboxAuthActivity" />
-
-        <meta-data
-            android:name="QUERY_LOG"
-            android:value="true" />
-        <meta-data
-            android:name="DOMAIN_PACKAGE_NAME"
-            android:value="io.xxlabs.messenger.localDatabase" />
-        <meta-data
-            android:name="DATABASE"
-            android:value="elixxir.db" />
-        <meta-data
-            android:name="VERSION"
-            android:value="4" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@drawable/ic_notification_icon_small" />
-        <!--
- Set color used with incoming notification messages. This is used when no color is set for the incoming
-                         notification message. See README(https://goo.gl/6BKBk7) for more.
-        -->
-        <meta-data
-            android:name="com.google.firebase.messaging.default_notification_color"
-            android:resource="@color/brand_dark" />
-
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="io.xxlabs.messenger.fileprovider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths" />
-        </provider>
-
-        <service
-            android:name=".notifications.MessagingService"
-            android:enabled="true"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT" />
-            </intent-filter>
-        </service>
+        <activity android:name=".MainActivity" />
+        <activity android:name=".registration.RegistrationFlowActivity" />
     </application>
 
 </manifest>

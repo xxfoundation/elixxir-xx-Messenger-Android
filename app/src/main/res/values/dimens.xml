@@ -1,111 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <dimen name="grid_spacing">16dp</dimen>
-    <dimen name="grid_spacing_small">4dp</dimen>
-    <dimen name="card_image_height">108dp</dimen>
-    <dimen name="grid_reveal_height">200dp</dimen>
-    <dimen name="design_bottom_navigation_icon_size" tools:override="true">20dp</dimen>
+<resources>
+    <!-- Rounded corner radius -->
 
-    <!-- Dimens for staggered asymmetric grid layout cards-->
-    <dimen name="staggered_grid_spacing_large">30dp</dimen>
-    <dimen name="staggered_grid_spacing_small">26dp</dimen>
-    <dimen name="staggered_grid_spacing_top_first">72dp</dimen>
-    <dimen name="staggered_grid_spacing_top_second">56dp</dimen>
-    <dimen name="staggered_grid_spacing_top_third">152dp</dimen>
-    <dimen name="staggered_grid_card_width_portrait">165dp</dimen>
-    <dimen name="staggered_grid_card_height_portrait">247dp</dimen>
-    <dimen name="staggered_grid_card_width_landscape">188dp</dimen>
-    <dimen name="staggered_grid_card_height_landscape">140dp</dimen>
+    <dimen name="rounded_corner_big_radius">32dp</dimen>
+    <dimen name="rounded_corner_medium_radius">30dp</dimen>
 
-    <!-- Components -->
-    <dimen name="line_thin">0.5dp</dimen>
-    <dimen name="line_normal">1dp</dimen>
+    <!-- View spacing -->
 
-    <!-- View Spacing -->
-    <dimen name="fab_margin">16dp</dimen>
+    <!-- Was: "registration_vertical_margin" -->
+    <dimen name="top_view_marginTop">90dp</dimen>
+    <!-- Was: "registration_body_vertical_margin" -->
+    <dimen name="inner_view_marginVertical">16dp</dimen>
+    <!-- Was: "registration_horizontal_margin" -->
+    <dimen name="inner_view_marginHorizontal">38dp</dimen>
+    <!-- Was: "registration_body_text_size -->
+    <dimen name="body_textSize">18sp</dimen>
 
-    <dimen name="spacing_1">1dp</dimen>
-    <dimen name="spacing_3">3dp</dimen>
-    <dimen name="spacing_4">4dp</dimen>
-    <dimen name="spacing_5">5dp</dimen>
-    <dimen name="spacing_7">7dp</dimen>
-    <dimen name="spacing_8">8dp</dimen>
-    <dimen name="spacing_10">10dp</dimen>
-    <dimen name="spacing_12">12dp</dimen>
-    <dimen name="spacing_14">14dp</dimen>
-    <dimen name="spacing_16">16dp</dimen>
-    <dimen name="spacing_18">18dp</dimen>
-    <dimen name="spacing_20">20dp</dimen>
-    <dimen name="spacing_22">22dp</dimen>
-    <dimen name="spacing_24">24dp</dimen>
-    <dimen name="spacing_26">26dp</dimen>
-    <dimen name="spacing_27">27dp</dimen>
-    <dimen name="spacing_28">28dp</dimen>
-    <dimen name="spacing_30">30dp</dimen>
-    <dimen name="spacing_32">32dp</dimen>
-    <dimen name="spacing_34">34dp</dimen>
-    <dimen name="spacing_35">35dp</dimen>
-    <dimen name="spacing_36">36dp</dimen>
-    <dimen name="spacing_38">38dp</dimen>
-    <dimen name="spacing_40">40dp</dimen>
-    <dimen name="spacing_42">42dp</dimen>
-    <dimen name="spacing_47">47dp</dimen>
-    <dimen name="spacing_48">48dp</dimen>
-    <dimen name="spacing_50">50dp</dimen>
-    <dimen name="spacing_54">54dp</dimen>
-    <dimen name="spacing_60">60dp</dimen>
-    <dimen name="spacing_64">64dp</dimen>
-    <dimen name="spacing_69">69dp</dimen>
-    <dimen name="spacing_72">72dp</dimen>
-    <dimen name="spacing_77">77dp</dimen>
-    <dimen name="spacing_80">80dp</dimen>
-    <dimen name="spacing_96">96dp</dimen>
-    <dimen name="spacing_110">110dp</dimen>
+    <!-- Dialog dimens -->
 
-    <!-- Text Dimens-->
-    <dimen name="text_7">7sp</dimen>
-    <dimen name="text_9">9sp</dimen>
-    <dimen name="text_10">10sp</dimen>
-    <dimen name="text_11">11sp</dimen>
-    <dimen name="text_13">13sp</dimen>
-    <dimen name="text_15">15sp</dimen>
-    <dimen name="text_12">12sp</dimen>
-    <dimen name="text_14">14sp</dimen>
-    <dimen name="text_16">16sp</dimen>
-    <dimen name="text_17">17sp</dimen>
-    <dimen name="text_18">18sp</dimen>
-    <dimen name="text_20">20sp</dimen>
-    <dimen name="text_22">22sp</dimen>
-    <dimen name="text_24">24sp</dimen>
-    <dimen name="text_25">25sp</dimen>
-    <dimen name="text_28">28sp</dimen>
-    <dimen name="text_32">32sp</dimen>
-    <dimen name="text_34">34sp</dimen>
-    <dimen name="text_37">37sp</dimen>
+    <!-- Was: "registration_dialog_title_text_size" -->
+    <dimen name="dialog_title_textSize">26sp</dimen>
+    <dimen name="bottom_sheet_dialog_corner_radius">@dimen/rounded_corner_big_radius</dimen>
 
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="nav_header_vertical_spacing">8dp</dimen>
-    <dimen name="nav_header_height">176dp</dimen>
-    <dimen name="spacing_1000">1000dp</dimen>
-    <dimen name="spacing_100">100dp</dimen>
+    <!-- Button dimens -->
 
-    <!-- Registration -->
-    <dimen name="registration_vertical_margin">90dp</dimen>
-    <dimen name="registration_horizontal_margin">38dp</dimen>
-    <dimen name="registration_body_vertical_margin">16dp</dimen>
-    <dimen name="registration_edittext_top_margin">38dp</dimen>
-    <dimen name="registration_edittext_height">54dp</dimen>
-    <dimen name="registration_title_text_size">40sp</dimen>
-    <dimen name="registration_dialog_title_text_size">26sp</dimen>
-    <dimen name="registration_body_text_size">18sp</dimen>
-    <dimen name="registration_button_height">52dp</dimen>
-    <dimen name="registration_info_button_height">48dp</dimen>
-    <dimen name="registration_info_button_width">48dp</dimen>
-    <dimen name="registration_dialog_button_width">150dp</dimen>
+    <!-- Was: registration_button_height" -->
+    <dimen name="button_layoutHeight">52dp</dimen>
+    <!-- Was: registration_dialog_button_width -->
+    <dimen name="button_layoutWidth">150dp</dimen>
+    <dimen name="button_corner_radius">@dimen/rounded_corner_medium_radius</dimen>
 
-    <!-- Info drawable -->
-    <dimen name="ic_info_padding">8dp</dimen>
-    <dimen name="bottom_sheet_dialog_corner_radius">32dp</dimen>
+    <!-- Uncategorized -->
+
+    <dimen name="splash_text_vertical_margin">40dp</dimen>
+    <dimen name="splash_text_horizontal_margin">20dp</dimen>
 </resources>

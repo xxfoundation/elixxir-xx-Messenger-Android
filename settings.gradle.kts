@@ -1,8 +1,6 @@
-//include(":app")
+include(":app")
 //include(":linkpreview")
 include(":proto")
-
-include(":messenger")
 
 include("cmix")
 project(":cmix").projectDir = File("elixxir-dapps-sdk-kotlin/cmix")

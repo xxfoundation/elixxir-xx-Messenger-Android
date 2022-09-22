@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_registration"
-    app:startDestination="@id/keyGenFragment">
+    app:startDestination="@id/registrationUsernameFragment">
 
     <fragment
         android:id="@+id/registrationUsernameFragment"
@@ -14,6 +14,9 @@
             android:id="@+id/action_registrationUsernameFragment_to_registrationWelcomeFragment"
             app:destination="@id/registrationWelcomeFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_registrationUsernameFragment_to_restoreAccountFragment"
+            app:destination="@id/restoreAccountFragment" />
     </fragment>
 
     <fragment
@@ -77,12 +80,28 @@
             android:name="tfaCredentials"
             app:argType="io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials" />
     </fragment>
+
     <fragment
-        android:id="@+id/keyGenFragment"
-        android:name="io.xxlabs.messenger.registration.keygen.KeyGenFragment"
-        android:label="KeyGenFragment" >
+        android:id="@+id/restoreAccountFragment"
+        android:name="io.xxlabs.messenger.backup.ui.list.RestoreListFragment"
+        android:label="RestoreAccountFragment"
+        tools:layout="@layout/fragment_backup_locations" >
         <action
-            android:id="@+id/action_keyGenFragment_to_registrationUsernameFragment"
-            app:destination="@id/registrationUsernameFragment" />
+            android:id="@+id/action_restoreList_to_restoreDetail"
+            app:destination="@id/restoreDetailFragment"
+            app:popUpTo="@id/restoreAccountFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/restoreDetailFragment"
+        android:name="io.xxlabs.messenger.backup.ui.restore.RestoreDetailFragment"
+        android:label="fragment_backup_found"
+        tools:layout="@layout/fragment_restore_detail" >
+        <argument
+            android:name="source"
+            app:argType="io.xxlabs.messenger.backup.data.BackupSource" />
+        <action
+            android:id="@+id/actionRestoreDetailToRegistrationCompleted"
+            app:destination="@id/registrationCompletedStepFragment" />
     </fragment>
 </navigation>

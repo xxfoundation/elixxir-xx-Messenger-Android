@@ -1,7 +1,11 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     id("com.android.application")
     kotlin("android")
+    kotlin("android.extensions")
     id("kotlin-kapt")
+    id("kotlin-android")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs")
@@ -13,6 +17,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    configurations.all {
+        exclude("com.google.guava", "listenablefuture")
     }
 
     buildFeatures {
@@ -28,7 +36,7 @@ android {
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
         versionCode = 629
-        versionName = "3.0"
+        versionName = "2.92"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -55,6 +63,14 @@ android {
             "APP_VERSION",
             android.defaultConfig.versionName ?: "1.0"
         )
+
+        // Dropbox API
+        val properties = gradleLocalProperties(rootDir)
+        val dropboxKey = properties["DROPBOX_KEY"] ?: ""
+        val dropboxAccessToken = properties["DROPBOX_ACCESS_TOKEN"] ?: ""
+        buildConfigField("String", "DROPBOX_KEY", "\"$dropboxKey\"")
+        buildConfigField("String", "DROPBOX_ACCESS_TOKEN", "\"$dropboxAccessToken\"")
+        manifestPlaceholders["dropboxKey"] = dropboxKey
     }
 
     buildTypes {
@@ -85,9 +101,9 @@ android {
             matchingFallbacks += "debug"
 
             buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
+                "io.xxlabs.messenger.data.datatype.Environment",
                 "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MOCK"
+                "io.xxlabs.messenger.data.datatype.Environment.MOCK"
             )
         }
 
@@ -103,9 +119,9 @@ android {
             )
 
             buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
+                "io.xxlabs.messenger.data.datatype.Environment",
                 "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.RELEASE_NET"
+                "io.xxlabs.messenger.data.datatype.Environment.RELEASE_NET"
             )
         }
 
@@ -115,9 +131,9 @@ android {
             matchingFallbacks += "debug"
 
             buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
+                "io.xxlabs.messenger.data.datatype.Environment",
                 "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MAIN_NET"
+                "io.xxlabs.messenger.data.datatype.Environment.MAIN_NET"
             )
         }
 
@@ -133,9 +149,9 @@ android {
             )
 
             buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
+                "io.xxlabs.messenger.data.datatype.Environment",
                 "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MAIN_NET"
+                "io.xxlabs.messenger.data.datatype.Environment.MAIN_NET"
             )
         }
     }
@@ -189,6 +205,9 @@ dependencies {
     // Android wrapper
     implementation(project(":xxclient"))
 
+    // Url Preview
+    implementation(project(":linkpreview"))
+
     implementation(project(":proto")) {
         exclude("com.google.protobuf")
     }
@@ -196,7 +215,10 @@ dependencies {
     // Core
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.0")
+    implementation("com.android.support:multidex:2.0.1")
     implementation("androidx.core:core-ktx:1.7.0")
+    implementation("com.google.guava:guava:30.1-jre")
     implementation("androidx.work:work-runtime:2.7.0")
 
     // AndroidX Components
@@ -206,17 +228,84 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.biometric:biometric:1.2.0-alpha03")
     implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Firebase
-    implementation(platform("com.google.firebase:firebase-bom:27.0.0"))
-    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    // SQLCipher Database encryption
+    implementation("net.zetetic:android-database-sqlcipher:4.5.0")
+    implementation("androidx.sqlite:sqlite-ktx:2.1.0")
+
+    // SecuredSharedPrefs
+    //NOTE: Use alpha01 meanwhile https://github.com/google/tink/issues/413
+    implementation("androidx.security:security-crypto:1.1.0-alpha01")
+
+    // Room
+    val roomVersion = "2.4.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.room:room-ktx:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-runtime:$roomVersion")
+    kapt("androidx.room:room-compiler:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion")
+
+    // Image Handling
+    implementation("com.github.CanHub:Android-Image-Cropper:3.2.1")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 
+    // Lifecycle, ViewModel, and LiveData
+    val lifecycleVersion = "2.4.0"
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion")
+
+    //Time Source
+    implementation("com.lyft.kronos:kronos-android:0.0.1-alpha10")
+
+    //Paging
+    implementation("androidx.paging:paging-runtime-ktx:2.1.2")
+
+    //Qr Code Generation
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:android-core:3.3.0")
+
+    // CameraX Android
+    implementation("androidx.camera:camera-camera2:1.1.0-alpha09")
+    implementation("androidx.camera:camera-lifecycle:1.1.0-alpha09")
+    implementation("androidx.camera:camera-view:1.0.0-alpha30")
+    implementation("androidx.camera:camera-extensions:1.0.0-alpha30")
+
+    // Animation
+    implementation("com.airbnb.android:lottie:3.6.1")
+
+    // Firebase
+    implementation(platform("com.google.firebase:firebase-bom:27.0.0"))
+    implementation("com.google.firebase:firebase-messaging:22.0.0")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+
+    // Install RXJava
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
+    // RxFlowable to livedata
+    implementation("android.arch.lifecycle:reactivestreams:1.1.1")
+
+    // RxJava support for Room
+    implementation("androidx.room:room-rxjava2:2.3.0")
+
     // Logging assistant Timber
     implementation("com.jakewharton.timber:timber:4.7.1")
+
+    // Dagger
+    implementation("com.google.dagger:dagger-android:2.35.1")
+    implementation("com.google.dagger:dagger-android-support:2.33")
+    kapt("com.google.dagger:dagger-compiler:2.33")
+    kapt("com.google.dagger:dagger-android-processor:2.33")
+    kaptAndroidTest("com.google.dagger:dagger-compiler:2.33")
 
     // Gson
     implementation("com.google.code.gson:gson:2.8.6")
@@ -230,6 +319,9 @@ dependencies {
     // Protobuf
     implementation("com.google.protobuf:protobuf-javalite:3.15.3")
 
+    // Datadog
+    implementation("com.datadoghq:dd-sdk-android:1.10.0")
+
     // Local unit testing
     testImplementation("junit:junit:4.13.2")
 
@@ -241,6 +333,7 @@ dependencies {
     androidTestImplementation("junit:junit:4.13.2")
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt")
     androidTestImplementation("org.mockito:mockito-core:4.1.0")
+    androidTestImplementation("com.linkedin.dexmaker:dexmaker-mockito:2.28.1")
     androidTestImplementation("androidx.test.espresso:espresso-contrib:3.4.0")
 
     androidTestImplementation("androidx.fragment:fragment-testing:1.3.6")
@@ -255,6 +348,23 @@ dependencies {
     testImplementation("com.google.truth:truth:1.1.3")
     testImplementation("androidx.arch.core:core-testing:2.1.0")
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.5.2-native-mt")
+
+    // Google Sign-In (required for Google Drive)
+    implementation("com.google.android.gms:play-services-auth:20.1.0")
+
+    // Google Drive
+    implementation("com.google.api-client:google-api-client-android:1.23.0") {
+        exclude("org.apache.httpcomponents", "guava-jdk5")
+    }
+    implementation("com.google.apis:google-api-services-drive:v3-rev136-1.25.0") {
+        exclude("org.apache.httpcomponents", "guava-jdk5")
+    }
+
+    // Dropbox
+    implementation("com.dropbox.core:dropbox-core-sdk:4.0.1")
+
+    // SSHJ library
+    implementation("com.hierynomus:sshj:0.31.0")
 }
 
 fun getNdf(): String {

@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.dialog.warning.WarningDialogUi" />
+            type="io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -22,37 +22,37 @@
 
             <TextView
                 android:id="@+id/confirm_dialog_title"
-                app:uiText="@{ui.title}"
-                android:layout_marginBottom="@dimen/inner_view_marginVertical"
+                android:text="@{ui.title}"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/confirm_dialog_body"
-                style="@style/SubtitleText"
-                tools:text="@string/lorem_title"/>
+                style="@style/dialog_title"
+                tools:text="@string/confirm_delete_fact_dialog_title"/>
 
             <TextView
                 android:id="@+id/confirm_dialog_body"
-                app:uiText="@{ui.body}"
-                android:layout_marginBottom="@dimen/inner_view_marginVertical"
+                android:text="@{ui.body}"
+                android:layout_marginBottom="@dimen/registration_body_vertical_margin"
                 app:layout_constraintTop_toBottomOf="@id/confirm_dialog_title"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintBottom_toTopOf="@+id/confirm_dialog_button"
-                tools:text="@string/lorem_paragraph"
-                style="@style/BodyText" />
+                tools:text="@string/confirm_delete_fact_dialog_body"
+                style="@style/dialog_body" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.xxlabs.messenger.support.view.SingleClickButton
                 android:id="@+id/confirm_dialog_button"
-                style="@style/FilledButton"
+                style="@style/confirm_dialog_button"
                 android:layout_width="0dp"
-                android:layout_marginTop="@dimen/inner_view_marginVertical"
-                app:uiText="@{ui.buttonText}"
+                android:layout_marginTop="@dimen/registration_body_vertical_margin"
+                android:text="@{ui.buttonText}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/confirm_dialog_body"
-                tools:text="@android:string/ok" />
+                tools:text="@string/confirm_delete_fact_dialog_button" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>
 </layout>
