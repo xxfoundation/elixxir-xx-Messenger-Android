@@ -1,6 +1,6 @@
 object Versions {
     const val ANDROID_GRADLE_PLUGIN = "7.1.2"
-    const val KOTLIN = "1.6.10"
+    const val KOTLIN = "1.7.30"
 
     const val COMPILE_SDK = 31
     const val MIN_SDK = 26
@@ -26,15 +26,15 @@ object Libs {
     }
 
     object Data {
-        const val ANDROIDX_PREFERENCE = "androidx.preference:preference-ktx"
+        const val PREFERENCE = "androidx.preference:preference-ktx"
         const val PHONE_NUMBER = "com.googlecode.libphonenumber:libphonenumber"
-        const val GSON = "com.google.code.gson:gson:2.8.6"
+        const val GSON = "com.google.code.gson:gson"
         const val PROTOBUF = "com.google.protobuf:protobuf-javalite"
     }
 
-    object Images {
-        const val GLIDE = "com.github.bumptech.glide:glide:4.12.0"
-        const val GLIDE_KAPT = "com.github.bumptech.glide:compiler:4.12.0"
+    object Media {
+        const val GLIDE = "com.github.bumptech.glide:glide"
+        const val GLIDE_KAPT = "com.github.bumptech.glide:compiler"
     }
 
     object Logging {
@@ -44,9 +44,9 @@ object Libs {
     }
 
     object Testing {
-        const val TEST_CORE = "androidx.test:core"
+        const val CORE_TEST = "androidx.test:core"
         const val JUNIT = "junit:junit"
         const val TRUTH = "com.google.truth:truth"
-        const val ANDROID_JUNIT = "androidx.test.ext:junit"
+        const val EXT_JUNIT = "androidx.test.ext:junit"
     }
 }
