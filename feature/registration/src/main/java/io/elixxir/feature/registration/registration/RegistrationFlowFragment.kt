@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.registration
+package io.elixxir.feature.registration.registration
 
 import android.content.Context
 import androidx.fragment.app.Fragment
@@ -6,7 +6,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistration
 import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationFactory
-import java.util.logging.Logger.global
 import javax.inject.Inject
 
 abstract class RegistrationFlowFragment : Fragment() {

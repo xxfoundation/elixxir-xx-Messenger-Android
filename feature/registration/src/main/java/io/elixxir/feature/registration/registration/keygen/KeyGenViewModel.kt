@@ -1,12 +1,12 @@
-package io.xxlabs.messenger.registration.keygen
+package io.elixxir.feature.registration.registration.keygen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.dialog.info.InfoDialogUi
-import io.xxlabs.messenger.dialog.warning.WarningDialogUi
-import io.xxlabs.messenger.keystore.KeyStoreManager
-import io.xxlabs.messenger.util.UiText
+import io.elixxir.core.ui.dialog.info.InfoDialogUi
+import io.elixxir.core.ui.dialog.warning.WarningDialogUi
+import io.elixxir.core.ui.model.UiText
+import io.elixxir.data.session.keystore.KeyStoreManager
+import io.elixxir.feature.registration.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch

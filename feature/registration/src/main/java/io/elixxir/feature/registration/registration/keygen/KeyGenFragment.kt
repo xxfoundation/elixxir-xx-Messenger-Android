@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.registration.keygen
+package io.elixxir.feature.registration.registration.keygen
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import io.xxlabs.messenger.databinding.FragmentKeygenBinding
-import io.xxlabs.messenger.dialog.warning.WarningDialog
-import io.xxlabs.messenger.dialog.warning.WarningDialogUi
 import io.elixxir.core.ui.util.navigateSafe
+import io.elixxir.feature.registration.databinding.FragmentKeygenBinding
 
 class KeyGenFragment : Fragment() {
 

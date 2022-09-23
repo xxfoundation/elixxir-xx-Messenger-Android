@@ -13,8 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
 import io.elixxir.core.ui.util.getTransition
 import io.elixxir.core.ui.view.SnackBarActivity
+import io.elixxir.feature.registration.R
 import io.elixxir.feature.registration.databinding.ActivityRegistrationFlowBinding
-import io.xxlabs.messenger.registration.RegistrationViewModel
 
 
 /**

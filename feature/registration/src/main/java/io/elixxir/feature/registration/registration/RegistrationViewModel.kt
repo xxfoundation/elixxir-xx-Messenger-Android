@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.registration
+package io.elixxir.feature.registration.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
