@@ -131,10 +131,7 @@ dependencies {
     implementation(Libs.Data.PHONE_NUMBER)
     implementation(Libs.Data.GSON)
     implementation(Libs.Data.PROTOBUF)
-
-    implementation(Libs.Media.GLIDE)
-    kapt(Libs.Media.GLIDE_KAPT)
-
+    
     testImplementation(Libs.Testing.CORE_TEST)
     testImplementation(Libs.Testing.TRUTH)
     testImplementation(Libs.Testing.JUNIT)
