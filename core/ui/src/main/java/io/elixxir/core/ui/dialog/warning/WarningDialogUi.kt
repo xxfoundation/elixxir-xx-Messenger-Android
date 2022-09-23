@@ -1,7 +1,8 @@
 package io.elixxir.core.ui.dialog.warning
 
 import io.elixxir.core.ui.dialog.info.InfoDialogUi
-import io.xxlabs.messenger.util.UiText
+import io.elixxir.core.ui.model.UiText
+
 
 interface WarningDialogUi : InfoDialogUi {
     val buttonText: UiText

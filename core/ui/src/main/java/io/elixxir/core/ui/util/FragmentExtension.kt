@@ -3,11 +3,7 @@ package io.elixxir.core.ui.util
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
-import io.xxlabs.messenger.MessengerApp
-
-fun Fragment.log(message: String) {
-    (requireActivity().application as MessengerApp).logger(message)
-}
+import io.elixxir.core.logging.log
 
 fun Fragment.navigateSafe(directions: NavDirections) {
     try {

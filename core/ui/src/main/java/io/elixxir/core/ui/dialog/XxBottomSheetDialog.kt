@@ -6,7 +6,7 @@ import android.view.View
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import io.xxlabs.messenger.R
+import io.elixxir.core.ui.R
 
 /**
  * Superclass for BottomSheetDialogFragments that launch already expanded.

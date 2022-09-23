@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import io.elixxir.core.logging.log
 import io.elixxir.core.ui.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -35,6 +36,6 @@ fun Context.openLink(url: String) {
         startActivity(chooser)
     } catch (e: Exception) {
         toast(getString(R.string.url_intent_launcher_no_browser_found))
-        Timber.e(e, "Error on loading link $e")
+        log("Error on loading link $e")
     }
 }

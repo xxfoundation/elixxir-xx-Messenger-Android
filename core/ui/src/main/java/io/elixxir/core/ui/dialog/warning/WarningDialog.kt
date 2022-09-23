@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.ComponentWarningDialogBinding
+import io.elixxir.core.ui.R
+import io.elixxir.core.ui.databinding.ComponentWarningDialogBinding
 import io.elixxir.core.ui.dialog.XxBottomSheetDialog
 
 class WarningDialog : XxBottomSheetDialog() {

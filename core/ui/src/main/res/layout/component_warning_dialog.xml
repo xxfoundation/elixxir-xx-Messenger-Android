@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.dialog.warning.WarningDialogUi" />
+            type="io.elixxir.core.ui.dialog.warning.WarningDialogUi" />
     </data>
 
     <androidx.cardview.widget.CardView

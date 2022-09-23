@@ -1,7 +1,7 @@
 package io.elixxir.core.ui.dialog.info
 
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.util.UiText
+import io.elixxir.core.ui.R
+import io.elixxir.core.ui.model.UiText
 import java.io.Serializable
 
 interface InfoDialogUi : Serializable {
