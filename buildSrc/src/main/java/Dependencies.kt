@@ -7,7 +7,7 @@ object Versions {
 }
 
 object Plugins {
-    const val AGP = "7.3.3"
+    const val AGP = "7.2.2"
     const val KOTLIN = "1.7.10"
     const val PROTOBUF = "0.8.18"
     const val GOOGLE_SVCS = "4.3.14"
