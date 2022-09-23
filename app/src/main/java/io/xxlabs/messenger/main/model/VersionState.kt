@@ -1,6 +1,6 @@
-package io.xxlabs.messenger.start.model
+package io.xxlabs.messenger.main.model
 
-import io.xxlabs.messenger.start.ui.VersionAlertUi
+import io.xxlabs.messenger.main.ui.VersionAlertUi
 
 sealed class VersionState
 

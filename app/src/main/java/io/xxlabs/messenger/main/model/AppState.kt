@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.start.model
+package io.xxlabs.messenger.main.model
 
 data class AppState(
     val userState: UserState,

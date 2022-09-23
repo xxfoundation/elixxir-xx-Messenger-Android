@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.start.ui
+package io.xxlabs.messenger.main.ui
 
 import androidx.lifecycle.*
 import com.google.gson.JsonElement
@@ -8,7 +8,7 @@ import io.elixxir.core.logging.log
 import io.elixxir.core.preferences.PreferencesRepository
 import io.elixxir.core.ui.model.UiText
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.start.model.*
+import io.xxlabs.messenger.main.model.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,7 +19,7 @@ import java.io.File
 /**
  * Responsible for minimum version enforcement and initializing core app components.
  */
-class ColdStartViewModel(
+class MainViewModel(
     private val preferences: PreferencesRepository
 ) : ViewModel() {
 

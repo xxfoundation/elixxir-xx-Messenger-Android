@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.start.ui
+package io.xxlabs.messenger.main.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,24 +12,20 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import io.elixxir.feature.home.MainActivity
-import io.elixxir.feature.home.MainActivity.Companion.INTENT_INVITATION
-import io.elixxir.feature.home.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.R
 import io.elixxir.feature.registration.registration.RegistrationFlowActivity
 import io.elixxir.core.ui.util.getTransition
 import io.elixxir.core.ui.util.openLink
-import io.xxlabs.messenger.start.model.*
+import io.xxlabs.messenger.main.model.*
 import kotlinx.coroutines.launch
 
 /**
- * The app entry point when initially launched. Has no UI.
- * Handles Intent (if applicable) and routes to
- * Onboarding (new user) or MainActivity (existing user).
+ * The single Activity that hosts all Fragments.
+ * Responsible for navigation between features and enforces minimum app version.
  */
-class ColdStartActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
-    private val viewModel: ColdStartViewModel by viewModels()
+    private val viewModel: MainViewModel by viewModels()
     private var mainIntent: Intent? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,7 +41,7 @@ class ColdStartActivity : AppCompatActivity() {
         hideSystemBars()
 
         intent?.let { handleIntent(it) }
-        setContentView(R.layout.activity_coldstart)
+        setContentView(R.layout.activity_main)
     }
 
     private fun hideSystemBars() {
@@ -87,7 +83,7 @@ class ColdStartActivity : AppCompatActivity() {
     private fun notificationIntent(intent: Intent) {
         mainIntent = intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
             Intent(
-                this@ColdStartActivity,
+                this@MainActivity,
                 MainActivity::class.java
             ).apply {
                 putExtra(INTENT_NOTIFICATION_CLICK, it)
@@ -123,7 +119,7 @@ class ColdStartActivity : AppCompatActivity() {
 
     private fun navigateToRegistration() {
         val activity = Intent(
-            this@ColdStartActivity,
+            this@MainActivity,
             RegistrationFlowActivity::class.java
         )
 
@@ -134,20 +130,24 @@ class ColdStartActivity : AppCompatActivity() {
 
     private fun navigateToMain() {
         val activity = mainIntent ?: Intent(
-            this@ColdStartActivity,
+            this@MainActivity,
             MainActivity::class.java
         )
 
         val options = getTransition(R.anim.fade_in, R.anim.fade_out)
         startActivity(activity, options)
-        ActivityCompat.finishAfterTransition(this@ColdStartActivity)
+        ActivityCompat.finishAfterTransition(this@MainActivity)
     }
 
     private fun showAlert(alertUi: VersionAlertUi) {
         TODO()
     }
 
-    private fun showError(error: String) {
-        TODO()
+    companion object {
+        const val INTENT_NOTIFICATION_CLICK = "nav_bundle"
+        const val INTENT_PRIVATE_CHAT = "private_message"
+        const val INTENT_GROUP_CHAT = "group_message"
+        const val INTENT_REQUEST = "request"
+        const val INTENT_INVITATION = "invitation"
     }
 }

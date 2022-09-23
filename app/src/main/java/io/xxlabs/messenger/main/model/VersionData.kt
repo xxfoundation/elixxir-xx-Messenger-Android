@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.start.model
+package io.xxlabs.messenger.main.model
 
 import com.google.gson.JsonElement
 import io.xxlabs.messenger.BuildConfig

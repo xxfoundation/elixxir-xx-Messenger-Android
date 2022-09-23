@@ -9,6 +9,6 @@
 
     <activity
         android:id="@+id/coldStartActivity"
-        android:name="io.xxlabs.messenger.start.ui.ColdStartActivity"
+        android:name="io.xxlabs.messenger.main.ui.MainActivity"
         android:label="ColdStartActivity" />
 </navigation>
