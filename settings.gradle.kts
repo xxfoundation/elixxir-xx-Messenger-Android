@@ -22,6 +22,7 @@ include(":data:session")
 // Core modules
 include(":core:ui")
 include(":core:preferences")
+include(":core:logging")
 
 // Resolve dependencies across modules
 include(":depconstraints")
