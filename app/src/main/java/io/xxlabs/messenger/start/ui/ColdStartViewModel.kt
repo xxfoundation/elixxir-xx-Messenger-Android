@@ -4,8 +4,7 @@ import androidx.lifecycle.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import io.elixxir.core.logging.log
-import io.xxlabs.messenger.config.ClientBridge
-import io.xxlabs.messenger.start.data.SessionManager
+import io.elixxir.core.preferences.PreferencesRepository
 import io.xxlabs.messenger.start.model.VersionData
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
@@ -17,8 +16,7 @@ import java.io.File
  * Responsible for minimum version enforcement and initializing core app components.
  */
 class ColdStartViewModel(
-    private val client: ClientBridge,
-    private val sessionManager: SessionManager
+    val preferences: PreferencesRepository
 ) : ViewModel() {
 
     val navigateToRegistration: LiveData<Boolean> by ::_navigateToRegistration
@@ -55,7 +53,7 @@ class ColdStartViewModel(
         } else true
     }
 
-    fun userExists(): Boolean = sessionManager.doesUserExist()
+    fun userExists(): Boolean = preferences.doesUserExist()
 
     private fun clearAppDataAsync() : Deferred<Boolean> {
         return viewModelScope.async {
