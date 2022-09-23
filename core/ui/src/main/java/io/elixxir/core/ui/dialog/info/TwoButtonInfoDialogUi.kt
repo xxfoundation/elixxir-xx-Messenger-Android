@@ -1,6 +1,7 @@
 package io.elixxir.core.ui.dialog.info
 
-import io.xxlabs.messenger.util.UiText
+import io.elixxir.core.ui.model.UiText
+
 
 interface TwoButtonInfoDialogUi : InfoDialogUi {
     val positiveLabel: UiText
