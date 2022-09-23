@@ -55,14 +55,15 @@ class RegistrationFlowActivity : AppCompatActivity(), SnackBarActivity {
     }
 
     private fun onRegistrationComplete() {
-        val activity = Intent(
-            this@RegistrationFlowActivity,
-            MainActivity::class.java
-        )
-
-        val options = getTransition(R.anim.fade_in, R.anim.fade_out)
-        startActivity(activity, options)
-        ActivityCompat.finishAfterTransition(this)
+        // TODO: Explicit deep link to MainActivity in :feature:home module
+//        val activity = Intent(
+//            this@RegistrationFlowActivity,
+//            MainActivity::class.java
+//        )
+//
+//        val options = getTransition(R.anim.fade_in, R.anim.fade_out)
+//        startActivity(activity, options)
+//        ActivityCompat.finishAfterTransition(this)
     }
 
     override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar {
