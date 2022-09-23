@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = Versions.COMPILE_SDK
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 32
+        minSdk = Versions.MIN_SDK
+        targetSdk = Versions.TARGET_SDK
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -33,11 +33,13 @@ android {
 }
 
 dependencies {
+    implementation(project(":depconstraints"))
 
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.6.1")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.3")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+    implementation(Libs.Core.ANDROIDX_APPCOMPAT)
+    implementation(Libs.Core.CORE_KTX)
+    implementation(Libs.Core.CORE_COROUTINES)
+
+    testImplementation(Libs.Testing.CORE_TEST)
+    testImplementation(Libs.Testing.TRUTH)
+    testImplementation(Libs.Testing.JUNIT)
 }
