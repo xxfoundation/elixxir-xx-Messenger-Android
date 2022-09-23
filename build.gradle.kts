@@ -9,6 +9,7 @@ buildscript {
     }
 
     dependencies {
+        classpath("com.android.tools.build:gradle:${Plugins.AGP}")
         classpath("com.google.protobuf:protobuf-gradle-plugin:${Plugins.PROTOBUF}")
         classpath("com.google.gms:google-services:${Plugins.GOOGLE_SVCS}")
         classpath("com.google.firebase:firebase-crashlytics-gradle:${Plugins.CRASHLYTICS}")
