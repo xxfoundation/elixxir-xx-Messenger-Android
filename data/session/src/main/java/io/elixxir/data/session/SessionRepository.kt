@@ -1,4 +1,7 @@
 package io.elixxir.data.session
 
-class SessionRepository {
+interface SessionRepository {
+    fun createSession()
+    fun restoreSession()
+    fun deleteSession()
 }
