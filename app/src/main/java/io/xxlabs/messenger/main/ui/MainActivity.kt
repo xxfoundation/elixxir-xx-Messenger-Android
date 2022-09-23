@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -13,8 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.xxlabs.messenger.R
-import io.elixxir.feature.registration.registration.RegistrationFlowActivity
-import io.elixxir.core.ui.util.getTransition
 import io.elixxir.core.ui.util.openLink
 import io.xxlabs.messenger.main.model.*
 import kotlinx.coroutines.launch
@@ -73,22 +70,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun invitationIntent(username: String) {
-        val intent = Intent(this, MainActivity::class.java).apply {
-            putExtra(INTENT_INVITATION, username)
-        }
-        startActivity(intent)
-        finish()
+        TODO("Go to requests screen")
     }
 
     private fun notificationIntent(intent: Intent) {
-        mainIntent = intent.getBundleExtra(INTENT_NOTIFICATION_CLICK)?.let {
-            Intent(
-                this@MainActivity,
-                MainActivity::class.java
-            ).apply {
-                putExtra(INTENT_NOTIFICATION_CLICK, it)
-            }
-        }
+        TODO("Go to chat/group chat")
     }
 
     private fun observeState() {
@@ -98,10 +84,10 @@ class MainActivity : AppCompatActivity() {
                     when (versionState) {
                         is VersionOk -> {
                             if (userState == UserState.NewUser) navigateToRegistration()
-                            else navigateToMain()
+                            else navigateToHome()
                         }
-                        is UpdateRecommended -> showAlert(versionState.alertUi)
-                        is UpdateRequired -> showAlert(versionState.alertUi)
+                        is UpdateRecommended -> showVersionAlert(versionState.alertUi)
+                        is UpdateRequired -> showVersionAlert(versionState.alertUi)
                         else -> {}
                     }
                 }
@@ -118,29 +104,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToRegistration() {
-        val activity = Intent(
-            this@MainActivity,
-            RegistrationFlowActivity::class.java
-        )
 
-        val options = getTransition(R.anim.hold, R.anim.hold)
-        startActivity(activity, options)
-        ActivityCompat.finishAfterTransition(this)
     }
 
-    private fun navigateToMain() {
-        val activity = mainIntent ?: Intent(
-            this@MainActivity,
-            MainActivity::class.java
-        )
+    private fun navigateToHome() {
 
-        val options = getTransition(R.anim.fade_in, R.anim.fade_out)
-        startActivity(activity, options)
-        ActivityCompat.finishAfterTransition(this@MainActivity)
     }
 
-    private fun showAlert(alertUi: VersionAlertUi) {
-        TODO()
+    private fun showVersionAlert(alertUi: VersionAlertUi) {
+
     }
 
     companion object {
