@@ -9,6 +9,9 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import io.elixxir.feature.home.MainActivity
 import io.elixxir.feature.home.MainActivity.Companion.INTENT_INVITATION
 import io.elixxir.feature.home.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
@@ -16,6 +19,8 @@ import io.xxlabs.messenger.R
 import io.elixxir.feature.registration.registration.RegistrationFlowActivity
 import io.elixxir.core.ui.util.getTransition
 import io.elixxir.core.ui.util.openLink
+import io.xxlabs.messenger.start.model.*
+import kotlinx.coroutines.launch
 
 /**
  * The app entry point when initially launched. Has no UI.
@@ -29,6 +34,13 @@ class ColdStartActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                observeState()
+            }
+        }
+
         WindowCompat.setDecorFitsSystemWindows(window, false)
         hideSystemBars()
 
@@ -83,43 +95,28 @@ class ColdStartActivity : AppCompatActivity() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        observeUi()
-    }
-
-    private fun observeUi() {
-        viewModel.navigateToRegistration.observe(this) { go ->
-            if (go) {
-                navigateToRegistration()
-                viewModel.onNavigationHandled()
+    private fun observeState() {
+        lifecycleScope.launch {
+            viewModel.appState.collect {
+                with(it) {
+                    when (versionState) {
+                        is VersionOk -> {
+                            if (userState == UserState.NewUser) navigateToRegistration()
+                            else navigateToMain()
+                        }
+                        is UpdateRecommended -> showAlert(versionState.alertUi)
+                        is UpdateRequired -> showAlert(versionState.alertUi)
+                        else -> {}
+                    }
+                }
             }
         }
 
-        viewModel.navigateToMain.observe(this) { go ->
-            if (go) {
-                navigateToMain()
-                viewModel.onNavigationHandled()
-            }
-        }
-
-        viewModel.versionAlert.observe(this) { alert ->
-            alert?.let {
-                showAlert(it)
-                viewModel.onVersionAlertShown()
-            }
-        }
-
-        viewModel.error.observe(this) { error ->
-            error?.let {
-                showError(error)
-            }
-        }
-
-        viewModel.navigateToUrl.observe(this) { url ->
-            url?.let {
-                openLink(url)
-                viewModel.onUrlHandled()
+        lifecycleScope.launch {
+            viewModel.launchUrl.collect {
+                it?.let {
+                    openLink(it)
+                }
             }
         }
     }
@@ -147,10 +144,10 @@ class ColdStartActivity : AppCompatActivity() {
     }
 
     private fun showAlert(alertUi: VersionAlertUi) {
-
+        TODO()
     }
 
     private fun showError(error: String) {
-
+        TODO()
     }
 }

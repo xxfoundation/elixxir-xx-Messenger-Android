@@ -3,12 +3,16 @@ package io.xxlabs.messenger.start.ui
 import androidx.lifecycle.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import io.elixxir.core.logging.NotExposedYet
 import io.elixxir.core.logging.log
 import io.elixxir.core.preferences.PreferencesRepository
-import io.xxlabs.messenger.start.model.VersionData
+import io.elixxir.core.ui.model.UiText
+import io.xxlabs.messenger.R
+import io.xxlabs.messenger.start.model.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
 
@@ -19,20 +23,16 @@ class ColdStartViewModel(
     private val preferences: PreferencesRepository
 ) : ViewModel() {
 
-    val navigateToRegistration: LiveData<Boolean> by ::_navigateToRegistration
-    private val _navigateToRegistration = MutableLiveData(false)
+    private val _appState = MutableStateFlow(
+        AppState(userState, Checking())
+    )
+    val appState = _appState.asStateFlow()
 
-    val navigateToMain: LiveData<Boolean> by ::_navigateToMain
-    private val _navigateToMain = MutableLiveData(false)
+    private val _launchUrl = MutableSharedFlow<String?>()
+    val launchUrl = _launchUrl.asSharedFlow()
 
-    val versionAlert: LiveData<VersionAlertUi?> by ::_versionAlert
-    private val _versionAlert = MutableLiveData<VersionAlertUi?>(null)
-
-    val error: LiveData<String?> by ::_error
-    private val _error = MutableLiveData<String?>(null)
-
-    val navigateToUrl: LiveData<String?> by ::_navigateToUrl
-    private val _navigateToUrl = MutableLiveData<String?>(null)
+    private val userState: UserState
+        get() = if (userExists()) UserState.ExistingUser else UserState.NewUser
 
     init {
         initializeApp()
@@ -43,17 +43,22 @@ class ColdStartViewModel(
             maybeClearData()
 //            fetchCommonErrors()
 //            parseJson(downloadRegistrationJson())
-            versionOk()
+            _appState.emit(
+                AppState(
+                    userState = userState,
+                    versionState = VersionOk()
+                )
+            )
         }
     }
+
+    fun userExists(): Boolean = preferences.doesUserExist()
 
     private suspend fun maybeClearData(): Boolean{
         return if (!userExists()) {
             clearAppDataAsync().await()
         } else true
     }
-
-    fun userExists(): Boolean = preferences.doesUserExist()
 
     private fun clearAppDataAsync() : Deferred<Boolean> {
         return viewModelScope.async {
@@ -70,14 +75,14 @@ class ColdStartViewModel(
     }
 
     private fun fetchCommonErrors() {
-        TODO()
+        NotExposedYet()
     }
 
     private fun downloadRegistrationJson(): JsonObject {
-        TODO()
+        NotExposedYet()
     }
 
-    private fun parseJson(json: JsonElement) {
+    private fun parseJson(json: JsonElement): VersionState {
         val registrationWrapper = VersionData.from(json)
         val appVersion = registrationWrapper.appVersion
         val minVersion = registrationWrapper.minVersion
@@ -85,61 +90,59 @@ class ColdStartViewModel(
         val downloadUrl = registrationWrapper.downloadUrl
         val popupMessage = registrationWrapper.minPopupMessage
 
-        when {
-            appVersion < minVersion -> updateRequiredAlert(popupMessage, downloadUrl)
+        return when {
+            appVersion < minVersion -> updateRequired(popupMessage, downloadUrl)
             appVersion >= minVersion && appVersion < recommendedVersion -> {
-                updateRecommendedAlert(downloadUrl)
+                updateRecommended(downloadUrl)
             }
-            else -> versionOk()
+            else -> VersionOk()
         }
     }
 
-    private fun updateRecommendedAlert(downloadUrl: String): VersionAlertUi {
-        TODO()
+    private fun updateRecommended(downloadUrl: String): VersionState {
+        return UpdateRecommended(
+            VersionAlert(
+                title = UiText.StringResource(R.string.version_alert_update_recommended_title),
+                body = UiText.StringResource(R.string.version_alert_update_recommended_subtitle),
+                positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
+                negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
+                onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
+                onNegativeClick = ::onUpdateRecommendedNegativeClick,
+                onDismissed = ::onUpdateRecommendedDismissed,
+                dismissable = true,
+                downloadUrl = downloadUrl
+            )
+        )
     }
 
-    private fun updateRequiredAlert(message: String, downloadUrl: String): VersionAlertUi {
-        TODO()
-    }
-
-    private fun versionOk() {
-        _versionAlert.value = null
-        determineNavigation()
-    }
-
-    private fun determineNavigation() {
-        if (userExists()) {
-            _navigateToMain.value = true
-            _navigateToRegistration.value = false
-        } else {
-            _navigateToRegistration.value = true
-            _navigateToMain.value = false
-        }
-    }
-
-    fun onNavigationHandled() {
-        _navigateToMain.value = null
-        _navigateToRegistration.value = null
-    }
-
-    fun onVersionAlertShown() {
-        _versionAlert.value = null
-    }
-
-    fun onUrlHandled() {
-        _navigateToUrl.value = null
+    private fun updateRequired(message: String, downloadUrl: String): VersionState {
+        return UpdateRequired(
+            VersionAlert(
+                title = UiText.StringResource(R.string.version_alert_update_required_title),
+                body = UiText.DynamicString(message),
+                positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
+                negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
+                onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
+                onNegativeClick = { },
+                onDismissed = { },
+                dismissable = false,
+                downloadUrl = downloadUrl
+            )
+        )
     }
 
     private fun onUpdateRecommendedPositiveClick(url: String) {
-        _navigateToUrl.value = url
+        viewModelScope.launch {
+            _launchUrl.emit(url)
+        }
     }
 
     private fun onUpdateRecommendedNegativeClick() {
-        determineNavigation()
+        onUpdateRecommendedDismissed()
     }
 
     private fun onUpdateRecommendedDismissed() {
-        determineNavigation()
+        _appState.value = AppState(userState, VersionOk())
     }
 
     private fun onUpdateRequiredPositiveClick(url: String) {
