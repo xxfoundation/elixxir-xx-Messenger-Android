@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.registration
+package io.elixxir.feature.registration.registration
 
 import android.content.Intent
 import android.os.Bundle
@@ -11,10 +11,11 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.ActivityRegistrationFlowBinding
 import io.elixxir.core.ui.util.getTransition
-import io.xxlabs.messenger.view.SnackBarActivity
+import io.elixxir.core.ui.view.SnackBarActivity
+import io.elixxir.feature.registration.databinding.ActivityRegistrationFlowBinding
+import io.xxlabs.messenger.registration.RegistrationViewModel
+
 
 /**
  * Presents and handles navigation for registration and restore account UI.

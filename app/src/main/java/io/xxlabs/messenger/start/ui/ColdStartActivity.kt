@@ -13,7 +13,7 @@ import io.elixxir.feature.home.MainActivity
 import io.elixxir.feature.home.MainActivity.Companion.INTENT_INVITATION
 import io.elixxir.feature.home.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.registration.RegistrationFlowActivity
+import io.elixxir.feature.registration.registration.RegistrationFlowActivity
 import io.elixxir.core.ui.util.getTransition
 import io.elixxir.core.ui.util.openLink
 
