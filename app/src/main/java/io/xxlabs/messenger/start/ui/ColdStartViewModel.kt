@@ -16,7 +16,7 @@ import java.io.File
  * Responsible for minimum version enforcement and initializing core app components.
  */
 class ColdStartViewModel(
-    val preferences: PreferencesRepository
+    private val preferences: PreferencesRepository
 ) : ViewModel() {
 
     val navigateToRegistration: LiveData<Boolean> by ::_navigateToRegistration
