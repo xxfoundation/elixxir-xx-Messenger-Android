@@ -14,6 +14,7 @@ include(":app")
 
 // Feature modules
 include(":feature:registration")
+include(":feature:home")
 
 // Data modules
 include(":data:session")
