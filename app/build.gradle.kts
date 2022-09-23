@@ -61,10 +61,6 @@ android {
         all {
             multiDexEnabled = true
 
-            //Shared Keys
-            val localNdf = getNdf()
-
-            buildConfigField("String", "NDF", localNdf)
             setProperty(
                 "archivesBaseName",
                 "${defaultConfig.applicationId}-v${defaultConfig.versionName}-build-${defaultConfig.versionCode}"
@@ -74,75 +70,22 @@ android {
         }
 
         getByName("debug") {
+            versionNameSuffix = "-internal"
             isDebuggable = true
             isMinifyEnabled = false
             isShrinkResources = false
         }
 
-        create("mock") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-Mock"
-            matchingFallbacks += "debug"
-
-            buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
-                "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MOCK"
-            )
-        }
-
-        create("releaseNetDebug") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-ReleaseNetDebug"
-            ndk.debugSymbolLevel = "FULL"
-            matchingFallbacks += "debug"
-
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-
-            buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
-                "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.RELEASE_NET"
-            )
-        }
-
-        create("mainNetDebug") {
-            initWith(getByName("debug"))
-            versionNameSuffix = "-MainNetDebug"
-            matchingFallbacks += "debug"
-
-            buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
-                "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MAIN_NET"
-            )
-        }
-
-        create("mainNet") {
-            isMinifyEnabled = false
+        getByName("release") {
+            versionNameSuffix = "-release"
+            isMinifyEnabled = true
             isDebuggable = false
-            isShrinkResources = false
-            matchingFallbacks += "release"
+            isShrinkResources = true
 
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-
-            buildConfigField(
-                "io.xxlabs.messenger.config.Environment",
-                "ENVIRONMENT",
-                "io.xxlabs.messenger.config.Environment.MAIN_NET"
-            )
-        }
-    }
-
-    android.variantFilter {
-        if(buildType.name == "release" || buildType.name == "debug") {
-            ignore = true
         }
     }
 
@@ -154,27 +97,10 @@ android {
 
     lint {
         lintConfig = file("lint_config.xml")
-//        disable("MissingTranslation")
     }
-
-    packagingOptions.excludes.addAll(
-        listOf(
-            "META-INF/atomicfu.kotlin_module",
-            "META-INF/reflect.kotlin_builtins",
-            "**/attach_hotspot_windows.dll",
-            "META-INF/licenses/**",
-            "META-INF/AL2.0",
-            "META-INF/LGPL2.1",
-            "META-INF/DEPENDENCIES"
-        )
-    )
 
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-
-    configurations.all {
-        resolutionStrategy.force("com.google.code.findbugs:jsr305:2.0.1")
     }
 }
 
@@ -214,16 +140,4 @@ dependencies {
     testImplementation(Libs.Testing.TRUTH)
     testImplementation(Libs.Testing.JUNIT)
     androidTestImplementation(Libs.Testing.EXT_JUNIT)
-}
-
-fun getNdf(): String {
-    val gson = com.google.gson.GsonBuilder()
-        .setLenient()
-        .create()
-
-    val fileContents = file("../ndf.json").readLines()
-    val json = gson.toJson(gson.toJsonTree(fileContents))
-    val parsedNdf = json.substring(1, json.length - 1)
-
-    return parsedNdf
 }
