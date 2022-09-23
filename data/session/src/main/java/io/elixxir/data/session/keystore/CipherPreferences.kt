@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.keystore
+package io.elixxir.data.session.keystore
 
 interface CipherPreferences {
     var userSecret: String

@@ -1,12 +1,12 @@
-package io.xxlabs.messenger.keystore
+package io.elixxir.data.session.keystore
 
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import io.elixxir.core.logging.log
+import io.elixxir.data.session.util.fromBase64toByteArray
+import io.elixxir.data.session.util.toBase64String
 import io.elixxir.xxclient.bindings.Bindings
-import io.xxlabs.messenger.util.fromBase64toByteArray
-import io.xxlabs.messenger.util.toBase64String
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

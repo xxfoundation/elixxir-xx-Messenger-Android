@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.util
+package io.elixxir.data.session.util
 
 import android.util.Base64
 
