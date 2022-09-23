@@ -33,6 +33,7 @@ class ColdStartActivity : AppCompatActivity() {
         hideSystemBars()
 
         intent?.let { handleIntent(it) }
+        setContentView(R.layout.activity_coldstart)
     }
 
     private fun hideSystemBars() {
