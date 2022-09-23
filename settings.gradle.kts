@@ -1,22 +1,13 @@
-pluginManagement {
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         gradlePluginPortal()
         google()
         mavenCentral()
         maven(url = "https://jitpack.io")
-        maven(url = "https://maven.appspector.com/artifactory/android-sdk")
-        maven(url = "https://oss.jfrog.org/libs-snapshot")
-        maven(url = "https://oss.sonatype.org/content/repositories/snapshots")
     }
 }
 
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
 rootProject.name = "xx Messenger"
 
 include(":app")
