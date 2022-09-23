@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation(project(":depconstraints"))
+    implementation(project(":core:preferences"))
 
     implementation(platform(Libs.Logging.FIREBASE_BOM))
     implementation(Libs.Logging.CRASHLYTICS)
