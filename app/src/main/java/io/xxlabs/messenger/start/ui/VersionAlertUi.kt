@@ -1,8 +1,8 @@
 package io.xxlabs.messenger.start.ui
 
-import io.xxlabs.messenger.dialog.info.SpanConfig
-import io.xxlabs.messenger.dialog.info.TwoButtonInfoDialogUi
-import io.xxlabs.messenger.util.UiText
+import io.elixxir.core.ui.dialog.info.SpanConfig
+import io.elixxir.core.ui.dialog.info.TwoButtonInfoDialogUi
+import io.elixxir.core.ui.model.UiText
 
 interface VersionAlertUi : TwoButtonInfoDialogUi {
     val dismissable: Boolean

@@ -3,6 +3,7 @@ package io.xxlabs.messenger.keystore
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
+import io.elixxir.core.logging.log
 import io.elixxir.xxclient.bindings.Bindings
 import io.xxlabs.messenger.util.fromBase64toByteArray
 import io.xxlabs.messenger.util.toBase64String
@@ -20,7 +21,6 @@ import kotlin.system.measureTimeMillis
 class XxmKeystore(
     private val bindings: Bindings,
     private val preferences: CipherPreferences,
-    private val log: (String) -> Unit,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : KeyStoreManager {
 

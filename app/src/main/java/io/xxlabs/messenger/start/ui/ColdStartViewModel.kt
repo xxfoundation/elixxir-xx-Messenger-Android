@@ -3,6 +3,7 @@ package io.xxlabs.messenger.start.ui
 import androidx.lifecycle.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import io.elixxir.core.logging.log
 import io.xxlabs.messenger.config.ClientBridge
 import io.xxlabs.messenger.start.data.SessionManager
 import io.xxlabs.messenger.start.model.VersionData
@@ -10,7 +11,6 @@ import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import java.io.File
 
 /**
@@ -61,9 +61,9 @@ class ColdStartViewModel(
         return viewModelScope.async {
             File("Session folder").apply {
                 if (exists()) {
-                    Timber.v("Bindings folder from previous installation was found.")
-                    Timber.v("It contains ${listFiles()?.size ?: 0} files.")
-                    Timber.v("Deleting!")
+                    log("Bindings folder from previous installation was found.")
+                    log("It contains ${listFiles()?.size ?: 0} files.")
+                    log("Deleting!")
                     deleteRecursively()
                 }
             }

@@ -113,6 +113,7 @@ dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":core:preferences"))
     implementation(project(":core:ui"))
+    implementation(project(":core:logging"))
     implementation(project(":feature:home"))
     implementation(project(":feature:registration"))
 
@@ -133,10 +134,6 @@ dependencies {
 
     implementation(Libs.Media.GLIDE)
     kapt(Libs.Media.GLIDE_KAPT)
-
-    implementation(platform(Libs.Logging.FIREBASE_BOM))
-    implementation(Libs.Logging.CRASHLYTICS)
-    implementation(Libs.Logging.TIMBER)
 
     testImplementation(Libs.Testing.CORE_TEST)
     testImplementation(Libs.Testing.TRUTH)

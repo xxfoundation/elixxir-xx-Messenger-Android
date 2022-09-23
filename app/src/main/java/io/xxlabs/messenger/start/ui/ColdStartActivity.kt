@@ -9,13 +9,13 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import io.xxlabs.messenger.MainActivity
-import io.xxlabs.messenger.MainActivity.Companion.INTENT_INVITATION
-import io.xxlabs.messenger.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
+import io.elixxir.feature.home.MainActivity
+import io.elixxir.feature.home.MainActivity.Companion.INTENT_INVITATION
+import io.elixxir.feature.home.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.registration.RegistrationFlowActivity
-import io.xxlabs.messenger.util.getTransition
-import io.xxlabs.messenger.util.openLink
+import io.elixxir.core.ui.util.getTransition
+import io.elixxir.core.ui.util.openLink
 
 /**
  * The app entry point when initially launched. Has no UI.
