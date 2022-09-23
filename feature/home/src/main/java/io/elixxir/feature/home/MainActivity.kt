@@ -1,4 +1,4 @@
-package io.xxlabs.messenger
+package io.elixxir.feature.home
 
 import androidx.appcompat.app.AppCompatActivity
 
