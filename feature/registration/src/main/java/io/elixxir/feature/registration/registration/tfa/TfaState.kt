@@ -1,7 +1,8 @@
-package io.xxlabs.messenger.ui.intro.registration.tfa
+package io.elixxir.feature.registration.registration.tfa
 
 import android.text.Spanned
 import androidx.lifecycle.LiveData
+import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 
 interface TfaState {
     val retryClicked: LiveData<Boolean>

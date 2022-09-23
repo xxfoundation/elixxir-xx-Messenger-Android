@@ -11,12 +11,10 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.snackbar.Snackbar
-import io.xxlabs.messenger.MainActivity
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ActivityRegistrationFlowBinding
-import io.xxlabs.messenger.util.getTransition
+import io.elixxir.core.ui.util.getTransition
 import io.xxlabs.messenger.view.SnackBarActivity
-import kotlinx.coroutines.flow.collect
 
 /**
  * Presents and handles navigation for registration and restore account UI.

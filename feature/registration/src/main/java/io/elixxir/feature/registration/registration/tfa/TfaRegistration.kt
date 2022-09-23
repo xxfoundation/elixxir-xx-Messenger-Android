@@ -4,6 +4,7 @@ import android.app.Application
 import android.text.Spanned
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.elixxir.feature.registration.registration.tfa.TfaState
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.data.datatype.FactType

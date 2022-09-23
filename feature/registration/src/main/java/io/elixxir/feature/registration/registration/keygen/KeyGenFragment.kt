@@ -10,8 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import io.xxlabs.messenger.databinding.FragmentKeygenBinding
 import io.xxlabs.messenger.dialog.warning.WarningDialog
 import io.xxlabs.messenger.dialog.warning.WarningDialogUi
-import io.xxlabs.messenger.util.navigateSafe
-import kotlinx.coroutines.flow.collect
+import io.elixxir.core.ui.util.navigateSafe
 
 class KeyGenFragment : Fragment() {
 

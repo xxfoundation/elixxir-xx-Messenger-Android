@@ -34,10 +34,18 @@ android {
 
 dependencies {
     implementation(project(":depconstraints"))
+    implementation(project(":core:preferences"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:logging"))
+    implementation(project(":core:preferences"))
+    implementation(project(":data:session"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)
     implementation(Libs.Core.CORE_COROUTINES)
+
+    implementation(Libs.Ui.NAVIGATION)
+    implementation(Libs.Ui.NAVIGATION_UI)
 
     testImplementation(Libs.Testing.CORE_TEST)
     testImplementation(Libs.Testing.TRUTH)
