@@ -1,6 +1,6 @@
-package io.xxlabs.messenger.dialog.warning
+package io.elixxir.core.ui.dialog.warning
 
-import io.xxlabs.messenger.dialog.info.InfoDialogUi
+import io.elixxir.core.ui.dialog.info.InfoDialogUi
 import io.xxlabs.messenger.util.UiText
 
 interface WarningDialogUi : InfoDialogUi {

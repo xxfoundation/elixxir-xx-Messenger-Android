@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.view
+package io.elixxir.core.ui.view
 
 import android.content.Context
 import android.util.AttributeSet

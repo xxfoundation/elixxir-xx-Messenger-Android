@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.util
+package io.elixxir.core.ui.model
 
 import android.content.Context
 import androidx.annotation.StringRes

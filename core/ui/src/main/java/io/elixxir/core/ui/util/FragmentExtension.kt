@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.util
+package io.elixxir.core.ui.util
 
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavDirections

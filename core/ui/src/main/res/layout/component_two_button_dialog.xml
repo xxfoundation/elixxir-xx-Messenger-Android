@@ -41,7 +41,7 @@
                 tools:text="@string/lorem_paragraph"
                 style="@style/BodyText" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.elixxir.core.ui.view.SingleClickButton
                 android:id="@+id/info_dialog_ok_button"
                 style="@style/FilledButton"
                 android:layout_marginTop="@dimen/inner_view_marginVertical"
@@ -56,7 +56,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/info_dialog_body" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.elixxir.core.ui.view.SingleClickButton
                 android:id="@+id/info_dialog_cancel_button"
                 app:uiText="@{ui.negativeLabel}"
                 android:layout_marginEnd="@dimen/inner_view_marginHorizontal"

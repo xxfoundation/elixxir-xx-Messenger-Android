@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.dialog.warning
+package io.elixxir.core.ui.dialog.warning
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentWarningDialogBinding
-import io.xxlabs.messenger.dialog.XxBottomSheetDialog
+import io.elixxir.core.ui.dialog.XxBottomSheetDialog
 
 class WarningDialog : XxBottomSheetDialog() {
 

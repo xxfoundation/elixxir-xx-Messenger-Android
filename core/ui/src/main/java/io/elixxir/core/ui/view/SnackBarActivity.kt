@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.view
+package io.elixxir.core.ui.view
 
 import com.google.android.material.snackbar.Snackbar
 

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Rounded corner radius -->
+
+    <dimen name="rounded_corner_big_radius">32dp</dimen>
+    <dimen name="rounded_corner_medium_radius">30dp</dimen>
+
+    <!-- View spacing -->
+
+    <!-- Was: "registration_vertical_margin" -->
+    <dimen name="top_view_marginTop">90dp</dimen>
+    <!-- Was: "registration_body_vertical_margin" -->
+    <dimen name="inner_view_marginVertical">16dp</dimen>
+    <!-- Was: "registration_horizontal_margin" -->
+    <dimen name="inner_view_marginHorizontal">38dp</dimen>
+    <!-- Was: "registration_body_text_size -->
+    <dimen name="body_textSize">18sp</dimen>
+
+    <!-- Dialog dimens -->
+
+    <!-- Was: "registration_dialog_title_text_size" -->
+    <dimen name="dialog_title_textSize">26sp</dimen>
+    <dimen name="bottom_sheet_dialog_corner_radius">@dimen/rounded_corner_big_radius</dimen>
+
+    <!-- Button dimens -->
+
+    <!-- Was: registration_button_height" -->
+    <dimen name="button_layoutHeight">52dp</dimen>
+    <!-- Was: registration_dialog_button_width -->
+    <dimen name="button_layoutWidth">150dp</dimen>
+    <dimen name="button_corner_radius">@dimen/rounded_corner_medium_radius</dimen>
+
+    <!-- Uncategorized -->
+
+    <dimen name="splash_text_vertical_margin">40dp</dimen>
+    <dimen name="splash_text_horizontal_margin">20dp</dimen>
+</resources>

@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.dialog.info
+package io.elixxir.core.ui.dialog.info
 
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.util.UiText

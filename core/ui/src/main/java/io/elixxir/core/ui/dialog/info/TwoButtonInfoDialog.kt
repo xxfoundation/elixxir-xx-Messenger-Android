@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.dialog.info
+package io.elixxir.core.ui.dialog.info
 
 import android.content.DialogInterface
 import android.os.Bundle
@@ -13,8 +13,8 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTwoButtonDialogBinding
-import io.xxlabs.messenger.dialog.XxBottomSheetDialog
-import io.xxlabs.messenger.util.setUiText
+import io.elixxir.core.ui.dialog.XxBottomSheetDialog
+import io.elixxir.core.ui.util.setUiText
 
 /**
  * An info dialog with positive and negative buttons.

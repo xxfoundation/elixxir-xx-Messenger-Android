@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.dialog
+package io.elixxir.core.ui.dialog
 
 
 import android.os.Bundle

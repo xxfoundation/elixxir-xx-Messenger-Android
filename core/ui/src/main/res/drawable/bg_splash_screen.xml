@@ -1,0 +1,11 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- A solid background fill -->
+    <item
+        android:drawable="@drawable/bg_brand_gradient"/>
+    <item
+        android:width="350dp"
+        android:height="350dp"
+        android:drawable="@drawable/ic_xxm_logo"
+        android:gravity="center" />
+</layer-list>

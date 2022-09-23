@@ -42,7 +42,7 @@
                 tools:text="@string/lorem_paragraph"
                 style="@style/BodyText" />
 
-            <io.xxlabs.messenger.view.SingleClickButton
+            <io.elixxir.core.ui.view.SingleClickButton
                 android:id="@+id/confirm_dialog_button"
                 style="@style/FilledButton"
                 android:layout_width="0dp"

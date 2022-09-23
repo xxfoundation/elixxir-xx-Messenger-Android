@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.util
+package io.elixxir.core.ui.util
 
 import android.app.ActivityOptions
 import android.content.Context
@@ -6,11 +6,10 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import io.xxlabs.messenger.R
+import io.elixxir.core.ui.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 fun Context.getTransition(enterAnim: Int, exitAnim: Int): Bundle? {
     val options: ActivityOptions = ActivityOptions.makeCustomAnimation(
