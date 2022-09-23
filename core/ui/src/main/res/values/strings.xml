@@ -1,15 +1,4 @@
 <resources>
-    <string name="app_name">xx messenger</string>
-
-    <!-- Version enforcement message -->
-
-    <string name="version_alert_update_required_title">App Update</string>
-    <string name="version_alert_update_recommended_title">@string/version_alert_update_required_title</string>
-    <string name="version_alert_update_recommended_subtitle">There is a new version available that enhance the current performance and usability.</string>
-    <string name="version_alert_update_required_positive_label">OK</string>
-    <string name="version_alert_update_recommended_positive_label">Update</string>
-    <string name="version_alert_update_recommended_negative_label">Not now</string>
-
     <!-- URL intent launcher-->
 
     <string name="url_intent_launcher_title">Choose your browser</string>
@@ -22,11 +11,4 @@
     <string name="lorem_paragraph">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum egestas nisl eu neque iaculis, at consequat nisl sollicitudin. Nulla suscipit sit amet erat feugiat luctus. Sed luctus et risus eu sodales. Donec tincidunt semper sapien, vel tristique lorem laoreet ut. Curabitur dictum tempor magna, ac condimentum nisl tincidunt nec.
     </string>
-
-    <!-- KeyGenFragment -->
-
-    <string name="keygen_generating_text">Generating secured cryptographic keys…</string>
-    <string name="keygen_generation_error_title">Failed to generate secure keys</string>
-    <string name="keygen_generation_error_body">An error occurred while generating keys. Please try again.</string>
-    <string name="keygen_generation_error_button">Try again</string>
 </resources>
