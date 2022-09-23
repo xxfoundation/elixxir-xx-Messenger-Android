@@ -1,12 +1,18 @@
 object Versions {
-    const val ANDROID_GRADLE_PLUGIN = "7.1.2"
-    const val KOTLIN = "1.7.30"
-
     const val COMPILE_SDK = 31
     const val MIN_SDK = 26
     const val TARGET_SDK = 32
     const val VERSION_CODE = 629
     const val VERSION_NAME = "3.0"
+}
+
+object Plugins {
+    const val AGP = "7.1.2"
+    const val KOTLIN = "1.7.10"
+    const val PROTOBUF = "0.8.18"
+    const val GOOGLE_SVCS = "4.3.14"
+    const val CRASHLYTICS = "2.9.2"
+    const val NAVIGATION_SAFEARGS = "2.5.2"
 }
 
 object Libs {
