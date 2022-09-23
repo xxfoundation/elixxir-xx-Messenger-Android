@@ -110,8 +110,11 @@ kapt {
 
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation(project(":xxclient"))
     implementation(project(":depconstraints"))
+    implementation(project(":core:preferences"))
+    implementation(project(":core:ui"))
+    implementation(project(":feature:home"))
+    implementation(project(":feature:registration"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)
@@ -124,7 +127,6 @@ dependencies {
     implementation(Libs.Ui.NAVIGATION)
     implementation(Libs.Ui.NAVIGATION_UI)
 
-    implementation(Libs.Data.PREFERENCE)
     implementation(Libs.Data.PHONE_NUMBER)
     implementation(Libs.Data.GSON)
     implementation(Libs.Data.PROTOBUF)
