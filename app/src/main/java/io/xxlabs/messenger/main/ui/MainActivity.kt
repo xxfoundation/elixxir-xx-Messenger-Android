@@ -4,51 +4,39 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import io.xxlabs.messenger.R
 import io.elixxir.core.ui.util.openLink
+import io.xxlabs.messenger.databinding.ActivityMainBinding
 import io.xxlabs.messenger.main.model.*
+import io.xxlabs.messenger.main.window.WindowManager
 import kotlinx.coroutines.launch
 
 /**
  * The single Activity that hosts all Fragments.
  * Responsible for navigation between features and enforces minimum app version.
  */
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), WindowManager {
 
     private val viewModel: MainViewModel by viewModels()
-    private var mainIntent: Intent? = null
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 observeState()
             }
         }
 
-        WindowCompat.setDecorFitsSystemWindows(window, false)
-        hideSystemBars()
-
         intent?.let { handleIntent(it) }
-        setContentView(R.layout.activity_main)
-    }
 
-    private fun hideSystemBars() {
-        val windowInsetsController =
-            ViewCompat.getWindowInsetsController(window.decorView) ?: return
-        // Configure the behavior of the hidden system bars
-        windowInsetsController.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        // Hide both the status bar and the navigation bar
-        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars())
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -70,11 +58,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun invitationIntent(username: String) {
-        TODO("Go to requests screen")
+        TODO("Navigate to requests screen")
     }
 
     private fun notificationIntent(intent: Intent) {
-        TODO("Go to chat/group chat")
+        TODO("Navigate to chat/group chat")
     }
 
     private fun observeState() {
@@ -84,10 +72,10 @@ class MainActivity : AppCompatActivity() {
                     when (versionState) {
                         is VersionOk -> {
                             if (userState == UserState.NewUser) navigateToRegistration()
-                            else navigateToHome()
+                            else navigateToMain()
                         }
-                        is UpdateRecommended -> showVersionAlert(versionState.alertUi)
-                        is UpdateRequired -> showVersionAlert(versionState.alertUi)
+                        is UpdateRecommended -> showAlert(versionState.alertUi)
+                        is UpdateRequired -> showAlert(versionState.alertUi)
                         else -> {}
                     }
                 }
@@ -104,15 +92,38 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun navigateToRegistration() {
-
+        TODO("Navigate to nav_registration graph")
     }
 
-    private fun navigateToHome() {
-
+    private fun navigateToMain() {
+        TODO("Navigate to nav_main graph")
     }
 
-    private fun showVersionAlert(alertUi: VersionAlertUi) {
+    private fun showAlert(alertUi: VersionAlertUi) {
+        TODO()
+    }
 
+    override fun setFullScreen(fullScreen: Boolean) {
+        if (fullScreen) {
+            hideSystemUI()
+        } else {
+            showSystemUI()
+        }
+    }
+
+    private fun hideSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, binding.root).let { controller ->
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
+    }
+
+    private fun showSystemUI() {
+        WindowCompat.setDecorFitsSystemWindows(window, true)
+        WindowInsetsControllerCompat(window, binding.root)
+            .show(WindowInsetsCompat.Type.systemBars())
     }
 
     companion object {
