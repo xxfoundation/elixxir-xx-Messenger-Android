@@ -5,6 +5,7 @@ plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
     id("androidx.navigation.safeargs")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -105,7 +106,7 @@ android {
 }
 
 kapt {
-    useBuildCache = true
+    correctErrorTypes = true
 }
 
 dependencies {
@@ -131,6 +132,9 @@ dependencies {
     implementation(Libs.Data.PHONE_NUMBER)
     implementation(Libs.Data.GSON)
     implementation(Libs.Data.PROTOBUF)
+
+    implementation(Libs.DI.HILT)
+    kapt(Libs.DI.HILT_KAPT)
     
     testImplementation(Libs.Testing.CORE_TEST)
     testImplementation(Libs.Testing.TRUTH)

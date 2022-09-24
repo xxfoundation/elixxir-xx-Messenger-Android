@@ -39,8 +39,9 @@ object Libs {
     }
 
     object Media {
+        const val GLIDE_VERSION = "4.12.0"
         const val GLIDE = "com.github.bumptech.glide:glide"
-        const val GLIDE_KAPT = "com.github.bumptech.glide:compiler"
+        const val GLIDE_KAPT = "com.github.bumptech.glide:compiler:$GLIDE_VERSION"
     }
 
     object Logging {
@@ -54,5 +55,11 @@ object Libs {
         const val JUNIT = "junit:junit"
         const val TRUTH = "com.google.truth:truth"
         const val EXT_JUNIT = "androidx.test.ext:junit"
+    }
+
+    object DI {
+        const val HILT_VERSION = "2.38.1"
+        const val HILT = "com.google.dagger:hilt-android"
+        const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:$HILT_VERSION"
     }
 }

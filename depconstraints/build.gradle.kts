@@ -12,7 +12,8 @@ val coroutines = "1.6.1"
 val extJunit = "1.1.3"
 val firebase = "27.0.0"
 val gson = "2.8.9"
-val glide = "4.12.0"
+val glide = Libs.Media.GLIDE_VERSION
+val hilt = Libs.DI.HILT_VERSION
 val junit = "4.13.2"
 val material = "1.6.1"
 val navigation = "2.5.2"
@@ -39,7 +40,6 @@ dependencies {
         api("${Libs.Data.GSON}:$gson")
         api("${Libs.Data.PROTOBUF}:$protobuf")
         api("${Libs.Media.GLIDE}:$glide")
-        api("${Libs.Media.GLIDE_KAPT}:$glide")
         api(Libs.Logging.CRASHLYTICS)
         api("${Libs.Logging.FIREBASE_BOM}:$firebase")
         api("${Libs.Logging.TIMBER}:$timber")
@@ -47,6 +47,7 @@ dependencies {
         api("${Libs.Testing.JUNIT}:$junit")
         api("${Libs.Testing.TRUTH}:$truth")
         api("${Libs.Testing.EXT_JUNIT}:$extJunit")
+        api("${Libs.DI.HILT}:$hilt")
     }
 }
 

@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -32,6 +34,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(project(":depconstraints"))
 
@@ -39,6 +45,9 @@ dependencies {
     implementation(Libs.Core.CORE_KTX)
 
     implementation(Libs.Data.PREFERENCE)
+
+    implementation(Libs.DI.HILT)
+    kapt(Libs.DI.HILT_KAPT)
 
     testImplementation(Libs.Testing.CORE_TEST)
     testImplementation(Libs.Testing.TRUTH)
