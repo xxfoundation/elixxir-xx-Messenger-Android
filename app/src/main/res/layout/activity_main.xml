@@ -15,7 +15,7 @@
         tools:context="io.xxlabs.messenger.main.ui.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
-            android:id="@+id/registrationNavHost"
+            android:id="@+id/mainNavHost"
             android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
