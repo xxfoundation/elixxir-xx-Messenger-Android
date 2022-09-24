@@ -136,10 +136,10 @@ class MainActivity : AppCompatActivity(), WindowManager, SnackBarActivity {
     }
 
     companion object {
-        const val INTENT_NOTIFICATION_CLICK = "nav_bundle"
-        const val INTENT_PRIVATE_CHAT = "private_message"
-        const val INTENT_GROUP_CHAT = "group_message"
-        const val INTENT_REQUEST = "request"
-        const val INTENT_INVITATION = "invitation"
+        private const val INTENT_NOTIFICATION_CLICK = "nav_bundle"
+        private const val INTENT_PRIVATE_CHAT = "private_message"
+        private const val INTENT_GROUP_CHAT = "group_message"
+        private const val INTENT_REQUEST = "request"
+        private const val INTENT_INVITATION = "invitation"
     }
 }
