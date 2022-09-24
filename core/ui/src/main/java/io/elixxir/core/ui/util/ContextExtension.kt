@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import io.elixxir.core.logging.log
 import io.elixxir.core.ui.R
 import kotlinx.coroutines.Dispatchers
@@ -24,6 +25,10 @@ fun Context.toast(message: String) {
     GlobalScope.launch(context = Dispatchers.Main) {
         Toast.makeText(applicationContext, message, Toast.LENGTH_LONG).show()
     }
+}
+
+fun Fragment.openLink(url: String) {
+    requireContext().openLink(url)
 }
 
 fun Context.openLink(url: String) {

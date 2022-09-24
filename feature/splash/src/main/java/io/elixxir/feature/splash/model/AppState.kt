@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.main.model
+package io.elixxir.feature.splash.model
 
 data class AppState(
     val userState: UserState,

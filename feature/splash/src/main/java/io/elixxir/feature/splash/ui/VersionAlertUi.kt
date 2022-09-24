@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.main.ui
+package io.elixxir.feature.splash.ui
 
 import io.elixxir.core.ui.dialog.info.SpanConfig
 import io.elixxir.core.ui.dialog.info.TwoButtonInfoDialogUi

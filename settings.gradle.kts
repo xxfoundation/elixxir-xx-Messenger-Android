@@ -13,6 +13,7 @@ rootProject.name = "xx Messenger"
 include(":app")
 
 // Feature modules
+include(":feature:splash")
 include(":feature:registration")
 include(":feature:home")
 

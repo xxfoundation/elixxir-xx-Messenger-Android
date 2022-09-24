@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.main.window
+package io.xxlabs.messenger.ui
 
 interface WindowManager {
     fun setFullScreen(fullScreen: Boolean)

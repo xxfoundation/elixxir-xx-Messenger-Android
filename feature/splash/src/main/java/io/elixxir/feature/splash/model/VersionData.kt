@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.main.model
+package io.elixxir.feature.splash.model
 
 import com.google.gson.JsonElement
 import io.xxlabs.messenger.BuildConfig

@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/brand_background"
-        tools:context="io.xxlabs.messenger.main.ui.MainActivity">
+        tools:context="io.xxlabs.messenger.ui.MainActivity">
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/mainNavHost"

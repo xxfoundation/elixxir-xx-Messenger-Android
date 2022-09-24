@@ -117,6 +117,7 @@ dependencies {
     implementation(project(":core:logging"))
     implementation(project(":feature:home"))
     implementation(project(":feature:registration"))
+    implementation(project(":feature:splash"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)

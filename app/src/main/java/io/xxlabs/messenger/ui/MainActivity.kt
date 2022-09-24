@@ -1,40 +1,27 @@
-package io.xxlabs.messenger.main.ui
+package io.xxlabs.messenger.ui
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.snackbar.Snackbar
-import io.elixxir.core.ui.util.openLink
+import dagger.hilt.android.AndroidEntryPoint
 import io.elixxir.core.ui.view.SnackBarActivity
 import io.xxlabs.messenger.databinding.ActivityMainBinding
-import io.xxlabs.messenger.main.model.*
-import io.xxlabs.messenger.main.window.WindowManager
-import kotlinx.coroutines.launch
 
 /**
  * The single Activity that hosts all Fragments.
  * Responsible for navigation between features and enforces minimum app version.
  */
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity(), WindowManager, SnackBarActivity {
 
-    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        lifecycleScope.launch {
-            repeatOnLifecycle(Lifecycle.State.STARTED) {
-                observeState()
-            }
-        }
-
         intent?.let { handleIntent(it) }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -49,7 +36,7 @@ class MainActivity : AppCompatActivity(), WindowManager, SnackBarActivity {
     private fun handleIntent(intent: Intent) {
         // Invitations can only be handled if the user has an account.
         // Only a valid user can receive notifications.
-        if (!viewModel.userExists()) return
+//        if (!viewModel.userExists()) return
 
         if (Intent.ACTION_VIEW == intent.action) {
             // Implicit Intent from an invitation link
@@ -65,44 +52,6 @@ class MainActivity : AppCompatActivity(), WindowManager, SnackBarActivity {
 
     private fun notificationIntent(intent: Intent) {
         TODO("Navigate to chat/group chat")
-    }
-
-    private fun observeState() {
-        lifecycleScope.launch {
-            viewModel.appState.collect {
-                with(it) {
-                    when (versionState) {
-                        is VersionOk -> {
-                            if (userState == UserState.NewUser) navigateToRegistration()
-                            else navigateToMain()
-                        }
-                        is UpdateRecommended -> showAlert(versionState.alertUi)
-                        is UpdateRequired -> showAlert(versionState.alertUi)
-                        else -> {}
-                    }
-                }
-            }
-        }
-
-        lifecycleScope.launch {
-            viewModel.launchUrl.collect {
-                it?.let {
-                    openLink(it)
-                }
-            }
-        }
-    }
-
-    private fun navigateToRegistration() {
-        TODO("Navigate to nav_registration graph")
-    }
-
-    private fun navigateToMain() {
-        TODO("Navigate to nav_main graph")
-    }
-
-    private fun showAlert(alertUi: VersionAlertUi) {
-        TODO()
     }
 
     override fun setFullScreen(fullScreen: Boolean) {

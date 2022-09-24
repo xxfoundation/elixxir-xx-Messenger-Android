@@ -1,12 +1,14 @@
-package io.xxlabs.messenger.main.ui
+package io.elixxir.feature.splash.ui
 
 import androidx.lifecycle.*
 import com.google.gson.JsonElement
 import com.google.gson.JsonObject
+import dagger.hilt.android.lifecycle.HiltViewModel
 import io.elixxir.core.logging.NotExposedYet
 import io.elixxir.core.logging.log
 import io.elixxir.core.preferences.PreferencesRepository
 import io.elixxir.core.ui.model.UiText
+import io.elixxir.feature.splash.model.*
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.main.model.*
 import kotlinx.coroutines.Deferred
@@ -15,11 +17,14 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
+import javax.inject.Inject
+import io.elixxir.feature.splash.model.UpdateRecommended as UpdateRecommended
 
 /**
  * Responsible for minimum version enforcement and initializing core app components.
  */
-class MainViewModel(
+@HiltViewModel
+class SplashScreenViewModel @Inject constructor(
     private val preferences: PreferencesRepository
 ) : ViewModel() {
 

@@ -1,6 +1,6 @@
-package io.xxlabs.messenger.main.model
+package io.elixxir.feature.splash.model
 
-import io.xxlabs.messenger.main.ui.VersionAlertUi
+import io.elixxir.feature.splash.ui.VersionAlertUi
 
 sealed class VersionState
 
