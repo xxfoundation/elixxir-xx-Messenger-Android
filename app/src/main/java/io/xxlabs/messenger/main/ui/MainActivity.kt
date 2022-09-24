@@ -10,7 +10,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import com.google.android.material.snackbar.Snackbar
 import io.elixxir.core.ui.util.openLink
+import io.elixxir.core.ui.view.SnackBarActivity
 import io.xxlabs.messenger.databinding.ActivityMainBinding
 import io.xxlabs.messenger.main.model.*
 import io.xxlabs.messenger.main.window.WindowManager
@@ -20,7 +22,7 @@ import kotlinx.coroutines.launch
  * The single Activity that hosts all Fragments.
  * Responsible for navigation between features and enforces minimum app version.
  */
-class MainActivity : AppCompatActivity(), WindowManager {
+class MainActivity : AppCompatActivity(), WindowManager, SnackBarActivity {
 
     private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
@@ -124,6 +126,13 @@ class MainActivity : AppCompatActivity(), WindowManager {
         WindowCompat.setDecorFitsSystemWindows(window, true)
         WindowInsetsControllerCompat(window, binding.root)
             .show(WindowInsetsCompat.Type.systemBars())
+    }
+
+    override fun createSnackMessage(msg: String, forceMessage: Boolean): Snackbar {
+        return Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).apply {
+            view.translationZ = 10f
+            show()
+        }
     }
 
     companion object {
