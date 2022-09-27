@@ -40,7 +40,7 @@ android {
 
 dependencies {
     implementation(project(":depconstraints"))
-    implementation(project(":core:logging"))
+    implementation(project(":core:common"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)

@@ -25,7 +25,7 @@ include(":data:user")
 // Core modules
 include(":core:ui")
 include(":core:preferences")
-include(":core:logging")
+include(":core:common")
 include(":core:networking")
 
 

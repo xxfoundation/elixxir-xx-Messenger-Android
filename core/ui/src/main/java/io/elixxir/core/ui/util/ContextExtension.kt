@@ -7,7 +7,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import io.elixxir.core.logging.log
+import io.elixxir.core.common.log
 import io.elixxir.core.ui.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

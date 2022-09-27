@@ -1,6 +1,6 @@
 package io.elixxir.data.networking.data
 
-import io.elixxir.core.logging.log
+import io.elixxir.core.common.log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext

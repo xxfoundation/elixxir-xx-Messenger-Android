@@ -41,7 +41,7 @@ kapt {
 dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":xxclient"))
-    implementation(project(":core:logging"))
+    implementation(project(":core:common"))
     implementation(project(":core:preferences"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)

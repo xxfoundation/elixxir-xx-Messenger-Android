@@ -108,7 +108,7 @@ dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":core:preferences"))
     implementation(project(":core:ui"))
-    implementation(project(":core:logging"))
+    implementation(project(":core:common"))
     implementation(project(":feature:home"))
     implementation(project(":feature:registration"))
     implementation(project(":feature:splash"))

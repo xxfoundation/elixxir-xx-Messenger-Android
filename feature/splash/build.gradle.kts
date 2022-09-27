@@ -41,7 +41,7 @@ kapt {
 dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":core:ui"))
-    implementation(project(":core:logging"))
+    implementation(project(":core:common"))
     implementation(project(":data:version"))
     implementation(project(":data:session"))
 

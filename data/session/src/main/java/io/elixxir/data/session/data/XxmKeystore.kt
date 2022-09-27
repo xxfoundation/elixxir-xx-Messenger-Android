@@ -3,7 +3,7 @@ package io.elixxir.data.session.data
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import io.elixxir.core.logging.log
+import io.elixxir.core.common.log
 import io.elixxir.data.session.util.fromBase64toByteArray
 import io.elixxir.data.session.util.toBase64String
 import io.elixxir.xxclient.bindings.Bindings

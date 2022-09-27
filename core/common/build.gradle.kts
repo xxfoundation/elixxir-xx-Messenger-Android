@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -32,6 +34,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":core:preferences"))
@@ -39,4 +45,7 @@ dependencies {
     implementation(platform(Libs.Logging.FIREBASE_BOM))
     implementation(Libs.Logging.CRASHLYTICS)
     implementation(Libs.Logging.TIMBER)
+
+    implementation(Libs.DI.HILT)
+    kapt(Libs.DI.HILT_KAPT)
 }

@@ -3,7 +3,7 @@ package io.elixxir.feature.splash.ui
 import androidx.lifecycle.*
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.elixxir.core.logging.log
+import io.elixxir.core.common.log
 import io.elixxir.core.ui.model.UiText
 import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState

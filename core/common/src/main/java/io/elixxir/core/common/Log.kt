@@ -1,4 +1,4 @@
-package io.elixxir.core.logging
+package io.elixxir.core.common
 
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.ktx.Firebase

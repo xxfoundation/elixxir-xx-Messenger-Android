@@ -1,4 +1,4 @@
-package io.elixxir.core.logging
+package io.elixxir.core.common
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

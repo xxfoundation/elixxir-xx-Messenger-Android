@@ -1,4 +1,4 @@
-package io.elixxir.core.logging
+package io.elixxir.core.common
 
 import org.junit.Test
 
