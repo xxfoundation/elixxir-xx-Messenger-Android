@@ -120,13 +120,13 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
                 return
             }
 
-            val jsonObject = downloadRegistrationJson()
-            val registrationWrapper = RegistrationJsonWrapper.from(jsonObject)
-            val appVersion = registrationWrapper.appVersion
-            val minVersion = registrationWrapper.minVersion
-            val recommendedVersion = registrationWrapper.recommendedVersion
-            val downloadUrl = registrationWrapper.downloadUrl
-            val popupMessage = registrationWrapper.minPopupMessage
+//            val jsonObject = downloadRegistrationJson()
+//            val registrationWrapper = RegistrationJsonWrapper.from(jsonObject)
+//            val appVersion = registrationWrapper.appVersion
+//            val minVersion = registrationWrapper.minVersion
+//            val recommendedVersion = registrationWrapper.recommendedVersion
+//            val downloadUrl = registrationWrapper.downloadUrl
+//            val popupMessage = registrationWrapper.minPopupMessage
 
 //            when {
 //                appVersion < minVersion -> {
