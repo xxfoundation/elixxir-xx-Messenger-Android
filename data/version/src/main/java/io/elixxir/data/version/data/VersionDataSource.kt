@@ -18,6 +18,10 @@ internal class VersionDataSource : VersionRepository {
         }
     }
 
+    override suspend fun fetchErrorJson(): String {
+        TODO("Not yet implemented")
+    }
+
     private fun downloadRegistrationJson(): JsonObject {
         TODO("Use Retrofit for the web call.")
     }

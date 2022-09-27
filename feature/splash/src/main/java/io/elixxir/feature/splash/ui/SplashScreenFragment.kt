@@ -10,6 +10,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.elixxir.core.ui.util.openLink
+import io.elixxir.data.session.model.SessionState
+import io.elixxir.data.version.model.UpdateRecommended
+import io.elixxir.data.version.model.UpdateRequired
+import io.elixxir.data.version.model.VersionOk
 import kotlinx.coroutines.launch
 
 /**
@@ -39,11 +43,11 @@ class SplashScreenFragment : Fragment() {
                 with(it) {
                     when (versionState) {
                         is VersionOk -> {
-                            if (userState == UserState.NewUser) navigateToRegistration()
+                            if (userState == SessionState.NewUser) navigateToRegistration()
                             else navigateToMain()
                         }
-                        is UpdateRecommended -> showAlert(versionState.alertUi)
-                        is UpdateRequired -> showAlert(versionState.alertUi)
+                        is UpdateRecommended -> showAlert(alert)
+                        is UpdateRequired -> showAlert(alert)
                         else -> {}
                     }
                 }
@@ -67,7 +71,7 @@ class SplashScreenFragment : Fragment() {
         TODO("Navigate to nav_main graph")
     }
 
-    private fun showAlert(alertUi: VersionAlertUi) {
+    private fun showAlert(alertUi: VersionAlertUi?) {
         TODO()
     }
 }

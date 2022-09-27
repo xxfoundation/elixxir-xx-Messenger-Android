@@ -3,18 +3,19 @@ package io.elixxir.feature.splash.ui
 import androidx.lifecycle.*
 
 import dagger.hilt.android.lifecycle.HiltViewModel
-import io.elixxir.core.logging.NotExposedYet
 import io.elixxir.core.logging.log
 import io.elixxir.core.ui.model.UiText
 import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState
 import io.elixxir.data.version.VersionRepository
+import io.elixxir.data.version.model.UpdateRecommended
+import io.elixxir.data.version.model.UpdateRequired
+import io.elixxir.data.version.model.VersionOk
+import io.elixxir.data.version.model.VersionState
+import io.elixxir.feature.splash.R
 import io.elixxir.feature.splash.model.*
-import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
 
@@ -28,7 +29,7 @@ class SplashScreenViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val _appState = MutableStateFlow(
-        AppState(userState, null)
+        AppState(userState, null, null)
     )
     val appState = _appState.asStateFlow()
 
@@ -45,18 +46,21 @@ class SplashScreenViewModel @Inject constructor(
     private fun initializeApp() {
         viewModelScope.launch(Dispatchers.IO) {
             maybeClearData()
-//            fetchCommonErrors()
-//            parseJson(downloadRegistrationJson())
+            downloadErrorMessages()
+            val versionInfo = enforceVersion()
             _appState.emit(
                 AppState(
                     userState = userState,
-                    versionState = VersionOk()
+                    versionState = versionInfo.first,
+                    alert = versionInfo.second
                 )
             )
         }
     }
 
-    fun userExists(): Boolean = preferences.doesUserExist()
+    fun userExists(): Boolean {
+        return sessionRepo.getSessionState() == SessionState.ExistingUser
+    }
 
     private suspend fun maybeClearData(): Boolean{
         return if (!userExists()) {
@@ -78,39 +82,50 @@ class SplashScreenViewModel @Inject constructor(
         }
     }
 
-    private fun fetchCommonErrors() {
-        NotExposedYet()
+    private suspend fun downloadErrorMessages() {
+        versionRepo.fetchErrorJson()
     }
 
-    private fun updateRecommended(downloadUrl: String): VersionState {
-        return UpdateRecommended(
-            VersionAlert(
-                title = UiText.StringResource(R.string.version_alert_update_recommended_title),
-                body = UiText.StringResource(R.string.version_alert_update_recommended_subtitle),
-                positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
-                negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
-                onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
-                onNegativeClick = ::onUpdateRecommendedNegativeClick,
-                onDismissed = ::onUpdateRecommendedDismissed,
-                dismissable = true,
-                downloadUrl = downloadUrl
-            )
+    private suspend fun enforceVersion(): Pair<VersionState, VersionAlertUi?> =
+        withContext(Dispatchers.IO) {
+            versionRepo.checkVersion().run {
+                val version = getOrElse {
+                    TODO("Show error")
+                }
+
+                when (version) {
+                    is UpdateRecommended -> version to updateRecommended(version.updateUrl)
+                    is UpdateRequired -> version to updateRequired(version.message, version.updateUrl)
+                    VersionOk -> version to null
+                }
+            }
+        }
+
+    private fun updateRecommended(downloadUrl: String): VersionAlertUi {
+        return VersionAlert(
+            title = UiText.StringResource(R.string.version_alert_update_recommended_title),
+            body = UiText.StringResource(R.string.version_alert_update_recommended_subtitle),
+            positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
+            negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
+            onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
+            onNegativeClick = ::onUpdateRecommendedNegativeClick,
+            onDismissed = ::onUpdateRecommendedDismissed,
+            dismissable = true,
+            downloadUrl = downloadUrl
         )
     }
 
-    private fun updateRequired(message: String, downloadUrl: String): VersionState {
-        return UpdateRequired(
-            VersionAlert(
-                title = UiText.StringResource(R.string.version_alert_update_required_title),
-                body = UiText.DynamicString(message),
-                positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
-                negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
-                onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
-                onNegativeClick = { },
-                onDismissed = { },
-                dismissable = false,
-                downloadUrl = downloadUrl
-            )
+    private fun updateRequired(message: String, downloadUrl: String): VersionAlertUi {
+        return VersionAlert(
+            title = UiText.StringResource(R.string.version_alert_update_required_title),
+            body = UiText.DynamicString(message),
+            positiveLabel = UiText.StringResource(R.string.version_alert_update_required_positive_label),
+            negativeLabel = UiText.StringResource(R.string.version_alert_update_recommended_negative_label),
+            onPositiveClick = { onUpdateRequiredPositiveClick(downloadUrl) },
+            onNegativeClick = { },
+            onDismissed = { },
+            dismissable = false,
+            downloadUrl = downloadUrl
         )
     }
 
@@ -125,7 +140,7 @@ class SplashScreenViewModel @Inject constructor(
     }
 
     private fun onUpdateRecommendedDismissed() {
-        _appState.value = AppState(userState, VersionOk())
+        _appState.value = AppState(userState, VersionOk, null)
     }
 
     private fun onUpdateRequiredPositiveClick(url: String) {
