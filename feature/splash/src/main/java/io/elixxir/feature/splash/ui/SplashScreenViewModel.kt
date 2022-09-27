@@ -8,6 +8,7 @@ import io.elixxir.core.logging.NotExposedYet
 import io.elixxir.core.logging.log
 import io.elixxir.core.preferences.PreferencesRepository
 import io.elixxir.core.ui.model.UiText
+import io.elixxir.data.session.model.SessionState
 import io.elixxir.feature.splash.model.*
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.main.model.*
@@ -36,8 +37,8 @@ class SplashScreenViewModel @Inject constructor(
     private val _launchUrl = MutableSharedFlow<String?>()
     val launchUrl = _launchUrl.asSharedFlow()
 
-    private val userState: UserState
-        get() = if (userExists()) UserState.ExistingUser else UserState.NewUser
+    private val userState: SessionState
+        get() = if (userExists()) SessionState.ExistingUser else SessionState.NewUser
 
     init {
         initializeApp()

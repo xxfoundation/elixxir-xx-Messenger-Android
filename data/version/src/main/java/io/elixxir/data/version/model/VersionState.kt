@@ -1,4 +1,4 @@
-package io.elixxir.data.version
+package io.elixxir.data.version.model
 
 sealed class VersionState
 
