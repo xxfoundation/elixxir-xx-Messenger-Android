@@ -35,7 +35,7 @@ class SplashScreenViewModel @Inject constructor(
     private val _navigateNext = MutableLiveData(false)
 
     init {
-        fetchCommonErrors()
+//        fetchCommonErrors()
         getKronosTime()
         validateSession()
     }
