@@ -37,3 +37,4 @@ project(":cmix").projectDir = File("elixxir-dapps-sdk-kotlin/cmix")
 
 // Protobuf
 include(":proto")
+include(":data:version")

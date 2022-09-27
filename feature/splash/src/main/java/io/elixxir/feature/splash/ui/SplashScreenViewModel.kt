@@ -88,7 +88,7 @@ class SplashScreenViewModel @Inject constructor(
     }
 
     private fun parseJson(json: JsonElement): VersionState {
-        val registrationWrapper = VersionData.from(json)
+        val registrationWrapper = io.elixxir.data.version.VersionData.from(json)
         val appVersion = registrationWrapper.appVersion
         val minVersion = registrationWrapper.minVersion
         val recommendedVersion = registrationWrapper.recommendedVersion

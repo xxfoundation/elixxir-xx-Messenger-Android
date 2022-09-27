@@ -50,12 +50,6 @@ android {
                 "x86_64"
             )
         )
-
-        buildConfigField(
-            "double",
-            "APP_VERSION",
-            android.defaultConfig.versionName ?: "1.0"
-        )
     }
 
     buildTypes {
@@ -131,7 +125,6 @@ dependencies {
     implementation(Libs.Ui.NAVIGATION_UI)
 
     implementation(Libs.Data.PHONE_NUMBER)
-    implementation(Libs.Data.GSON)
     implementation(Libs.Data.PROTOBUF)
 
     implementation(Libs.DI.HILT)

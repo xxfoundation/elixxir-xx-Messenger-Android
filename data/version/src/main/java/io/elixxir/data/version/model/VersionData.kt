@@ -1,9 +1,10 @@
-package io.elixxir.feature.splash.model
+package io.elixxir.data.version.model
 
 import com.google.gson.JsonElement
-import io.xxlabs.messenger.BuildConfig
+import io.elixxir.core.logging.BuildConfig
+import io.elixxir.data.version.BuildConfig.APP_VERSION
 
-data class VersionData(
+internal data class VersionData(
     val cmixOldest: String = "",
     val cmixLatest: String = "",
     val minVersion: Double = 1.0,
@@ -13,7 +14,7 @@ data class VersionData(
     val minPopupMessage: String = "",
 ) {
     companion object {
-        fun from(jsonElement: JsonElement): VersionData {
+        internal fun from(jsonElement: JsonElement): VersionData {
             val cmix = jsonElement.asJsonObject["cmix-client"].asJsonObject
             val dappId = jsonElement.asJsonObject["dapp-id"].asJsonObject
 

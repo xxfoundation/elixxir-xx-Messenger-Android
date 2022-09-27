@@ -10,9 +10,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import io.elixxir.core.ui.util.openLink
-import io.elixxir.feature.splash.model.UpdateRecommended
-import io.elixxir.feature.splash.model.UpdateRequired
-import io.elixxir.feature.splash.model.VersionOk
 import kotlinx.coroutines.launch
 
 /**
