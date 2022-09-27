@@ -381,7 +381,7 @@ class RequestsViewModel @Inject constructor(
         when (request.request.requestStatus) {
             RECEIVED -> retryVerification(request).also { actionQueue.remove(request.id) }
             VERIFYING -> showVerifyingInfo().also { actionQueue.remove(request.id) }
-            SEND_FAIL, SENT -> resendRequest(request)
+            RESET_FAIL, RESET_SENT, SEND_FAIL, SENT -> resendRequest(request)
             VERIFICATION_FAIL -> retryVerification(request)
         }
     }
