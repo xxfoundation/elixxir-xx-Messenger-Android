@@ -1,6 +1,8 @@
 plugins {
     id("com.android.library")
     kotlin("android")
+    kotlin("kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -32,6 +34,10 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+}
+
 dependencies {
     implementation(project(":depconstraints"))
     implementation(project(":xxclient"))
@@ -41,4 +47,9 @@ dependencies {
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)
     implementation(Libs.Core.CORE_COROUTINES)
+
+    implementation(Libs.DI.HILT)
+
+    implementation(Libs.DI.HILT)
+    kapt(Libs.DI.HILT_KAPT)
 }

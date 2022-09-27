@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import io.elixxir.core.ui.dialog.info.InfoDialogUi
 import io.elixxir.core.ui.dialog.warning.WarningDialogUi
 import io.elixxir.core.ui.model.UiText
-import io.elixxir.data.session.keystore.KeyStoreManager
+import io.elixxir.data.session.data.KeyStoreManager
 import io.elixxir.feature.registration.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

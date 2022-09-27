@@ -1,4 +1,4 @@
-package io.elixxir.data.session.keystore
+package io.elixxir.data.session.data
 
 interface KeyStoreManager {
     suspend fun generatePassword(): Result<Unit>

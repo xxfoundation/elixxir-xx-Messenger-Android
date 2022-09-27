@@ -5,5 +5,5 @@ import io.elixxir.data.version.model.VersionState
 
 data class AppState(
     val userState: SessionState,
-    val versionState: VersionState
+    val versionState: VersionState?
 )

@@ -1,4 +1,4 @@
-package io.elixxir.data.session.keystore
+package io.elixxir.data.session.data
 
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
@@ -18,7 +18,7 @@ import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource
 import kotlin.system.measureTimeMillis
 
-class XxmKeystore(
+internal class XxmKeystore(
     private val bindings: Bindings,
     private val preferences: CipherPreferences,
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO

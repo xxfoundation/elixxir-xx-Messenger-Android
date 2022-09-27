@@ -1,17 +1,15 @@
 package io.elixxir.feature.splash.ui
 
 import androidx.lifecycle.*
-import com.google.gson.JsonElement
-import com.google.gson.JsonObject
+
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.elixxir.core.logging.NotExposedYet
 import io.elixxir.core.logging.log
-import io.elixxir.core.preferences.PreferencesRepository
 import io.elixxir.core.ui.model.UiText
+import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState
+import io.elixxir.data.version.VersionRepository
 import io.elixxir.feature.splash.model.*
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.main.model.*
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,18 +17,18 @@ import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.inject.Inject
-import io.elixxir.feature.splash.model.UpdateRecommended as UpdateRecommended
 
 /**
  * Responsible for minimum version enforcement and initializing core app components.
  */
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
-    private val preferences: PreferencesRepository
+    private val sessionRepo: SessionRepository,
+    private val versionRepo: VersionRepository,
 ) : ViewModel() {
 
     private val _appState = MutableStateFlow(
-        AppState(userState, Checking())
+        AppState(userState, null)
     )
     val appState = _appState.asStateFlow()
 
@@ -82,27 +80,6 @@ class SplashScreenViewModel @Inject constructor(
 
     private fun fetchCommonErrors() {
         NotExposedYet()
-    }
-
-    private fun downloadRegistrationJson(): JsonObject {
-        NotExposedYet()
-    }
-
-    private fun parseJson(json: JsonElement): VersionState {
-        val registrationWrapper = io.elixxir.data.version.VersionData.from(json)
-        val appVersion = registrationWrapper.appVersion
-        val minVersion = registrationWrapper.minVersion
-        val recommendedVersion = registrationWrapper.recommendedVersion
-        val downloadUrl = registrationWrapper.downloadUrl
-        val popupMessage = registrationWrapper.minPopupMessage
-
-        return when {
-            appVersion < minVersion -> updateRequired(popupMessage, downloadUrl)
-            appVersion >= minVersion && appVersion < recommendedVersion -> {
-                updateRecommended(downloadUrl)
-            }
-            else -> VersionOk()
-        }
     }
 
     private fun updateRecommended(downloadUrl: String): VersionState {
