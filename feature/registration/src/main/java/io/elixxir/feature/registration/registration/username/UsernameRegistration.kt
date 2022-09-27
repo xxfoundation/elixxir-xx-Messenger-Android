@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.intro.registration.username
+package io.elixxir.feature.registration.registration.username
 
 import android.app.Application
 import android.content.Context
@@ -9,15 +9,14 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import io.xxlabs.messenger.BuildConfig
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.config.ClientBridge
-import io.xxlabs.messenger.dialog.info.SpanConfig
-import io.xxlabs.messenger.network.NetworkManager
-import io.xxlabs.messenger.repository.PreferencesReposi
+import io.elixxir.core.logging.log
+import io.elixxir.core.ui.BuildConfig
+import io.elixxir.core.ui.dialog.info.InfoDialogUi
+import io.elixxir.core.ui.dialog.info.SpanConfig
+import io.elixxir.core.ui.model.UiText
+import io.elixxir.data.session.SessionRepository
+import io.elixxir.feature.registration.R
 import kotlinx.coroutines.*
-import timber.log.Timber
-import java.util.logging.Logger.global
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 import kotlin.random.Random.Default.nextInt
@@ -29,9 +28,9 @@ private const val NETWORK_POLL_INTERVAL_MS = 1000L
  * Encapsulates username registration logic.
  */
 class UsernameRegistration constructor(
+    private val app: Application,
+    private val sessionRepo: SessionRepository,
     private val client: ClientBridge,
-    private val preferences: PreferencesRepository,
-    private val application: Application,
     private val sessionPassword: ByteArray,
     private val networking: NetworkManager
 ) : UsernameRegistrationController {
@@ -57,8 +56,8 @@ class UsernameRegistration constructor(
                 .joinToString("")
         }
 
-    override val usernameError: LiveData<String?> get() = error
-    private val error = MutableLiveData<String?>(null)
+    override val usernameError: LiveData<UiText?> get() = error
+    private val error = MutableLiveData<UiText?>(null)
 
     override val usernameInputEnabled: LiveData<Boolean> get() = inputEnabled
     private val inputEnabled = MutableLiveData(true)
@@ -78,14 +77,14 @@ class UsernameRegistration constructor(
         }
     }
 
-    override val usernameDialogUI: InfoDialogUI by lazy {
-        InfoDialogUI.create(
-            title = application.getString(R.string.registration_username_info_title),
-            body = application.getString(R.string.registration_username_info_body),
+    override val usernameDialogUI: InfoDialogUi by lazy {
+        InfoDialogUi.create(
+            title = UiText.StringResource(R.string.registration_username_info_title),
+            body = UiText.StringResource(R.string.registration_username_info_body),
             spans = mutableListOf(
                 SpanConfig.create(
-                    application.getString(R.string.registration_username_info_dialog_link_text),
-                    application.getString(R.string.registration_username_info_dialog_link_url)
+                    UiText.StringResource(R.string.registration_username_info_dialog_link_text),
+                    UiText.StringResource(R.string.registration_username_info_dialog_link_url)
                 )
             )
         )
@@ -105,12 +104,6 @@ class UsernameRegistration constructor(
 
     override val usernameFilters: Array<InputFilter> =
         arrayOf(
-//            InputFilter { source, start, end, _, _, _ ->
-//                val input = source?.subSequence(start, end)
-//                val filtered = source?.subSequence(start, end)
-//                    ?.replace(Regex(USERNAME_FILTER_REGEX), "")
-//                if (filtered == input) null else filtered
-//            },
             InputFilter.LengthFilter(MAX_USERNAME_LENGTH)
         )
 
@@ -194,16 +187,16 @@ class UsernameRegistration constructor(
     private fun String.isMinimumLength() = length > MIN_USERNAME_LENGTH
 
     private fun minimumLengthError() {
-        error.value = application.getString(R.string.registration_error_username_min_len)
+        error.value = UiText.StringResource(R.string.registration_error_username_min_len)
     }
 
     private fun invalidUsernameError() {
-        error.value = application.getString(R.string.registration_error_username_invalid)
+        error.value = UiText.StringResource(R.string.registration_error_username_invalid)
     }
 
     private fun invalidCharsInUsernameError() {
         error.postValue(
-            application.getString(R.string.registration_error_username_invalid_chars)
+            UiText.StringResource(R.string.registration_error_username_invalid_chars)
         )
     }
 
@@ -258,13 +251,13 @@ class UsernameRegistration constructor(
         networking.checkRegisterNetworkCallback()
         if (retries < MAX_NETWORK_RETRIES) {
             if (initializeNetworkFollower()) {
-                Timber.d("Started network follower after #${retries + 1} attempt(s).")
+                log("Started network follower after #${retries + 1} attempt(s).")
                 withContext(Dispatchers.Main) {
                     onUsernameNextClicked()
                 }
             } else {
                 delay(NETWORK_POLL_INTERVAL_MS)
-                Timber.d("Attempting to start network follower, attempt #${retries + 1}.")
+                log("Attempting to start network follower, attempt #${retries + 1}.")
                 connectToCmix(retries + 1)
             }
         } else throw Exception("Failed to connect to network after ${retries + 1} attempts. Please try again.")
@@ -284,9 +277,9 @@ class UsernameRegistration constructor(
     }
 
     private fun getSpannableTitle(): Spanned {
-        val highlight = application.getColor(R.color.brand_default)
-        val title = application.getString(R.string.registration_username_title)
-        val span = application.getString(R.string.registration_username_title_span)
+        val highlight = app.getColor(R.color.brand_default)
+        val title = app.getString(R.string.registration_username_title)
+        val span = app.getString(R.string.registration_username_title_span)
         val startIndex = title.indexOf(span, ignoreCase = true)
 
         return SpannableString(title).apply {
@@ -301,7 +294,7 @@ class UsernameRegistration constructor(
 
     override fun onRestoreAccountClicked() {
         if (_restoreEnabled.value == false) {
-            error.value = appContext().getString(R.string.registration_restore_disabled_error)
+            error.value = UiText.StringResource(R.string.registration_restore_disabled_error)
         } else {
             navigateRestore.value = true
         }

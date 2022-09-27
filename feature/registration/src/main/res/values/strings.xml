@@ -6,4 +6,121 @@
     <string name="keygen_generation_error_title">Failed to generate secure keys</string>
     <string name="keygen_generation_error_body">An error occurred while generating keys. Please try again.</string>
     <string name="keygen_generation_error_button">Try again</string>
+
+    <!-- Registration: Common -->
+
+    <string name="registration_intro_tagline">A quantum leap in privacy</string>
+    <string name="registration_intro_cta">Get Started</string>
+    <string name="registration_flow_next">Next</string>
+    <string name="registration_flow_ok">Got it</string>
+    <string name="registration_flow_done">Done</string>
+
+    <!-- Registration: Username -->
+
+    <string name="registration_username_title">Choose your username.</string>
+    <string name="registration_username_title_span">username</string>
+    <string name="registration_username_body">
+        Your unique username is the first name your contacts
+        will see in their searches and contact lists.\n\nThis cannot be changed.</string>
+    <string name="registration_choose_username_hint">Username</string>
+    <string name="registration_username_explanation">
+        Your chosen username will be registered with
+        the User Discovery Service allowing your public keys to be accessible to anyone who knows
+        your username. They will then be able to send a request to create an authenticated channel
+        with you. You will then be able to reject unwanted requests.</string>
+    <string name="registration_username_info_title">Your Username</string>
+    <string name="registration_username_info_body">
+        Your chosen username will be registered with the
+        User Discovery Service allowing your public keys to be accessible to anyone who knows your
+        username. They will then be able to send a request to create an authenticated channel
+        with you. You will then be able to reject unwanted requests.</string>
+    <string name="registration_username_info_dialog_link_text">User Discovery Service</string>
+    <string name="registration_username_info_dialog_link_url">https://links.xx.network/ud</string>
+    <string name="registration_error_username_min_len">
+        User name must be at least four characters</string>
+    <string name="registration_error_username_taken">Username taken. Try again.</string>
+    <string name="registration_username_restore_account">Already have an account?</string>
+    <string name="registration_username_restore_button">Restore From Backup</string>
+    <string name="registration_restore_disabled_error">A username has been submitted. Please reinstall to use restore.</string>
+    <string name="registration_error_username_invalid">Username must start and end with an alphanumeric character.</string>
+    <string name="registration_error_username_invalid_chars">Username contains invalid characters.</string>
+
+    <!-- Registration: Welcome -->
+
+    <string name="registration_welcome_title">%s, <br />welcome to xx network</string>
+    <string name="registration_welcome_body">
+        Would you like to register an email or phone number
+        to help other users find your account? If not, you can still be found by your username,
+        or completely off the grid using QR codes.</string>
+    <string name="registration_welcome_continue">Yes, continue </string>
+    <string name="registration_welcome_skip">No, skip this step</string>
+    <string name="registration_welcome_dialog_title">Welcome</string>
+    <string name="registration_welcome_dialog_body">Registration is completely optional. When
+        registering an email or phone number, they will be evaluated by twilio, a 3rd party
+        partner.  Afterwards, salted hashes will be registered in User Discovery to allow
+        other uses to search for you using the registered data completely privately. </string>
+    <string name="registration_welcome_dialog_link_text">User Discovery</string>
+    <string name="registration_welcome_dialog_link_url">https://links.xx.network/ud</string>
+
+    <!-- Registration: Email -->
+
+    <string name="registration_email_title">Add your email.</string>
+    <string name="registration_email_body">
+        You can add, remove, or edit this email in your profile
+        settings. Adding an email is optional.</string>
+    <string name="registration_add_email_hint">Email</string>
+    <string name="registration_email_skip_text">Skip. Do not add an email</string>
+    <string name="registration_email_info_title">Your Email</string>
+    <string name="registration_email_info_body">
+        This email will be shared with our third-party provider, Twilio, to verify your
+        ownership through a confirmation code. However, it will be immediately removed from
+        the xx network’s systems and only a salted hash of the email will be stored in the
+        User Discovery Service.</string>
+    <string name="registration_email_info_link_text">User Discovery Service</string>
+    <string name="registration_email_info_link_url">https://links.xx.network/ud</string>
+    <string name="registration_email_error_already_exists">That email is already registered.</string>
+
+    <!-- Registration: Phone -->
+
+    <string name="registration_phone_title">Add your phone number.</string>
+    <string name="registration_phone_body">
+        You can add, remove, or edit this phone number in your profile settings.
+        Adding a phone number is optional.</string>
+    <string name="registration_add_phone_hint">Phone Number</string>
+    <string name="registration_phone_skip_text">Skip. Do not add a phone number</string>
+    <string name="registration_phone_info_title">Your Phone Number</string>
+    <string name="registration_phone_info_body">
+        This phone number will be shared with our third-party provider, Twilio, to verify your
+        ownership through a confirmation code. However, it will be immediately removed from
+        the xx network’s systems and only a salted hash of the phone number will be stored in the
+        User Discovery Service.</string>
+    <string name="registration_phone_info_link_text">User Discovery Service</string>
+    <string name="registration_phone_info_link_url">https://links.xx.network/ud</string>
+
+    <!-- Registration: 2FA -->
+
+    <string name="registration_2fa_title">Please enter the code sent to your %s</string>
+    <string name="registration_2fa_body">We sent a verification code to %s.</string>
+    <string name="registration_2fa_input_hint">0000</string>
+    <string name="registration_2fa_resend">Resend Code (%d sec)</string>
+    <string name="registration_2fa_info_title">2-Factor Authentication</string>
+    <string name="registration_2fa_info_body">
+        xx messenger uses Twilio’s two-factor authentication to prevent someone from fraudulently
+        registering your email or phone number on xx messenger.</string>
+    <string name="registration_2fa_code_expired">
+        Failed to confirm code. Your verification code may have expired; please resubmit.
+    </string>
+
+    <!-- Registration: Email 2FA -->
+
+    <string name="registration_email_2fa_title">email.</string>
+
+    <!-- Registration: Phone 2FA -->
+
+    <string name="registration_phone_2fa_title">phone through SMS.</string>
+
+    <!-- Registration: Successfully added -->
+
+    <string name="registration_successfully_added_title">
+        Your %s has been successfully added.</string>
 </resources>

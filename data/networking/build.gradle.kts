@@ -1,16 +1,14 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
-    kotlin("kapt")
-    id("dagger.hilt.android.plugin")
+    id("org.jetbrains.kotlin.android")
 }
 
 android {
-    compileSdk = Versions.COMPILE_SDK
+    compileSdk = 32
 
     defaultConfig {
-        minSdk = Versions.MIN_SDK
-        targetSdk = Versions.TARGET_SDK
+        minSdk = 21
+        targetSdk = 32
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -34,20 +32,12 @@ android {
     }
 }
 
-kapt {
-    correctErrorTypes = true
-}
-
 dependencies {
-    implementation(project(":depconstraints"))
-    implementation(project(":xxclient"))
-    implementation(project(":core:logging"))
-    implementation(project(":core:preferences"))
 
-    implementation(Libs.Core.ANDROIDX_APPCOMPAT)
-    implementation(Libs.Core.CORE_KTX)
-    implementation(Libs.Core.CORE_COROUTINES)
-
-    implementation(Libs.DI.HILT)
-    kapt(Libs.DI.HILT_KAPT)
+    implementation("androidx.core:core-ktx:1.7.0")
+    implementation("androidx.appcompat:appcompat:1.5.1")
+    implementation("com.google.android.material:material:1.6.1")
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.1.3")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
 }

@@ -1,15 +1,15 @@
-package io.xxlabs.messenger.ui.intro.registration.username
+package io.elixxir.feature.registration.registration.username
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import androidx.navigation.fragment.findNavController
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.FragmentRegistrationUsernameBinding
-import io.xxlabs.messenger.ui.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.elixxir.core.ui.dialog.info.InfoDialog
+import io.elixxir.core.ui.util.navigateSafe
+import io.elixxir.feature.registration.R
+import io.elixxir.feature.registration.databinding.FragmentRegistrationUsernameBinding
+import io.elixxir.feature.registration.registration.RegistrationFlowFragment
 
 /**
  * Username creation screen.
@@ -44,10 +44,10 @@ class RegistrationUsernameFragment : RegistrationFlowFragment() {
 
     override fun onStart() {
         super.onStart()
-        observeUI()
+        observeState()
     }
 
-    private fun observeUI() {
+    private fun observeState() {
         ui.usernameInfoClicked.observe(viewLifecycleOwner) { show ->
             if (show) displayUsernameInfoDialog()
         }
@@ -74,7 +74,7 @@ class RegistrationUsernameFragment : RegistrationFlowFragment() {
     private fun navigateNextStep(username: String) {
         val directions = RegistrationUsernameFragmentDirections
             .actionRegistrationUsernameFragmentToRegistrationWelcomeFragment(username)
-        findNavController().navigate(directions)
+        navigateSafe(directions)
         ui.onUsernameNavigateHandled()
     }
 
@@ -84,9 +84,9 @@ class RegistrationUsernameFragment : RegistrationFlowFragment() {
     }
 
     private fun navigateRestore() {
-        val directions = RegistrationUsernameFragmentDirections
-            .actionRegistrationUsernameFragmentToRestoreAccountFragment()
-        findNavController().navigate(directions)
-        ui.onUsernameNavigateHandled()
+//        val directions = RegistrationUsernameFragmentDirections
+//            .actionRegistrationUsernameFragmentToRestoreAccountFragment()
+//        navigateSafe(directions)
+//        ui.onUsernameNavigateHandled()
     }
 }

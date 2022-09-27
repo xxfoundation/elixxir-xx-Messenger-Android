@@ -5,8 +5,9 @@ import com.google.gson.JsonObject
 import io.elixxir.data.version.VersionRepository
 import io.elixxir.data.version.model.*
 import io.elixxir.data.version.model.VersionData
+import javax.inject.Inject
 
-internal class VersionDataSource : VersionRepository {
+class VersionDataSource @Inject internal constructor(): VersionRepository {
 
     override suspend fun checkVersion(): Result<VersionState> {
         return try {

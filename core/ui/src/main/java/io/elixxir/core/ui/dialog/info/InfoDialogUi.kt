@@ -30,18 +30,18 @@ interface InfoDialogUi : Serializable {
 interface SpanConfig : Serializable {
     val text: UiText
     val color: Int
-    val url: String?
+    val url: UiText?
 
     companion object Factory {
         fun create(
             text: UiText,
-            url: String?,
+            url: UiText?,
             color: Int = R.color.brand_default
         ): SpanConfig {
             return object : SpanConfig {
                 override val text: UiText = text
                 override val color = color
-                override val url: String? = url
+                override val url: UiText? = url
             }
         }
     }

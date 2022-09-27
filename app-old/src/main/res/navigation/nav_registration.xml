@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/registrationUsernameFragment"
-        android:name="io.xxlabs.messenger.ui.intro.registration.username.RegistrationUsernameFragment"
+        android:name="io.elixxir.feature.registration.registration.username.RegistrationUsernameFragment"
         android:label="Username Registration"
         tools:layout="@layout/fragment_registration_username">
         <action
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/registrationWelcomeFragment"
-        android:name="io.xxlabs.messenger.ui.intro.registration.welcome.RegistrationWelcomeFragment"
+        android:name="io.elixxir.feature.registration.registration.welcome.RegistrationWelcomeFragment"
         android:label="RegistrationWelcomeFragment"
         tools:layout="@layout/fragment_registration_welcome">
         <action

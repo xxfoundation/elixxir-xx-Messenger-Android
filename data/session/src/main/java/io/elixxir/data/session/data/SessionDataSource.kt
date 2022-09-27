@@ -2,8 +2,9 @@ package io.elixxir.data.session.data
 
 import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState
+import javax.inject.Inject
 
-internal class SessionDataSource : SessionRepository {
+class SessionDataSource @Inject internal constructor()  : SessionRepository {
     override fun getSessionState(): SessionState {
         TODO("Not yet implemented")
     }

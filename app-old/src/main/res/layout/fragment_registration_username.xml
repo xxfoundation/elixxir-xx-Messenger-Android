@@ -7,7 +7,7 @@
     <data>
         <variable
             name="ui"
-            type="io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationUI" />
+            type="io.elixxir.feature.registration.registration.username.UsernameRegistrationUI" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout style="@style/registration_flow_root_view">

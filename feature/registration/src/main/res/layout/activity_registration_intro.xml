@@ -31,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintBottom_toTopOf="@id/registration_intro_next_button"
             app:layout_constraintEnd_toEndOf="parent"
-            style="@style/dialog_body" />
+            style="@style/BodyText" />
 
         <Button
             android:id="@+id/registration_intro_next_button"
@@ -42,7 +42,7 @@
             app:layout_constraintBottom_toTopOf="@id/poweredByXxImageView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/registration_step_next_button" />
+            style="@style/ButtonFilled" />
 
         <ImageView
             android:id="@+id/poweredByXxImageView"

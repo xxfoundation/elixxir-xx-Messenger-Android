@@ -58,7 +58,7 @@ object Libs {
     }
 
     object DI {
-        const val HILT_VERSION = "2.38.1"
+        const val HILT_VERSION = "2.43.2"
         const val HILT = "com.google.dagger:hilt-android"
         const val HILT_KAPT = "com.google.dagger:hilt-android-compiler:$HILT_VERSION"
     }

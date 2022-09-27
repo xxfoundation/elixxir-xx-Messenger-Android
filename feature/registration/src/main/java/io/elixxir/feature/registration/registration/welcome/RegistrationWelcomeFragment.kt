@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.intro.registration.welcome
+package io.elixxir.feature.registration.registration.welcome
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,10 +7,11 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.fragment.findNavController
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.FragmentRegistrationWelcomeBinding
-import io.xxlabs.messenger.ui.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.elixxir.core.ui.dialog.info.InfoDialog
+import io.elixxir.feature.registration.R
+import io.elixxir.feature.registration.databinding.FragmentRegistrationWelcomeBinding
+import io.elixxir.feature.registration.registration.RegistrationFlowFragment
+import io.xxlabs.messenger.ui.intro.registration.welcome.WelcomeRegistrationController
 
 class RegistrationWelcomeFragment : RegistrationFlowFragment() {
 

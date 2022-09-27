@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/nav_registration">
+    android:id="@+id/nav_registration"
+    app:startDestination="@id/keyGenFragment">
 
+    <fragment
+        android:id="@+id/keyGenFragment"
+        android:name="io.elixxir.feature.registration.registration.keygen.KeyGenFragment"
+        android:label="KeyGenFragment" />
+    <fragment
+        android:id="@+id/registrationUsernameFragment"
+        android:name="io.elixxir.feature.registration.registration.username.RegistrationUsernameFragment"
+        android:label="RegistrationUsernameFragment" >
+        <action
+            android:id="@+id/action_registrationUsernameFragment_to_registrationWelcomeFragment"
+            app:destination="@id/registrationWelcomeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/registrationWelcomeFragment"
+        android:name="io.elixxir.feature.registration.registration.welcome.RegistrationWelcomeFragment"
+        android:label="RegistrationWelcomeFragment" />
 </navigation>

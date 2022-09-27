@@ -6,7 +6,7 @@ import io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationControll
 import io.xxlabs.messenger.ui.intro.registration.phone.PhoneRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.success.CompletedRegistrationStepController
 import io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistrationController
-import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationController
+import io.elixxir.feature.registration.registration.username.UsernameRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.welcome.WelcomeRegistrationController
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

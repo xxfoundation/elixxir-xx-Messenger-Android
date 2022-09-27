@@ -1,4 +1,4 @@
-package io.xxlabs.messenger.ui.intro.registration.email
+package io.elixxir.feature.registration.registration.email
 
 import android.app.Application
 import android.text.Spannable
@@ -9,13 +9,7 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.SchedulerProvider
-import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
-import io.xxlabs.messenger.data.datatype.FactType
-import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
-import io.xxlabs.messenger.ui.dialog.info.SpanConfig
+import io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 import javax.inject.Inject
 
