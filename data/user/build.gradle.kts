@@ -40,24 +40,14 @@ kapt {
 
 dependencies {
     implementation(project(":depconstraints"))
-    implementation(project(":core:preferences"))
-    implementation(project(":core:ui"))
+    implementation(project(":xxclient"))
     implementation(project(":core:logging"))
     implementation(project(":core:preferences"))
-    implementation(project(":data:session"))
-    implementation(project(":data:user"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
     implementation(Libs.Core.CORE_KTX)
     implementation(Libs.Core.CORE_COROUTINES)
 
-    implementation(Libs.Ui.NAVIGATION)
-    implementation(Libs.Ui.NAVIGATION_UI)
-
     implementation(Libs.DI.HILT)
     kapt(Libs.DI.HILT_KAPT)
-
-    testImplementation(Libs.Testing.CORE_TEST)
-    testImplementation(Libs.Testing.TRUTH)
-    testImplementation(Libs.Testing.JUNIT)
 }

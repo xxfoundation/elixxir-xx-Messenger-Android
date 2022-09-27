@@ -19,11 +19,15 @@ include(":feature:home")
 
 // Data modules
 include(":data:session")
+include(":data:version")
+include(":data:user")
 
 // Core modules
 include(":core:ui")
 include(":core:preferences")
 include(":core:logging")
+include(":core:networking")
+
 
 // Resolve dependencies across modules
 include(":depconstraints")
@@ -37,5 +41,3 @@ project(":cmix").projectDir = File("elixxir-dapps-sdk-kotlin/cmix")
 
 // Protobuf
 include(":proto")
-include(":data:version")
-include(":data:networking")

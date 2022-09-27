@@ -1,6 +1,5 @@
 package io.elixxir.feature.registration.registration.username
 
-import android.app.Application
 import android.content.Context
 import android.text.*
 import android.text.style.ForegroundColorSpan
@@ -9,30 +8,26 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import io.elixxir.core.logging.log
-import io.elixxir.core.ui.BuildConfig
+import dagger.hilt.android.qualifiers.ApplicationContext
 import io.elixxir.core.ui.dialog.info.InfoDialogUi
 import io.elixxir.core.ui.dialog.info.SpanConfig
 import io.elixxir.core.ui.model.UiText
+import io.elixxir.core.ui.util.genericError
 import io.elixxir.data.session.SessionRepository
+import io.elixxir.data.session.model.SessionState
+import io.elixxir.data.userdiscovery.UserRepository
 import io.elixxir.feature.registration.R
 import kotlinx.coroutines.*
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import javax.inject.Inject
 import kotlin.random.Random.Default.nextInt
-
-private const val MAX_NETWORK_RETRIES = 29
-private const val NETWORK_POLL_INTERVAL_MS = 1000L
 
 /**
  * Encapsulates username registration logic.
  */
-class UsernameRegistration constructor(
-    private val app: Application,
+class UsernameRegistration @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val sessionRepo: SessionRepository,
-    private val client: ClientBridge,
-    private val sessionPassword: ByteArray,
-    private val networking: NetworkManager
+    private val userRepo: UserRepository,
 ) : UsernameRegistrationController {
 
     private val scope = CoroutineScope(
@@ -41,7 +36,7 @@ class UsernameRegistration constructor(
             + Dispatchers.Default
     )
 
-    private val loggedIn get() = repo.isLoggedIn().blockingGet()
+    private val sessionExists get() = sessionRepo.getSessionState() == SessionState.ExistingUser
 
     private val username = MutableLiveData<String?>(null)
     override val usernameTitle: Spanned = getSpannableTitle()
@@ -201,85 +196,28 @@ class UsernameRegistration constructor(
     }
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
-        if (!loggedIn) {
-            getOrCreateSession()
-            return
-        }
-
-        repo.registerUdUsername(username)
-            .subscribeOn(scheduler.single)
-            .observeOn(scheduler.main)
-            .doOnError {
-                it.message?.let { error ->
-                    if (error.isNetworkNotHealthyError()) handleNetworkHealthError()
-                    else {
-                        displayError(error)
-                        enableUI()
-                    }
-                }
-            }.doOnSuccess {
-                onSuccessfulRegistration(username, isDemoAcct)
-            }.subscribe()
-    }
-
-    private fun String.isNetworkNotHealthyError() =
-        contains("network is not healthy")
-
-    private fun handleNetworkHealthError() {
-        onUsernameNextClicked()
-    }
-
-    private fun displayError(errorMsg: String) {
-        error.postValue(bindingsErrorMessage(Exception(errorMsg)))
-    }
-
-    private fun getOrCreateSession(context: Context = appContext()) {
-        scope.launch(Dispatchers.IO) {
-            val appFolder = repo.createSessionFolder(context)
-            try {
-                repo.newClient(appFolder, sessionPassword)
-                preferences.lastAppVersion = BuildConfig.VERSION_CODE
-                connectToCmix()
-            } catch (err: Exception) {
-                err.printStackTrace()
-                displayError(err.toString())
+        scope.launch {
+            userRepo.registerUsername(username).apply {
+                if (isSuccess) onSuccessfulRegistration(username, isDemoAcct)
+                else error.postValue(
+                    UiText.DynamicString(
+                    exceptionOrNull()?.message ?: genericError("register username")
+                    )
+                )
             }
-        }
-    }
-
-    private suspend fun connectToCmix(retries: Int = 0) {
-        networking.checkRegisterNetworkCallback()
-        if (retries < MAX_NETWORK_RETRIES) {
-            if (initializeNetworkFollower()) {
-                log("Started network follower after #${retries + 1} attempt(s).")
-                withContext(Dispatchers.Main) {
-                    onUsernameNextClicked()
-                }
-            } else {
-                delay(NETWORK_POLL_INTERVAL_MS)
-                log("Attempting to start network follower, attempt #${retries + 1}.")
-                connectToCmix(retries + 1)
-            }
-        } else throw Exception("Failed to connect to network after ${retries + 1} attempts. Please try again.")
-    }
-
-    private suspend fun initializeNetworkFollower(): Boolean = suspendCoroutine { continuation ->
-        networking.tryStartNetworkFollower { successful ->
-            continuation.resume(successful)
         }
     }
 
     private fun onSuccessfulRegistration(username: String, isDemoAcct: Boolean) {
-        preferences.name = username
         enableUI()
         if (isDemoAcct) navigateDemoAcct.value = true
         else navigateNextStep.value = username
     }
 
     private fun getSpannableTitle(): Spanned {
-        val highlight = app.getColor(R.color.brand_default)
-        val title = app.getString(R.string.registration_username_title)
-        val span = app.getString(R.string.registration_username_title_span)
+        val highlight = context.getColor(R.color.brand_default)
+        val title = context.getString(R.string.registration_username_title)
+        val span = context.getString(R.string.registration_username_title_span)
         val startIndex = title.indexOf(span, ignoreCase = true)
 
         return SpannableString(title).apply {
@@ -307,22 +245,10 @@ class UsernameRegistration constructor(
         private const val USERNAME_VALIDATION_REGEX = "^[a-zA-Z0-9][a-zA-Z0-9_\\-+@.#]*[a-zA-Z0-9]\$"
         private const val PLAY_STORE_DEMO_USERNAME = "GPlayStoreDemoAcc"
         private val DEMO_ACCT_CHARS: List<Char> = ('a'..'z') + ('0'..'9')
-
-        fun provideFactory(
-            assistedFactory: UsernameRegistrationFactory,
-            sessionPassword: ByteArray,
-            networking: NetworkManager,
-        ): UsernameRegistration {
-            return assistedFactory.create(sessionPassword, networking)
-        }
     }
 }
 
 @BindingAdapter("inputFilters")
 fun EditText.setInputFilters(filters: Array<InputFilter>) {
     this.filters = filters
-}
-
-interface UsernameRegistrationFactory {
-    fun create(sessionPassword: ByteArray, networking: NetworkManager): UsernameRegistration
 }
