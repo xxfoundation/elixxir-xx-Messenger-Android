@@ -10,7 +10,7 @@
             type="io.elixxir.feature.registration.registration.username.UsernameRegistrationUI" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout style="@style/registration_flow_root_view">
+    <androidx.constraintlayout.widget.ConstraintLayout style="@style/RegistrationRootView">
 
         <TextView
             android:id="@+id/registration_username_title_text"
@@ -19,7 +19,7 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/registration_username_body_text"
-            style="@style/bold_title"
+            style="@style/TitleBold"
             tools:text="@string/registration_username_title"/>
 
         <TextView
@@ -29,11 +29,11 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registration_username_title_text"
             app:layout_constraintBottom_toTopOf="@id/registration_username_input"
-            style="@style/dialog_body" />
+            style="@style/BodyText" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/registration_username_input"
-            style="@style/registration_text_input"
+            style="@style/OutlinedTextInput"
             android:enabled="@{ui.usernameInputEnabled}"
             app:endIconDrawable="@drawable/ic_outline_info_24"
             app:endIconMode="custom"
@@ -46,7 +46,7 @@
             app:layout_constraintTop_toBottomOf="@+id/registration_username_body_text">
 
             <com.google.android.material.textfield.TextInputEditText
-                style="@style/registration_text_input_edittext"
+                style="@style/TextInputEditTextStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="@string/registration_choose_username_hint"
@@ -55,9 +55,9 @@
                 app:inputFilters="@{ui.usernameFilters}" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <io.xxlabs.messenger.support.view.SingleClickButton
+        <io.elixxir.core.ui.view.SingleClickButton
             android:id="@+id/registration_username_next_btn"
-            style="@style/registration_step_next_button"
+            style="@style/ButtonFilled"
             android:layout_marginTop="24dp"
             android:enabled="@{ui.usernameNextButtonEnabled}"
             android:onClick="@{() -> ui.onUsernameNextClicked()}"
@@ -94,9 +94,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toTopOf="@id/registration_username_restore_btn"
-            style="@style/dialog_title" />
+            style="@style/SubtitleText" />
 
-        <io.xxlabs.messenger.support.view.SingleClickButton
+        <io.elixxir.core.ui.view.SingleClickButton
             android:id="@+id/registration_username_restore_btn"
             android:text="@string/registration_username_restore_button"
             android:onClick="@{() -> ui.onRestoreAccountClicked()}"
@@ -107,7 +107,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            style="@style/dialog_button" />
+            style="@style/OutlinedButton" />
 
         <ProgressBar
             android:id="@+id/registration_username_progressbar"

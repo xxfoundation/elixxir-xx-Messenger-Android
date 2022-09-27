@@ -1,8 +1,9 @@
 package io.elixxir.data.userdiscovery.data
 
 import io.elixxir.data.userdiscovery.UserRepository
+import javax.inject.Inject
 
-class UserDataSource : UserRepository {
+class UserDataSource @Inject internal constructor(): UserRepository {
     override suspend fun registerUsername(username: String): Result<Unit> {
         // Save name to preferences if successful
         TODO("Not yet implemented")

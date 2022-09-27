@@ -13,13 +13,18 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
-    <style name="AppFont" parent="TextAppearance.AppCompat">
+    <style name="RegularFont" parent="TextAppearance.AppCompat">
         <item name="android:fontFamily">@font/mulish_regular</item>
         <item name="fontFamily">@font/mulish_regular</item>
     </style>
 
+    <style name="BoldFont" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/mulish_bold</item>
+        <item name="fontFamily">@font/mulish_bold</item>
+    </style>
+
     <!-- Base text style -->
-    <style name="BasicText" parent="AppFont">
+    <style name="BasicText" parent="RegularFont">
         <item name="android:textColor">@color/neutral_body</item>
         <item name="android:textColorLink">@color/accent_safe</item>
         <item name="android:textColorHint">@color/neutral_weak</item>
@@ -38,7 +43,7 @@
     </style>
 
     <!-- Was: dialog_title -->
-    <style name="SubtitleText" parent="AppFont">
+    <style name="SubtitleText" parent="RegularFont">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/inner_view_marginVertical</item>
@@ -50,7 +55,7 @@
     </style>
 
     <!-- Was: dialog_button -->
-    <style name="OutlinedButton" parent="AppFont">
+    <style name="OutlinedButton" parent="RegularFont">
         <item name="android:layout_width">@dimen/button_layoutWidth</item>
         <item name="android:layout_height">@dimen/button_layoutHeight</item>
         <item name="android:layout_marginStart">@dimen/inner_view_marginHorizontal</item>
@@ -70,7 +75,7 @@
     </style>
 
     <!-- Was: dialog_body -->
-    <style name="BodyText" parent="AppFont">
+    <style name="BodyText" parent="RegularFont">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/inner_view_marginHorizontal</item>
@@ -82,7 +87,7 @@
         <item name="android:focusable">true</item>
     </style>
 
-    <style name="SplashText" parent="AppFont">
+    <style name="SplashText" parent="RegularFont">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginStart">@dimen/splash_text_horizontal_margin</item>
@@ -95,7 +100,7 @@
     </style>
 
     <!-- Was: registration_step_next_button -->
-    <style name="ButtonFilled" parent="AppFont">
+    <style name="ButtonFilled" parent="RegularFont">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">@dimen/registration_button_height</item>
         <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
@@ -105,5 +110,33 @@
         <item name="android:background">@drawable/bg_rectangle_rounded_corners_big_radius</item>
         <item name="android:backgroundTint">@color/selector_btn_default</item>
         <item name="android:textAllCaps">false</item>
+    </style>
+
+    <!-- Was: xx_title, bold_title -->
+    <style name="TitleBold" parent="BoldFont">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_vertical_margin</item>
+        <item name="android:textSize">@dimen/registration_title_text_size</item>
+        <item name="android:textColor">@color/neutral_active</item>
+    </style>
+
+    <!-- Was: registration_text_input -->
+    <style name="OutlinedTextInput" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginStart">@dimen/registration_horizontal_margin</item>
+        <item name="android:layout_marginTop">@dimen/registration_edittext_top_margin</item>
+        <item name="android:layout_marginEnd">@dimen/registration_horizontal_margin</item>
+        <item name="errorEnabled">true</item>
+        <item name="android:fontFamily">@font/mulish_regular</item>
+        <item name="fontFamily">@font/mulish_regular</item>
+    </style>
+
+    <!-- Was: registration_text_input_edittext -->
+    <style name="TextInputEditTextStyle" parent="RegularFont">
+        <item name="android:singleLine">true</item>
     </style>
 </resources>
