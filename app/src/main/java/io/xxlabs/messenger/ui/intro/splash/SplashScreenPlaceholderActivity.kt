@@ -128,17 +128,18 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
             val downloadUrl = registrationWrapper.downloadUrl
             val popupMessage = registrationWrapper.minPopupMessage
 
-            when {
-                appVersion < minVersion -> {
-                    createForcedUpdatePopup(downloadUrl, popupMessage)
-                }
-                appVersion >= minVersion && appVersion < recommendedVersion -> {
-                    createRecommendedUpdatePopup(downloadUrl)
-                }
-                else -> {
-                    navigateMain()
-                }
-            }
+//            when {
+//                appVersion < minVersion -> {
+//                    createForcedUpdatePopup(downloadUrl, popupMessage)
+//                }
+//                appVersion >= minVersion && appVersion < recommendedVersion -> {
+//                    createRecommendedUpdatePopup(downloadUrl)
+//                }
+//                else -> {
+//                    navigateMain()
+//                }
+//            }
+            navigateMain()
         } catch (err: Exception) {
             showError(err)
         }
