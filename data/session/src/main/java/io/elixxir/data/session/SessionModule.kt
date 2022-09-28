@@ -12,6 +12,6 @@ interface SessionModule {
 
     @Binds
     fun bindSessionRepository(
-        repo: SessionDataSource
+        repo: SessionDataSource,
     ): SessionRepository
 }

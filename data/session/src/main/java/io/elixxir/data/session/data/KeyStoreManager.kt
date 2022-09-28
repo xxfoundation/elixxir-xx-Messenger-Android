@@ -1,6 +1,6 @@
 package io.elixxir.data.session.data
 
-interface KeyStoreManager {
+internal interface KeyStoreManager {
     suspend fun generatePassword(): Result<Unit>
     suspend fun decryptPassword(): Result<ByteArray>
 }

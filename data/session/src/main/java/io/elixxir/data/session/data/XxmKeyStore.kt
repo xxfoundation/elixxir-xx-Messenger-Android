@@ -3,37 +3,38 @@ package io.elixxir.data.session.data
 import android.os.Build
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
-import io.elixxir.core.common.log
+import io.elixxir.core.common.Config
+import io.elixxir.core.preferences.model.KeyStorePreferences
 import io.elixxir.data.session.util.fromBase64toByteArray
 import io.elixxir.data.session.util.toBase64String
 import io.elixxir.xxclient.bindings.Bindings
-import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.lang.IllegalStateException
 import java.security.*
 import java.security.spec.MGF1ParameterSpec
 import java.security.spec.RSAKeyGenParameterSpec
 import javax.crypto.Cipher
 import javax.crypto.spec.OAEPParameterSpec
 import javax.crypto.spec.PSource
+import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
-internal class XxmKeystore(
+class XxmKeyStore @Inject internal constructor(
     private val bindings: Bindings,
-    private val preferences: CipherPreferences,
-    private val dispatcher: CoroutineDispatcher = Dispatchers.IO
-) : KeyStoreManager {
+    private val prefs: KeyStorePreferences,
+    config: Config,
+) : KeyStoreManager, Config by config {
 
-    private val keystore: KeyStore by lazy {
+    private val keyStore: KeyStore by lazy {
         KeyStore.getInstance(ANDROID_KEYSTORE).apply { load(null) }
     }
 
     private val publicKey: PublicKey by lazy {
-        keystore.getCertificate(KEY_ALIAS).publicKey
+        keyStore.getCertificate(KEY_ALIAS).publicKey
     }
 
     private val privateKey: PrivateKey?
-        get() = keystore.getKey(KEY_ALIAS, null) as PrivateKey?
+        get() = keyStore.getKey(KEY_ALIAS, null) as PrivateKey?
 
     private val keyPairGenerator: KeyPairGenerator by lazy {
         KeyPairGenerator.getInstance(
@@ -81,9 +82,9 @@ internal class XxmKeystore(
     }
 
     private fun deletePreviousKeys() {
-        if (keystore.containsAlias(KEY_ALIAS)) {
+        if (keyStore.containsAlias(KEY_ALIAS)) {
             log("Deleting key alias")
-            keystore.deleteEntry(KEY_ALIAS)
+            keyStore.deleteEntry(KEY_ALIAS)
         }
     }
 
@@ -111,7 +112,7 @@ internal class XxmKeystore(
         cipher.init(Cipher.ENCRYPT_MODE, publicKey, cipherMode)
         val encryptedBytes = cipher.doFinal(pwd)
         log("Encrypted: ${encryptedBytes.toBase64String()}")
-        preferences.userSecret = encryptedBytes.toBase64String()
+        prefs.userSecret = encryptedBytes.toBase64String()
 
         return encryptedBytes
     }
@@ -125,7 +126,11 @@ internal class XxmKeystore(
     }
 
     private fun decryptSecret(): ByteArray {
-        val encryptedBytes = preferences.userSecret.fromBase64toByteArray()
+        if (prefs.userSecret.isBlank()) {
+            throw IllegalStateException("Key has not been saved yet!")
+        }
+
+        val encryptedBytes = prefs.userSecret.fromBase64toByteArray()
         val cipher = Cipher.getInstance(KEYSTORE_ALGORITHM)
         log("Initializing Decrypt")
         cipher.init(Cipher.DECRYPT_MODE, privateKey, cipherMode)
