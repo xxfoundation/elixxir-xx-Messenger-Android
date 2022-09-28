@@ -5,9 +5,9 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import io.elixxir.core.common.Config
 import io.elixxir.core.preferences.model.KeyStorePreferences
+import io.elixxir.data.networking.BindingsRepository
 import io.elixxir.data.session.util.fromBase64toByteArray
 import io.elixxir.data.session.util.toBase64String
-import io.elixxir.xxclient.bindings.Bindings
 import kotlinx.coroutines.withContext
 import java.lang.IllegalStateException
 import java.security.*
@@ -20,7 +20,7 @@ import javax.inject.Inject
 import kotlin.system.measureTimeMillis
 
 class XxmKeyStore @Inject internal constructor(
-    private val bindings: Bindings,
+    private val bindings: BindingsRepository,
     private val prefs: KeyStorePreferences,
     config: Config,
 ) : KeyStoreManager, Config by config {

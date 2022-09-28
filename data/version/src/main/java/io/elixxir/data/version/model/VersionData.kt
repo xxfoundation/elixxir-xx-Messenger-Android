@@ -1,7 +1,7 @@
 package io.elixxir.data.version.model
 
 import com.google.gson.JsonElement
-import io.elixxir.data.version.BuildConfig
+import io.elixxir.core.common.BuildConfig
 
 internal data class VersionData(
     val cmixOldest: String = "",

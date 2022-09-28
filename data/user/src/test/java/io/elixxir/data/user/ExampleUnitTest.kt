@@ -1,4 +1,4 @@
-package io.elixxir.data.userdiscovery
+package io.elixxir.data.user
 
 import org.junit.Test
 

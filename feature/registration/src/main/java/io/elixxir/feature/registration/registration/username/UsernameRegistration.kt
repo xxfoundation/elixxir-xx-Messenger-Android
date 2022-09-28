@@ -15,7 +15,7 @@ import io.elixxir.core.ui.model.UiText
 import io.elixxir.core.ui.util.genericError
 import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState
-import io.elixxir.data.userdiscovery.UserRepository
+import io.elixxir.data.user.UserRepository
 import io.elixxir.feature.registration.R
 import kotlinx.coroutines.*
 import javax.inject.Inject

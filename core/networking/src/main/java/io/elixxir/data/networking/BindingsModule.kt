@@ -1,19 +1,19 @@
 package io.elixxir.data.networking
 
-import dagger.Binds
 import dagger.Module
+import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.elixxir.data.networking.data.NetworkDataSource
+import io.elixxir.data.networking.data.BindingsDataSource
 import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface NetworkModule {
+object BindingsModule {
 
     @Singleton
-    @Binds
-    fun bindNetworkRepository(
-        dataSource: NetworkDataSource
-    ): NetworkRepository
+    @Provides
+    fun provideBindingsRepository(): BindingsRepository {
+        return BindingsDataSource()
+    }
 }

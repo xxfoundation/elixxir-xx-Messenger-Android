@@ -6,7 +6,6 @@ import io.elixxir.core.common.Config
 import io.elixxir.core.common.util.resultOf
 import io.elixxir.data.session.SessionRepository
 import io.elixxir.data.session.model.SessionState
-import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxclient.cmix.CMix
 import kotlinx.coroutines.withContext
 import java.io.File
@@ -14,7 +13,7 @@ import javax.inject.Inject
 
 class SessionDataSource @Inject internal constructor(
     @ApplicationContext private val context: Context,
-    private val bindings: Bindings,
+    private val bindings: BindingsRepository,
     private val keyStore: KeyStoreManager,
     config: Config,
 ) : SessionRepository, Config by config {

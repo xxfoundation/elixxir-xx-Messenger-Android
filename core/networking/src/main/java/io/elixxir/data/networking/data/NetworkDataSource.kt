@@ -1,38 +1,44 @@
 package io.elixxir.data.networking.data
 
-import io.elixxir.core.common.log
-import kotlinx.coroutines.Dispatchers
+import io.elixxir.core.common.Config
+import io.elixxir.core.common.util.resultOf
+import io.elixxir.data.networking.BindingsRepository
+import io.elixxir.data.networking.NetworkRepository
+import io.elixxir.xxclient.cmix.CMix
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
+import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-private const val MAX_NETWORK_RETRIES = 29
-private const val NETWORK_POLL_INTERVAL_MS = 1000L
+class NetworkDataSource @Inject internal constructor(
+    private val bindings: BindingsRepository,
+    config: Config
+) : NetworkRepository, Config by config {
 
+    private val cMix: CMix
+        get() = bindings.getCMix() ?: throw(IllegalStateException("CMix not initialized"))
 
-class NetworkDataSource {
+    override suspend fun initializeNetwork(): Result<Unit> = resultOf {
+        do {
+            waitTilHealthy()
+            delay(NETWORK_POLL_INTERVAL_MS)
+        } while (!waitTilHealthy())
 
-    private suspend fun connectToCmix(retries: Int = 0) {
-        networking.checkRegisterNetworkCallback()
-        if (retries < MAX_NETWORK_RETRIES) {
-            if (initializeNetworkFollower()) {
-                log("Started network follower after #${retries + 1} attempt(s).")
-                withContext(Dispatchers.Main) {
-                    onUsernameNextClicked()
-                }
-            } else {
-                delay(NETWORK_POLL_INTERVAL_MS)
-                log("Attempting to start network follower, attempt #${retries + 1}.")
-                connectToCmix(retries + 1)
-            }
-        } else throw Exception("Failed to connect to network after ${retries + 1} attempts. Please try again.")
+        initializeNetworkFollower()
     }
 
-    private suspend fun initializeNetworkFollower(): Boolean = suspendCoroutine { continuation ->
-        networking.tryStartNetworkFollower { successful ->
-            continuation.resume(successful)
-        }
+    private suspend fun waitTilHealthy(): Boolean = suspendCoroutine { continuation ->
+        continuation.resume(cMix.waitForNetwork(NETWORK_TIMEOUT_MS))
     }
 
+    private suspend fun initializeNetworkFollower(): Unit = withContext(dispatcher) {
+        cMix.startNetworkFollower(NETWORK_TIMEOUT_MS)
+    }
+
+    companion object {
+        private const val MAX_NETWORK_RETRIES = 29
+        private const val NETWORK_POLL_INTERVAL_MS = 1000L
+        private const val NETWORK_TIMEOUT_MS = 30_000L
+    }
 }

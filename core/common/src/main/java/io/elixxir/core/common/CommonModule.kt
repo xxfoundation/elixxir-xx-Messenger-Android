@@ -1,14 +1,16 @@
 package io.elixxir.core.common
 
-import com.google.android.datatransport.runtime.dagger.Binds
-import com.google.android.datatransport.runtime.dagger.Module
+import dagger.Binds
+import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
 interface CommonModule {
 
+    @Singleton
     @Binds
     fun bindConfig(
         config: DefaultConfig

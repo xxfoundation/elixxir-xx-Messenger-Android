@@ -1,6 +1,6 @@
-package io.elixxir.data.userdiscovery.data
+package io.elixxir.data.user.data
 
-import io.elixxir.data.userdiscovery.UserRepository
+import io.elixxir.data.user.UserRepository
 import javax.inject.Inject
 
 class UserDataSource @Inject internal constructor(): UserRepository {
@@ -33,5 +33,5 @@ class UserDataSource @Inject internal constructor(): UserRepository {
 
     private fun displayError(errorMsg: String) {
         error.postValue(bindingsErrorMessage(Exception(errorMsg)))
-
+    }
 }

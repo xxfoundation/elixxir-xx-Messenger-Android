@@ -40,7 +40,7 @@ kapt {
 
 dependencies {
     implementation(project(":depconstraints"))
-    implementation(project(":xxclient"))
+    api(project(":xxclient"))
     implementation(project(":core:common"))
 
     implementation(Libs.Core.ANDROIDX_APPCOMPAT)
