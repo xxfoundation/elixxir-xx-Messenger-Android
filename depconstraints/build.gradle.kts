@@ -9,6 +9,7 @@ val constraintLayout = "2.1.4"
 val core = "1.9.0"
 val coreTest = "1.4.0"
 val coroutines = "1.6.1"
+val crypto = "1.1.0-alpha03"
 val extJunit = "1.1.3"
 val firebase = "27.0.0"
 val gson = "2.8.9"
@@ -39,6 +40,7 @@ dependencies {
         api("${Libs.Data.PHONE_NUMBER}:$phoneNumber")
         api("${Libs.Data.GSON}:$gson")
         api("${Libs.Data.PROTOBUF}:$protobuf")
+        api("${Libs.Data.CRYPTO}:$crypto")
         api("${Libs.Media.GLIDE}:$glide")
         api(Libs.Logging.CRASHLYTICS)
         api("${Libs.Logging.FIREBASE_BOM}:$firebase")

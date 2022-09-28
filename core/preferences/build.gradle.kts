@@ -45,6 +45,7 @@ dependencies {
     implementation(Libs.Core.CORE_KTX)
 
     implementation(Libs.Data.PREFERENCE)
+    implementation(Libs.Data.CRYPTO)
 
     implementation(Libs.DI.HILT)
     kapt(Libs.DI.HILT_KAPT)

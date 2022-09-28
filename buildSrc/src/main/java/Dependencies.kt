@@ -36,6 +36,7 @@ object Libs {
         const val PHONE_NUMBER = "com.googlecode.libphonenumber:libphonenumber"
         const val GSON = "com.google.code.gson:gson"
         const val PROTOBUF = "com.google.protobuf:protobuf-javalite"
+        const val CRYPTO = "androidx.security:security-crypto"
     }
 
     object Media {
