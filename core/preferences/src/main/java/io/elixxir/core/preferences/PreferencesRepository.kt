@@ -1,7 +1,7 @@
 package io.elixxir.core.preferences
 
-import io.elixxir.core.preferences.model.KeyStorePreferences
+import android.content.SharedPreferences
 
 interface PreferencesRepository {
-    val keyStore: KeyStorePreferences
+    val preferences: SharedPreferences
 }

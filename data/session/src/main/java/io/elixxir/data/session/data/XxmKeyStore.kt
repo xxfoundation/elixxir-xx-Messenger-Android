@@ -126,11 +126,11 @@ class XxmKeyStore @Inject internal constructor(
     }
 
     private fun decryptSecret(): ByteArray {
-        if (prefs.userSecret.isBlank()) {
+        if (prefs.userSecret.isNullOrBlank()) {
             throw IllegalStateException("Key has not been saved yet!")
         }
 
-        val encryptedBytes = prefs.userSecret.fromBase64toByteArray()
+        val encryptedBytes = prefs.userSecret?.fromBase64toByteArray()
         val cipher = Cipher.getInstance(KEYSTORE_ALGORITHM)
         log("Initializing Decrypt")
         cipher.init(Cipher.DECRYPT_MODE, privateKey, cipherMode)
