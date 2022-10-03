@@ -21,49 +21,49 @@ class MessageReceivedListener @Inject constructor(
     private val daoRepo: DaoRepository,
     private val schedulers: SchedulerProvider,
     private val preferences: PreferencesRepository
-) : Listener {
+)/* : Listener */{
     var subscriptions = CompositeDisposable()
 
     init {
         Timber.v("Message listener started")
     }
 
-    override fun hear(message: Message) {
-        try {
-            val cmixText = CMIXText.parseFrom(message.payload)
-            val timestamp = message.timestampMS
-            val javaTimestamp = System.currentTimeMillis()
-            // Get the text of the message
+//    override fun hear(message: Message) {
+//        try {
+//            val cmixText = CMIXText.parseFrom(message.payload)
+//            val timestamp = message.timestampMS
+//            val javaTimestamp = System.currentTimeMillis()
+//            // Get the text of the message
+//
+//            Timber.v("Bindings timestamp (ms): ${message.timestampMS}")
+//            Timber.v("Bindings timestamp (nano): ${message.timestampNano}")
+//            Timber.v("Java timestamp (ms): $javaTimestamp")
+//            Timber.v("Kronos timestamp (ms): ${XxMessengerApplication.kronosClock.getCurrentNtpTimeMs()}")
+//
+//            val senderId = message.sender
+//            Timber.v(
+//                "Received Message and attempting to save it %s, %s, %s",
+//                cmixText,
+//                timestamp,
+//                senderId
+//            )
+//
+//            insertMsgByContactId(
+//                message.id,
+//                senderId,
+//                preferences.getUserId(),
+//                cmixText,
+//                timestamp,
+//                message.roundURL
+//            )
+//        } catch (e: InvalidProtocolBufferException) {
+//            Timber.e(e.localizedMessage)
+//        }
+//    }
 
-            Timber.v("Bindings timestamp (ms): ${message.timestampMS}")
-            Timber.v("Bindings timestamp (nano): ${message.timestampNano}")
-            Timber.v("Java timestamp (ms): $javaTimestamp")
-            Timber.v("Kronos timestamp (ms): ${XxMessengerApplication.kronosClock.getCurrentNtpTimeMs()}")
-
-            val senderId = message.sender
-            Timber.v(
-                "Received Message and attempting to save it %s, %s, %s",
-                cmixText,
-                timestamp,
-                senderId
-            )
-
-            insertMsgByContactId(
-                message.id,
-                senderId,
-                preferences.getUserId(),
-                cmixText,
-                timestamp,
-                message.roundURL
-            )
-        } catch (e: InvalidProtocolBufferException) {
-            Timber.e(e.localizedMessage)
-        }
-    }
-
-    override fun name(): String {
-        return this::javaClass.get().simpleName
-    }
+//    override fun name(): String {
+//        return this::javaClass.get().simpleName
+//    }
 
     private fun insertMsgByContactId(
         uniqueMsgId: ByteArray,

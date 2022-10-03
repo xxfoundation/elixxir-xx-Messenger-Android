@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.chat
 
 import bindings.GroupChat
-import bindings.IdList
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBindings
@@ -16,7 +15,8 @@ class GroupChatBindings(val groupChat: GroupChat) : GroupChatBase {
     }
 
     override fun getGroups(): IdListBase {
-        return IdListBindings(groupChat.groups)
+        TODO()
+//        return IdListBindings(groupChat.groups)
     }
 
     override fun joinGroup(serializedGroupData: ByteArray) {
@@ -32,30 +32,34 @@ class GroupChatBindings(val groupChat: GroupChat) : GroupChatBase {
         name: String,
         initialMessage: String?
     ): NewGroupReportBase {
-        val idListBindings = IdList()
-        idList.forEach { id ->
-            idListBindings.add(id)
-        }
-
-        val groupReport = groupChat.makeGroup(
-            idListBindings,
-            name.encodeToByteArray(),
-            initialMessage?.encodeToByteArray() ?: byteArrayOf()
-        )
-
-        return NewGroupReportBindings(groupReport)
+        TODO()
+//        val idListBindings = IdList()
+//        idList.forEach { id ->
+//            idListBindings.add(id)
+//        }
+//
+//        val groupReport = groupChat.makeGroup(
+//            idListBindings,
+//            name.encodeToByteArray(),
+//            initialMessage?.encodeToByteArray() ?: byteArrayOf()
+//        )
+//
+//        return NewGroupReportBindings(groupReport)
     }
 
     override fun numGroups(): Long {
-        return groupChat.numGroups()
+        TODO()
+//        return groupChat.numGroups()
     }
 
     override fun resendRequest(groupIdBytes: ByteArray): NewGroupReportBase {
-        val report = groupChat.resendRequest(groupIdBytes)
-        return NewGroupReportBindings(report)
+        TODO()
+//        val report = groupChat.resendRequest(groupIdBytes)
+//        return NewGroupReportBindings(report)
     }
 
     override fun send(groupIdBytes: ByteArray, message: ByteArray): GroupSendReportBase {
-        return GroupSendReportBindings(groupChat.send(groupIdBytes, message))
+        TODO()
+//        return GroupSendReportBindings(groupChat.send(groupIdBytes, message))
     }
 }

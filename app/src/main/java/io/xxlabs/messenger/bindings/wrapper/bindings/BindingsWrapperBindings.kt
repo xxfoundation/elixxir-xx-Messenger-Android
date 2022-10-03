@@ -2,7 +2,6 @@ package io.xxlabs.messenger.bindings.wrapper.bindings
 
 import android.content.Context
 import bindings.Bindings
-import bindings.TimeSource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Single
 import io.xxlabs.messenger.BuildConfig
@@ -87,23 +86,25 @@ class BindingsWrapperBindings {
 
         override fun newClient(path: String, password: ByteArray) {
             val ndf = getNdf()
-            Bindings.newClient(
-                ndf,
-                path,
-                password,
-                ""
-            )
+            TODO()
+//            Bindings.newClient(
+//                ndf,
+//                path,
+//                password,
+//                ""
+//            )
         }
 
         override fun login(storageDir: String, password: ByteArray): ClientWrapperBase {
-            return ClientWrapperBindings(Bindings.login(storageDir, password, ""))
+            return ClientWrapperBindings()
         }
 
         override fun newUserDiscovery(clientWrapper: ClientWrapperBase): UserDiscoveryWrapperBase {
-            return UserDiscoveryWrapperBindings(
-                Bindings.newUserDiscovery((clientWrapper as ClientWrapperBindings).client),
-                clientWrapper.getUser().getContact() as ContactWrapperBindings
-            ).apply { onUdInitialized() }
+            TODO()
+//            return UserDiscoveryWrapperBindings(
+//                Bindings.newUserDiscovery((clientWrapper as ClientWrapperBindings).client),
+//                clientWrapper.getUser().getContact() as ContactWrapperBindings
+//            ).apply { onUdInitialized() }
         }
 
         override fun newUserDiscoveryFromBackup(
@@ -111,10 +112,11 @@ class BindingsWrapperBindings {
             emailStringified: String?,
             phoneStringified: String?
         ): UserDiscoveryWrapperBase {
-            return UserDiscoveryWrapperBindings(Bindings.newUserDiscoveryFromBackup(
-                (clientWrapper as ClientWrapperBindings).client, emailStringified, phoneStringified,),
-                clientWrapper.getUser().getContact() as ContactWrapperBindings
-            ).apply { onUdInitialized() }
+            TODO()
+//            return UserDiscoveryWrapperBindings(Bindings.newUserDiscoveryFromBackup(
+//                (clientWrapper as ClientWrapperBindings).client, emailStringified, phoneStringified,),
+//                clientWrapper.getUser().getContact() as ContactWrapperBindings
+//            ).apply { onUdInitialized() }
         }
 
         private fun UserDiscoveryWrapperBindings.onUdInitialized() {
@@ -158,11 +160,13 @@ class BindingsWrapperBindings {
             }
 
         override fun setTimeSource(kronosFunction: () -> Long) {
-            Bindings.setTimeSource(TimeSource(kronosFunction))
+            TODO()
+//            Bindings.setTimeSource(TimeSource(kronosFunction))
         }
 
         override fun unmarshallContact(rawData: ByteArray): Any {
-            return Bindings.unmarshalContact(rawData)
+            TODO()
+//            return Bindings.unmarshalContact(rawData)
         }
 
         override fun updateCommonErrors(jsonFile: String) {
@@ -170,20 +174,22 @@ class BindingsWrapperBindings {
         }
 
         override fun downloadCommonErrors(): Single<String> {
-            return Single.create { emitter ->
-                try {
-                    val commonErrors = Bindings.downloadErrorDB().decodeToString()
-                    Bindings.updateCommonErrors(commonErrors)
-                    emitter.onSuccess(commonErrors)
-                } catch (err: Exception) {
-                    err.printStackTrace()
-                    emitter.onError(err)
-                }
-            }
+            TODO()
+//            return Single.create { emitter ->
+//                try {
+//                    val commonErrors = Bindings.downloadErrorDB().decodeToString()
+//                    Bindings.updateCommonErrors(commonErrors)
+//                    emitter.onSuccess(commonErrors)
+//                } catch (err: Exception) {
+//                    err.printStackTrace()
+//                    emitter.onError(err)
+//                }
+//            }
         }
 
         override fun unmarshallSendReport(marshalledReport: ByteArray): SendReportBase {
-            return SendReportBindings(Bindings.unmarshalSendReport(marshalledReport))
+            TODO()
+//            return SendReportBindings(Bindings.unmarshalSendReport(marshalledReport))
         }
 
         fun getXxdkVersion(): String {
@@ -201,14 +207,15 @@ class BindingsWrapperBindings {
 }
 
 fun bindingsErrorMessage(exception: Throwable): String {
-    val bindingsErrorMsg = Bindings.errorStringToUserFriendlyMessage(exception.localizedMessage)
-    return when {
-        exception is NodeErrorException ->
-            "Establishing secure connection. Please try again in a moment."
-        bindingsErrorMsg.startsWith("UR") -> {
-            FirebaseCrashlytics.getInstance().recordException(exception)
-            "Unexpected error. Please try again."
-        }
-        else -> bindingsErrorMsg
-    }
+    TODO()
+//    val bindingsErrorMsg = Bindings.errorStringToUserFriendlyMessage(exception.localizedMessage)
+//    return when {
+//        exception is NodeErrorException ->
+//            "Establishing secure connection. Please try again in a moment."
+//        bindingsErrorMsg.startsWith("UR") -> {
+//            FirebaseCrashlytics.getInstance().recordException(exception)
+//            "Unexpected error. Please try again."
+//        }
+//        else -> bindingsErrorMsg
+//    }
 }

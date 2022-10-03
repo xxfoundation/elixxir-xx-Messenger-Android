@@ -84,10 +84,10 @@ class DeleteAccount @Inject constructor(
             .flatMap {
                 // Wait for running processes to complete.
                 var isBusy: Boolean
-                do {
-                    Thread.sleep(RUNNING_PROCESSES_POLL_INTERVAL)
-                    isBusy = ClientRepository.clientWrapper.client.hasRunningProcessies()
-                } while (isBusy)
+//                do {
+//                    Thread.sleep(RUNNING_PROCESSES_POLL_INTERVAL)
+//                    isBusy = ClientRepository.clientWrapper.client.hasRunningProcessies()
+//                } while (isBusy)
 
                 Single.just(clearAppData())
             }

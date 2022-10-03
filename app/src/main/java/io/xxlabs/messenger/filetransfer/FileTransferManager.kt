@@ -23,17 +23,17 @@ class FileTransferManager(repo: BaseRepository) : FileTransferRepository {
 
     private val callback: IncomingFileCallback = IncomingFileListener(repo, this)
 
-    private val manager: FileTransfer =
-        Bindings.newFileTransferManager(
-            ClientRepository.clientWrapper.client,
-            IncomingFileTransferCallback(callback),
-            FileTransferParams.create()
-        )
+    private val manager: FileTransfer = TODO()
+//        Bindings.newFileTransferManager(
+//            ClientRepository.clientWrapper.client,
+//            IncomingFileTransferCallback(callback),
+//            FileTransferParams.create()
+//        )
 
-    override val maxFilePreviewSize: FileSize = FileSize(manager.maxFilePreviewSize)
-    override val maxFileNameByteLength: Long = manager.maxFileNameByteLength
-    override val maxFileTypeByteLength: Long = manager.maxFileTypeByteLength
-    override val maxFileSize: FileSize = FileSize(manager.maxFileSize)
+    override val maxFilePreviewSize: FileSize = TODO("FileSize(manager.maxFilePreviewSize")
+    override val maxFileNameByteLength: Long = TODO("manager.maxFileNameByteLength")
+    override val maxFileTypeByteLength: Long = TODO("manager.maxFileTypeByteLength")
+    override val maxFileSize: FileSize = TODO("FileSize(manager.maxFileSize)")
 
     @Throws(Exception::class)
     override fun send(content: OutgoingFile): SentFile = runBlocking(Dispatchers.IO) {
@@ -121,7 +121,7 @@ class FileTransferManager(repo: BaseRepository) : FileTransferRepository {
         )
 
         // Use JPEG compression provided by Bindings.
-        val compressedImageData = Bindings.compressJpeg(savedFileData.rawBytes)
+        val compressedImageData = TODO("Bindings.compressJpeg(savedFileData.rawBytes)")
         // Create a SentFile with the compressed file data.
         val compressedSentFile = sentFile.copy(
             data = FileData(compressedImageData),
@@ -153,27 +153,29 @@ class FileTransferManager(repo: BaseRepository) : FileTransferRepository {
     @Throws(Exception::class)
     private fun send(content: SentFile): TransferId {
         // TODO: Save the TransferId to DB.
-        return TransferId(manager.send(
-            content.fileName,
-            content.fileExtension,
-            content.data.rawBytes,
-            content.recipient.id,
-            RETRY_COUNT,
-            content.preview?.rawBytes,
-            SendProgressCallback(content.progressCallback),
-            PROGRESS_POLL_INTERVAL_MS
-        ))
+        TODO()
+//        return TransferId(manager.send(
+//            content.fileName,
+//            content.fileExtension,
+//            content.data.rawBytes,
+//            content.recipient.id,
+//            RETRY_COUNT,
+//            content.preview?.rawBytes,
+//            SendProgressCallback(content.progressCallback),
+//            PROGRESS_POLL_INTERVAL_MS
+//        ))
     }
 
     @Throws(Exception::class)
     override fun registerSendProgressCallback(
         transferId: TransferId,
         callback: SentFileProgressCallback,
-    ) = manager.registerSendProgressCallback(
-        transferId.tid,
-        SendProgressCallback(callback),
-        PROGRESS_POLL_INTERVAL_MS
-    )
+    ) = TODO()
+//        manager.registerSendProgressCallback(
+//        transferId.tid,
+//        SendProgressCallback(callback),
+//        PROGRESS_POLL_INTERVAL_MS
+//    )
 
     @Throws(Exception::class)
     override fun resend(transferId: TransferId) {
@@ -188,11 +190,12 @@ class FileTransferManager(repo: BaseRepository) : FileTransferRepository {
     override fun registerReceiveProgressCallback(
         transferId: TransferId,
         callback: ReceivedFileProgressCallback,
-    ) = manager.registerReceiveProgressCallback(
-        transferId.tid,
-        ReceiveProgressCallback(callback),
-        PROGRESS_POLL_INTERVAL_MS
-    )
+    ) = TODO()
+//    manager.registerReceiveProgressCallback(
+//        transferId.tid,
+//        ReceiveProgressCallback(callback),
+//        PROGRESS_POLL_INTERVAL_MS
+//    )
 
     @Throws(Exception::class)
     override suspend fun receive(transferId: TransferId): FileData {
@@ -221,52 +224,52 @@ class FileTransferParams private constructor() {
 
 private class IncomingFileTransferCallback(
     private val callback: IncomingFileCallback
-) : IncomingFileCallback by callback, FileTransferReceiveFunc {
+) : IncomingFileCallback by callback/*, FileTransferReceiveFunc*/ {
 
-    override fun receiveCallback(
-        tid: ByteArray,
-        fileName: String,
-        fileType: String,
-        sender: ByteArray,
-        size: Long,
-        preview: ByteArray?
-    ) = callback.onFileTransferReceived(
-        IncomingFile(
-            TransferId(tid),
-            fileName,
-            fileType,
-            Sender(sender),
-            size,
-            preview?.let { PreviewData(it) }
-        )
-    )
+//    override fun receiveCallback(
+//        tid: ByteArray,
+//        fileName: String,
+//        fileType: String,
+//        sender: ByteArray,
+//        size: Long,
+//        preview: ByteArray?
+//    ) = callback.onFileTransferReceived(
+//        IncomingFile(
+//            TransferId(tid),
+//            fileName,
+//            fileType,
+//            Sender(sender),
+//            size,
+//            preview?.let { PreviewData(it) }
+//        )
+//    )
 }
 
 private class SendProgressCallback(
     private val callback: SentFileProgressCallback
-) : SentFileProgressCallback by callback, FileTransferSentProgressFunc {
+) : SentFileProgressCallback by callback/*, FileTransferSentProgressFunc*/ {
 
-    override fun sentProgressCallback(
-        isComplete: Boolean,
-        chunksSent: Long,
-        chunksDelivered: Long,
-        chunksTotal: Long,
-        filePartTracker: FilePartTracker,
-        error: java.lang.Exception?
-    ) = callback.onProgressUpdate(
-        isComplete, chunksSent, chunksDelivered, chunksTotal, error
-    )
+//    override fun sentProgressCallback(
+//        isComplete: Boolean,
+//        chunksSent: Long,
+//        chunksDelivered: Long,
+//        chunksTotal: Long,
+//        filePartTracker: FilePartTracker,
+//        error: java.lang.Exception?
+//    ) = callback.onProgressUpdate(
+//        isComplete, chunksSent, chunksDelivered, chunksTotal, error
+//    )
 }
 
 private class ReceiveProgressCallback(
     private val callback: ReceivedFileProgressCallback
-): ReceivedFileProgressCallback by callback, FileTransferReceivedProgressFunc {
+): ReceivedFileProgressCallback by callback/*, FileTransferReceivedProgressFunc*/ {
 
-    override fun receivedProgressCallback(
-        isComplete: Boolean,
-        chunksReceived: Long,
-        chunksTotal: Long,
-        filePartTracker: FilePartTracker?,
-        error: java.lang.Exception?
-    ) = callback.onProgressUpdate(isComplete, chunksReceived, chunksTotal, error)
+//    override fun receivedProgressCallback(
+//        isComplete: Boolean,
+//        chunksReceived: Long,
+//        chunksTotal: Long,
+//        filePartTracker: FilePartTracker?,
+//        error: java.lang.Exception?
+//    ) = callback.onProgressUpdate(isComplete, chunksReceived, chunksTotal, error)
 }

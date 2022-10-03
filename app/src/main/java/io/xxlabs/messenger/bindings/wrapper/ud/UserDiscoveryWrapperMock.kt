@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.bindings.wrapper.ud
 
-import bindings.Fact
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperMock
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
@@ -51,22 +50,26 @@ data class UserDiscoveryWrapperMock(
     }
 
     override fun registerUdNickname(nickname: String): String {
-        val newFact = Fact(FactType.NICKNAME.value, nickname)
-        return addFactToUd(newFact)
+        TODO()
+//        val newFact = Fact(FactType.NICKNAME.value, nickname)
+//        return addFactToUd(newFact)
     }
 
     override fun registerUdEmail(email: String): String {
-        val newFact = Fact(FactType.EMAIL.value, email)
-        return addFactToUd(newFact)
+        TODO()
+//        val newFact = Fact(FactType.EMAIL.value, email)
+//        return addFactToUd(newFact)
     }
 
     override fun registerUdPhone(phone: String): String {
-        val newFact = Fact(FactType.PHONE.value, phone)
-        return addFactToUd(newFact)
+        TODO()
+//        val newFact = Fact(FactType.PHONE.value, phone)
+//        return addFactToUd(newFact)
     }
 
-    override fun addFactToUd(newFact: Fact): String {
-        return newFact.stringify()
+    override fun addFactToUd(/*newFact: Fact*/): String {
+        TODO()
+//        return newFact.stringify()
     }
 
     override fun confirmFact(confirmationId: String, confirmationCode: String) {}

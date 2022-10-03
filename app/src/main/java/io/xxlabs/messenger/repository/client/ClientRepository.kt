@@ -45,7 +45,7 @@ import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
 import javax.inject.Inject
-import bindings.Contact as ContactBindings
+//import bindings.Contact as ContactBindings
 
 class ClientRepository @Inject constructor(
     val schedulers: SchedulerProvider,
@@ -139,12 +139,12 @@ class ClientRepository @Inject constructor(
 
     private fun initPreImageCallback() {
         val userReceptionId = clientWrapper.getUser().getReceptionId()
-        clientWrapper.client.registerPreimageCallback(userReceptionId) { receptionId, _ ->
-            Timber.v("[PREIMAGE] Pre image has been updated")
-            if (receptionId.contentEquals(receptionId)) {
-                preferences.preImages = getPreImages()
-            }
-        }
+//        clientWrapper.client.registerPreimageCallback(userReceptionId) { receptionId, _ ->
+//            Timber.v("[PREIMAGE] Pre image has been updated")
+//            if (receptionId.contentEquals(receptionId)) {
+//                preferences.preImages = getPreImages()
+//            }
+//        }
     }
 
     private fun initFileTransferManager() {
@@ -155,11 +155,11 @@ class ClientRepository @Inject constructor(
         onGroupReceived: (GroupBase) -> Unit,
         onMessageReceived: (GroupMessageReceiveBase) -> Unit
     ) {
-        groupManager = GroupsManagerBindings.initManager(clientWrapper, { group ->
-            onGroupReceived(group)
-        }, { message ->
-            onMessageReceived(GroupMessageReceiveBindings(message))
-        }) as GroupChatBindings
+//        groupManager = GroupsManagerBindings.initManager(clientWrapper, { group ->
+//            onGroupReceived(group)
+//        }, { message ->
+//            onMessageReceived(GroupMessageReceiveBindings(message))
+//        }) as GroupChatBindings
     }
 
     override fun sendGroupMessage(
@@ -651,17 +651,19 @@ class ClientRepository @Inject constructor(
     //  Contact ===============================================================================
     override fun deleteContact(marshalledContact: ByteArray): Single<ByteArray> {
         return Single.create { emitter ->
-            try {
-                clientWrapper.client.deleteContact(marshalledContact)
-                emitter.onSuccess(marshalledContact)
-            } catch (err: Exception) {
-                emitter.onError(err)
-            }
+            TODO()
+//            try {
+//                clientWrapper.client.deleteContact(marshalledContact)
+//                emitter.onSuccess(marshalledContact)
+//            } catch (err: Exception) {
+//                emitter.onError(err)
+//            }
         }
     }
 
     override fun unmarshallContact(rawData: ByteArray): ContactWrapperBase {
-        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as ContactBindings)
+        TODO()
+//        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as ContactBindings)
     }
 
     override fun getContactWrapper(contact: ByteArray): ContactWrapperBase {
@@ -1001,14 +1003,15 @@ class ClientRepository @Inject constructor(
     private var shouldReplay = true
 
     override fun replayRequests() {
-        try {
-            if (shouldReplay) {
-                clientWrapper.client.replayRequests()
-                shouldReplay = false
-            }
-        } catch (e: Exception) {
-            Timber.d(e)
-        }
+        TODO()
+//        try {
+//            if (shouldReplay) {
+//                clientWrapper.client.replayRequests()
+//                shouldReplay = false
+//            }
+//        } catch (e: Exception) {
+//            Timber.d(e)
+//        }
     }
 
     override suspend fun getPartners(): List<String> {
@@ -1029,24 +1032,25 @@ class ClientRepository @Inject constructor(
 
         fun hasInitialized(): Single<Boolean> {
             return Single.create { emitter ->
-                val isInitialized =
-                    this::clientWrapper.isInitialized && this::userWrapper.isInitialized
-                Timber.v("[CLIENT REPO] initialized: $isInitialized")
-                if (!isInitialized) {
-                    try {
-                        Timber.v("[CLIENT REPO] Trying to get client singleton...")
-                        val clientSingleton = Bindings.getClientSingleton()
-                        clientWrapper.client = clientSingleton
-                        userWrapper = clientWrapper.getUser().getContact() as ContactWrapperBindings
-                        emitter.onSuccess(true)
-                    } catch (err: Exception) {
-                        Timber.e(err.localizedMessage)
-                        Timber.e("[CLIENT REPO] Singleton client does not exist, initiating new...")
-                        emitter.onSuccess(false)
-                    }
-                }
-
-                emitter.onSuccess(true)
+                TODO()
+//                val isInitialized =
+//                    this::clientWrapper.isInitialized && this::userWrapper.isInitialized
+//                Timber.v("[CLIENT REPO] initialized: $isInitialized")
+//                if (!isInitialized) {
+//                    try {
+//                        Timber.v("[CLIENT REPO] Trying to get client singleton...")
+//                        val clientSingleton = Bindings.getClientSingleton()
+//                        clientWrapper.client = clientSingleton
+//                        userWrapper = clientWrapper.getUser().getContact() as ContactWrapperBindings
+//                        emitter.onSuccess(true)
+//                    } catch (err: Exception) {
+//                        Timber.e(err.localizedMessage)
+//                        Timber.e("[CLIENT REPO] Singleton client does not exist, initiating new...")
+//                        emitter.onSuccess(false)
+//                    }
+//                }
+//
+//                emitter.onSuccess(true)
             }
         }
 

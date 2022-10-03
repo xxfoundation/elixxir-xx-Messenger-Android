@@ -2,11 +2,9 @@ package io.xxlabs.messenger.backup.bindings
 
 import bindings.Backup
 import bindings.Bindings
-import bindings.Client
 import bindings.UpdateBackupFunc
 import io.xxlabs.messenger.backup.data.restore.ExtrasJson
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
-import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.support.appContext
@@ -27,8 +25,6 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     )
 
     private var backup: Backup? = null
-    private val client: Client
-        get() = ClientRepository.clientWrapper.client
     private val userWrapper: ContactWrapperBase
         get() = ClientRepository.userWrapper
 
@@ -55,20 +51,22 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     }
 
     fun initializeBackup(backupPassword: String) {
-        backup = Bindings.initializeBackup(
-            backupPassword,
-            BackupCallback(backupTaskCallback),
-            client
-        )
+        TODO()
+//        backup = Bindings.initializeBackup(
+//            backupPassword,
+//            BackupCallback(backupTaskCallback),
+//            client
+//        )
         backupUserFacts(userWrapper)
     }
 
-    fun initializeBackupDuringRestore(client: Client, backupPassword: String? = "") {
-        backup = Bindings.initializeBackup(
-            backupPassword,
-            BackupCallback(backupTaskCallback),
-            client
-        )
+    fun initializeBackupDuringRestore(backupPassword: String? = "") {
+        TODO()
+//        backup = Bindings.initializeBackup(
+//            backupPassword,
+//            BackupCallback(backupTaskCallback),
+//            client
+//        )
     }
 
     fun backupUserFacts(user: ContactWrapperBase) {
@@ -98,12 +96,13 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     }
 
     private fun getEnabledBackup(): Backup? {
-        return backup ?: try {
-            Bindings.resumeBackup(BackupCallback(backupTaskCallback), client)
-        } catch (e: Exception) {
-            Timber.d("resumeBackup exception: ${e.message}")
-            null
-        }
+        TODO()
+//        return backup ?: try {
+//            Bindings.resumeBackup(BackupCallback(backupTaskCallback), client)
+//        } catch (e: Exception) {
+//            Timber.d("resumeBackup exception: ${e.message}")
+//            null
+//        }
     }
 }
 

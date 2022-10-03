@@ -142,19 +142,20 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun resetSession(contact: ContactData) {
-        try {
-            val roundId = ClientRepository.clientWrapper.client.resetSession(
-                contact.marshaled,
-                repo.getMashalledUser(),
-                ""
-            )
-            if (roundId > 0) {
-                updateContactStatus(contact.userId, RESET_SENT)
-                saveRequest(contact)
-            }
-        } catch (e: Exception) {
-            Timber.d("Failed to reset session: ${e.message}")
-        }
+        TODO()
+//        try {
+//            val roundId = ClientRepository.clientWrapper.client.resetSession(
+//                contact.marshaled,
+//                repo.getMashalledUser(),
+//                ""
+//            )
+//            if (roundId > 0) {
+//                updateContactStatus(contact.userId, RESET_SENT)
+//                saveRequest(contact)
+//            }
+//        } catch (e: Exception) {
+//            Timber.d("Failed to reset session: ${e.message}")
+//        }
     }
 
     fun updateAndRequestAuthChannel(contact: ContactData) {

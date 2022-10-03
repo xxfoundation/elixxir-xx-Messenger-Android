@@ -145,12 +145,13 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun downloadRegistrationJson(): JsonObject {
+        TODO()
         val gson = GsonBuilder()
             .setLenient()
             .create()
 
-        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
-        return gson.fromJson(db, JsonObject::class.java)
+//        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
+//        return gson.fromJson(db, JsonObject::class.java)
     }
 
     private fun navigateMain() {

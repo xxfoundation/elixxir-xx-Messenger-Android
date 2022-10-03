@@ -65,19 +65,20 @@ class BindingsRequestMediator @Inject constructor(
        requestVerifier.verifyRequest(request)
 
     override fun resetSession(contact: Contact): Boolean {
-        var result = false
-        try {
-            val roundId = ClientRepository.clientWrapper.client.resetSession(
-                contact.marshaled,
-                repo.getMashalledUser(),
-                ""
-            )
-            result = roundId > 0
-        } catch (e: Exception) {
-            Timber.d(
-                "Exception occurred when resetting ${contact.displayName}: ${e.message}."
-            )
-        }
-        return result
+        TODO()
+//        var result = false
+//        try {
+//            val roundId = ClientRepository.clientWrapper.client.resetSession(
+//                contact.marshaled,
+//                repo.getMashalledUser(),
+//                ""
+//            )
+//            result = roundId > 0
+//        } catch (e: Exception) {
+//            Timber.d(
+//                "Exception occurred when resetting ${contact.displayName}: ${e.message}."
+//            )
+//        }
+//        return result
     }
 }

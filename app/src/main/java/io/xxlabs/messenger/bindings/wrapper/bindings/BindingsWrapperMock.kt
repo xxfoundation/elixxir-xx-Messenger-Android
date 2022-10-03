@@ -68,7 +68,8 @@ class BindingsWrapperMock {
         }
 
         override fun unmarshallContact(rawData: ByteArray): Any {
-            return Bindings.unmarshalContact(rawData)
+            TODO()
+//            return Bindings.unmarshalContact(rawData)
         }
 
         override fun updateCommonErrors(jsonFile: String) {

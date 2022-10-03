@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.bindings.wrapper.ud
 
-import bindings.Fact
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.data.datatype.FactType
@@ -18,7 +17,7 @@ interface UserDiscoveryWrapperBase {
     fun registerUdNickname(nickname: String): String
     fun registerUdEmail(email: String): String
     fun registerUdPhone(phone: String): String
-    fun addFactToUd(newFact: Fact): String
+    fun addFactToUd(/*newFact: Fact*/): String
     fun confirmFact(confirmationId: String, confirmationCode: String)
     fun removeFact(factType: FactType): Boolean
     fun deleteUser(username: String)

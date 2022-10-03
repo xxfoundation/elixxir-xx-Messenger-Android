@@ -1,20 +1,19 @@
 package io.xxlabs.messenger.bindings.wrapper.contact
 
-import bindings.Contact
-import bindings.Fact
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
 import timber.log.Timber
 
 class ContactWrapperBindings(
-    val contact: Contact
+    /*val contact: Contact*/
 ) : ContactWrapperBase {
     override fun getId(): ByteArray {
-        return contact.id
+        TODO()
+//        return contact.id
     }
 
     private fun addFactToFactList(fact: String, type: FactType) {
-        contact.factList.add(fact, type.value)
+//        contact.factList.add(fact, type.value)
     }
 
     override fun addUsername(username: String) {
@@ -54,59 +53,63 @@ class ContactWrapperBindings(
     }
 
     override fun marshal(): ByteArray {
-        return contact.marshal()
+        TODO()
+//        return contact.marshal()
     }
 
-    private fun getFact(type: FactType): Fact? {
-        Timber.v("Facts list stringified: ${contact.factList.stringify()}")
-        try {
-            for (n in 0 until contact.factList.num()) {
-                Timber.v("Fact[$n] stringified = ${contact.factList[n].stringify()}")
-                if (contact.factList[n].get().isNotBlank()
-                    && type.value == contact.factList[n].type()
-                ) {
-                    return contact.factList[n]
-                }
-            }
-        } catch (err: Exception) {
-            err.localizedMessage
-        }
-        return null
+    private fun getFact(type: FactType): Nothing {
+        TODO()
+//        Timber.v("Facts list stringified: ${contact.factList.stringify()}")
+//        try {
+//            for (n in 0 until contact.factList.num()) {
+//                Timber.v("Fact[$n] stringified = ${contact.factList[n].stringify()}")
+//                if (contact.factList[n].get().isNotBlank()
+//                    && type.value == contact.factList[n].type()
+//                ) {
+//                    return contact.factList[n]
+//                }
+//            }
+//        } catch (err: Exception) {
+//            err.localizedMessage
+//        }
+//        return null
     }
 
     private fun getFactStringfy(type: FactType, raw: Boolean): String {
-        return try {
-            Timber.v("Get fact: ${getFact(type)?.stringify()}")
-            if (raw) {
-                getFact(type)?.stringify() ?: ""
-            } else {
-                if (type == FactType.PHONE) {
-                    val rawPhone = getFact(type)?.stringify()
-
-                    if (rawPhone != null) {
-                        val country = Country.fromRawPhone(rawPhone)
-                        Timber.v("Selected country: $country")
-                        country?.dialCode + rawPhone.substring(1, rawPhone.length - 2)
-                    } else {
-                        ""
-                    }
-                } else {
-                    getFact(type)?.stringify()?.substring(1) ?: ""
-                }
-            }
-        } catch (err: Exception) {
-            Timber.e("Error retrieving fact:")
-            err.printStackTrace()
-            ""
-        }
+        TODO()
+//        return try {
+//            Timber.v("Get fact: ${getFact(type)?.stringify()}")
+//            if (raw) {
+//                getFact(type)?.stringify() ?: ""
+//            } else {
+//                if (type == FactType.PHONE) {
+//                    val rawPhone = getFact(type)?.stringify()
+//
+//                    if (rawPhone != null) {
+//                        val country = Country.fromRawPhone(rawPhone)
+//                        Timber.v("Selected country: $country")
+//                        country?.dialCode + rawPhone.substring(1, rawPhone.length - 2)
+//                    } else {
+//                        ""
+//                    }
+//                } else {
+//                    getFact(type)?.stringify()?.substring(1) ?: ""
+//                }
+//            }
+//        } catch (err: Exception) {
+//            Timber.e("Error retrieving fact:")
+//            err.printStackTrace()
+//            ""
+//        }
     }
 
     override fun getStringifiedFacts(): String {
-        Timber.v("[STRINGIFY] Username ${getFact(FactType.USERNAME)?.stringify()}")
-        Timber.v("[STRINGIFY] EMAIL ${getFact(FactType.EMAIL)?.stringify()}")
-        Timber.v("[STRINGIFY] PHONE ${getFact(FactType.PHONE)?.stringify()}")
-        Timber.v("[STRINGIFY] NICKNAME ${getFact(FactType.NICKNAME)?.stringify()}")
-        return contact.factList.stringify()
+        TODO()
+//        Timber.v("[STRINGIFY] Username ${getFact(FactType.USERNAME)?.stringify()}")
+//        Timber.v("[STRINGIFY] EMAIL ${getFact(FactType.EMAIL)?.stringify()}")
+//        Timber.v("[STRINGIFY] PHONE ${getFact(FactType.PHONE)?.stringify()}")
+//        Timber.v("[STRINGIFY] NICKNAME ${getFact(FactType.NICKNAME)?.stringify()}")
+//        return contact.factList.stringify()
     }
 
     override fun getDisplayName(): CharSequence {

@@ -46,7 +46,7 @@ class BindingsRestoreHandler(
                 Dispatchers.IO
     )
 
-    private lateinit var client: Client
+//    private lateinit var client: Client
 
     private val backupReportPath: String
         get() = File(appContext().filesDir, "backup_report.xxm").path
@@ -119,69 +119,72 @@ class BindingsRestoreHandler(
     }
 
     private fun resetContacts(contacts: List<ContactData>) {
-        for (contact in contacts) {
-            try {
-                client.resetSession(
-                    contact.marshaled,
-                    client.user.contact.marshal(),
-                    ""
-                )
-            } catch (e: Exception) {
-                log("Error while resetting sessions.")
-            }
-        }
-        restoreComplete()
+        TODO()
+//        for (contact in contacts) {
+//            try {
+//                client.resetSession(
+//                    contact.marshaled,
+//                    client.user.contact.marshal(),
+//                    ""
+//                )
+//            } catch (e: Exception) {
+//                log("Error while resetting sessions.")
+//            }
+//        }
+//        restoreComplete()
     }
 
     private suspend fun restoreBackup(
         restoreParams: RestoreParams
     ) : BackupReport = withContext(scope.coroutineContext) {
-        log("Decrypting backup.")
-        with (restoreParams) {
-            val jsonBytes = Bindings.newClientFromBackup(
-                ndf, appDirectory, sessionPassword, backupPassword, account.data
-            )
-            log("Successfully decrypted.")
-            BackupReport.unmarshall(jsonBytes, backupReportPath)
-        }
+        TODO()
+//        log("Decrypting backup.")
+//        with (restoreParams) {
+//            val jsonBytes = Bindings.newClientFromBackup(
+//                ndf, appDirectory, sessionPassword, backupPassword, account.data
+//            )
+//            log("Successfully decrypted.")
+//            BackupReport.unmarshall(jsonBytes, backupReportPath)
+//        }
     }
 
-    private suspend fun initializeClient(restoreParams: RestoreParams, backupReport: BackupReport) =
-        withContext(scope.coroutineContext) {
-            with (ClientRepository.Companion) {
-                log("Logging in...")
-                client = Bindings.login(
-                    restoreParams.appDirectory,
-                    restoreParams.sessionPassword,
-                    ""
-                )
-
-                clientWrapper = ClientWrapperBindings(client).apply {
-                    log("Logged in.")
-                    userWrapper = getUser().getContact() as ContactWrapperBindings
-                    log("Getting user.")
-
-                    preferences.setUserId(getUserId())
-                    preferences.preImages = getPreImages()
-
-                    registerCallbacks(this)
-                    startNetworkFollower()
-                    log("Network follower started.")
-
-                    udWrapperBindings = BindingsWrapperBindings.newUserDiscoveryFromBackup(
-                        this,
-                        backupReport.emailStringified ?: "",
-                        backupReport.phoneStringified ?: ""
-                    ) as UserDiscoveryWrapperBindings
-                    log("User Discovery from backup initialized.")
-
-                    if (areNodesReady(this)) {
-                        log("Starting new backup process to handoff restored profile.")
-                        backupHandler.initializeBackupDuringRestore(client)
-                        fetchUserProfile(userWrapper, udWrapperBindings, backupReport)
-                    }
-                }
-            }
+    private suspend fun initializeClient(restoreParams: RestoreParams, backupReport: BackupReport): Nothing
+        = withContext(scope.coroutineContext) {
+            TODO()
+//            with (ClientRepository.Companion) {
+//                log("Logging in...")
+//                client = Bindings.login(
+//                    restoreParams.appDirectory,
+//                    restoreParams.sessionPassword,
+//                    ""
+//                )
+//
+//                clientWrapper = ClientWrapperBindings(client).apply {
+//                    log("Logged in.")
+//                    userWrapper = getUser().getContact() as ContactWrapperBindings
+//                    log("Getting user.")
+//
+//                    preferences.setUserId(getUserId())
+//                    preferences.preImages = getPreImages()
+//
+//                    registerCallbacks(this)
+//                    startNetworkFollower()
+//                    log("Network follower started.")
+//
+//                    udWrapperBindings = BindingsWrapperBindings.newUserDiscoveryFromBackup(
+//                        this,
+//                        backupReport.emailStringified ?: "",
+//                        backupReport.phoneStringified ?: ""
+//                    ) as UserDiscoveryWrapperBindings
+//                    log("User Discovery from backup initialized.")
+//
+//                    if (areNodesReady(this)) {
+//                        log("Starting new backup process to handoff restored profile.")
+//                        backupHandler.initializeBackupDuringRestore()
+//                        fetchUserProfile(userWrapper, udWrapperBindings, backupReport)
+//                    }
+//                }
+//            }
         }
 
     private fun registerCallbacks(clientWrapper: ClientWrapperBindings) {
@@ -191,13 +194,14 @@ class BindingsRestoreHandler(
     }
 
     private fun registerPreImageCallback(clientWrapper: ClientWrapperBindings) {
-        val userReceptionId = clientWrapper.getUser().getReceptionId()
-        clientWrapper.client.registerPreimageCallback(userReceptionId) { receptionId, _ ->
-            Timber.v("[PREIMAGE] Pre image has been updated")
-            if (receptionId.contentEquals(receptionId)) {
-                preferences.preImages = clientWrapper.getPreImages()
-            }
-        }
+        TODO()
+//        val userReceptionId = clientWrapper.getUser().getReceptionId()
+//        clientWrapper.client.registerPreimageCallback(userReceptionId) { receptionId, _ ->
+//            Timber.v("[PREIMAGE] Pre image has been updated")
+//            if (receptionId.contentEquals(receptionId)) {
+//                preferences.preImages = clientWrapper.getPreImages()
+//            }
+//        }
     }
 
     private fun registerAuthCallback(clientWrapper: ClientWrapperBindings) {
@@ -218,7 +222,8 @@ class BindingsRestoreHandler(
     }
 
     private fun unmarshallContact(rawData: ByteArray): ContactWrapperBase {
-        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as Contact)
+        TODO()
+//        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as Contact)
     }
 
     private fun onRequestReceived(contact: ByteArray) {

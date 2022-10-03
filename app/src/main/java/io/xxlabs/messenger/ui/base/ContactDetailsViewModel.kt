@@ -2,7 +2,6 @@ package io.xxlabs.messenger.ui.base
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import bindings.Contact
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -204,8 +203,9 @@ class ContactDetailsViewModel @Inject constructor(
         return repo.unmarshallContact(rawData)
     }
 
-    fun getNickname(contact: Contact): String {
-        return ContactWrapperBindings(contact).getNameFact()
+    fun getNickname(): String {
+        TODO()
+//        return ContactWrapperBindings(contact).getNameFact()
     }
 
     override fun onCleared() {
