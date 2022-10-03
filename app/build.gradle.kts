@@ -209,7 +209,7 @@ dependencies {
         exclude("com.google.protobuf")
     }
 
-    implementation(project(":xxclient"))
+    implementation(project(":xxmessengerclient"))
     implementation(project(":cmix"))
 
     // Core
