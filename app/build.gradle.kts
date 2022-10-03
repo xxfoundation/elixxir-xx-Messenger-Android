@@ -200,7 +200,6 @@ kapt {
 
 dependencies {
     implementation(fileTree(mapOf("include" to listOf("*.jar"), "dir" to "libs")))
-    implementation(project(":xx_bindings"))
     implementation("com.googlecode.libphonenumber:libphonenumber:8.12.31")
 
     // Url Preview
@@ -209,6 +208,9 @@ dependencies {
     implementation(project(":proto")) {
         exclude("com.google.protobuf")
     }
+
+    implementation(project(":xxclient"))
+    implementation(project(":cmix"))
 
     // Core
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.30")
