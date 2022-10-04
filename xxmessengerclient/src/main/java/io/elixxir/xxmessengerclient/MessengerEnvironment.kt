@@ -6,6 +6,10 @@ import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.password.PasswordStorage
 import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.environment.*
+import io.elixxir.xxmessengerclient.utils.AuthCallbacksRegistry
+import io.elixxir.xxmessengerclient.utils.BackupCallbacksRegistry
+import io.elixxir.xxmessengerclient.utils.ListenersRegistry
+import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
 interface MessengerEnvironment {
     var authCallbacks: AuthCallbacksRegistry
