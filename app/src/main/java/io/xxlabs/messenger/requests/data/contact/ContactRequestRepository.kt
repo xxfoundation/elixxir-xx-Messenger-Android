@@ -94,8 +94,8 @@ class ContactRequestsRepository @Inject constructor(
         scope.launch {
             when (request.requestStatus) {
                 VERIFICATION_FAIL -> verify(request)
-                RESET_FAIL, RESET_SENT -> resetSession(request)
-                SEND_FAIL, SENT -> resendRequest(request)
+                SEND_FAIL, SENT, RESET_FAIL, RESET_SENT -> resetSession(request)
+//                SEND_FAIL, SENT -> resendRequest(request)
                 CONFIRM_FAIL -> accept(request)
                 SENDING -> sendRequest(request)
                 else -> Timber.d("Unknown request status: ${request.requestStatus.value}")
