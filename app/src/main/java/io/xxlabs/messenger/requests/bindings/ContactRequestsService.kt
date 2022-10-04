@@ -7,5 +7,6 @@ interface ContactRequestsService {
     suspend fun acceptContactRequest(request: ContactRequest): Boolean
     suspend fun sendContactRequest(request: ContactRequest): Boolean
     suspend fun verifyContactRequest(request: ContactRequest): VerificationResult
+    suspend fun deleteContactRequest(request: ContactRequest): Boolean
     fun resetSession(contact: Contact): Boolean
 }

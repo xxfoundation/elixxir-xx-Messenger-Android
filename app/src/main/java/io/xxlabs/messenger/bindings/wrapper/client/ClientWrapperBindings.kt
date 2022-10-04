@@ -139,6 +139,10 @@ class ClientWrapperBindings(
         return client.confirmAuthenticatedChannel(marshalledContact)
     }
 
+    override fun deleteRequest(marshalledContact: ByteArray) {
+        client.deleteRequest(marshalledContact)
+    }
+
     override fun waitForRoundCompletion(
         roundId: Long,
         timeoutMillis: Long,

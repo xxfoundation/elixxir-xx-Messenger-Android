@@ -70,6 +70,7 @@ class ContactRequestsRepository @Inject constructor(
 
     override fun delete(request: ContactRequest) {
         scope.launch {
+            requestsService.deleteContactRequest(request)
             localDataSource.getRequest(request.requestId)?.apply {
                 localDataSource.deleteRequest(this)
             }
@@ -149,7 +150,7 @@ class ContactRequestsRepository @Inject constructor(
     }
 
     private fun resetSession(request: ContactRequest) {
-        if (requestsService.resetSession(request.model)) update(request, RESET_SENT)
+        if (requestsService.resetSession(request.model)) update(request, RESENT)
         else update(request, RESET_FAIL)
     }
 
