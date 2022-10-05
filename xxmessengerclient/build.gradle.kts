@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
-    id("org.jetbrains.kotlin.android")
+    kotlin("android")
+    kotlin("kapt")
 }
 
 android {
@@ -36,9 +37,18 @@ dependencies {
 
     implementation(project(":xxclient"))
 
+    // Android core
     implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
 
+    // Dagger
+    implementation("com.google.dagger:dagger-android:2.35.1")
+    implementation("com.google.dagger:dagger-android-support:2.33")
+    kapt("com.google.dagger:dagger-compiler:2.33")
+    kapt("com.google.dagger:dagger-android-processor:2.33")
+    kaptAndroidTest("com.google.dagger:dagger-compiler:2.33")
+
+    // Testing
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
 }
