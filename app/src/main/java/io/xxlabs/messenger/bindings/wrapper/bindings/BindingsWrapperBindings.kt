@@ -160,7 +160,6 @@ class BindingsWrapperBindings {
             }
 
         override fun setTimeSource(kronosFunction: () -> Long) {
-            TODO()
 //            Bindings.setTimeSource(TimeSource(kronosFunction))
         }
 
