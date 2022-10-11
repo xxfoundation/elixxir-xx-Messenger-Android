@@ -2,7 +2,6 @@ package io.elixxir.xxmessengerclient.environment
 
 import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxclient.callbacks.UdMultiLookupResultListener
-import io.elixxir.xxclient.models.BindingsList
 import io.elixxir.xxclient.models.Contact
 import io.elixxir.xxclient.utils.E2eId
 import io.elixxir.xxclient.utils.SingleUseParams
@@ -14,7 +13,7 @@ class MultiLookupUD(
     private val e2eId: () -> E2eId,
     private val contact: () -> Contact,
     private val listener: () -> UdMultiLookupResultListener,
-    private val lookupIds: () -> BindingsList<UserId>,
+    private val lookupIds: () -> List<UserId>,
     private val singleUeParams: () -> SingleUseParams
 ) {
 
