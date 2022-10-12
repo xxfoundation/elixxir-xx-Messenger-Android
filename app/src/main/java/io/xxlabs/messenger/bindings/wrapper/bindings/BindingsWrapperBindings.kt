@@ -128,7 +128,7 @@ class BindingsWrapperBindings {
 
         private fun UserDiscoveryWrapperBindings.onUdInitialized() {
             XxMessengerApplication.isUserDiscoveryRunning = true
-            development(BuildConfig.DEBUG)
+            development(BuildConfig.DEBUG && BuildConfig.ENVIRONMENT != Environment.TEST_NET)
         }
 
         private fun UserDiscoveryWrapperBindings.development(enabled: Boolean) {
