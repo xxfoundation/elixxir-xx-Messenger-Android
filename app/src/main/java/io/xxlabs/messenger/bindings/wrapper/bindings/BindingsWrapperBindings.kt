@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.bindings
 
 import android.content.Context
+import android.os.Build.VERSION_CODES.N
 import bindings.Bindings
 import bindings.TimeSource
 import com.google.firebase.crashlytics.FirebaseCrashlytics
@@ -23,6 +24,8 @@ import java.io.File
 
 private val devUserDiscoveryIp = "18.198.117.203:11420".encodeToByteArray()
 private const val NDF_MAX_RETRIES = 2
+
+private val testNetUserDiscoveryIp = "44.225.110.44:11420".encodeToByteArray()
 
 class BindingsWrapperBindings {
 
@@ -128,13 +131,17 @@ class BindingsWrapperBindings {
 
         private fun UserDiscoveryWrapperBindings.onUdInitialized() {
             XxMessengerApplication.isUserDiscoveryRunning = true
-            development(BuildConfig.DEBUG && BuildConfig.ENVIRONMENT != Environment.TEST_NET)
+            development(BuildConfig.DEBUG || BuildConfig.ENVIRONMENT == Environment.TEST_NET)
         }
 
         private fun UserDiscoveryWrapperBindings.development(enabled: Boolean) {
             if (enabled) {
                 setAlternativeUD(
-                    devUserDiscoveryIp,
+                    if (BuildConfig.ENVIRONMENT == Environment.TEST_NET) {
+                        testNetUserDiscoveryIp
+                    } else {
+                        devUserDiscoveryIp
+                    } ,
                     rawBytes(R.raw.ud_elixxir_io),
                     rawBytes(R.raw.ud_contact_test)
                 )
