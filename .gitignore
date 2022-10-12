@@ -85,3 +85,7 @@ app/src/main/res/raw/ud_contact_test.bin
 app/src/main/res/raw/ud_elixxir_io.crt
 
 fastlane/Fastfile
+
+app/src/main/res/raw/ud_testnet_contact.bin
+
+app/src/main/res/raw/ud_testnet.crt

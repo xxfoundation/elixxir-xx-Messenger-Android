@@ -131,23 +131,32 @@ class BindingsWrapperBindings {
 
         private fun UserDiscoveryWrapperBindings.onUdInitialized() {
             XxMessengerApplication.isUserDiscoveryRunning = true
-            development(BuildConfig.DEBUG || BuildConfig.ENVIRONMENT == Environment.TEST_NET)
+            when {
+                BuildConfig.ENVIRONMENT == Environment.TEST_NET -> testNet()
+                BuildConfig.DEBUG -> development()
+                else -> normal()
+            }
+
         }
 
-        private fun UserDiscoveryWrapperBindings.development(enabled: Boolean) {
-            if (enabled) {
-                setAlternativeUD(
-                    if (BuildConfig.ENVIRONMENT == Environment.TEST_NET) {
-                        testNetUserDiscoveryIp
-                    } else {
-                        devUserDiscoveryIp
-                    } ,
-                    rawBytes(R.raw.ud_elixxir_io),
-                    rawBytes(R.raw.ud_contact_test)
-                )
-            } else {
-                restoreNormalUD()
-            }
+        private fun UserDiscoveryWrapperBindings.development() {
+            setAlternativeUD(
+                devUserDiscoveryIp,
+                rawBytes(R.raw.ud_elixxir_io),
+                rawBytes(R.raw.ud_contact_test)
+            )
+        }
+
+        private fun UserDiscoveryWrapperBindings.testNet() {
+            setAlternativeUD(
+                testNetUserDiscoveryIp,
+                rawBytes(R.raw.ud_testnet),
+                rawBytes(R.raw.ud_testnet_contact)
+            )
+        }
+
+        private fun UserDiscoveryWrapperBindings.normal() {
+            restoreNormalUD()
         }
 
         private fun rawBytes(resourceId: Int): ByteArray {
