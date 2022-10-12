@@ -48,6 +48,7 @@ class BindingsWrapperBindings {
                         certificateFor(Environment.RELEASE_NET)
                     )
                 }
+                Environment.TEST_NET -> getTestNetNdf()
                 else -> getLocalNdf()
             }
 
@@ -71,12 +72,20 @@ class BindingsWrapperBindings {
             return reader.use { reader.readText() }
         }
 
+        private fun getTestNetNdf(): String {
+            val reader = appContext().resources.openRawResource(R.raw.ndf)
+                .bufferedReader()
+            return reader.use {
+                    reader.readText()
+            }
+        }
+
         private fun downloadAndVerifySignedNdfWithUrl(
             url: String,
             certificate: String
         ): String = String(Bindings.downloadAndVerifySignedNdfWithUrl(url, certificate))
 
-        private fun getLocalNdf() = BuildConfig.TEST_NET_NDF
+        private fun getLocalNdf() = BuildConfig.NDF
 
         override fun registerGrpc() {
             Bindings.registerLogWriter { writer ->

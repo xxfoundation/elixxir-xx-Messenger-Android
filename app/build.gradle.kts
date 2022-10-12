@@ -35,7 +35,7 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 637
+        versionCode = 638
         versionName = "2.95"
         minSdk = 26
         targetSdk = 31
@@ -71,10 +71,6 @@ android {
         buildConfigField("String", "DROPBOX_KEY", "\"$dropboxKey\"")
         buildConfigField("String", "DROPBOX_ACCESS_TOKEN", "\"$dropboxAccessToken\"")
         manifestPlaceholders["dropboxKey"] = dropboxKey
-
-        // Test Net
-        val testNetNdf = properties["TEST_NET_NDF"] ?: ""
-        buildConfigField("String", "TEST_NET_NDF", "\"$testNetNdf\"")
     }
 
     buildTypes {
