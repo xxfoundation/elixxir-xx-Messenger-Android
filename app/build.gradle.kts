@@ -71,6 +71,10 @@ android {
         buildConfigField("String", "DROPBOX_KEY", "\"$dropboxKey\"")
         buildConfigField("String", "DROPBOX_ACCESS_TOKEN", "\"$dropboxAccessToken\"")
         manifestPlaceholders["dropboxKey"] = dropboxKey
+
+        // Test Net
+        val testNetNdf = properties["TEST_NET_NDF"] ?: ""
+        buildConfigField("String", "TEST_NET_NDF", "\"$testNetNdf\"")
     }
 
     buildTypes {
@@ -122,6 +126,24 @@ android {
                 "io.xxlabs.messenger.data.datatype.Environment",
                 "ENVIRONMENT",
                 "io.xxlabs.messenger.data.datatype.Environment.RELEASE_NET"
+            )
+        }
+
+        create("networkTest") {
+            initWith(getByName("debug"))
+            versionNameSuffix = "-TestNetDebug"
+            ndk.debugSymbolLevel = "FULL"
+            matchingFallbacks += "debug"
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            buildConfigField(
+                "io.xxlabs.messenger.data.datatype.Environment",
+                "ENVIRONMENT",
+                "io.xxlabs.messenger.data.datatype.Environment.TEST_NET"
             )
         }
 

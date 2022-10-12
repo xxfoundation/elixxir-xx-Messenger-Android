@@ -76,7 +76,7 @@ class BindingsWrapperBindings {
             certificate: String
         ): String = String(Bindings.downloadAndVerifySignedNdfWithUrl(url, certificate))
 
-        private fun getLocalNdf() = BuildConfig.NDF
+        private fun getLocalNdf() = BuildConfig.TEST_NET_NDF
 
         override fun registerGrpc() {
             Bindings.registerLogWriter { writer ->
