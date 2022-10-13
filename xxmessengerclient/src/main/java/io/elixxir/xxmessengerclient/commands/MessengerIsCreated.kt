@@ -1,8 +1,10 @@
 package io.elixxir.xxmessengerclient.commands
 
-class MessengerIsCreated {
+import io.elixxir.xxmessengerclient.MessengerEnvironment
 
-    operator fun invoke() {
+class MessengerIsCreated(private val env: MessengerEnvironment) {
 
+    operator fun invoke(): Boolean {
+        return !env.fileManager.isDirectoryEmpty(env.storageDir)
     }
 }
