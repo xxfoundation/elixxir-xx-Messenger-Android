@@ -9,15 +9,4 @@ class GetCMixParams(private val bindings: Bindings) {
     operator fun invoke(): Result<Data> {
         return nonNullResultOf { bindings.defaultCmixParams }
     }
-
-    /*
-    extension GetCMixParams {
-  public static let liveDefault = GetCMixParams {
-    guard let data = BindingsGetDefaultCMixParams() else {
-      fatalError("BindingsGetDefaultCMixParams returned `nil`")
-    }
-    return data
-  }
-}
-     */
 }
