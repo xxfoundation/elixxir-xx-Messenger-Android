@@ -1,4 +1,10 @@
 package io.elixxir.xxmessengerclient.commands
 
-class MessengerIsConnected {
+import io.elixxir.xxmessengerclient.MessengerEnvironment
+
+class MessengerIsConnected(private val env: MessengerEnvironment) {
+
+    operator fun invoke(): Boolean {
+        return env.e2e != null
+    }
 }
