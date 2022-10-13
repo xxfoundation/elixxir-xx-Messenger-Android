@@ -1,4 +1,12 @@
 package io.elixxir.xxmessengerclient.commands
 
-class MessengerRegisterMessageListener {
+import io.elixxir.xxclient.callbacks.MessageListener
+import io.elixxir.xxmessengerclient.MessengerEnvironment
+import java.util.*
+
+class MessengerRegisterMessageListener(private val env: MessengerEnvironment) {
+
+    operator fun invoke(listener: MessageListener) {
+        env.messageListeners.listeners[UUID.randomUUID()] = listener
+    }
 }
