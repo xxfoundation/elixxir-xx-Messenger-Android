@@ -19,6 +19,7 @@ interface Messenger {
     val registerAuthCallbacks: MessengerRegisterAuthCallbacks
     val registerMessageListener: MessengerRegisterMessageListener
     val start: MessengerStart
+    val stop: MessengerStop
     val isConnected: MessengerIsConnected
     val connect: MessengerConnect
     val isListeningForMessages: MessengerIsListeningForMessages
