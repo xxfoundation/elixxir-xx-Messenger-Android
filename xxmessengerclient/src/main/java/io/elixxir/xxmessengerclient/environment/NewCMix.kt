@@ -1,24 +1,23 @@
 package io.elixxir.xxmessengerclient.environment
 
 import io.elixxir.xxclient.bindings.Bindings
-import io.elixxir.xxclient.utils.CmixParams
+import io.elixxir.xxclient.utils.Password
 import io.elixxir.xxmessengerclient.utils.nonNullResultOf
 
-class NewCMix(
-    private val bindings: Bindings,
-    private val ndfJson: () -> String,
-    private val storageDir: () -> String,
-    private val cmixParams: () -> CmixParams,
-    private val registrationCode: () -> String,
-) {
+class NewCMix(private val bindings: Bindings) {
 
-    operator fun invoke(): Result<Unit> {
+    operator fun invoke(
+        ndfJson: String,
+        storageDir: String,
+        password: Password,
+        registrationCode: String,
+    ): Result<Unit> {
         return nonNullResultOf {
             bindings.newCmix(
-                ndfJson(),
-                storageDir(),
-                cmixParams(),
-                registrationCode()
+                ndfJson,
+                storageDir,
+                password,
+                registrationCode
             )
         }
     }

@@ -4,14 +4,12 @@ import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxmessengerclient.utils.nonNullResultOf
 
 class DownloadAndVerifySignedNdf(
-    private val bindings: Bindings,
-    private val udAddress: () -> String,
-    private val udCert: () -> String,
+    private val bindings: Bindings
 ) {
 
-    operator fun invoke(): Result<ByteArray> = nonNullResultOf {
+    operator fun invoke(environment: NDFEnvironment): Result<ByteArray> = nonNullResultOf {
         bindings.downloadAndVerifySignedNdf(
-            udAddress(), udCert()
+            environment.url, environment.cert
         )
     }
 }

@@ -1,6 +1,7 @@
 package io.elixxir.xxmessengerclient
 
 import io.elixxir.xxclient.backup.Backup
+import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxclient.cmix.CMix
 import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.password.PasswordStorage
@@ -12,6 +13,7 @@ import io.elixxir.xxmessengerclient.utils.ListenersRegistry
 import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
 interface MessengerEnvironment {
+    val bindings: Bindings
     var authCallbacks: AuthCallbacksRegistry
     var backup: Backup?
     var backupCallbacks: BackupCallbacksRegistry
