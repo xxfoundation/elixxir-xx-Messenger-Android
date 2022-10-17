@@ -20,7 +20,7 @@ import io.xxlabs.messenger.support.appContext
 import timber.log.Timber
 import java.io.File
 
-private val devUserDiscoveryIp = "18.198.117.203:11420".encodeToByteArray()
+private val devUserDiscoveryIp = "46.101.98.49:18001".encodeToByteArray()
 private const val NDF_MAX_RETRIES = 2
 
 class BindingsWrapperBindings {
