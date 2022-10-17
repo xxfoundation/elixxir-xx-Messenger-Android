@@ -1,4 +1,10 @@
 package io.elixxir.xxmessengerclient.commands
 
-class MessengerIsLoggedIn {
+import io.elixxir.xxmessengerclient.MessengerEnvironment
+
+class MessengerIsLoggedIn(private val env: MessengerEnvironment) {
+
+    operator fun invoke(): Boolean {
+        return env.ud != null
+    }
 }
