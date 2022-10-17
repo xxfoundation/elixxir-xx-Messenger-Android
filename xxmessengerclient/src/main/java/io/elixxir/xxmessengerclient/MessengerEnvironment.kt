@@ -12,6 +12,7 @@ import io.elixxir.xxmessengerclient.utils.BackupCallbacksRegistry
 import io.elixxir.xxmessengerclient.utils.ListenersRegistry
 import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
+
 interface MessengerEnvironment {
     val udIpAddress: String get() = "46.101.98.49:18001" // AltUD
 
