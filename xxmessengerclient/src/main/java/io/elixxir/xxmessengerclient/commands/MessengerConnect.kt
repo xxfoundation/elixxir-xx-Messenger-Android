@@ -6,12 +6,12 @@ import io.elixxir.xxmessengerclient.utils.MessengerException
 class MessengerConnect(private val env: MessengerEnvironment) {
 
     operator fun invoke() {
-        val _cMix = env.cMix ?: throw MessengerException.NotLoaded("Cmix")
+        val cMix = env.cMix ?: throw MessengerException.NotLoaded("Cmix")
 
         env.e2e = env.login(
-            cMixId = _cMix.id,
+            cMixId = cMix.id,
             authCallbacks = env.authCallbacks.authCallbacks.values.first(),
-            receptionId = _cMix.makeReceptionIdentity(),
+            receptionId = cMix.makeReceptionIdentity(),
             e2eParams = env.getE2EParams().getOrThrow()
         ).getOrThrow()
     }
