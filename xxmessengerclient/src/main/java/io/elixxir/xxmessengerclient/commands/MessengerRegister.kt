@@ -6,8 +6,6 @@ import io.elixxir.xxmessengerclient.utils.MessengerException
 
 class MessengerRegister(private val env: MessengerEnvironment) {
 
-    private val altUdAddress = "46.101.98.49:18001"
-
     operator fun invoke(username: String) {
         val cMix = env.cMix ?: throw MessengerException.NotLoaded("CMix")
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
@@ -19,7 +17,7 @@ class MessengerRegister(private val env: MessengerEnvironment) {
             registrationValidationSignature = cMix.receptionRegistrationValidationSignature,
             certificateData = env.udCert ?: byteArrayOf(),
             contact = ContactAdapter(env.udContact ?: byteArrayOf()),
-            udIpAddress = altUdAddress
+            udIpAddress = env.udIpAddress
         ).getOrThrow()
     }
 }
