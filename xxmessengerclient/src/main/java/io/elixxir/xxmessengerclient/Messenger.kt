@@ -28,6 +28,7 @@ interface Messenger {
     val register: MessengerRegister
     val isLoggedIn: MessengerIsLoggedIn
     val logIn: MessengerLogIn
+    val myContact: MessengerMyContact
     val waitForNetwork: MessengerWaitForNetwork
     val waitForNodes: MessengerWaitForNodes
     val destroy: MessengerDestroy
