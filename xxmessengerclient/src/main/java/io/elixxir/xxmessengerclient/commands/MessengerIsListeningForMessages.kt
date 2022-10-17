@@ -1,4 +1,10 @@
 package io.elixxir.xxmessengerclient.commands
 
-class MessengerIsListeningForMessages {
+import io.elixxir.xxmessengerclient.MessengerEnvironment
+
+class MessengerIsListeningForMessages(private val env: MessengerEnvironment) {
+
+    operator fun invoke(): Boolean {
+        return env.isListeningForMessages()
+    }
 }
