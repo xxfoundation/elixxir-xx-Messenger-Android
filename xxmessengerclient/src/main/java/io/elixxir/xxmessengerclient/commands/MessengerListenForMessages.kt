@@ -14,9 +14,9 @@ class MessengerListenForMessages(private val env: MessengerEnvironment) {
                 messageType = MessageType.XxMessage,
                 e2eListener = env.messageListeners.listeners.values.first()
             )
-            env.isListeningForMessages = { true }
+            env.isListeningForMessages = true
         } catch (e: Exception) {
-            env.isListeningForMessages = { false }
+            env.isListeningForMessages = false
             throw e
         }
     }

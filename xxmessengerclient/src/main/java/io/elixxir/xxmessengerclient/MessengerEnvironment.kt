@@ -29,7 +29,7 @@ interface MessengerEnvironment {
     var getE2EParams: GetE2EParams
     var getSingleUseParams: GetSingleUseParams
     var initializeBackup: InitializeBackup
-    var isListeningForMessages: () -> Boolean
+    var isListeningForMessages: Boolean
     var isRegisteredWithUD: IsRegisteredWithUD
     var loadCMix: LoadCMix
     var login: Login
