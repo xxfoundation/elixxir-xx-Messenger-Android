@@ -10,21 +10,22 @@ import io.elixxir.xxmessengerclient.utils.nonNullResultOf
 
 class MultiLookupUD(
     private val bindings: Bindings,
-    private val e2eId: () -> E2eId,
-    private val contact: () -> Contact,
-    private val listener: () -> UdMultiLookupResultListener,
-    private val lookupIds: () -> List<UserId>,
-    private val singleUeParams: () -> SingleUseParams
 ) {
 
-    operator fun invoke(): Result<Unit> {
+    operator fun invoke(
+        e2eId: E2eId,
+        contact: Contact,
+        listener: UdMultiLookupResultListener,
+        lookupIds: List<UserId>,
+        singleUeParams: SingleUseParams
+    ): Result<Unit> {
         return nonNullResultOf {
             bindings.multiLookupUd(
-                e2eId(),
-                contact(),
-                listener(),
-                lookupIds(),
-                singleUeParams()
+                e2eId,
+                contact,
+                listener,
+                lookupIds,
+                singleUeParams
             )
         }
     }
