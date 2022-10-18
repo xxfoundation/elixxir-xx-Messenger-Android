@@ -15,14 +15,14 @@ import io.elixxir.xxmessengerclient.utils.ListenersRegistry
 import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
 
-abstract class MessengerEnvironment(
-    app: Application,
-) {
+abstract class MessengerEnvironment {
     abstract val passwordStorage: PasswordStorage
     abstract val storageDir: String
     abstract val udCert: ByteArray
     abstract val udContact: ByteArray
+
     open val udAddress: String = "46.101.98.49:18001"
+    open val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
 
     var backup: Backup? = null
     var cMix: CMix? = null
@@ -33,7 +33,7 @@ abstract class MessengerEnvironment(
     val authCallbacks: AuthCallbacksRegistry = AuthCallbacksRegistry()
     val backupCallbacks: BackupCallbacksRegistry = BackupCallbacksRegistry()
     val downloadNDF: DownloadAndVerifySignedNdf = DownloadAndVerifySignedNdf(bindings)
-    val fileManager: MessengerFileManager = MessengerFileManager(app)
+    val fileManager: MessengerFileManager get() = MessengerFileManager(storageDir)
     val generateSecret: GenerateSecret = GenerateSecret(bindings)
     val getCMixParams: GetCMixParams = GetCMixParams(bindings)
     val getE2EParams: GetE2EParams = GetE2EParams(bindings)
@@ -54,5 +54,4 @@ abstract class MessengerEnvironment(
     val registerForNotifications: RegisterForNotifications = RegisterForNotifications()
     val resumeBackup: ResumeBackup = ResumeBackup()
     val searchUD: SearchUD = SearchUD(bindings)
-    val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
 }

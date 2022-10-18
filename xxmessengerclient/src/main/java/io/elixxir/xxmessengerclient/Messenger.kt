@@ -6,9 +6,7 @@ import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.commands.*
 
-abstract class Messenger(
-    protected val env: MessengerEnvironment
-) {
+class Messenger(val env: MessengerEnvironment) {
     val cMix: CMix? get() = env.cMix
     val e2e: E2e? get() = env.e2e
     val ud: UserDiscovery? get() = env.ud
