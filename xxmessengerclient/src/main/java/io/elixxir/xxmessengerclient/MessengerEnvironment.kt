@@ -24,14 +24,15 @@ abstract class MessengerEnvironment(
     abstract val udContact: ByteArray
     open val udAddress: String = "46.101.98.49:18001"
 
-    val bindings: Bindings = BindingsAdapter()
+    var backup: Backup? = null
+    var cMix: CMix? = null
+    var e2e: E2e? = null
+    var ud: UserDiscovery? = null
 
+    val bindings: Bindings = BindingsAdapter()
     val authCallbacks: AuthCallbacksRegistry = AuthCallbacksRegistry()
-    val backup: Backup? = null
     val backupCallbacks: BackupCallbacksRegistry = BackupCallbacksRegistry()
-    val cMix: CMix? = null
     val downloadNDF: DownloadAndVerifySignedNdf = DownloadAndVerifySignedNdf(bindings)
-    val e2e: E2e? = null
     val fileManager: MessengerFileManager = MessengerFileManager(app)
     val generateSecret: GenerateSecret = GenerateSecret(bindings)
     val getCMixParams: GetCMixParams = GetCMixParams(bindings)
@@ -54,5 +55,4 @@ abstract class MessengerEnvironment(
     val resumeBackup: ResumeBackup = ResumeBackup()
     val searchUD: SearchUD = SearchUD(bindings)
     val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
-    val ud: UserDiscovery? = null
 }
