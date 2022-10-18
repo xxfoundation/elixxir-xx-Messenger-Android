@@ -11,6 +11,6 @@ class MessengerStart(private val env: MessengerEnvironment) {
             if (it.getNetworkFollowerStatus() != NetworkFollowerStatus.Running) {
                 it.startNetworkFollower(timeoutMs)
             }
-        } ?: throw MessengerException.NotLoaded()
+        } ?: throw MessengerException.NotLoaded("CMix")
     }
 }

@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -19,7 +20,6 @@ import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.SpanConfig
 import io.xxlabs.messenger.ui.global.NetworkViewModel
@@ -36,7 +36,7 @@ private const val NETWORK_POLL_INTERVAL_MS = 1000L
  * Encapsulates username registration logic.
  */
 class UsernameRegistration @AssistedInject constructor(
-    private val repo: BaseRepository,
+    private val messenger: Messenger,
     private val scheduler: SchedulerProvider,
     private val preferences: PreferencesRepository,
     private val application: Application,
@@ -50,7 +50,7 @@ class UsernameRegistration @AssistedInject constructor(
             + Dispatchers.Default
     )
 
-    private val loggedIn get() = repo.isLoggedIn().blockingGet()
+    private val sessionExists get() = messenger.isCreated()
 
     private val username = MutableLiveData<String?>(null)
     override val usernameTitle: Spanned = getSpannableTitle()
@@ -216,25 +216,20 @@ class UsernameRegistration @AssistedInject constructor(
     }
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
-        if (!loggedIn) {
+        if (!sessionExists) {
             getOrCreateSession()
             return
         }
 
-        repo.registerUdUsername(username)
-            .subscribeOn(scheduler.single)
-            .observeOn(scheduler.main)
-            .doOnError {
-                it.message?.let { error ->
-                    if (error.isNetworkNotHealthyError()) handleNetworkHealthError()
-                    else {
-                        displayError(error)
-                        enableUI()
-                    }
-                }
-            }.doOnSuccess {
+        scope.launch {
+            try {
+                messenger.register(username)
                 onSuccessfulRegistration(username, isDemoAcct)
-            }.subscribe()
+            } catch (e: Exception) {
+                displayError(e.message ?: "Failed to register username.")
+                enableUI()
+            }
+        }
     }
 
     private fun String.isNetworkNotHealthyError() =
@@ -248,13 +243,17 @@ class UsernameRegistration @AssistedInject constructor(
         error.postValue(bindingsErrorMessage(Exception(errorMsg)))
     }
 
-    private fun getOrCreateSession(context: Context = appContext()) {
+    private fun getOrCreateSession() {
         scope.launch(Dispatchers.IO) {
-            val appFolder = repo.createSessionFolder(context)
             try {
-                repo.newClient(appFolder, sessionPassword)
+                messenger.run {
+                    create()
+                    load()
+                    start()
+                    connect()
+                    logIn()
+                }
                 preferences.lastAppVersion = BuildConfig.VERSION_CODE
-                connectToCmix()
             } catch (err: Exception) {
                 err.printStackTrace()
                 displayError(err.toString())
