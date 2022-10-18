@@ -8,22 +8,21 @@ import io.elixxir.xxclient.utils.E2eId
 import io.elixxir.xxclient.utils.SingleUseParams
 import io.elixxir.xxclient.utils.UserId
 
-class LookupUD(
-    private val bindings: Bindings,
-    private val e2eId: () -> E2eId,
-    private val contact: () -> Contact,
-    private val listener: () -> UdLookupResultListener,
-    private val lookupId: () -> UserId,
-    private val singleUseParams: () -> SingleUseParams
-) {
+class LookupUD(private val bindings: Bindings) {
 
-    operator fun invoke(): SingleUseReport {
+    operator fun invoke(
+        e2eId: E2eId,
+        contact: Contact,
+        listener: UdLookupResultListener,
+        lookupId: UserId,
+        singleUseParams: SingleUseParams
+    ): SingleUseReport {
         return bindings.lookupUd(
-            e2eId(),
-            contact(),
-            listener(),
-            lookupId(),
-            singleUseParams()
+            e2eId,
+            contact,
+            listener,
+            lookupId,
+            singleUseParams
         )
     }
 }
