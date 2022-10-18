@@ -4,23 +4,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.disposables.CompositeDisposable
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.ioThread
 import io.xxlabs.messenger.support.util.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.File
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class SplashScreenViewModel @Inject constructor(
+    val messenger: Messenger,
     val repo: BaseRepository,
     val preferences: PreferencesRepository,
     val schedulers: SchedulerProvider
@@ -86,15 +86,8 @@ class SplashScreenViewModel @Inject constructor(
 
     private fun clearAppData() {
         viewModelScope.launch(Dispatchers.IO) {
-            File(repo.getSessionFolder(appContext())).apply {
-                if (exists()) {
-                    Timber.v("Bindings folder from previous installation was found.")
-                    Timber.v("It contains ${listFiles()?.size ?: 0} files.")
-                    Timber.v("Deleting!")
-                    deleteRecursively()
-                }
-                _appDataCleared.postValue(true)
-            }
+            messenger.destroy()
+            _appDataCleared.postValue(true)
         }
 
     }
