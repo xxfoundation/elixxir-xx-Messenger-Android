@@ -6,7 +6,7 @@ import io.elixxir.xxmessengerclient.utils.nonNullResultOf
 
 class GetSingleUseParams(private val bindings: Bindings) {
 
-    operator fun invoke(): Result<Data> {
-        return nonNullResultOf { bindings.defaultSingleUseParams }
+    operator fun invoke(): Data {
+        return bindings.defaultSingleUseParams
     }
 }

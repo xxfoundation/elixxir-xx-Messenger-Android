@@ -20,7 +20,7 @@ class MessengerSearchContacts(private val env: MessengerEnvironment) {
             udContact = ud.contact,
             facts = query,
             searchResultListener = listener,
-            singleUseParams = env.getSingleUseParams().getOrThrow()
+            singleUseParams = env.getSingleUseParams()
         )
     }
 }
