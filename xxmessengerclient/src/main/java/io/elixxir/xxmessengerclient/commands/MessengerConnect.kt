@@ -12,7 +12,7 @@ class MessengerConnect(private val env: MessengerEnvironment) {
             cMixId = cMix.id,
             authCallbacks = env.authCallbacks.authCallbacks.values.first(),
             receptionId = cMix.makeReceptionIdentity(),
-            e2eParams = env.getE2EParams().getOrThrow()
+            e2eParams = env.getE2EParams()
         ).getOrThrow()
     }
 }
