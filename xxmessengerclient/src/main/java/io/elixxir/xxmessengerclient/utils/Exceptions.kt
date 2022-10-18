@@ -8,5 +8,5 @@ sealed class MessengerException(message: String?) : Exception(message) {
         componentName?.let { "$it component is required and hasn't been loaded."}
     )
 
-    class TimedOut : MessengerException(null)
+    class TimedOut : MessengerException("The network operation timed out.")
 }
