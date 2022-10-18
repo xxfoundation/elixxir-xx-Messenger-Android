@@ -2,10 +2,8 @@ package io.xxlabs.messenger.xxclient
 
 import android.security.keystore.KeyProperties
 import android.util.Base64
-import io.elixxir.xxclient.password.PasswordStorage
-import io.elixxir.xxclient.utils.Password
+import io.elixxir.xxmessengerclient.utils.PasswordStorage
 import io.xxlabs.messenger.repository.PreferencesRepository
-import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
 import java.security.KeyStore
@@ -31,7 +29,7 @@ class AndroidKeyStore @Inject constructor(
     private val privateKey: PrivateKey?
         get() = keystore.getKey(KEY_ALIAS, null) as PrivateKey?
 
-    override fun save(password: Password) {
+    override fun save(password: ByteArray) {
         rsaEncryptPwd(password)
     }
 
@@ -43,7 +41,7 @@ class AndroidKeyStore @Inject constructor(
         prefs.userSecret = encryptedBytes.toBase64String(Base64.DEFAULT)
     }
 
-    override fun load(): Password {
+    override fun load(): ByteArray {
         return rsaDecryptPwd()
     }
 
@@ -64,10 +62,7 @@ class AndroidKeyStore @Inject constructor(
     companion object {
         private const val KEY_ALIAS = "xxmessengerpvk"
         private const val ANDROID_KEYSTORE = "AndroidKeyStore"
-        private const val KEY_PURPOSE =
-            KeyProperties.PURPOSE_SIGN or KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
         private const val KEYSTORE_ALGORITHM = "RSA/ECB/OAEPWithSHA-1AndMGF1Padding"
-        private const val KEY_SIZE = 2048
         private val cipherMode = OAEPParameterSpec(
             "SHA-1", "MGF1",
             MGF1ParameterSpec.SHA1, PSource.PSpecified.DEFAULT

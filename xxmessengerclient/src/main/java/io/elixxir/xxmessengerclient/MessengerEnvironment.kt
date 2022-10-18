@@ -5,15 +5,13 @@ import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxclient.bindings.BindingsAdapter
 import io.elixxir.xxclient.cmix.CMix
 import io.elixxir.xxclient.e2e.E2e
-import io.elixxir.xxclient.password.PasswordStorage
+import io.elixxir.xxmessengerclient.utils.PasswordStorage
 import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.environment.*
 import io.elixxir.xxmessengerclient.utils.*
 
 
-abstract class MessengerEnvironment(
-    val bindings: Bindings = BindingsAdapter()
-) {
+abstract class MessengerEnvironment {
     abstract val passwordStorage: PasswordStorage
     abstract val storageDir: String
     abstract val udCert: ByteArray
@@ -21,6 +19,8 @@ abstract class MessengerEnvironment(
 
     open val udAddress: String = "46.101.98.49:18001"
     open val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
+
+    private val bindings: Bindings = BindingsAdapter()
 
     var backup: Backup? = null
     var cMix: CMix? = null
@@ -36,7 +36,7 @@ abstract class MessengerEnvironment(
     open val getE2EParams: GetE2EParams = GetE2EParams(bindings)
     open val getSingleUseParams: GetSingleUseParams = GetSingleUseParams(bindings)
     open val initializeBackup: InitializeBackup = InitializeBackup(bindings)
-    open val isListeningForMessages: Boolean = false
+    open var isListeningForMessages: Boolean = false
     open val isRegisteredWithUD: IsRegisteredWithUD = IsRegisteredWithUD(bindings)
     open val loadCMix: LoadCMix = LoadCMix(bindings)
     open val login: Login = Login(bindings)
