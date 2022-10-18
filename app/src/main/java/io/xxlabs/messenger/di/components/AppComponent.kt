@@ -9,6 +9,7 @@ import io.xxlabs.messenger.di.modules.ActivityBuildersModule
 import io.xxlabs.messenger.di.modules.AppModule
 import io.xxlabs.messenger.di.modules.ListenersBuildersModule
 import io.xxlabs.messenger.di.modules.ServiceBuilderModule
+import io.xxlabs.messenger.xxclient.ClientModule
 import javax.inject.Singleton
 
 @Singleton
@@ -18,7 +19,8 @@ import javax.inject.Singleton
         AppModule::class,
         ActivityBuildersModule::class,
         ListenersBuildersModule::class,
-        ServiceBuilderModule::class
+        ServiceBuilderModule::class,
+        ClientModule::class
     ]
 )
 interface AppComponent {
