@@ -6,42 +6,45 @@ import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.commands.*
 
-interface Messenger {
-    val cMix: () -> CMix?
-    val e2e: () -> E2e?
-    val ud: () -> UserDiscovery?
-    val backup: () -> Backup?
-    val isCreated: MessengerIsCreated
-    val create: MessengerCreate
-    val restoreBackup: MessengerRestoreBackup
-    val isLoaded: MessengerIsLoaded
-    val load: MessengerLoad
-    val registerAuthCallbacks: MessengerRegisterAuthCallbacks
-    val registerMessageListener: MessengerRegisterMessageListener
-    val start: MessengerStart
-    val stop: MessengerStop
-    val isConnected: MessengerIsConnected
-    val connect: MessengerConnect
-    val isListeningForMessages: MessengerIsListeningForMessages
-    val listenForMessages: MessengerListenForMessages
-    val isRegistered: MessengerIsRegistered
-    val register: MessengerRegister
-    val isLoggedIn: MessengerIsLoggedIn
-    val logIn: MessengerLogIn
-    val myContact: MessengerMyContact
-    val waitForNetwork: MessengerWaitForNetwork
-    val waitForNodes: MessengerWaitForNodes
-    val destroy: MessengerDestroy
-    val searchContacts: MessengerSearchContacts
-    val lookupContact: MessengerLookupContact
-    val lookupContacts: MessengerLookupContacts
-    val registerForNotifications: MessengerRegisterForNotifications
-    val verifyContact: MessengerVerifyContact
-    val sendMessage: MessengerSendMessage
-    val registerBackupCallback: MessengerRegisterBackupCallback
-    val isBackupRunning: MessengerIsBackupRunning
-    val startBackup: MessengerStartBackup
-    val resumeBackup: MessengerResumeBackup
-    val backupParams: MessengerBackupParams
-    val stopBackup: MessengerStopBackup
+abstract class Messenger(
+    protected val env: MessengerEnvironment
+) {
+    val cMix: CMix? get() = env.cMix
+    val e2e: E2e? get() = env.e2e
+    val ud: UserDiscovery? get() = env.ud
+    val backup: Backup? get() = env.backup
+
+    val isCreated: MessengerIsCreated = MessengerIsCreated(env)
+    val create: MessengerCreate = MessengerCreate(env)
+    val restoreBackup: MessengerRestoreBackup = MessengerRestoreBackup()
+    val isLoaded: MessengerIsLoaded = MessengerIsLoaded(env)
+    val load: MessengerLoad = MessengerLoad(env)
+    val registerAuthCallbacks: MessengerRegisterAuthCallbacks = MessengerRegisterAuthCallbacks(env)
+    val registerMessageListener: MessengerRegisterMessageListener = MessengerRegisterMessageListener(env)
+    val start: MessengerStart = MessengerStart(env)
+    val stop: MessengerStop = MessengerStop(env)
+    val isConnected: MessengerIsConnected = MessengerIsConnected(env)
+    val connect: MessengerConnect = MessengerConnect(env)
+    val isListeningForMessages: MessengerIsListeningForMessages = MessengerIsListeningForMessages(env)
+    val listenForMessages: MessengerListenForMessages = MessengerListenForMessages(env)
+    val isRegistered: MessengerIsRegistered = MessengerIsRegistered(env)
+    val register: MessengerRegister = MessengerRegister(env)
+    val isLoggedIn: MessengerIsLoggedIn = MessengerIsLoggedIn(env)
+    val logIn: MessengerLogIn = MessengerLogIn(env)
+    val myContact: MessengerMyContact = MessengerMyContact(env)
+    val waitForNetwork: MessengerWaitForNetwork = MessengerWaitForNetwork(env)
+    val waitForNodes: MessengerWaitForNodes = MessengerWaitForNodes(env)
+    val destroy: MessengerDestroy = MessengerDestroy(env)
+    val searchContacts: MessengerSearchContacts = MessengerSearchContacts(env)
+    val lookupContact: MessengerLookupContact = MessengerLookupContact(env)
+    val lookupContacts: MessengerLookupContacts = MessengerLookupContacts(env)
+    val registerForNotifications: MessengerRegisterForNotifications = TODO()
+    val verifyContact: MessengerVerifyContact = MessengerVerifyContact(env)
+    val sendMessage: MessengerSendMessage = MessengerSendMessage(env)
+    val registerBackupCallback: MessengerRegisterBackupCallback = TODO()
+    val isBackupRunning: MessengerIsBackupRunning = TODO()
+    val startBackup: MessengerStartBackup = TODO()
+    val resumeBackup: MessengerResumeBackup = TODO()
+    val backupParams: MessengerBackupParams = TODO()
+    val stopBackup: MessengerStopBackup = TODO()
 }
