@@ -1,7 +1,9 @@
 package io.elixxir.xxmessengerclient
 
+import android.app.Application
 import io.elixxir.xxclient.backup.Backup
 import io.elixxir.xxclient.bindings.Bindings
+import io.elixxir.xxclient.bindings.BindingsAdapter
 import io.elixxir.xxclient.cmix.CMix
 import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.password.PasswordStorage
@@ -13,41 +15,44 @@ import io.elixxir.xxmessengerclient.utils.ListenersRegistry
 import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
 
-interface MessengerEnvironment {
-    val udAddress: String
-    val udCert: ByteArray
-    val udContact: ByteArray
+abstract class MessengerEnvironment(
+    app: Application,
+) {
+    abstract val passwordStorage: PasswordStorage
+    abstract val storageDir: String
+    abstract val udCert: ByteArray
+    abstract val udContact: ByteArray
+    open val udAddress: String = "46.101.98.49:18001"
 
-    val bindings: Bindings
-    var authCallbacks: AuthCallbacksRegistry
-    var backup: Backup?
-    var backupCallbacks: BackupCallbacksRegistry
-    var cMix: CMix?
-    var downloadNDF: DownloadAndVerifySignedNdf
-    var e2e: E2e?
-    var fileManager: MessengerFileManager
-    var generateSecret: GenerateSecret
-    var getCMixParams: GetCMixParams
-    var getE2EParams: GetE2EParams
-    var getSingleUseParams: GetSingleUseParams
-    var initializeBackup: InitializeBackup
-    var isListeningForMessages: Boolean
-    var isRegisteredWithUD: IsRegisteredWithUD
-    var loadCMix: LoadCMix
-    var login: Login
-    var lookupUD: LookupUD
-    var messageListeners: ListenersRegistry
-    var multiLookupUD: MultiLookupUD
-    var ndfEnvironment: NDFEnvironment
-    var newCMix: NewCMix
-    var newCMixFromBackup: NewCMixFromBackup
-    var newOrLoadUd: NewOrLoadUd
-    var newUdManagerFromBackup: NewUdManagerFromBackup
-    var passwordStorage: PasswordStorage
-    var registerForNotifications: RegisterForNotifications
-    var resumeBackup: ResumeBackup
-    var searchUD: SearchUD
-    var sleep: (ms: Long) -> Unit
-    var storageDir: String
-    var ud: UserDiscovery?
+    val bindings: Bindings = BindingsAdapter()
+
+    val authCallbacks: AuthCallbacksRegistry = AuthCallbacksRegistry()
+    val backup: Backup? = null
+    val backupCallbacks: BackupCallbacksRegistry = BackupCallbacksRegistry()
+    val cMix: CMix? = null
+    val downloadNDF: DownloadAndVerifySignedNdf = DownloadAndVerifySignedNdf(bindings)
+    val e2e: E2e? = null
+    val fileManager: MessengerFileManager = MessengerFileManager(app)
+    val generateSecret: GenerateSecret = GenerateSecret(bindings)
+    val getCMixParams: GetCMixParams = GetCMixParams(bindings)
+    val getE2EParams: GetE2EParams = GetE2EParams(bindings)
+    val getSingleUseParams: GetSingleUseParams = GetSingleUseParams(bindings)
+    val initializeBackup: InitializeBackup = InitializeBackup(bindings)
+    val isListeningForMessages: Boolean = false
+    val isRegisteredWithUD: IsRegisteredWithUD = IsRegisteredWithUD(bindings)
+    val loadCMix: LoadCMix = LoadCMix(bindings)
+    val login: Login = Login(bindings)
+    val lookupUD: LookupUD = LookupUD(bindings)
+    val messageListeners: ListenersRegistry = ListenersRegistry()
+    val multiLookupUD: MultiLookupUD = MultiLookupUD(bindings)
+    val ndfEnvironment: NDFEnvironment = NDFEnvironment()
+    val newCMix: NewCMix = NewCMix(bindings)
+    val newCMixFromBackup: NewCMixFromBackup = NewCMixFromBackup(bindings)
+    val newOrLoadUd: NewOrLoadUd = NewOrLoadUd(bindings)
+    val newUdManagerFromBackup: NewUdManagerFromBackup = NewUdManagerFromBackup(bindings)
+    val registerForNotifications: RegisterForNotifications = RegisterForNotifications()
+    val resumeBackup: ResumeBackup = ResumeBackup()
+    val searchUD: SearchUD = SearchUD(bindings)
+    val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
+    val ud: UserDiscovery? = null
 }
