@@ -5,6 +5,7 @@ import bindings.Bindings
 import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -52,7 +53,8 @@ class ClientRepository @Inject constructor(
     val daoRepo: DaoRepository,
     private val preferences: BasePreferences,
     private val messageReceivedListener: MessageReceivedListener,
-    private val backupService: BackupService
+    private val backupService: BackupService,
+    private val messenger: Messenger,
 ) : BaseRepository {
 
     // Initialization ========================================================================
@@ -1059,7 +1061,8 @@ class ClientRepository @Inject constructor(
             daoRepo: DaoRepository,
             preferencesRepository: PreferencesRepository,
             messageReceivedListener: MessageReceivedListener,
-            backupService: BackupService
+            backupService: BackupService,
+            messenger: Messenger
         ): ClientRepository {
             return instance ?: synchronized(this) {
                 val client = ClientRepository(
@@ -1067,7 +1070,8 @@ class ClientRepository @Inject constructor(
                     daoRepo,
                     preferencesRepository,
                     messageReceivedListener,
-                    backupService
+                    backupService,
+                    messenger
                 )
                 instance = client
                 return client

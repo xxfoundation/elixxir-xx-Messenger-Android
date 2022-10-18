@@ -10,7 +10,6 @@ import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.environment.*
 import io.elixxir.xxmessengerclient.utils.*
 
-
 abstract class MessengerEnvironment {
     abstract val passwordStorage: PasswordStorage
     abstract val storageDir: String

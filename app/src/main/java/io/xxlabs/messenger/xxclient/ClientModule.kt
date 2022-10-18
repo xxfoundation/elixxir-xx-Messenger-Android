@@ -2,18 +2,31 @@ package io.xxlabs.messenger.xxclient
 
 import dagger.Binds
 import dagger.Module
+import dagger.Provides
+import io.elixxir.xxmessengerclient.Messenger
 import io.elixxir.xxmessengerclient.MessengerEnvironment
 import io.elixxir.xxmessengerclient.utils.PasswordStorage
 import javax.inject.Singleton
 
+@Module(includes = [
+    ClientModule::class
+])
+object MessengerModule {
+    @Provides
+    @Singleton
+    fun provideMessenger(environment: MessengerEnvironment): Messenger {
+        return Messenger(environment)
+    }
+}
+
 @Module
-interface ClientModule {
+abstract class ClientModule {
 
     @Binds
     @Singleton
-    fun bindEnvironment(environment: DevEnvironment): MessengerEnvironment
+    abstract fun bindEnvironment(environment: DevEnvironment): MessengerEnvironment
 
     @Binds
     @Singleton
-    fun bindPasswordStorage(keystore: AndroidKeyStore): PasswordStorage
+    abstract fun bindPasswordStorage(keystore: AndroidKeyStore): PasswordStorage
 }

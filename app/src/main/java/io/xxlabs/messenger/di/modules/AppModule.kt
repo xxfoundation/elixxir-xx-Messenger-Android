@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.application.AppDatabase
 import io.xxlabs.messenger.application.AppRxSchedulers
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -50,7 +51,8 @@ class AppModule {
         daoRepo: DaoRepository,
         preferencesRepository: PreferencesRepository,
         messageReceivedListener: MessageReceivedListener,
-        backupService: BackupService
+        backupService: BackupService,
+        messenger: Messenger
     ): BaseRepository {
         return if (isMockVersion()) {
             ClientMockRepository(preferencesRepository)
@@ -60,7 +62,8 @@ class AppModule {
                 daoRepo,
                 preferencesRepository,
                 messageReceivedListener,
-                backupService
+                backupService,
+                messenger
             )
         }
     }

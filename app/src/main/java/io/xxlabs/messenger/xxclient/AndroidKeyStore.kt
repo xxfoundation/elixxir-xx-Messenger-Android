@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.xxclient
 
-import android.security.keystore.KeyProperties
 import android.util.Base64
 import io.elixxir.xxmessengerclient.utils.PasswordStorage
 import io.xxlabs.messenger.repository.PreferencesRepository
