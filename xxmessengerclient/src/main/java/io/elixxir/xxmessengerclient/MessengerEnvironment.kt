@@ -45,7 +45,7 @@ interface MessengerEnvironment {
     var registerForNotifications: RegisterForNotifications
     var resumeBackup: ResumeBackup
     var searchUD: SearchUD
-    var sleep: (Long) -> Void
+    var sleep: (ms: Long) -> Void
     var storageDir: String
     var ud: UserDiscovery?
     var udAddress: String?
