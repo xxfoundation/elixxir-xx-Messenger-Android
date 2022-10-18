@@ -1,6 +1,6 @@
 package io.elixxir.xxmessengerclient.utils
 
-import io.elixxir.xxclient.models.BackupUpdateListener
+import io.elixxir.xxclient.callbacks.BackupUpdateListener
 import java.util.*
 
 class BackupCallbacksRegistry {

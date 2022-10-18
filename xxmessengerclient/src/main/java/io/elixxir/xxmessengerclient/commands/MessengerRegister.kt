@@ -15,9 +15,9 @@ class MessengerRegister(private val env: MessengerEnvironment) {
             networkFollowerStatus = cMix.getNetworkFollowerStatus(),
             username = username,
             registrationValidationSignature = cMix.receptionRegistrationValidationSignature,
-            certificateData = env.udCert ?: byteArrayOf(),
-            contact = ContactAdapter(env.udContact ?: byteArrayOf()),
-            udIpAddress = env.udIpAddress
+            certificateData = env.udCert,
+            contact = ContactAdapter(env.udContact),
+            udIpAddress = env.udAddress
         ).getOrThrow()
     }
 }

@@ -6,23 +6,22 @@ import io.elixxir.xxclient.utils.Data
 import io.elixxir.xxclient.utils.Password
 import io.elixxir.xxmessengerclient.utils.nonNullResultOf
 
-class NewCMixFromBackup(
-    private val bindings: Bindings,
-    private val ndfJson: () -> String,
-    private val storageDir: () -> String,
-    private val backupPassword: () -> String,
-    private val sessionPassword: () -> Password,
-    private val backupFileContents: () -> Data,
-) {
+class NewCMixFromBackup(private val bindings: Bindings) {
 
-    operator fun invoke(): Result<BackupReport> {
+    operator fun invoke(
+        ndfJson: String,
+        storageDir: String,
+        backupPassword: String,
+        sessionPassword: Password,
+        backupFileContents: Data,
+    ): Result<BackupReport> {
         return nonNullResultOf {
             bindings.newCmixFromBackup(
-                ndfJson(),
-                storageDir(),
-                backupPassword(),
-                sessionPassword(),
-                backupFileContents()
+                ndfJson,
+                storageDir,
+                backupPassword,
+                sessionPassword,
+                backupFileContents
             )
         }
     }

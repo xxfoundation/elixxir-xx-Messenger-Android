@@ -3,7 +3,7 @@ package io.elixxir.xxmessengerclient.utils
 import android.content.Context
 import java.util.Date
 
-class MessengerFileManager(private val context: () -> Context) {
+class MessengerFileManager(private val context: Context) {
     fun isDirectoryEmpty(path: String): Boolean {
         return false
     }

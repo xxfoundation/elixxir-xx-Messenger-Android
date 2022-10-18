@@ -14,7 +14,9 @@ import io.elixxir.xxmessengerclient.utils.MessengerFileManager
 
 
 interface MessengerEnvironment {
-    val udIpAddress: String get() = "46.101.98.49:18001" // AltUD
+    val udAddress: String
+    val udCert: ByteArray
+    val udContact: ByteArray
 
     val bindings: Bindings
     var authCallbacks: AuthCallbacksRegistry
@@ -45,10 +47,7 @@ interface MessengerEnvironment {
     var registerForNotifications: RegisterForNotifications
     var resumeBackup: ResumeBackup
     var searchUD: SearchUD
-    var sleep: (ms: Long) -> Void
+    var sleep: (ms: Long) -> Unit
     var storageDir: String
     var ud: UserDiscovery?
-    var udAddress: String?
-    var udCert: ByteArray?
-    var udContact: ByteArray?
 }

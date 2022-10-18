@@ -8,23 +8,22 @@ import io.elixxir.xxclient.utils.ContactData
 import io.elixxir.xxclient.utils.E2eId
 import io.elixxir.xxclient.utils.nonNullResultOf
 
-class NewUdManagerFromBackup(
-    private val bindings: Bindings,
-    private val networkFollowerStatus: () -> NetworkFollowerStatus,
-    private val e2eId: () -> E2eId,
-    private val certificateData: () -> CertificateData,
-    private val contactData: () -> ContactData,
-    private val ipAddress: () -> String
-) {
+class NewUdManagerFromBackup(private val bindings: Bindings) {
 
-    operator fun invoke(): Result<UserDiscovery> {
+    operator fun invoke(
+        networkFollowerStatus: NetworkFollowerStatus,
+        e2eId: E2eId,
+        certificateData: CertificateData,
+        contactData: ContactData,
+        ipAddress: String
+    ): Result<UserDiscovery> {
         return nonNullResultOf {
             bindings.newUdFromBackup(
-                e2eId(),
-                networkFollowerStatus(),
-                certificateData(),
-                contactData(),
-                ipAddress()
+                e2eId,
+                networkFollowerStatus,
+                certificateData,
+                contactData,
+                ipAddress
             )
         }
     }
