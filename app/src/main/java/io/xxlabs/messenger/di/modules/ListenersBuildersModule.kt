@@ -15,12 +15,10 @@ class ListenersBuildersModule {
     fun provideTextMessageListener(
         daoRepository: DaoRepository,
         schedulers: SchedulerProvider,
-        preferences: PreferencesRepository
     ): MessageReceivedListener {
         return MessageReceivedListener.getInstance(
             daoRepository,
             schedulers,
-            preferences
         )
     }
 }

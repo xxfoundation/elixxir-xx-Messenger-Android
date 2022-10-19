@@ -6,6 +6,9 @@ import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.elixxir.xxclient.callbacks.AuthEventListener
+import io.elixxir.xxclient.callbacks.MessageListener
+import io.elixxir.xxclient.callbacks.NetworkHealthListener
+import io.elixxir.xxclient.models.Message
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -244,6 +247,14 @@ class ClientRepository @Inject constructor(
 
     override fun isLoggedIn(): Single<Boolean> {
         return Single.create { emitter ->
+            if (!messenger.isLoggedIn()) {
+                messenger.run {
+                    if (!isLoaded()) load()
+                    start()
+                    if (!isConnected()) connect()
+                    logIn()
+                }
+            }
             emitter.onSuccess(messenger.isLoggedIn())
         }
     }
@@ -419,7 +430,11 @@ class ClientRepository @Inject constructor(
     override fun registerNetworkHealthCb(networkHealthCallback: NetworkHealthCallback): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                clientWrapper.registerNetworkHealthCb(networkHealthCallback)
+                messenger.cMix?.setHealthListener(object : NetworkHealthListener {
+                    override fun onHealthUpdate(isHealthy: Boolean) {
+                        networkHealthCallback.callback(isHealthy)
+                    }
+                })
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -462,7 +477,7 @@ class ClientRepository @Inject constructor(
     override fun registerMessageListener(): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                clientWrapper.registerMessageListener(messageReceivedListener)
+                messenger.registerMessageListener(messageReceivedListener)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -1045,7 +1060,6 @@ class ClientRepository @Inject constructor(
     private var shouldReplay = true
 
     override fun replayRequests() {
-        TODO()
 //        try {
 //            if (shouldReplay) {
 //                clientWrapper.client.replayRequests()
@@ -1057,7 +1071,8 @@ class ClientRepository @Inject constructor(
     }
 
     override suspend fun getPartners(): List<String> {
-        return unmarshallPartners(clientWrapper.getPartners()).toList()
+        return listOf()
+//        return unmarshallPartners(clientWrapper.getPartners()).toList()
     }
 
     companion object {

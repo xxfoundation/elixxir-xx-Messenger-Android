@@ -1,9 +1,8 @@
 package io.xxlabs.messenger.bindings.listeners
 
-import bindings.Listener
-import bindings.Message
 import com.google.protobuf.InvalidProtocolBufferException
 import data.proto.CMIXText
+import io.elixxir.xxclient.callbacks.MessageListener
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.xxlabs.messenger.application.SchedulerProvider
@@ -15,14 +14,48 @@ import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
 import javax.inject.Inject
+import io.elixxir.xxclient.models.Message as BindingsMessage
 
 //Msg Type 2
 class MessageReceivedListener @Inject constructor(
     private val daoRepo: DaoRepository,
     private val schedulers: SchedulerProvider,
-    private val preferences: PreferencesRepository
-)/* : Listener */{
+) : MessageListener {
     var subscriptions = CompositeDisposable()
+
+    override val name: String = this::javaClass.get().simpleName
+
+    override fun onMessageReceived(message: BindingsMessage) {
+        try {
+            val cmixText = CMIXText.parseFrom(message.payload)
+            val timestamp = message.timestamp
+            val javaTimestamp = System.currentTimeMillis()
+            // Get the text of the message
+
+            Timber.v("Bindings timestamp (ms): ${message.timestamp}")
+            Timber.v("Bindings timestamp (nano): ${message.timestamp}")
+            Timber.v("Java timestamp (ms): $javaTimestamp")
+            Timber.v("Kronos timestamp (ms): ${XxMessengerApplication.kronosClock.getCurrentNtpTimeMs()}")
+
+            Timber.v(
+                "Received Message and attempting to save it %s, %s, %s",
+                cmixText,
+                timestamp,
+                message.sender
+            )
+
+            insertMsgByContactId(
+                message.id,
+                message.sender,
+                message.recipientId,
+                cmixText,
+                timestamp,
+                message.roundUrl
+            )
+        } catch (e: InvalidProtocolBufferException) {
+            Timber.e(e.localizedMessage)
+        }
+    }
 
     init {
         Timber.v("Message listener started")
@@ -59,10 +92,6 @@ class MessageReceivedListener @Inject constructor(
 //        } catch (e: InvalidProtocolBufferException) {
 //            Timber.e(e.localizedMessage)
 //        }
-//    }
-
-//    override fun name(): String {
-//        return this::javaClass.get().simpleName
 //    }
 
     private fun insertMsgByContactId(
@@ -107,13 +136,11 @@ class MessageReceivedListener @Inject constructor(
         fun getInstance(
             daoRepo: DaoRepository,
             schedulers: SchedulerProvider,
-            preferences: PreferencesRepository
         ): MessageReceivedListener {
             return instance ?: synchronized(this) {
                 val messageReceivedListener = MessageReceivedListener(
                     daoRepo,
                     schedulers,
-                    preferences
                 )
                 instance = messageReceivedListener
                 messageReceivedListener
