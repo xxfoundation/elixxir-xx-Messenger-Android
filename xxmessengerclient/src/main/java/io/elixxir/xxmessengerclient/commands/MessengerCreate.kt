@@ -10,6 +10,7 @@ class MessengerCreate(private val env: MessengerEnvironment) {
             .getOrThrow()
             .decodeToString()
         val password = env.generateSecret()
+        env.passwordStorage.clear()
         env.passwordStorage.save(password)
 
         val storageDir = env.storageDir

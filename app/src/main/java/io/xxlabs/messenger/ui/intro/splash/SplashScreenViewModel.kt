@@ -14,6 +14,8 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.ioThread
 import io.xxlabs.messenger.support.util.Utils
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
@@ -31,8 +33,11 @@ class SplashScreenViewModel @Inject constructor(
     val appDataCleared: LiveData<Boolean> by ::_appDataCleared
     private val _appDataCleared = MutableLiveData(false)
 
-    val navigateNext: LiveData<Boolean> by ::_navigateNext
-    private val _navigateNext = MutableLiveData(false)
+    val sessionExists: LiveData<Boolean> by ::_sessionExists
+    private val _sessionExists = MutableLiveData(false)
+
+    private val _errors: MutableStateFlow<String?> = MutableStateFlow(null)
+    val errors = _errors.asStateFlow()
 
     init {
 //        fetchCommonErrors()
@@ -77,7 +82,7 @@ class SplashScreenViewModel @Inject constructor(
     private fun validateSession() {
         if (preferences.name.isNotEmpty()) {
             Timber.v("User session is already created")
-            _navigateNext.value = true
+            _sessionExists.value = true
         } else {
             Timber.v("User session not present, creating new...")
             clearAppData()
@@ -87,9 +92,9 @@ class SplashScreenViewModel @Inject constructor(
     private fun clearAppData() {
         viewModelScope.launch(Dispatchers.IO) {
             messenger.destroy()
+            messenger.create()
             _appDataCleared.postValue(true)
         }
-
     }
 
     override fun onCleared() {

@@ -21,7 +21,6 @@ import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_INVITATION
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
-import timber.log.Timber
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
@@ -93,8 +92,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun observeUi() {
-        splashScreenViewModel.navigateNext.observe(this) { navigate ->
-            if (navigate) navigateNext()
+        splashScreenViewModel.sessionExists.observe(this) { navigate ->
+            if (navigate) navigateMain()
         }
 
         splashScreenViewModel.appDataCleared.observe(this) { cleared ->
@@ -146,10 +145,10 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
 
     private fun downloadRegistrationJson(): JsonObject {
         TODO()
-        val gson = GsonBuilder()
-            .setLenient()
-            .create()
-
+//        val gson = GsonBuilder()
+//            .setLenient()
+//            .create()
+//
 //        val db = Bindings.downloadDAppRegistrationDB().decodeToString().replace("\n", "")
 //        return gson.fromJson(db, JsonObject::class.java)
     }
