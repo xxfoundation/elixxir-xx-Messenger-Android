@@ -6,8 +6,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.ui.global.NetworkViewModel
-import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistration
-import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationFactory
 import javax.inject.Inject
 
 abstract class RegistrationFlowFragment : Fragment(), Injectable {
@@ -21,19 +19,9 @@ abstract class RegistrationFlowFragment : Fragment(), Injectable {
     }
 
     @Inject
-    lateinit var usernameRegistrationFactory: UsernameRegistrationFactory
-    private val usernameRegistration: UsernameRegistration by lazy {
-        UsernameRegistration.provideFactory(
-            usernameRegistrationFactory,
-            registrationHandler.rsaDecryptPwd(),
-            networkViewModel
-        )
-    }
-
-    @Inject
     lateinit var registrationViewModelFactory: RegistrationViewModelFactory
     protected val registrationViewModel: RegistrationViewModel by activityViewModels {
-        RegistrationViewModel.provideFactory(registrationViewModelFactory, usernameRegistration)
+        RegistrationViewModel.provideFactory(registrationViewModelFactory)
     }
 
     /* UI */

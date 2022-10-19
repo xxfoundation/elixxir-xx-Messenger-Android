@@ -2,7 +2,6 @@ package io.xxlabs.messenger.ui.intro.registration
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import io.xxlabs.messenger.ui.intro.registration.email.EmailRegistrationController
@@ -18,7 +17,7 @@ class RegistrationViewModel @AssistedInject constructor(
     phoneRegistration: PhoneRegistrationController,
     completedStep: CompletedRegistrationStepController,
     tfaRegistration: TfaRegistrationController,
-    @Assisted private val usernameRegistration: UsernameRegistrationController
+    usernameRegistration: UsernameRegistrationController
 ) : ViewModel(),
     UsernameRegistrationController by usernameRegistration,
     WelcomeRegistrationController by welcomeRegistration,
@@ -31,10 +30,9 @@ class RegistrationViewModel @AssistedInject constructor(
     companion object {
         fun provideFactory(
             assistedFactory: RegistrationViewModelFactory,
-            usernameRegistration: UsernameRegistrationController
         ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return assistedFactory.create(usernameRegistration) as T
+                return assistedFactory.create() as T
             }
         }
     }
@@ -42,5 +40,5 @@ class RegistrationViewModel @AssistedInject constructor(
 
 @AssistedFactory
 interface RegistrationViewModelFactory {
-    fun create(usernameRegistration: UsernameRegistrationController): RegistrationViewModel
+    fun create(): RegistrationViewModel
 }

@@ -35,7 +35,7 @@ android {
 
 dependencies {
 
-    implementation(project(":xxclient"))
+    api(project(":xxclient"))
 
     // Android core
     implementation("androidx.core:core-ktx:1.7.0")

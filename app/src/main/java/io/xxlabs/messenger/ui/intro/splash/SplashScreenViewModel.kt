@@ -5,12 +5,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.elixxir.xxmessengerclient.Messenger
+import io.elixxir.xxmessengerclient.environment.NDFEnvironment
 import io.reactivex.disposables.CompositeDisposable
+import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
+import io.xxlabs.messenger.data.datatype.Environment
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.ioThread
 import io.xxlabs.messenger.support.util.Utils
 import kotlinx.coroutines.Dispatchers
@@ -80,16 +84,10 @@ class SplashScreenViewModel @Inject constructor(
     }
 
     private fun validateSession() {
-        if (preferences.name.isNotEmpty()) {
-            Timber.v("User session is already created")
-            _sessionExists.value = true
-        } else {
-            Timber.v("User session not present, creating new...")
-            clearAppData()
-        }
+        _sessionExists.value = preferences.name.isNotEmpty()
     }
 
-    private fun clearAppData() {
+    fun clearAppData() {
         viewModelScope.launch(Dispatchers.IO) {
             messenger.destroy()
             messenger.create()

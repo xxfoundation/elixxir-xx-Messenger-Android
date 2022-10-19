@@ -18,6 +18,8 @@ import io.xxlabs.messenger.ui.intro.registration.tfa.RegistrationTfaFragment
 import io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistration
 import io.xxlabs.messenger.ui.intro.registration.tfa.TfaRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.username.RegistrationUsernameFragment
+import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistration
+import io.xxlabs.messenger.ui.intro.registration.username.UsernameRegistrationController
 import io.xxlabs.messenger.ui.intro.registration.welcome.RegistrationWelcomeFragment
 import io.xxlabs.messenger.ui.intro.registration.welcome.WelcomeRegistration
 import io.xxlabs.messenger.ui.intro.registration.welcome.WelcomeRegistrationController
@@ -55,6 +57,9 @@ interface RegistrationModule {
     abstract fun contributeRestoreDetailFragment(): RestoreDetailFragment
 
     /* Logic */
+
+    @Binds
+    fun usernameStep(registration: UsernameRegistration): UsernameRegistrationController
 
     @Binds
     fun welcomeStep(registration: WelcomeRegistration): WelcomeRegistrationController

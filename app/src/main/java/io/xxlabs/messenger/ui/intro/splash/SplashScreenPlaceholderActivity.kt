@@ -92,12 +92,8 @@ class SplashScreenPlaceholderActivity : BaseInjectorActivity() {
     }
 
     private fun observeUi() {
-        splashScreenViewModel.sessionExists.observe(this) { navigate ->
-            if (navigate) navigateMain()
-        }
-
-        splashScreenViewModel.appDataCleared.observe(this) { cleared ->
-            if (cleared) newUserSession()
+        splashScreenViewModel.sessionExists.observe(this) { exists ->
+            if (exists) navigateMain() else newUserSession()
         }
     }
 

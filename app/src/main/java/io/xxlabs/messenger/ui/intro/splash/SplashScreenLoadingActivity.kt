@@ -26,6 +26,8 @@ class SplashScreenLoadingActivity : BaseKeystoreActivity() {
         setContentView(R.layout.activity_splash)
         splashScreenViewModel =
             ViewModelProvider(this, viewModelFactory).get(SplashScreenViewModel::class.java)
+
+        splashScreenViewModel.clearAppData()
     }
 
     private fun hideSystemBars() {

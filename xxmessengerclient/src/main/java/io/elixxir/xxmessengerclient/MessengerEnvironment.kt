@@ -15,6 +15,7 @@ abstract class MessengerEnvironment {
     abstract val storageDir: String
     abstract val udCert: ByteArray
     abstract val udContact: ByteArray
+    abstract val ndfCert: String
 
     open val udAddress: String = "46.101.98.49:18001"
     open val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
@@ -42,7 +43,7 @@ abstract class MessengerEnvironment {
     open val lookupUD: LookupUD = LookupUD(bindings)
     open val messageListeners: ListenersRegistry = ListenersRegistry()
     open val multiLookupUD: MultiLookupUD = MultiLookupUD(bindings)
-    open val ndfEnvironment: NDFEnvironment = NDFEnvironment()
+    open val ndfEnvironment: NDFEnvironment = NDFEnvironment(cert = ndfCert)
     open val newCMix: NewCMix = NewCMix(bindings)
     open val newCMixFromBackup: NewCMixFromBackup = NewCMixFromBackup(bindings)
     open val newOrLoadUd: NewOrLoadUd = NewOrLoadUd(bindings)

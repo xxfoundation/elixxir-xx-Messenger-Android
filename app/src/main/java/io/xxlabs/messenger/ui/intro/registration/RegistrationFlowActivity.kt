@@ -61,5 +61,4 @@ class RegistrationFlowActivity : BaseKeystoreActivity(), RegistrationHandler, Sn
 
 interface RegistrationHandler {
     fun onRegistrationComplete()
-    fun rsaDecryptPwd(): ByteArray
 }

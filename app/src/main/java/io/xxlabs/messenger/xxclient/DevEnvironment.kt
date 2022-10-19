@@ -13,13 +13,22 @@ class DevEnvironment @Inject constructor(
 ): MessengerEnvironment() {
     override val storageDir: String = context.filesDir.path
     override val udCert: ByteArray
-        get() = rawBytes(R.raw.ud_elixxir_io)
+        get() = readBytes(R.raw.ud_elixxir_io)
     override val udContact: ByteArray
-        get() = rawBytes(R.raw.ud_contact_test)
+        get() = readBytes(R.raw.ud_contact_test)
+    override val ndfCert: String
+        get() = readText(R.raw.xx_ndf)
 
-    private fun rawBytes(resourceId: Int): ByteArray {
+    private fun readBytes(resourceId: Int): ByteArray {
         return appContext().resources
             .openRawResource(resourceId)
             .use { it.readBytes() }
+    }
+
+    private fun readText(resourceId: Int): String {
+        return appContext().resources
+            .openRawResource(resourceId)
+            .bufferedReader()
+            .use { it.readText() }
     }
 }

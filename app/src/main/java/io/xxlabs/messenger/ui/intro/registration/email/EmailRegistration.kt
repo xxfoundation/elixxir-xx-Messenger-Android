@@ -9,6 +9,8 @@ import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import io.elixxir.xxclient.models.Fact
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage

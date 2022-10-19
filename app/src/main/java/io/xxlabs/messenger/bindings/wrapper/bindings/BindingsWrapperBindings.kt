@@ -206,7 +206,8 @@ class BindingsWrapperBindings {
 }
 
 fun bindingsErrorMessage(exception: Throwable): String {
-    TODO()
+    Timber.e(exception)
+    return exception.message ?: "Unexpected error. Please try again."
 //    val bindingsErrorMsg = Bindings.errorStringToUserFriendlyMessage(exception.localizedMessage)
 //    return when {
 //        exception is NodeErrorException ->

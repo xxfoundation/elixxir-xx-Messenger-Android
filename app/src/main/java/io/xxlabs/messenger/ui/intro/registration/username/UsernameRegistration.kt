@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.ui.intro.registration.username
 
 import android.app.Application
-import android.content.Context
 import android.text.*
 import android.text.style.ForegroundColorSpan
 import android.widget.EditText
@@ -9,45 +8,31 @@ import androidx.databinding.BindingAdapter
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import dagger.assisted.Assisted
-import dagger.assisted.AssistedFactory
-import dagger.assisted.AssistedInject
 import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.repository.PreferencesRepository
-import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.SpanConfig
-import io.xxlabs.messenger.ui.global.NetworkViewModel
 import kotlinx.coroutines.*
-import timber.log.Timber
-import kotlin.coroutines.resume
-import kotlin.coroutines.suspendCoroutine
+import javax.inject.Inject
 import kotlin.random.Random.Default.nextInt
-
-private const val MAX_NETWORK_RETRIES = 29
-private const val NETWORK_POLL_INTERVAL_MS = 1000L
 
 /**
  * Encapsulates username registration logic.
  */
-class UsernameRegistration @AssistedInject constructor(
+class UsernameRegistration @Inject constructor(
     private val messenger: Messenger,
-    private val scheduler: SchedulerProvider,
     private val preferences: PreferencesRepository,
     private val application: Application,
-    @Assisted private val sessionPassword: ByteArray,
-    @Assisted private val networking: NetworkViewModel
 ) : UsernameRegistrationController {
 
     private val scope = CoroutineScope(
         CoroutineName("UsernameRegistration")
             + Job()
-            + Dispatchers.Default
+            + Dispatchers.IO
     )
 
     private val sessionExists get() = messenger.isCreated()
@@ -112,15 +97,7 @@ class UsernameRegistration @AssistedInject constructor(
     private val navigateRestore = MutableLiveData(false)
 
     override val usernameFilters: Array<InputFilter> =
-        arrayOf(
-//            InputFilter { source, start, end, _, _, _ ->
-//                val input = source?.subSequence(start, end)
-//                val filtered = source?.subSequence(start, end)
-//                    ?.replace(Regex(USERNAME_FILTER_REGEX), "")
-//                if (filtered == input) null else filtered
-//            },
-            InputFilter.LengthFilter(MAX_USERNAME_LENGTH)
-        )
+        arrayOf(InputFilter.LengthFilter(MAX_USERNAME_LENGTH))
 
     override val restoreEnabled: LiveData<Boolean> by ::_restoreEnabled
     private val _restoreEnabled = MutableLiveData(true)
@@ -165,7 +142,7 @@ class UsernameRegistration @AssistedInject constructor(
     }
 
     private fun enableUI() {
-        inputEnabled.value = true
+        inputEnabled.postValue(true)
     }
 
     override fun onUsernameNavigateHandled() {
@@ -216,12 +193,9 @@ class UsernameRegistration @AssistedInject constructor(
     }
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
-        if (!sessionExists) {
-            getOrCreateSession()
-            return
-        }
-
         scope.launch {
+            if (!sessionExists) getOrCreateSession()
+
             try {
                 messenger.register(username)
                 onSuccessfulRegistration(username, isDemoAcct)
@@ -232,62 +206,30 @@ class UsernameRegistration @AssistedInject constructor(
         }
     }
 
-    private fun String.isNetworkNotHealthyError() =
-        contains("network is not healthy")
-
-    private fun handleNetworkHealthError() {
-        onUsernameNextClicked()
-    }
-
     private fun displayError(errorMsg: String) {
         error.postValue(bindingsErrorMessage(Exception(errorMsg)))
     }
 
     private fun getOrCreateSession() {
-        scope.launch(Dispatchers.IO) {
-            try {
-                messenger.run {
-                    create()
-                    load()
-                    start()
-                    connect()
-                    logIn()
-                }
-                preferences.lastAppVersion = BuildConfig.VERSION_CODE
-            } catch (err: Exception) {
-                err.printStackTrace()
-                displayError(err.toString())
+        try {
+            messenger.run {
+                if (!isLoaded()) load()
+                start()
+                if (!isConnected()) connect()
             }
-        }
-    }
-
-    private suspend fun connectToCmix(retries: Int = 0) {
-        networking.checkRegisterNetworkCallback()
-        if (retries < MAX_NETWORK_RETRIES) {
-            if (initializeNetworkFollower()) {
-                Timber.d("Started network follower after #${retries + 1} attempt(s).")
-                withContext(Dispatchers.Main) {
-                    onUsernameNextClicked()
-                }
-            } else {
-                delay(NETWORK_POLL_INTERVAL_MS)
-                Timber.d("Attempting to start network follower, attempt #${retries + 1}.")
-                connectToCmix(retries + 1)
-            }
-        } else throw Exception("Failed to connect to network after ${retries + 1} attempts. Please try again.")
-    }
-
-    private suspend fun initializeNetworkFollower(): Boolean = suspendCoroutine { continuation ->
-        networking.tryStartNetworkFollower { successful ->
-            continuation.resume(successful)
+            preferences.lastAppVersion = BuildConfig.VERSION_CODE
+        } catch (err: Exception) {
+            err.printStackTrace()
+            enableUI()
+            displayError(err.toString())
         }
     }
 
     private fun onSuccessfulRegistration(username: String, isDemoAcct: Boolean) {
         preferences.name = username
         enableUI()
-        if (isDemoAcct) navigateDemoAcct.value = true
-        else navigateNextStep.value = username
+        if (isDemoAcct) navigateDemoAcct.postValue(true)
+        else navigateNextStep.postValue(username)
     }
 
     private fun getSpannableTitle(): Spanned {
@@ -321,23 +263,10 @@ class UsernameRegistration @AssistedInject constructor(
         private const val USERNAME_VALIDATION_REGEX = "^[a-zA-Z0-9][a-zA-Z0-9_\\-+@.#]*[a-zA-Z0-9]\$"
         private const val PLAY_STORE_DEMO_USERNAME = "GPlayStoreDemoAcc"
         private val DEMO_ACCT_CHARS: List<Char> = ('a'..'z') + ('0'..'9')
-
-        fun provideFactory(
-            assistedFactory: UsernameRegistrationFactory,
-            sessionPassword: ByteArray,
-            networking: NetworkViewModel,
-        ): UsernameRegistration {
-            return assistedFactory.create(sessionPassword, networking)
-        }
     }
 }
 
 @BindingAdapter("inputFilters")
 fun EditText.setInputFilters(filters: Array<InputFilter>) {
     this.filters = filters
-}
-
-@AssistedFactory
-interface UsernameRegistrationFactory {
-    fun create(sessionPassword: ByteArray, networking: NetworkViewModel): UsernameRegistration
 }
