@@ -1,10 +1,11 @@
 package io.xxlabs.messenger.repository.client
 
 import android.content.Context
-import bindings.Bindings
+import bindings.Bindings.setFactsOnContact
 import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import io.elixxir.xxclient.callbacks.AuthEventListener
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -18,9 +19,7 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.chat.GroupChatBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
-import io.xxlabs.messenger.bindings.wrapper.groups.manager.GroupsManagerBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.message.GroupMessageReceiveBase
-import io.xxlabs.messenger.bindings.wrapper.groups.message.GroupMessageReceiveBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.report.GroupSendReportBase
 import io.xxlabs.messenger.bindings.wrapper.groups.report.NewGroupReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
@@ -39,7 +38,6 @@ import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.repository.client.NodeErrorException.Companion.isNodeError
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
@@ -107,35 +105,38 @@ class ClientRepository @Inject constructor(
 
     override fun loginSingle(storageDir: String, password: ByteArray): Single<ByteArray> {
         return Single.create { emitter ->
-            try {
-                Timber.v("[LOGIN]Logging in...")
-                clientWrapper =
-                    BindingsWrapperBindings.login(storageDir, password) as ClientWrapperBindings
-                clientWrapper.registerDatadogListener()
-                Timber.v("[LOGIN]Logged in!")
-                val userContact = getBaseUser().marshal()
-                userWrapper = ContactWrapperBase.from(
-                    BindingsWrapperBindings.unmarshallContact(userContact),
-                    importUserContact()
-                ) as ContactWrapperBindings
-
-                Timber.d("[LOGIN] Username: ${userWrapper.getUsernameFact()}")
-                Timber.d("[LOGIN] Email: ${userWrapper.getEmailFact()}")
-                Timber.d("[LOGIN] Phone: ${userWrapper.getPhoneFact()}")
-                val userId = clientWrapper.getUserId()
-                Timber.d("[LOGIN]UserId: $userId")
-
-                if (userId.isNotEmpty() && !preferences.getUserId().contentEquals(userId)) {
-                    Timber.v("[LOGIN]userId updated!")
-                    preferences.setUserId(userId)
-                }
-                preferences.preImages = getPreImages()
-                initPreImageCallback()
-                initFileTransferManager()
-                emitter.onSuccess(clientWrapper.getUser().getReceptionId())
-            } catch (err: Exception) {
-                emitter.onError(err)
-            }
+            messenger.logIn()
+            emitter.onSuccess(byteArrayOf())
+//            try {
+//                Timber.v("[LOGIN]Logging in...")
+//                clientWrapper =
+//                    BindingsWrapperBindings.login(storageDir, password) as ClientWrapperBindings
+//                clientWrapper.registerDatadogListener()
+//                Timber.v("[LOGIN]Logged in!")
+//                val userContact = getBaseUser().marshal()
+//                userWrapper = ContactWrapperBase.from(
+//                    BindingsWrapperBindings.unmarshallContact(userContact),
+//                    importUserContact()
+//                ) as ContactWrapperBindings
+//
+//                Timber.d("[LOGIN] Username: ${userWrapper.getUsernameFact()}")
+//                Timber.d("[LOGIN] Email: ${userWrapper.getEmailFact()}")
+//                Timber.d("[LOGIN] Phone: ${userWrapper.getPhoneFact()}")
+//                val userId = clientWrapper.getUserId()
+//                Timber.d("[LOGIN]UserId: $userId")
+//
+//                if (userId.isNotEmpty() && !preferences.getUserId().contentEquals(userId)) {
+//                    Timber.v("[LOGIN]userId updated!")
+//                    preferences.setUserId(userId)
+//                }
+//                preferences.preImages = getPreImages()
+//                initPreImageCallback()
+//                initFileTransferManager()
+//                emitter.onSuccess(clientWrapper.getUser().getReceptionId())
+//            } catch (err: Exception) {
+//                emitter.onError(err)
+//            }
+//        }
         }
     }
 
@@ -188,13 +189,15 @@ class ClientRepository @Inject constructor(
 
     override fun startNetworkFollower(): Single<Boolean> {
         return Single.create { emitter ->
-            try {
-                resumeBackup()
-                clientWrapper.startNetworkFollower()
-                emitter.onSuccess(true)
-            } catch (e: Exception) {
-                emitter.onError(e)
-            }
+            messenger.start
+            emitter.onSuccess(true)
+//            try {
+//                resumeBackup()
+//                clientWrapper.startNetworkFollower()
+//                emitter.onSuccess(true)
+//            } catch (e: Exception) {
+//                emitter.onError(e)
+//            }
         }
     }
 
@@ -207,6 +210,7 @@ class ClientRepository @Inject constructor(
 
     override fun stopNetworkFollower(): Single<Boolean> {
         return Single.create { emitter ->
+
             try {
                 clientWrapper.stopNetworkFollower()
                 emitter.onSuccess(true)
@@ -217,16 +221,21 @@ class ClientRepository @Inject constructor(
     }
 
     override fun getNetworkFollowerStatus(): NetworkFollowerStatus {
-        if (!::fileRepository.isInitialized) initFileTransferManager()
-        return NetworkFollowerStatus.from(clientWrapper.getNetworkFollowerStatus())
+        return messenger.cMix?.getNetworkFollowerStatus()?.let {
+            NetworkFollowerStatus.from(it.code)
+        } ?: NetworkFollowerStatus.STOPPED
+//        if (!::fileRepository.isInitialized) initFileTransferManager()
+//        return NetworkFollowerStatus.from(clientWrapper.getNetworkFollowerStatus())
     }
 
     override fun newUserDiscovery(): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                udWrapperBindings = BindingsWrapperBindings
-                    .newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
+                messenger.logIn()
                 emitter.onSuccess(true)
+//                udWrapperBindings = BindingsWrapperBindings
+//                    .newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
+//                emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
@@ -234,7 +243,9 @@ class ClientRepository @Inject constructor(
     }
 
     override fun isLoggedIn(): Single<Boolean> {
-        return hasInitialized()
+        return Single.create { emitter ->
+            emitter.onSuccess(messenger.isLoggedIn())
+        }
     }
 
     override fun getNodeRegistrationStatus(): Pair<Long, Long> {
@@ -298,8 +309,11 @@ class ClientRepository @Inject constructor(
 
     override fun deleteUser(): Single<Boolean> {
         return Single.create { emitter ->
+            val username = messenger.myContact().getFactsFromContact().first {
+                it.type == FactType.USERNAME.value
+            }
             try {
-                udWrapperBindings.deleteUser(getStoredUsername())
+                messenger.ud?.permanentDeleteAccount(username)
                 emitter.onSuccess(true)
             } catch (err: Exception) {
                 emitter.onError(err)
@@ -318,44 +332,39 @@ class ClientRepository @Inject constructor(
     }
 
     override fun getUserId(): ByteArray {
-        return userWrapper.getId()
+        return messenger.myContact().getIdFromContact()
     }
 
     override fun getStoredUsername(): String {
-        val factList = importUserFactsHash()
-        return factList[FactType.USERNAME] ?: ""
+        return messenger.myContact().getFactsFromContact().firstOrNull {
+            it.type == FactType.USERNAME.value
+        }?.fact ?: ""
     }
 
     override fun getStoredEmail(): String {
-        val factList = importUserFactsHash()
-        return factList[FactType.EMAIL] ?: ""
+        return messenger.myContact().getFactsFromContact().firstOrNull {
+            it.type == FactType.EMAIL.value
+        }?.fact ?: ""
     }
 
     override fun getStoredPhone(): String {
-        val factList = importUserFactsHash()
-        return factList[FactType.PHONE] ?: ""
+        return messenger.myContact().getFactsFromContact().firstOrNull {
+            it.type == FactType.PHONE.value
+        }?.fact ?: ""
     }
 
     override fun getMashalledUser(): ByteArray {
-        val userContact = getBaseUser()
-        val factsHash = importUserFactsHash()
-        userContact.addUsername(factsHash[FactType.USERNAME] ?: "")
-        Timber.d("[CLIENT REPO] Facts: ${userContact.getStringifiedFacts()}")
-
-        if (preferences.shareEmailWhenRequesting) {
-            factsHash[FactType.EMAIL]?.let { email ->
-                userContact.addEmail(email)
-            }
+        val contact = messenger.myContact().run {
+            setFactsOnContact(
+                getFactsFromContact().filter {
+                    preferences.shareEmailWhenRequesting && it.type == FactType.EMAIL.value ||
+                    preferences.sharePhoneWhenRequesting && it.type == FactType.PHONE.value ||
+                    it.type == FactType.USERNAME.value
+                }
+            )
         }
 
-        if (preferences.sharePhoneWhenRequesting) {
-            factsHash[FactType.PHONE]?.let { phone ->
-                userContact.addPhone(phone)
-            }
-        }
-
-        Timber.d("[CLIENT REPO] Facts after: ${userContact.getStringifiedFacts()}")
-        return userContact.marshal()
+        return contact.data
     }
 
     private fun getBaseUser(): ContactWrapperBase {
@@ -370,8 +379,35 @@ class ClientRepository @Inject constructor(
     ): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                clientWrapper.registerAuthCallback(
-                    onContactReceived, onConfirmationReceived, onResetReceived
+                messenger.registerAuthCallbacks(
+                    object : AuthEventListener {
+                        override fun onConfirm(
+                            contact: ByteArray?,
+                            receptionId: ByteArray?,
+                            ephemeralId: Long,
+                            roundId: Long
+                        ) {
+                            contact?.let { onConfirmationReceived(it) }
+                        }
+
+                        override fun onRequest(
+                            contact: ByteArray?,
+                            receptionId: ByteArray?,
+                            ephemeralId: Long,
+                            roundId: Long
+                        ) {
+                            contact?.let { onContactReceived(it) }
+                        }
+
+                        override fun onReset(
+                            contact: ByteArray?,
+                            receptionId: ByteArray?,
+                            ephemeralId: Long,
+                            roundId: Long
+                        ) {
+                            contact?.let { onResetReceived(it) }
+                        }
+                    }
                 )
                 emitter.onSuccess(true)
             } catch (e: Exception) {
@@ -962,30 +998,32 @@ class ClientRepository @Inject constructor(
     override fun areNodesReady(): Boolean = recursiveAreNodesReady()
 
     private fun recursiveAreNodesReady(retries: Int = 0): Boolean {
-        val status = try {
-             clientWrapper.getNodeRegistrationStatus()
+        return try {
+            messenger.waitForNodes()
+//             clientWrapper.getNodeRegistrationStatus()'
+            true
         } catch (e: Exception) {
-            return if (e.isNodeError()) {
-                Timber.d("Network is not healthy. Waiting $NODES_READY_POLL_INTERVAL before retry.")
-                Thread.sleep(NODES_READY_POLL_INTERVAL)
-                recursiveAreNodesReady()
-            }
-            else throw e
+//            return if (e.isNodeError()) {
+//                Timber.d("Network is not healthy. Waiting $NODES_READY_POLL_INTERVAL before retry.")
+//                Thread.sleep(NODES_READY_POLL_INTERVAL)
+//                recursiveAreNodesReady()
+//            }
+            throw e
         }
 
-        val rate: Double = ((status.first.toDouble() / status.second))
-        Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
-
-        return if (rate < NODES_READY_MINIMUM_RATE && retries <= NODES_READY_MAX_RETRIES) {
-            Timber.d(
-                "Nodes not ready after ${retries + 1} attempts. " +
-                        "Waiting $NODES_READY_POLL_INTERVAL before next retry."
-            )
-            Thread.sleep(NODES_READY_POLL_INTERVAL)
-            recursiveAreNodesReady(retries+1)
-        } else {
-            rate >= NODES_READY_MINIMUM_RATE
-        }
+//        val rate: Double = ((status.first.toDouble() / status.second))
+//        Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
+//
+//        return if (rate < NODES_READY_MINIMUM_RATE && retries <= NODES_READY_MAX_RETRIES) {
+//            Timber.d(
+//                "Nodes not ready after ${retries + 1} attempts. " +
+//                        "Waiting $NODES_READY_POLL_INTERVAL before next retry."
+//            )
+//            Thread.sleep(NODES_READY_POLL_INTERVAL)
+//            recursiveAreNodesReady(retries+1)
+//        } else {
+//            rate >= NODES_READY_MINIMUM_RATE
+//        }
     }
 
     override lateinit var fileRepository: FileTransferRepository
@@ -1000,7 +1038,9 @@ class ClientRepository @Inject constructor(
         } ?: false
     }
 
-    override fun enableDummyTraffic(enabled: Boolean) = clientWrapper.enableDummyTraffic(enabled)
+    override fun enableDummyTraffic(enabled: Boolean) {
+
+    }
 
     private var shouldReplay = true
 

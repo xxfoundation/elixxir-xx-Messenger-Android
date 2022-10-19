@@ -7,7 +7,7 @@ class MessengerWaitForNodes(private val env: MessengerEnvironment) {
 
     operator fun invoke(
         retries: Int = 10,
-        retryIntervalMs: Long,
+        retryIntervalMs: Long = 1000,
         targetRatio: Float = 0.75F,
     ) {
         val cMix = env.cMix ?: throw MessengerException.NotLoaded("CMix")
