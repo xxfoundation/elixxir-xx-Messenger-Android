@@ -74,13 +74,10 @@ interface BaseRepository {
     )
 
     fun searchUd(input: String, type: FactType, callback: (ContactWrapperBase?, String?) -> (Unit))
-    fun getUdUsername(raw: Boolean = false): String?
     fun getUdEmail(raw: Boolean = false): String?
     fun getUdPhone(raw: Boolean = false): String?
-    fun registerUdUsername(username: String): Single<String>
     fun registerUdPhone(phone: String): Single<String>
     fun registerUdEmail(email: String): Single<String>
-    fun registerNickname(nickname: String): Single<String>
     fun confirmFact(
         confirmationId: String,
         confirmationCode: String,

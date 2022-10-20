@@ -2,10 +2,8 @@ package io.xxlabs.messenger.bindings.wrapper.contact
 
 import io.elixxir.xxclient.models.Contact
 import io.elixxir.xxclient.models.Fact
-import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
-import timber.log.Timber
 
 class ContactWrapperBindings(
     private var contact: Contact

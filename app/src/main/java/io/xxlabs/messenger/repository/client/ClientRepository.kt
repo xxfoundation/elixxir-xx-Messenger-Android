@@ -346,10 +346,6 @@ class ClientRepository @Inject constructor(
         }
     }
 
-    override fun getUdUsername(raw: Boolean): String {
-        return udWrapperBindings.getUdUsername(raw)
-    }
-
     override fun getUdEmail(raw: Boolean): String? {
         return udWrapperBindings.getUdEmail(raw)
     }
@@ -411,28 +407,6 @@ class ClientRepository @Inject constructor(
         }
     }
 
-    override fun registerUdUsername(username: String): Single<String> {
-        return Single.create { emitter ->
-            try {
-                if (!areNodesReady()) {
-                    Timber.d("Failed to register-- nodes aren't ready.")
-                    emitter.onError(throwNodeError())
-                    return@create
-                }
-
-                udWrapperBindings.registerUdUsername(username)
-                udWrapperBindings.addUsernameToContact(username)
-                userWrapper.addUsername(username)
-                Timber.v("[CLIENT REPO] Username: ${udWrapperBindings.getUdUsername()}")
-                exportUserContact()
-                emitter.onSuccess(username)
-            } catch (e: Exception) {
-                Timber.d("Failed to register: ${e.message}")
-                emitter.onError(e)
-            }
-        }
-    }
-
     override fun registerUdEmail(email: String): Single<String> {
         return Single.create { emitter ->
             try {
@@ -463,18 +437,6 @@ class ClientRepository @Inject constructor(
                 userWrapper.addPhone(phone)
                 Timber.v("[CLIENT REPO] ConfirmationId for phone: $confirmationId")
                 emitter.onSuccess(confirmationId)
-            } catch (e: Exception) {
-                emitter.onError(e)
-            }
-        }
-    }
-
-    override fun registerNickname(nickname: String): Single<String> {
-        return Single.create { emitter ->
-            try {
-                userWrapper.addName(nickname)
-                exportUserContact()
-                emitter.onSuccess(nickname)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
@@ -558,8 +520,6 @@ class ClientRepository @Inject constructor(
         factsHash[FactType.PHONE]?.let { phone ->
             userContact.addPhone(phone)
         }
-
-        userWrapper = userContact as ContactWrapperBindings
     }
 
     //  Contact ===============================================================================
@@ -576,12 +536,11 @@ class ClientRepository @Inject constructor(
     }
 
     override fun unmarshallContact(rawData: ByteArray): ContactWrapperBase {
-        TODO()
-//        return ContactWrapperBase.from(BindingsWrapperBindings.unmarshallContact(rawData) as ContactBindings)
+        return ContactWrapperBase.from(rawData)
     }
 
     override fun getContactWrapper(contact: ByteArray): ContactWrapperBase {
-        return ContactWrapperBase.from(unmarshallContact(contact))
+        return unmarshallContact(contact)
     }
 
     override fun requestAuthenticatedChannel(marshalledRecipient: ByteArray): Single<Long> {
@@ -934,9 +893,16 @@ class ClientRepository @Inject constructor(
         const val NODES_READY_POLL_INTERVAL = 1_000L
         const val NODES_READY_MINIMUM_RATE = 0.70
 
-        lateinit var clientWrapper: ClientWrapperBindings
-        lateinit var userWrapper: ContactWrapperBindings
-        lateinit var udWrapperBindings: UserDiscoveryWrapperBindings
+        private lateinit var messenger: Messenger
+        val clientWrapper: ClientWrapperBindings by lazy {
+            ClientWrapperBindings(messenger)
+        }
+        val userWrapper: ContactWrapperBindings
+            get() = ContactWrapperBindings(messenger.ud!!.contact)
+
+        val udWrapperBindings: UserDiscoveryWrapperBindings by lazy {
+            UserDiscoveryWrapperBindings(messenger, userWrapper)
+        }
         lateinit var groupManager: GroupChatBindings
 
         fun getInstance(
@@ -947,9 +913,7 @@ class ClientRepository @Inject constructor(
             backupService: BackupService,
             messenger: Messenger
         ): ClientRepository {
-            clientWrapper = ClientWrapperBindings(messenger)
-            userWrapper = ContactWrapperBindings(messenger)
-            udWrapperBindings = UserDiscoveryWrapperBindings(messenger, userWrapper)
+            this.messenger = messenger
             return instance ?: synchronized(this) {
                 val client = ClientRepository(
                     schedulers,

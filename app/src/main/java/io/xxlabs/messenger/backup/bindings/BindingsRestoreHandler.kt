@@ -305,9 +305,9 @@ class BindingsRestoreHandler(
     }
 
     private fun createDefaultUserDiscovery() {
-        ClientRepository.udWrapperBindings = BindingsWrapperBindings
-            .newUserDiscovery(ClientRepository.clientWrapper) as UserDiscoveryWrapperBindings
-        log("Main User Discovery initialized.")
+//        ClientRepository.udWrapperBindings = BindingsWrapperBindings
+//            .newUserDiscovery(ClientRepository.clientWrapper) as UserDiscoveryWrapperBindings
+//        log("Main User Discovery initialized.")
     }
 
     private fun saveContact(contactData: ContactData): Long {

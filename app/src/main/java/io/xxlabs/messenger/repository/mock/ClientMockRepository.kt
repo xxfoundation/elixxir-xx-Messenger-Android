@@ -163,11 +163,6 @@ class ClientMockRepository(
         }
     }
 
-    override fun getUdUsername(raw: Boolean): String {
-        val factList = importUserFactsHash()
-        return factList[FactType.USERNAME] ?: ""
-    }
-
     override fun getUdEmail(raw: Boolean): String {
         val factList = importUserFactsHash()
         return factList[FactType.EMAIL] ?: ""
@@ -343,13 +338,6 @@ class ClientMockRepository(
         }
     }
 
-    override fun registerUdUsername(username: String): Single<String> {
-        val factsList = importUserFactsHash()
-        factsList[FactType.USERNAME] = "U$username"
-        exportUserContact(factsList)
-        return Single.create { emitter -> emitter.onSuccess(username) }
-    }
-
     override fun registerUdPhone(phone: String): Single<String> {
         val factsList = importUserFactsHash()
         factsList[FactType.PHONE] = "P$phone"
@@ -362,12 +350,6 @@ class ClientMockRepository(
         factsList[FactType.EMAIL] = "E$email"
         exportUserContact(factsList)
         return Single.create { emitter -> emitter.onSuccess(email) }
-    }
-
-    override fun registerNickname(nickname: String): Single<String> {
-        val import = importUserFactsHash()
-        import[FactType.NICKNAME] = "N$nickname"
-        return Single.create { emitter -> emitter.onSuccess(nickname) }
     }
 
     override fun confirmFact(
