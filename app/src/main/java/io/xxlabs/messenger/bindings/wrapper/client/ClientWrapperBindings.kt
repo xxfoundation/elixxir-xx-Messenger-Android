@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.*
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
@@ -10,7 +11,7 @@ import io.xxlabs.messenger.data.datatype.MsgType
 import timber.log.Timber
 
 class ClientWrapperBindings(
-    /*override var client: Client*/
+    messenger: Messenger
 ) : ClientWrapperBase {
 
     private val dummyTrafficManager: DummyTraffic = TODO()

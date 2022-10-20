@@ -1,9 +1,10 @@
 package io.xxlabs.messenger.bindings.wrapper.user
 
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 
-class UserBindings(): UserBase {
+class UserBindings(messenger: Messenger) : UserBase {
     override fun getReceptionId(): ByteArray {
         TODO()
 //        return user.receptionID

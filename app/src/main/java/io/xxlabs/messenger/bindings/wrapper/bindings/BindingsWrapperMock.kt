@@ -21,12 +21,6 @@ class BindingsWrapperMock {
 
         override fun registerGrpc() {}
 
-        override fun newClient(path: String, password: ByteArray) {}
-
-        override fun login(storageDir: String, password: ByteArray): ClientWrapperBase {
-            return ClientWrapperMock(ContactData())
-        }
-
         override fun newUserDiscovery(clientWrapper: ClientWrapperBase): UserDiscoveryWrapperBase {
             return UserDiscoveryWrapperMock(clientWrapper.getUser().getContact() as ContactWrapperMock)
         }

@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.ud
 
 import bindings.UserDiscovery
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
@@ -9,7 +10,7 @@ import io.xxlabs.messenger.data.datatype.FactType
 import timber.log.Timber
 
 data class UserDiscoveryWrapperBindings(
-    var userDiscovery: UserDiscovery,
+    val messenger: Messenger,
     var userContact: ContactWrapperBindings
 ) : UserDiscoveryWrapperBase {
     override fun search(input: String, factType: FactType, callback: (ContactWrapperBase?, String?) -> (Unit)) {
@@ -125,7 +126,7 @@ data class UserDiscoveryWrapperBindings(
     }
 
     override fun confirmFact(confirmationId: String, confirmationCode: String) {
-        userDiscovery.confirmFact(confirmationId, confirmationCode)
+//        userDiscovery.confirmFact(confirmationId, confirmationCode)
     }
 
     override fun removeFact(factType: FactType): Boolean {

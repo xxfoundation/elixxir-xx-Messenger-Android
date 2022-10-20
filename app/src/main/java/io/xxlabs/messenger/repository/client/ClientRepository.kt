@@ -12,6 +12,7 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
+import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.chat.GroupChatBindings
@@ -946,6 +947,9 @@ class ClientRepository @Inject constructor(
             backupService: BackupService,
             messenger: Messenger
         ): ClientRepository {
+            clientWrapper = ClientWrapperBindings(messenger)
+            userWrapper = ContactWrapperBindings(messenger)
+            udWrapperBindings = UserDiscoveryWrapperBindings(messenger, userWrapper)
             return instance ?: synchronized(this) {
                 val client = ClientRepository(
                     schedulers,

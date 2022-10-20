@@ -1,11 +1,12 @@
 package io.xxlabs.messenger.bindings.wrapper.contact
 
+import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
 import timber.log.Timber
 
 class ContactWrapperBindings(
-    /*val contact: Contact*/
+    messenger: Messenger
 ) : ContactWrapperBase {
     override fun getId(): ByteArray {
         TODO()

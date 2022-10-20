@@ -2,20 +2,15 @@ package io.xxlabs.messenger.bindings.wrapper.bindings
 
 import android.content.Context
 import bindings.Bindings
-import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.reactivex.Single
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBase
-import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
-import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
-import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBindings
 import io.xxlabs.messenger.data.datatype.Environment
-import io.xxlabs.messenger.repository.client.NodeErrorException
 import io.xxlabs.messenger.support.appContext
 import timber.log.Timber
 import java.io.File
@@ -82,21 +77,6 @@ class BindingsWrapperBindings {
                 Timber.v("[DEFAULT LOGWRITER] $writer")
             }
             Bindings.logLevel(1)
-        }
-
-        override fun newClient(path: String, password: ByteArray) {
-            val ndf = getNdf()
-            TODO()
-//            Bindings.newClient(
-//                ndf,
-//                path,
-//                password,
-//                ""
-//            )
-        }
-
-        override fun login(storageDir: String, password: ByteArray): ClientWrapperBase {
-            return ClientWrapperBindings()
         }
 
         override fun newUserDiscovery(clientWrapper: ClientWrapperBase): UserDiscoveryWrapperBase {
