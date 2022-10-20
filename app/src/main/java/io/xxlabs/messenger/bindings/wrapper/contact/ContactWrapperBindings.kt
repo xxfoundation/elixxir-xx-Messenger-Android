@@ -1,20 +1,24 @@
 package io.xxlabs.messenger.bindings.wrapper.contact
 
+import io.elixxir.xxclient.models.Contact
+import io.elixxir.xxclient.models.Fact
 import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
 import timber.log.Timber
 
 class ContactWrapperBindings(
-    messenger: Messenger
+    private var contact: Contact
 ) : ContactWrapperBase {
     override fun getId(): ByteArray {
-        TODO()
-//        return contact.id
+        return contact.getIdFromContact()
     }
 
     private fun addFactToFactList(fact: String, type: FactType) {
-//        contact.factList.add(fact, type.value)
+        val updated = contact.setFactsOnContact(
+            listOf(Fact(fact, type.value))
+        )
+        contact = updated
     }
 
     override fun addUsername(username: String) {
@@ -54,63 +58,21 @@ class ContactWrapperBindings(
     }
 
     override fun marshal(): ByteArray {
-        TODO()
-//        return contact.marshal()
+        return contact.data
     }
 
-    private fun getFact(type: FactType): Nothing {
-        TODO()
-//        Timber.v("Facts list stringified: ${contact.factList.stringify()}")
-//        try {
-//            for (n in 0 until contact.factList.num()) {
-//                Timber.v("Fact[$n] stringified = ${contact.factList[n].stringify()}")
-//                if (contact.factList[n].get().isNotBlank()
-//                    && type.value == contact.factList[n].type()
-//                ) {
-//                    return contact.factList[n]
-//                }
-//            }
-//        } catch (err: Exception) {
-//            err.localizedMessage
-//        }
-//        return null
+    private fun getFact(type: FactType): Fact? {
+        return contact.getFactsFromContact().firstOrNull {
+            it.type == type.value
+        }
     }
 
     private fun getFactStringfy(type: FactType, raw: Boolean): String {
-        TODO()
-//        return try {
-//            Timber.v("Get fact: ${getFact(type)?.stringify()}")
-//            if (raw) {
-//                getFact(type)?.stringify() ?: ""
-//            } else {
-//                if (type == FactType.PHONE) {
-//                    val rawPhone = getFact(type)?.stringify()
-//
-//                    if (rawPhone != null) {
-//                        val country = Country.fromRawPhone(rawPhone)
-//                        Timber.v("Selected country: $country")
-//                        country?.dialCode + rawPhone.substring(1, rawPhone.length - 2)
-//                    } else {
-//                        ""
-//                    }
-//                } else {
-//                    getFact(type)?.stringify()?.substring(1) ?: ""
-//                }
-//            }
-//        } catch (err: Exception) {
-//            Timber.e("Error retrieving fact:")
-//            err.printStackTrace()
-//            ""
-//        }
+        return getFact(type)?.fact ?: ""
     }
 
     override fun getStringifiedFacts(): String {
-        TODO()
-//        Timber.v("[STRINGIFY] Username ${getFact(FactType.USERNAME)?.stringify()}")
-//        Timber.v("[STRINGIFY] EMAIL ${getFact(FactType.EMAIL)?.stringify()}")
-//        Timber.v("[STRINGIFY] PHONE ${getFact(FactType.PHONE)?.stringify()}")
-//        Timber.v("[STRINGIFY] NICKNAME ${getFact(FactType.NICKNAME)?.stringify()}")
-//        return contact.factList.stringify()
+        return contact.getFactsFromContact().toString()
     }
 
     override fun getDisplayName(): CharSequence {
