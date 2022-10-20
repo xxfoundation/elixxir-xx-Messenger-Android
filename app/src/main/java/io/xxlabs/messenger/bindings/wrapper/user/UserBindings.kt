@@ -4,19 +4,16 @@ import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 
-class UserBindings(messenger: Messenger) : UserBase {
+class UserBindings(private val messenger: Messenger) : UserBase {
     override fun getReceptionId(): ByteArray {
-        TODO()
-//        return user.receptionID
+        return messenger.cMix?.makeReceptionIdentity() ?: byteArrayOf()
     }
 
     override fun getContact(): ContactWrapperBase {
-        TODO()
-//        return ContactWrapperBindings(user.contact)
+        return ContactWrapperBindings(messenger.myContact())
     }
 
     override fun getTransmissionID(): ByteArray {
-        TODO()
-//        return user.transmissionID
+        return byteArrayOf()
     }
 }
