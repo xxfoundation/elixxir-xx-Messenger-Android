@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.ud
 
+import io.elixxir.xxclient.models.Fact
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperMock
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
@@ -15,16 +16,6 @@ data class UserDiscoveryWrapperMock(
         callback.invoke(ContactWrapperMock(contact), null)
     }
 
-    override fun searchSingle(input: String, callback: (ContactWrapperBase?, String?) -> (Unit)) {
-        val contact = ContactData()
-        contact.username = input
-        callback.invoke(ContactWrapperMock(contact), null)
-    }
-
-    override fun addUsernameToContact(username: String) {
-        userContact.addUsername(username)
-    }
-
     override fun addEmailToContact(email: String) {
         userContact.addEmail(email)
     }
@@ -33,26 +24,12 @@ data class UserDiscoveryWrapperMock(
         userContact.addPhone(phone)
     }
 
-    override fun getUdUsername(raw: Boolean): String {
-        return userContact.getUsernameFact(raw)
-    }
-
     override fun getUdEmail(raw: Boolean): String? {
         return userContact.getEmailFact(raw)
     }
 
     override fun getUdPhone(raw: Boolean): String? {
         return userContact.getPhoneFact(raw)
-    }
-
-    override fun registerUdUsername(username: String) {
-        userContact.addUsername(username)
-    }
-
-    override fun registerUdNickname(nickname: String): String {
-        TODO()
-//        val newFact = Fact(FactType.NICKNAME.value, nickname)
-//        return addFactToUd(newFact)
     }
 
     override fun registerUdEmail(email: String): String {
@@ -67,7 +44,7 @@ data class UserDiscoveryWrapperMock(
 //        return addFactToUd(newFact)
     }
 
-    override fun addFactToUd(/*newFact: Fact*/): String {
+    override fun addFactToUd(newFact: Fact): String {
         TODO()
 //        return newFact.stringify()
     }

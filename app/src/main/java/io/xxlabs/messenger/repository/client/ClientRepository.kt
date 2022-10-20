@@ -385,13 +385,6 @@ class ClientRepository @Inject constructor(
         }
     }
 
-    override fun searchUd(
-        input: HashMap<FactType, String>,
-        callback: (ContactWrapperBase?, String?) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
     private fun throwNodeError(): Throwable {
         return NodeErrorException()
     }
@@ -404,7 +397,7 @@ class ClientRepository @Inject constructor(
         return try {
             if (!areNodesReady()) throw(throwNodeError())
             
-            udWrapperBindings.searchSingle(input, callback)
+            udWrapperBindings.search(input, type, callback)
         } catch (e: Exception) {
             callback.invoke(null, e.message)
         }
@@ -904,7 +897,7 @@ class ClientRepository @Inject constructor(
             get() = ContactWrapperBindings(messenger.ud!!.contact)
 
         val udWrapperBindings: UserDiscoveryWrapperBindings by lazy {
-            UserDiscoveryWrapperBindings(messenger, userWrapper)
+            UserDiscoveryWrapperBindings(messenger)
         }
         lateinit var groupManager: GroupChatBindings
 

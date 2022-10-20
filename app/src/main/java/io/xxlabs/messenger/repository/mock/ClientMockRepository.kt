@@ -273,13 +273,6 @@ class ClientMockRepository(
     }
 
     override fun searchUd(
-        input: HashMap<FactType, String>,
-        callback: (ContactWrapperBase?, String?) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
-    override fun searchUd(
         input: String,
         type: FactType,
         callback: (ContactWrapperBase?, String?) -> Unit

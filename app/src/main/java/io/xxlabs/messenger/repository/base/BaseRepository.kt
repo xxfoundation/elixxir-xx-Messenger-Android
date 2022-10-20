@@ -68,11 +68,6 @@ interface BaseRepository {
 
     //  Ud ====================================================================================
     fun searchUd(input: String, type: FactType): Single<Pair<ContactWrapperBase?, String?>>
-    fun searchUd(
-        input: HashMap<FactType, String>,
-        callback: (ContactWrapperBase?, String?) -> (Unit)
-    )
-
     fun searchUd(input: String, type: FactType, callback: (ContactWrapperBase?, String?) -> (Unit))
     fun getUdEmail(raw: Boolean = false): String?
     fun getUdPhone(raw: Boolean = false): String?
