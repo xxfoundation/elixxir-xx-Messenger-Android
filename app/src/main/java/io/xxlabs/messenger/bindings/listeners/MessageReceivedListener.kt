@@ -10,7 +10,6 @@ import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.PrivateMessageData
 import io.xxlabs.messenger.repository.DaoRepository
-import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
 import javax.inject.Inject
@@ -60,39 +59,6 @@ class MessageReceivedListener @Inject constructor(
     init {
         Timber.v("Message listener started")
     }
-
-//    override fun hear(message: Message) {
-//        try {
-//            val cmixText = CMIXText.parseFrom(message.payload)
-//            val timestamp = message.timestampMS
-//            val javaTimestamp = System.currentTimeMillis()
-//            // Get the text of the message
-//
-//            Timber.v("Bindings timestamp (ms): ${message.timestampMS}")
-//            Timber.v("Bindings timestamp (nano): ${message.timestampNano}")
-//            Timber.v("Java timestamp (ms): $javaTimestamp")
-//            Timber.v("Kronos timestamp (ms): ${XxMessengerApplication.kronosClock.getCurrentNtpTimeMs()}")
-//
-//            val senderId = message.sender
-//            Timber.v(
-//                "Received Message and attempting to save it %s, %s, %s",
-//                cmixText,
-//                timestamp,
-//                senderId
-//            )
-//
-//            insertMsgByContactId(
-//                message.id,
-//                senderId,
-//                preferences.getUserId(),
-//                cmixText,
-//                timestamp,
-//                message.roundURL
-//            )
-//        } catch (e: InvalidProtocolBufferException) {
-//            Timber.e(e.localizedMessage)
-//        }
-//    }
 
     private fun insertMsgByContactId(
         uniqueMsgId: ByteArray,
