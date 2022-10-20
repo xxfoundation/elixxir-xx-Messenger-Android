@@ -338,7 +338,10 @@ class ClientRepository @Inject constructor(
     override fun registerMessageListener(): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                messenger.registerMessageListener(messageReceivedListener)
+                messenger.run {
+                    registerMessageListener(messageReceivedListener)
+                    if (isListeningForMessages()) listenForMessages()
+                }
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
