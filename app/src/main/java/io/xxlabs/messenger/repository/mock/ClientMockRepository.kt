@@ -38,27 +38,6 @@ class ClientMockRepository(
     val preferences: PreferencesRepository
 ) : BaseRepository {
 
-    // Initialization ========================================================================
-    override fun doesBindingsFolderExists(): Boolean {
-        return preferences.userSecret.isNotEmpty()
-    }
-
-    override fun newClientSingle(storageDir: String, password: ByteArray): Single<Boolean> {
-        return Single.create {
-            it.onSuccess(true)
-        }
-    }
-
-    override fun newClient(storageDir: String, password: ByteArray) {
-
-    }
-
-    override fun login(storageDir: String, password: ByteArray): ByteArray {
-        preferences.setUserId(preferences.name.toByteArray())
-        isLoggedIn = true
-        return preferences.getUserId()
-    }
-
     override fun loginSingle(storageDir: String, password: ByteArray): Single<ByteArray> {
         preferences.setUserId(preferences.name.toByteArray())
         isLoggedIn = true
@@ -99,10 +78,6 @@ class ClientMockRepository(
         return true
     }
 
-    override fun getNodeRegistrationStatus(): Pair<Long, Long> {
-        return Pair(1, 1)
-    }
-
     override fun registerNotificationsToken(): Single<String> {
         return Single.create { emitter ->
             emitter.onSuccess("12345")
@@ -120,22 +95,8 @@ class ClientMockRepository(
         return "1234567812345678123456781234567812345678".toByteArray()
     }
 
-    override fun getUserReceptionId(): ByteArray {
-        return "12345678".toByteArray()
-    }
-
-    override fun getPreImages(): String {
-        TODO("Not yet implemented")
-    }
-
     override fun getUserId(): ByteArray {
         return "12345678".toByteArray()
-    }
-
-    override fun getBioKey() = preferences.userBiometricKey
-
-    override fun setBioKey(newKey: String) {
-        preferences.userBiometricKey = newKey
     }
 
     override fun deleteUser(): Single<Boolean> {
@@ -596,12 +557,6 @@ class ClientMockRepository(
                 }
             }
         }
-    }
-
-    override fun createSessionFolder(context: Context): String = "file"
-
-    override fun getSessionFolder(context: Context): String {
-        return "file"
     }
 
     override fun unmarshallSendReport(marshalledReport: ByteArray): SendReportBase {

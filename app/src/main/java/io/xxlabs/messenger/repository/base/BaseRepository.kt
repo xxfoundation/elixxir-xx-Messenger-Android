@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.repository.base
 
-import android.content.Context
 import bindings.NetworkHealthCallback
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -20,11 +19,6 @@ import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
 
 interface BaseRepository {
-    // Initialization =======================================================================
-    fun doesBindingsFolderExists(): Boolean
-    fun newClientSingle(storageDir: String, password: ByteArray): Single<Boolean>
-    fun newClient(storageDir: String, password: ByteArray)
-    fun login(storageDir: String, password: ByteArray): ByteArray
     fun loginSingle(storageDir: String, password: ByteArray): Single<ByteArray>
     fun startNetworkFollower(): Single<Boolean>
     fun stopNetworkFollower(): Single<Boolean>
@@ -34,24 +28,17 @@ interface BaseRepository {
 
     @Throws(Exception::class)
     fun areNodesReady(): Boolean
-    fun getNodeRegistrationStatus(): Pair<Long, Long>
-    fun createSessionFolder(context: Context): String
-    fun getSessionFolder(context: Context): String
 
     //Notifications =========================================================================
     fun registerNotificationsToken(): Single<String>
     fun unregisterForNotification(): Single<Boolean>
 
     //  User =================================================================================
-    fun getUserReceptionId(): ByteArray
-    fun getPreImages(): String
     fun getUserId(): ByteArray
     fun getStoredUsername(): String
     fun getStoredEmail(): String
     fun getStoredPhone(): String
     fun getMashalledUser(): ByteArray
-    fun getBioKey(): String
-    fun setBioKey(newKey: String)
     fun deleteUser(): Single<Boolean>
 
     //  Callbacks ============================================================================

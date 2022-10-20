@@ -1,14 +1,10 @@
 package io.xxlabs.messenger.repository.client
 
-import android.content.Context
-import bindings.Bindings.setFactsOnContact
 import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.elixxir.xxclient.callbacks.AuthEventListener
-import io.elixxir.xxclient.callbacks.MessageListener
 import io.elixxir.xxclient.callbacks.NetworkHealthListener
-import io.elixxir.xxclient.models.Message
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -16,7 +12,6 @@ import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
-import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.chat.GroupChatBindings
@@ -35,19 +30,16 @@ import io.xxlabs.messenger.data.datatype.NetworkFollowerStatus
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.GroupData
-import io.xxlabs.messenger.filetransfer.FileTransferManager
 import io.xxlabs.messenger.filetransfer.FileTransferRepository
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BasePreferences
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
 import javax.inject.Inject
-//import bindings.Contact as ContactBindings
 
 class ClientRepository @Inject constructor(
     val schedulers: SchedulerProvider,
@@ -58,114 +50,18 @@ class ClientRepository @Inject constructor(
     private val messenger: Messenger,
 ) : BaseRepository {
 
-    // Initialization ========================================================================
-    override fun doesBindingsFolderExists(): Boolean {
-        val appFolder = BindingsWrapperBindings.getSessionFolder(appContext())
-        return (appFolder.exists() && appFolder.length() > 0)
-    }
-
-    override fun newClientSingle(storageDir: String, password: ByteArray): Single<Boolean> {
-        return Single.create { emitter ->
-            try {
-                BindingsWrapperBindings.newClient(storageDir, password)
-                emitter.onSuccess(true)
-            } catch (err: Exception) {
-                emitter.onError(err)
-            }
-        }
-    }
-
-    override fun newClient(storageDir: String, password: ByteArray) {
-        BindingsWrapperBindings.newClient(storageDir, password)
-        login(storageDir, password)
-    }
-
-    override fun login(storageDir: String, password: ByteArray): ByteArray {
-        Timber.v("[LOGIN]Logging in...")
-        clientWrapper = BindingsWrapperBindings.login(storageDir, password) as ClientWrapperBindings
-        clientWrapper.registerDatadogListener()
-        Timber.v("[LOGIN]Logged in!")
-        val userContact = getBaseUser().marshal()
-        userWrapper = ContactWrapperBase.from(
-            BindingsWrapperBindings.unmarshallContact(userContact),
-            importUserContact()
-        ) as ContactWrapperBindings
-        Timber.d("[LOGIN] Username: ${userWrapper.getUsernameFact()}")
-        Timber.d("[LOGIN] Email: ${userWrapper.getEmailFact()}")
-        Timber.d("[LOGIN] Phone: ${userWrapper.getPhoneFact()}")
-        val userId = clientWrapper.getUserId()
-        Timber.d("[LOGIN]UserId: $userId")
-
-        if (userId.isNotEmpty() && !preferences.getUserId().contentEquals(userId)) {
-            Timber.v("[LOGIN]userId updated!")
-            preferences.setUserId(userId)
-        }
-        preferences.preImages = getPreImages()
-        initPreImageCallback()
-        initFileTransferManager()
-        return clientWrapper.getUser().getReceptionId()
-    }
-
     override fun loginSingle(storageDir: String, password: ByteArray): Single<ByteArray> {
         return Single.create { emitter ->
             messenger.logIn()
             emitter.onSuccess(byteArrayOf())
-//            try {
-//                Timber.v("[LOGIN]Logging in...")
-//                clientWrapper =
-//                    BindingsWrapperBindings.login(storageDir, password) as ClientWrapperBindings
-//                clientWrapper.registerDatadogListener()
-//                Timber.v("[LOGIN]Logged in!")
-//                val userContact = getBaseUser().marshal()
-//                userWrapper = ContactWrapperBase.from(
-//                    BindingsWrapperBindings.unmarshallContact(userContact),
-//                    importUserContact()
-//                ) as ContactWrapperBindings
-//
-//                Timber.d("[LOGIN] Username: ${userWrapper.getUsernameFact()}")
-//                Timber.d("[LOGIN] Email: ${userWrapper.getEmailFact()}")
-//                Timber.d("[LOGIN] Phone: ${userWrapper.getPhoneFact()}")
-//                val userId = clientWrapper.getUserId()
-//                Timber.d("[LOGIN]UserId: $userId")
-//
-//                if (userId.isNotEmpty() && !preferences.getUserId().contentEquals(userId)) {
-//                    Timber.v("[LOGIN]userId updated!")
-//                    preferences.setUserId(userId)
-//                }
-//                preferences.preImages = getPreImages()
-//                initPreImageCallback()
-//                initFileTransferManager()
-//                emitter.onSuccess(clientWrapper.getUser().getReceptionId())
-//            } catch (err: Exception) {
-//                emitter.onError(err)
-//            }
-//        }
         }
-    }
-
-    private fun initPreImageCallback() {
-        val userReceptionId = clientWrapper.getUser().getReceptionId()
-//        clientWrapper.client.registerPreimageCallback(userReceptionId) { receptionId, _ ->
-//            Timber.v("[PREIMAGE] Pre image has been updated")
-//            if (receptionId.contentEquals(receptionId)) {
-//                preferences.preImages = getPreImages()
-//            }
-//        }
-    }
-
-    private fun initFileTransferManager() {
-        fileRepository = FileTransferManager(this)
     }
 
     override fun initGroupManager(
         onGroupReceived: (GroupBase) -> Unit,
         onMessageReceived: (GroupMessageReceiveBase) -> Unit
     ) {
-//        groupManager = GroupsManagerBindings.initManager(clientWrapper, { group ->
-//            onGroupReceived(group)
-//        }, { message ->
-//            onMessageReceived(GroupMessageReceiveBindings(message))
-//        }) as GroupChatBindings
+
     }
 
     override fun sendGroupMessage(
@@ -194,13 +90,6 @@ class ClientRepository @Inject constructor(
         return Single.create { emitter ->
             messenger.start
             emitter.onSuccess(true)
-//            try {
-//                resumeBackup()
-//                clientWrapper.startNetworkFollower()
-//                emitter.onSuccess(true)
-//            } catch (e: Exception) {
-//                emitter.onError(e)
-//            }
         }
     }
 
@@ -213,9 +102,8 @@ class ClientRepository @Inject constructor(
 
     override fun stopNetworkFollower(): Single<Boolean> {
         return Single.create { emitter ->
-
             try {
-                clientWrapper.stopNetworkFollower()
+                messenger.stop
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -227,8 +115,6 @@ class ClientRepository @Inject constructor(
         return messenger.cMix?.getNetworkFollowerStatus()?.let {
             NetworkFollowerStatus.from(it.code)
         } ?: NetworkFollowerStatus.STOPPED
-//        if (!::fileRepository.isInitialized) initFileTransferManager()
-//        return NetworkFollowerStatus.from(clientWrapper.getNetworkFollowerStatus())
     }
 
     override fun newUserDiscovery(): Single<Boolean> {
@@ -236,9 +122,6 @@ class ClientRepository @Inject constructor(
             try {
                 messenger.logIn()
                 emitter.onSuccess(true)
-//                udWrapperBindings = BindingsWrapperBindings
-//                    .newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
-//                emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
@@ -257,10 +140,6 @@ class ClientRepository @Inject constructor(
             }
             emitter.onSuccess(messenger.isLoggedIn())
         }
-    }
-
-    override fun getNodeRegistrationStatus(): Pair<Long, Long> {
-        return clientWrapper.getNodeRegistrationStatus()
     }
 
     override fun registerNotificationsToken(): Single<String> {
@@ -309,15 +188,6 @@ class ClientRepository @Inject constructor(
         }
     }
 
-    //  User =================================================================================
-    override fun getBioKey(): String {
-        return preferences.userBiometricKey
-    }
-
-    override fun setBioKey(newKey: String) {
-        preferences.userBiometricKey = newKey
-    }
-
     override fun deleteUser(): Single<Boolean> {
         return Single.create { emitter ->
             val username = messenger.myContact().getFactsFromContact().first {
@@ -330,16 +200,6 @@ class ClientRepository @Inject constructor(
                 emitter.onError(err)
             }
         }
-    }
-
-    override fun getUserReceptionId(): ByteArray {
-        return clientWrapper.getUser().getReceptionId()
-    }
-
-    override fun getPreImages(): String {
-        val preImage = clientWrapper.getPreImages()
-        Timber.v("[PREIMAGE] Getting preimage: $preImage")
-        return preImage
     }
 
     override fun getUserId(): ByteArray {
@@ -945,14 +805,6 @@ class ClientRepository @Inject constructor(
         }
     }
 
-    override fun createSessionFolder(context: Context): String {
-        return BindingsWrapperBindings.createSessionFolder(context).absolutePath
-    }
-
-    override fun getSessionFolder(context: Context): String {
-        return BindingsWrapperBindings.getSessionFolder(context).absolutePath
-    }
-
     override fun unmarshallSendReport(marshalledReport: ByteArray): SendReportBase {
         return BindingsWrapperBindings.unmarshallSendReport(marshalledReport)
     }
@@ -1079,37 +931,12 @@ class ClientRepository @Inject constructor(
         @Volatile
         private var instance: ClientRepository? = null
         const val NODES_READY_POLL_INTERVAL = 1_000L
-        const val NODES_READY_MAX_RETRIES = 29
         const val NODES_READY_MINIMUM_RATE = 0.70
 
         lateinit var clientWrapper: ClientWrapperBindings
         lateinit var userWrapper: ContactWrapperBindings
         lateinit var udWrapperBindings: UserDiscoveryWrapperBindings
         lateinit var groupManager: GroupChatBindings
-
-        fun hasInitialized(): Single<Boolean> {
-            return Single.create { emitter ->
-                TODO()
-//                val isInitialized =
-//                    this::clientWrapper.isInitialized && this::userWrapper.isInitialized
-//                Timber.v("[CLIENT REPO] initialized: $isInitialized")
-//                if (!isInitialized) {
-//                    try {
-//                        Timber.v("[CLIENT REPO] Trying to get client singleton...")
-//                        val clientSingleton = Bindings.getClientSingleton()
-//                        clientWrapper.client = clientSingleton
-//                        userWrapper = clientWrapper.getUser().getContact() as ContactWrapperBindings
-//                        emitter.onSuccess(true)
-//                    } catch (err: Exception) {
-//                        Timber.e(err.localizedMessage)
-//                        Timber.e("[CLIENT REPO] Singleton client does not exist, initiating new...")
-//                        emitter.onSuccess(false)
-//                    }
-//                }
-//
-//                emitter.onSuccess(true)
-            }
-        }
 
         fun getInstance(
             schedulers: SchedulerProvider,
