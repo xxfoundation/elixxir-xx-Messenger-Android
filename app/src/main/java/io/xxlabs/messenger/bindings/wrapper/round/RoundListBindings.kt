@@ -1,23 +1,18 @@
 package io.xxlabs.messenger.bindings.wrapper.round
 
+import io.elixxir.xxclient.utils.RoundId
 
-class RoundListBindings(/*val roundList: RoundList*/): RoundListBase {
-    override fun get(l: Long) {
-        TODO()
-//        roundList[l]
+
+class RoundListBindings(private val list: List<RoundId>?): RoundListBase {
+    override fun get(index: Long): Long {
+        return list?.getOrNull(index.toInt()) ?: 0
     }
 
     override fun len(): Long {
-        TODO()
-//        return roundList.len()
+        return list?.size?.toLong() ?: 0
     }
 
     override fun toList(): List<Long> {
-        TODO()
-//        val list = mutableListOf<Long>()
-//        for (i in 0 until len()) {
-//            list.add(roundList[i])
-//        }
-//        return list
+        return list ?: listOf()
     }
 }

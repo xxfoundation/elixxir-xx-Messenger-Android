@@ -136,13 +136,6 @@ interface BaseRepository {
 
     fun userDbLookup(userId: ByteArray): Maybe<ContactData>
 
-    // Message ================================================================================
-    fun sendViaClientUnsafe(
-        senderId: String,
-        recipientId: String,
-        payload: String
-    ): Maybe<RoundListBase>
-
     fun sendViaClientE2E(
         senderId: ByteArray,
         recipientId: ByteArray,

@@ -493,24 +493,6 @@ class ClientMockRepository(
     override fun userDbLookup(userId: ByteArray): Maybe<ContactData> =
         Maybe.create { emitter -> emitter.onSuccess(ContactData())}
 
-    // Message =====================================================================
-    override fun sendViaClientUnsafe(
-        senderId: String,
-        recipientId: String,
-        payload: String
-    ): Maybe<RoundListBase> {
-        return Maybe.create { emitter ->
-            Thread.sleep(2000)
-            val random = (0..100).random()
-
-            if (random > 20) {
-                emitter.onSuccess(RoundListMock())
-            } else {
-                emitter.onError(Exception("Failed to send"))
-            }
-        }
-    }
-
     override fun sendViaClientE2E(
         senderId: ByteArray,
         recipientId: ByteArray,

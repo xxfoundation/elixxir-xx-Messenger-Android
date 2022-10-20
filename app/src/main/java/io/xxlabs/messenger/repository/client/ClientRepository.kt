@@ -251,36 +251,7 @@ class ClientRepository @Inject constructor(
     ): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                messenger.registerAuthCallbacks(
-                    object : AuthEventListener {
-                        override fun onConfirm(
-                            contact: ByteArray?,
-                            receptionId: ByteArray?,
-                            ephemeralId: Long,
-                            roundId: Long
-                        ) {
-                            contact?.let { onConfirmationReceived(it) }
-                        }
-
-                        override fun onRequest(
-                            contact: ByteArray?,
-                            receptionId: ByteArray?,
-                            ephemeralId: Long,
-                            roundId: Long
-                        ) {
-                            contact?.let { onContactReceived(it) }
-                        }
-
-                        override fun onReset(
-                            contact: ByteArray?,
-                            receptionId: ByteArray?,
-                            ephemeralId: Long,
-                            roundId: Long
-                        ) {
-                            contact?.let { onResetReceived(it) }
-                        }
-                    }
-                )
+                clientWrapper.registerAuthCallback(onContactReceived, onContactReceived, onResetReceived)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -291,11 +262,7 @@ class ClientRepository @Inject constructor(
     override fun registerNetworkHealthCb(networkHealthCallback: NetworkHealthCallback): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                messenger.cMix?.setHealthListener(object : NetworkHealthListener {
-                    override fun onHealthUpdate(isHealthy: Boolean) {
-                        networkHealthCallback.callback(isHealthy)
-                    }
-                })
+                clientWrapper.registerNetworkHealthCb(networkHealthCallback)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -709,32 +676,6 @@ class ClientRepository @Inject constructor(
 
     override fun userDbLookup(userId: ByteArray): Maybe<ContactData> =
         daoRepo.getContactByUserId(userId)
-
-    // Message ================================================================================
-    override fun sendViaClientUnsafe(
-        senderId: String,
-        recipientId: String,
-        payload: String
-    ): Maybe<RoundListBase> {
-        return Maybe.create { emitter ->
-            try {
-                val roundList = clientWrapper.sendUnsafe(
-                    recipientId.toByteArray(),
-                    payload.toByteArray(),
-                    MsgType.TEXT_MESSAGE
-                )
-
-                if (roundList != null) {
-                    emitter.onSuccess(roundList)
-                } else {
-                    emitter.onComplete()
-                }
-            } catch (err: Exception) {
-                Timber.e(err, "[CLIENT REPO] Error sending msg")
-                emitter.onError(err)
-            }
-        }
-    }
 
     override fun sendViaClientE2E(
         senderId: ByteArray,

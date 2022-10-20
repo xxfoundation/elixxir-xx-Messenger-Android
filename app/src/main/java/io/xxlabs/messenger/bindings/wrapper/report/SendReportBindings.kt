@@ -1,18 +1,19 @@
 package io.xxlabs.messenger.bindings.wrapper.report
 
+import io.elixxir.xxclient.models.SendReport
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBindings
 
-class SendReportBindings(/*val sendReport: SendReport*/): SendReportBase {
-    override fun getMessageId(): ByteArray = TODO("sendReport.messageID")
+class SendReportBindings(val sendReport: SendReport): SendReportBase {
+    override fun getMessageId(): ByteArray = sendReport.messageId ?: byteArrayOf()
 
-    override fun getRoundList(): RoundListBase = TODO("RoundListBindings(sendReport.roundList)")
+    override fun getRoundList(): RoundListBase = RoundListBindings(sendReport.roundIdList)
 
-    override fun getTimestampMs(): Long = TODO("sendReport.timestampMS")
+    override fun getTimestampMs(): Long = sendReport.timestamp ?: 0
 
-    override fun getTimestampNano(): Long = TODO("sendReport.timestampNano")
+    override fun getTimestampNano(): Long = (sendReport.timestamp ?: 0) * 1_000_000
 
-    override fun marshal(): ByteArray = TODO("sendReport.marshal()")
+    override fun marshal(): ByteArray = byteArrayOf()
 
-    override fun getRoundUrl(): String = TODO("sendReport.roundURL")
+    override fun getRoundUrl(): String = sendReport.roundUrl ?: ""
 }

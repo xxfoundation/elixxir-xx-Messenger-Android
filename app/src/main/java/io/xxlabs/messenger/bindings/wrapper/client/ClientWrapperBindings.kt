@@ -1,18 +1,29 @@
 package io.xxlabs.messenger.bindings.wrapper.client
 
 import bindings.*
+import io.elixxir.xxclient.callbacks.AuthEventListener
+import io.elixxir.xxclient.callbacks.MessageDeliveryListener
+import io.elixxir.xxclient.callbacks.NetworkHealthListener
+import io.elixxir.xxclient.cmix.CMix
+import io.elixxir.xxclient.e2e.E2e
+import io.elixxir.xxclient.models.ContactAdapter
 import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
-import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
+import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
 import io.xxlabs.messenger.bindings.wrapper.user.UserBase
 import io.xxlabs.messenger.bindings.wrapper.user.UserBindings
 import io.xxlabs.messenger.data.datatype.MsgType
-import timber.log.Timber
 
 class ClientWrapperBindings(
-    messenger: Messenger
+    private val messenger: Messenger
 ) : ClientWrapperBase {
+    private val cMix: CMix by lazy {
+        messenger.cMix!!
+    }
+    private val e2e: E2e by lazy {
+        messenger.e2e!!
+    }
 
     private val dummyTrafficManager: DummyTraffic = TODO()
 //    Bindings.newDummyTrafficManager(
@@ -24,52 +35,34 @@ class ClientWrapperBindings(
 
     //Network
     override fun startNetworkFollower() {
-        Timber.v("Starting Network Follower....")
-        TODO()
-//        client.startNetworkFollower(10000)
+        messenger.start
     }
 
     override fun stopNetworkFollower() {
-        Timber.v("Stopping Network Follower...")
-        TODO()
-//        client.stopNetworkFollower()
+        messenger.stop
     }
 
     override fun registerNetworkHealthCb(callback: NetworkHealthCallback) {
-        Timber.v("Registering network callback...")
-        TODO()
-//        client.registerNetworkHealthCB(callback)
+        cMix.setHealthListener(
+            object : NetworkHealthListener {
+                override fun onHealthUpdate(isHealthy: Boolean) {
+                    callback.callback(isHealthy)
+                }
+            }
+        )
     }
 
     override fun getNetworkFollowerStatus(): Long {
-        TODO()
-//        return client.networkFollowerStatus()
+        return cMix.getNetworkFollowerStatus().code
     }
 
     override fun isNetworkHealthy(): Boolean {
-        TODO()
-//        return client.isNetworkHealthy
+        return cMix.isNetworkHealthy()
     }
-
-    //  0x00 - PENDING (Never seen by client)
-    //  0x01 - PRECOMPUTING
-    //  0x02 - STANDBY
-    //  0x03 - QUEUED
-    //  0x04 - REALTIME
-    //  0x05 - COMPLETED
-    //  0x06 - FAILED
-    override fun registerDatadogListener() { }
 
     //Messaging
     override fun registerMessageListener(messageReceivedListener: MessageReceivedListener) {
-        TODO()
-//        val zeroUser = ByteArray(33) { 0 }
-//        zeroUser[32] = 3
-//        client.registerListener(
-//            zeroUser,
-//            MsgType.TEXT_MESSAGE.value.toLong(),
-//            messageReceivedListener
-//        )
+        messenger.registerMessageListener(messageReceivedListener)
     }
 
     override fun registerAuthCallback(
@@ -77,46 +70,36 @@ class ClientWrapperBindings(
         authConfirmCallback: ((contact: ByteArray) -> Unit),
         authResetCallback: ((contact: ByteArray) -> Unit)
     ) {
-        TODO()
-//        client.registerAuthCallbacks(
-//            { contact -> registerAuthCallback.invoke(contact.marshal()) },
-//            { contact -> authConfirmCallback.invoke(contact.marshal()) },
-//            { contact -> authResetCallback(contact.marshal())}
-//        )
-    }
+        messenger.registerAuthCallbacks(
+            object : AuthEventListener {
+                override fun onConfirm(
+                    contact: ByteArray?,
+                    receptionId: ByteArray?,
+                    ephemeralId: Long,
+                    roundId: Long
+                ) {
+                    contact?.let { authConfirmCallback(it) }
+                }
 
-    override fun sendUnsafe(
-        recipientId: ByteArray,
-        payload: ByteArray,
-        msgType: MsgType
-    ): RoundListBase? {
-        TODO()
-//        return try {
-//            Timber.v("Send Message TYPE: $msgType")
-//            val round =
-//                client.sendUnsafe(recipientId, payload, msgType.value.toLong(), "")
-//            Timber.v("Successfully sent message to server :: round ${round.get(0)}")
-//            RoundListBindings(round)
-//        } catch (e: Exception) {
-//            Timber.e(e, "Failed sending a message")
-//            null
-//        }
-    }
+                override fun onRequest(
+                    contact: ByteArray?,
+                    receptionId: ByteArray?,
+                    ephemeralId: Long,
+                    roundId: Long
+                ) {
+                    contact?.let { registerAuthCallback(it) }
+                }
 
-    override fun sendCmix(
-        recipientId: ByteArray,
-        payload: String
-    ): Boolean {
-        TODO()
-//        return try {
-//            val round =
-//                client.sendCmix(recipientId, payload.toByteArray(), "")
-//            Timber.v("Successfully sent message to CMIX :: round $round")
-//            true
-//        } catch (e: Exception) {
-//            Timber.e(e, "Failed sending a message CMIX")
-//            false
-//        }
+                override fun onReset(
+                    contact: ByteArray?,
+                    receptionId: ByteArray?,
+                    ephemeralId: Long,
+                    roundId: Long
+                ) {
+                    contact?.let { authResetCallback(it) }
+                }
+            }
+        )
     }
 
     override fun sendE2E(
@@ -124,30 +107,28 @@ class ClientWrapperBindings(
         payload: ByteArray,
         msgType: MsgType
     ): SendReportBase? {
-        TODO()
-//        return try {
-//            Timber.v("Send Message TYPE (E2E): $msgType")
-//            val sendReport =
-//                client.sendE2E(recipientId, payload, msgType.value.toLong(), "")
-//            Timber.v("Successfully sent message id ${sendReport.messageID.toBase64String()} to server :: round ${sendReport.roundList}")
-//            SendReportBindings(sendReport)
-//        } catch (e: Exception) {
-//            Timber.e(e.localizedMessage)
-//            null
-//        }
+        return messenger.sendMessage(
+            recipientId,
+            payload
+        ).let {
+            SendReportBindings(it)
+        }
     }
 
     override fun requestAuthenticatedChannel(
         marshalledRecipient: ByteArray,
         marshalledUser: ByteArray
     ): Long {
-        TODO()
-//        return client.requestAuthenticatedChannel(marshalledRecipient, marshalledUser, "")
+        return e2e.requestAuthenticatedChannel(
+            ContactAdapter(marshalledRecipient),
+            ContactAdapter(marshalledUser).getFactsFromContact()
+        )
     }
 
     override fun confirmAuthenticatedChannel(marshalledContact: ByteArray): Long {
-        TODO()
-//        return client.confirmAuthenticatedChannel(marshalledContact)
+        return e2e.confirmReceivedRequest(
+            ContactAdapter(marshalledContact)
+        )
     }
 
     override fun waitForRoundCompletion(
@@ -156,31 +137,32 @@ class ClientWrapperBindings(
         onRoundCompletionCallback: ((Long, Boolean, Boolean) -> Unit)
     ) {
         TODO()
-//        client.waitForRoundCompletion(roundId, object : RoundCompletionCallback {
-//            override fun eventCallback(roundId: Long, success: Boolean, timedOut: Boolean) {
-//                onRoundCompletionCallback(roundId, success, timedOut)
-//            }
-//
-//        }, timeoutMillis)
     }
 
     override fun waitForMessageDelivery(
         sentReport: ByteArray,
         timeoutMillis: Long,
         onMessageDeliveryCallback: ((ByteArray, Boolean, Boolean, ByteArray) -> Unit)
-    ) { //msgID []byte, delivered, timedOut bool, roundResults []byte
-        TODO()
-//        client.waitForMessageDelivery(sentReport, object : MessageDeliveryCallback {
-//            override fun eventCallback(
-//                msgId: ByteArray,
-//                delivered: Boolean,
-//                timedOut: Boolean,
-//                roundResults: ByteArray
-//            ) {
-//                onMessageDeliveryCallback(msgId, delivered, timedOut, roundResults)
-//            }
-//
-//        }, timeoutMillis)
+    ) {
+        cMix.waitForRoundResult(
+            sentReport,
+            timeoutMillis,
+            object : MessageDeliveryListener {
+                override fun onMessageSent(
+                    delivered: Boolean,
+                    timedOut: Boolean,
+                    roundResults: ByteArray?
+                ) {
+                    onMessageDeliveryCallback(
+                        byteArrayOf(),
+                        delivered,
+                        timedOut,
+                        roundResults ?: byteArrayOf()
+                    )
+                }
+
+            }
+        )
     }
 
     override fun registerForNotifications(token: String) {
@@ -204,8 +186,7 @@ class ClientWrapperBindings(
     }
 
     override fun getUser(): UserBase {
-        TODO()
-//        return UserBindings(client.user)
+        return UserBindings(messenger)
     }
 
     override fun getUserId(): ByteArray {
@@ -218,8 +199,11 @@ class ClientWrapperBindings(
     }
 
     override fun verifyOwnership(receivedContact: ByteArray, verifiedContact: ByteArray): Boolean =
-        TODO()
-//        client.verifyOwnership(receivedContact, verifiedContact)
+        e2e.verifyOwnership(
+            ContactAdapter(receivedContact),
+            ContactAdapter(verifiedContact),
+            e2e.id
+        )
 
     override fun enableDummyTraffic(enabled: Boolean) {
         dummyTrafficManager.status = enabled
@@ -228,11 +212,9 @@ class ClientWrapperBindings(
     override fun getPartners(): ByteArray = TODO("client.partners")
 
     fun getNodeRegistrationStatus(): Pair<Long, Long> {
-        TODO()
-//        val registeredNodes = client.nodeRegistrationStatus.registered
-//        val totalNodes = client.nodeRegistrationStatus.total
-//        Timber.v("[NODE REGISTRATION STATUS] Registered: $registeredNodes, Total: $totalNodes")
-//        return Pair(registeredNodes, totalNodes)
+        return cMix.getNodeRegistrationStatus().let {
+            Pair(it.registeredCount, it.totalCount)
+        }
     }
 
     companion object {

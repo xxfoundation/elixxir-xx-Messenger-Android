@@ -17,9 +17,6 @@ interface ClientWrapperBase {
     fun getNetworkFollowerStatus(): Long
     fun isNetworkHealthy(): Boolean
 
-    //Datadog
-    fun registerDatadogListener()
-
     //Messaging
     fun registerMessageListener(messageReceivedListener: MessageReceivedListener)
     fun registerAuthCallback(
@@ -27,17 +24,6 @@ interface ClientWrapperBase {
         authConfirmCallback: (contact: ByteArray) -> Unit,
         authResetCallback: (contact: ByteArray) -> Unit
     )
-
-    fun sendUnsafe(
-        recipientId: ByteArray,
-        payload: ByteArray,
-        msgType: MsgType
-    ): RoundListBase?
-
-    fun sendCmix(
-        recipientId: ByteArray,
-        payload: String
-    ): Boolean
 
     fun sendE2E(
         recipientId: ByteArray,

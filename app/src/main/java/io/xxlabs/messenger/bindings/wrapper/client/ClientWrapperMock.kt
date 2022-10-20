@@ -38,10 +38,6 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
         return true
     }
 
-    override fun registerDatadogListener() {
-
-    }
-
     //Messaging
     override fun registerMessageListener(messageReceivedListener: MessageReceivedListener) {
 
@@ -52,21 +48,6 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
         authConfirmCallback: (contact: ByteArray) -> Unit,
         authResetCallback: (contact: ByteArray) -> Unit
     ) {}
-
-    override fun sendUnsafe(
-        recipientId: ByteArray,
-        payload: ByteArray,
-        msgType: MsgType
-    ): RoundListBase {
-        return RoundListMock()
-    }
-
-    override fun sendCmix(
-        recipientId: ByteArray,
-        payload: String
-    ): Boolean {
-        return true
-    }
 
     override fun sendE2E(
         recipientId: ByteArray,
