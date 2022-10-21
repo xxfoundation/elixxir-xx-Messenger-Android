@@ -9,12 +9,10 @@ class MessengerMyContact(private val env: MessengerEnvironment) {
 
     operator fun invoke(includeFacts: IncludedFacts = IncludedFacts.All): Contact {
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
-        val ud by lazy {
-            env.ud ?: throw MessengerException.NotLoaded("UD")
-        }
+        val ud = env.ud ?: throw MessengerException.NotLoaded("UD")
         val contact = e2e.contact
 
-        when (includeFacts) {
+        return when (includeFacts) {
             is IncludedFacts.All -> contact.setFactsOnContact(ud.facts)
             is IncludedFacts.Types -> contact.setFactsOnContact(
                 ud.facts.filter {
@@ -22,8 +20,6 @@ class MessengerMyContact(private val env: MessengerEnvironment) {
                 }
             )
         }
-
-        return contact
     }
 }
 

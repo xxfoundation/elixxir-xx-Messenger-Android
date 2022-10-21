@@ -246,7 +246,7 @@ abstract class MessageViewHolder<T: ChatMessage>(
                     .timeout(20, TimeUnit.SECONDS)
                     .subscribe({ content ->
                         contentLoading?.hide()
-                        Timber.d("Url parse success: $content")
+                        Timber.d("Url parseModel success: $content")
                         if (!content.getFavicon().isNullOrEmpty()) {
                             handleUrlImage(arrayListOf(content.getFavicon()!!), it)
                         } else {

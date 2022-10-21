@@ -1,12 +1,14 @@
 package io.elixxir.xxmessengerclient
 
 import io.elixxir.xxclient.backup.Backup
+import io.elixxir.xxclient.bindings.Bindings
 import io.elixxir.xxclient.cmix.CMix
 import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.userdiscovery.UserDiscovery
 import io.elixxir.xxmessengerclient.commands.*
 
 class Messenger(val env: MessengerEnvironment) {
+    val bindings: Bindings get() = env.bindings
     val cMix: CMix? get() = env.cMix
     val e2e: E2e? get() = env.e2e
     val ud: UserDiscovery? get() = env.ud

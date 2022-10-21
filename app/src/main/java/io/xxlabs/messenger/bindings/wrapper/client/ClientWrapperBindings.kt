@@ -5,6 +5,7 @@ import io.elixxir.xxclient.callbacks.AuthEventListener
 import io.elixxir.xxclient.callbacks.MessageDeliveryListener
 import io.elixxir.xxclient.callbacks.NetworkHealthListener
 import io.elixxir.xxclient.cmix.CMix
+import io.elixxir.xxclient.dummytraffic.DummyTrafficAdapter
 import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.models.ContactAdapter
 import io.elixxir.xxmessengerclient.Messenger
@@ -25,13 +26,14 @@ class ClientWrapperBindings(
         messenger.e2e!!
     }
 
-    private val dummyTrafficManager: DummyTraffic = TODO()
-//    Bindings.newDummyTrafficManager(
-//        client,
-//        MAX_NUM_MESSAGES,
-//        AVG_SEND_DELTA_MS,
-//        RANDOM_RANGE_MS
-//    )
+    private val dummyTrafficManager: DummyTraffic =
+        (
+                messenger.bindings.newDummyTrafficManager(
+                cmixId = cMix.id,
+                maxNumMessages = MAX_NUM_MESSAGES,
+                avgSendDeltaMS = AVG_SEND_DELTA_MS,
+                randomRangeMS = RANDOM_RANGE_MS
+        ) as DummyTrafficAdapter).dt
 
     //Network
     override fun startNetworkFollower() {
@@ -136,7 +138,7 @@ class ClientWrapperBindings(
         timeoutMillis: Long,
         onRoundCompletionCallback: ((Long, Boolean, Boolean) -> Unit)
     ) {
-        TODO()
+        TODO("Wait for round completion")
     }
 
     override fun waitForMessageDelivery(
@@ -198,8 +200,6 @@ class ClientWrapperBindings(
     override fun enableDummyTraffic(enabled: Boolean) {
         dummyTrafficManager.status = enabled
     }
-
-    override fun getPartners(): ByteArray = TODO("client.partners")
 
     fun getNodeRegistrationStatus(): Pair<Long, Long> {
         return cMix.getNodeRegistrationStatus().let {

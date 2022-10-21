@@ -20,7 +20,7 @@ abstract class MessengerEnvironment {
     open val udAddress: String = "46.101.98.49:18001"
     open val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
 
-    private val bindings: Bindings = BindingsAdapter()
+    val bindings: Bindings = BindingsAdapter()
 
     var backup: Backup? = null
     var cMix: CMix? = null

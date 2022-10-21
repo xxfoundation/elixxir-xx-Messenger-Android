@@ -15,7 +15,6 @@ import timber.log.Timber
 import kotlin.random.Random
 
 class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
-//    override val client: Nothing = TODO()
 
     //Network
     override fun startNetworkFollower() {
@@ -99,8 +98,6 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
     override fun getPreImages(): String {
         TODO("Not yet implemented")
     }
-
-    override fun getPartners(): ByteArray = byteArrayOf()
 
     override fun verifyOwnership(receivedContact: ByteArray, verifiedContact: ByteArray) = true
     override fun enableDummyTraffic(enabled: Boolean) { }

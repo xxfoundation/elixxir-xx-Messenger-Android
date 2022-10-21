@@ -57,6 +57,4 @@ interface ClientWrapperBase {
 
     fun verifyOwnership(receivedContact: ByteArray, verifiedContact: ByteArray): Boolean
     fun enableDummyTraffic(enabled: Boolean)
-
-    fun getPartners(): ByteArray
 }

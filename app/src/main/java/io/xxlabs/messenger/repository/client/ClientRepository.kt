@@ -304,7 +304,7 @@ class ClientRepository @Inject constructor(
             try {
                 messenger.run {
                     registerMessageListener(messageReceivedListener)
-                    if (isListeningForMessages()) listenForMessages()
+                    if (!isListeningForMessages()) listenForMessages()
                 }
                 emitter.onSuccess(true)
             } catch (e: Exception) {

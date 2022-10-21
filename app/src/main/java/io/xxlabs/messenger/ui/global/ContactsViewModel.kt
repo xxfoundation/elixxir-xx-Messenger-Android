@@ -111,6 +111,7 @@ class ContactsViewModel @Inject constructor(
                     setAuthCallbackRegistered()
                     Timber.v("Successfully registered AuthCallback")
                 }.doOnError { err ->
+                    err.printStackTrace()
                     Timber.e("Error registering AuthCallback: ${err.localizedMessage}}")
                 }
                     .subscribeOn(schedulers.io)
@@ -142,7 +143,7 @@ class ContactsViewModel @Inject constructor(
     }
 
     fun resetSession(contact: ContactData) {
-        TODO()
+        TODO("Reset session")
 //        try {
 //            val roundId = ClientRepository.clientWrapper.client.resetSession(
 //                contact.marshaled,
