@@ -3,8 +3,6 @@ package io.xxlabs.messenger.repository.client
 import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
-import io.elixxir.xxclient.callbacks.AuthEventListener
-import io.elixxir.xxclient.callbacks.NetworkHealthListener
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -22,7 +20,6 @@ import io.xxlabs.messenger.bindings.wrapper.groups.message.GroupMessageReceiveBa
 import io.xxlabs.messenger.bindings.wrapper.groups.report.GroupSendReportBase
 import io.xxlabs.messenger.bindings.wrapper.groups.report.NewGroupReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
-import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBindings
 import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.data.datatype.FactType
@@ -488,13 +485,13 @@ class ClientRepository @Inject constructor(
     //  Contact ===============================================================================
     override fun deleteContact(marshalledContact: ByteArray): Single<ByteArray> {
         return Single.create { emitter ->
-            TODO()
-//            try {
-//                clientWrapper.client.deleteContact(marshalledContact)
-//                emitter.onSuccess(marshalledContact)
-//            } catch (err: Exception) {
-//                emitter.onError(err)
-//            }
+            try {
+                val userId = ContactWrapperBase.from(marshalledContact).getId()
+                messenger.e2e!!.deleteRequest(userId)
+                emitter.onSuccess(userId)
+            } catch (e: Exception) {
+                emitter.onError(e)
+            }
         }
     }
 
@@ -796,8 +793,9 @@ class ClientRepository @Inject constructor(
     }
 
     override suspend fun getPartners(): List<String> {
-        return listOf()
-//        return unmarshallPartners(clientWrapper.getPartners()).toList()
+        return messenger.e2e?.getAllPartnerIds()?.map {
+            it.toBase64String()
+        } ?: listOf()
     }
 
     companion object {
