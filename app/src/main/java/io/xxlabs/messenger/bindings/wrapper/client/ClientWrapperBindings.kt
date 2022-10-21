@@ -170,16 +170,6 @@ class ClientWrapperBindings(
 //        client.registerForNotifications(token)
     }
 
-    fun getPreferredBins(countryCode: String): String {
-        TODO()
-//        return client.getPreferredBins(countryCode)
-    }
-
-    fun setProxiedBins(bins: String) {
-        TODO()
-//        client.setProxiedBins(bins)
-    }
-
     override fun unregisterForNotifications() {
         TODO()
 //        client.unregisterForNotifications()

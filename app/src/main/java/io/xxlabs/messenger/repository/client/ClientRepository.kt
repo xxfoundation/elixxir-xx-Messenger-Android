@@ -759,35 +759,11 @@ class ClientRepository @Inject constructor(
         return hashmap
     }
 
-    override fun areNodesReady(): Boolean = recursiveAreNodesReady()
-
-    private fun recursiveAreNodesReady(retries: Int = 0): Boolean {
-        return try {
-            messenger.waitForNodes()
-//             clientWrapper.getNodeRegistrationStatus()'
-            true
-        } catch (e: Exception) {
-//            return if (e.isNodeError()) {
-//                Timber.d("Network is not healthy. Waiting $NODES_READY_POLL_INTERVAL before retry.")
-//                Thread.sleep(NODES_READY_POLL_INTERVAL)
-//                recursiveAreNodesReady()
-//            }
-            throw e
-        }
-
-//        val rate: Double = ((status.first.toDouble() / status.second))
-//        Timber.v("[NODE REGISTRATION STATUS] Registration rate: $rate")
-//
-//        return if (rate < NODES_READY_MINIMUM_RATE && retries <= NODES_READY_MAX_RETRIES) {
-//            Timber.d(
-//                "Nodes not ready after ${retries + 1} attempts. " +
-//                        "Waiting $NODES_READY_POLL_INTERVAL before next retry."
-//            )
-//            Thread.sleep(NODES_READY_POLL_INTERVAL)
-//            recursiveAreNodesReady(retries+1)
-//        } else {
-//            rate >= NODES_READY_MINIMUM_RATE
-//        }
+    override fun areNodesReady(): Boolean = try {
+        messenger.waitForNodes()
+        true
+    } catch (e: Exception) {
+        throw e
     }
 
     override lateinit var fileRepository: FileTransferRepository
