@@ -5,7 +5,7 @@ import io.elixxir.xxclient.callbacks.AuthEventListener
 import io.elixxir.xxclient.callbacks.MessageDeliveryListener
 import io.elixxir.xxclient.callbacks.NetworkHealthListener
 import io.elixxir.xxclient.cmix.CMix
-import io.elixxir.xxclient.dummytraffic.DummyTrafficAdapter
+import io.elixxir.xxclient.dummytraffic.DummyTraffic
 import io.elixxir.xxclient.e2e.E2e
 import io.elixxir.xxclient.models.ContactAdapter
 import io.elixxir.xxmessengerclient.Messenger
@@ -27,13 +27,12 @@ class ClientWrapperBindings(
     }
 
     private val dummyTrafficManager: DummyTraffic =
-        (
-                messenger.bindings.newDummyTrafficManager(
-                cmixId = cMix.id,
-                maxNumMessages = MAX_NUM_MESSAGES,
-                avgSendDeltaMS = AVG_SEND_DELTA_MS,
-                randomRangeMS = RANDOM_RANGE_MS
-        ) as DummyTrafficAdapter).dt
+        messenger.bindings.newDummyTrafficManager(
+        cmixId = cMix.id,
+        maxNumMessages = MAX_NUM_MESSAGES,
+        avgSendDeltaMS = AVG_SEND_DELTA_MS,
+        randomRangeMS = RANDOM_RANGE_MS
+    )
 
     //Network
     override fun startNetworkFollower() {
@@ -196,7 +195,7 @@ class ClientWrapperBindings(
         )
 
     override fun enableDummyTraffic(enabled: Boolean) {
-        dummyTrafficManager.status = enabled
+        dummyTrafficManager.enabled = enabled
     }
 
     fun getNodeRegistrationStatus(): Pair<Long, Long> {
