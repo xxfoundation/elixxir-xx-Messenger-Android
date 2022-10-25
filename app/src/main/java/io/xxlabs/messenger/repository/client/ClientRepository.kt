@@ -7,6 +7,7 @@ import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
 import io.xxlabs.messenger.application.SchedulerProvider
+import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
@@ -134,6 +135,7 @@ class ClientRepository @Inject constructor(
                     start()
                     if (!isConnected()) connect()
                     logIn()
+                    XxMessengerApplication.isUserDiscoveryRunning = true
                 }
             }
             emitter.onSuccess(messenger.isLoggedIn())
