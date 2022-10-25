@@ -48,7 +48,8 @@ abstract class MessengerEnvironment {
     open val newCMixFromBackup: NewCMixFromBackup = NewCMixFromBackup(bindings)
     open val newOrLoadUd: NewOrLoadUd = NewOrLoadUd(bindings)
     open val newUdManagerFromBackup: NewUdManagerFromBackup = NewUdManagerFromBackup(bindings)
-    open val registerForNotifications: RegisterForNotifications = RegisterForNotifications()
+    open val registerForNotifications: RegisterForNotifications = RegisterForNotifications(bindings)
+    open val unregisterForNotifications: UnregisterForNotifications = UnregisterForNotifications(bindings)
     open val resumeBackup: ResumeBackup = ResumeBackup()
     open val searchUD: SearchUD = SearchUD(bindings)
 }

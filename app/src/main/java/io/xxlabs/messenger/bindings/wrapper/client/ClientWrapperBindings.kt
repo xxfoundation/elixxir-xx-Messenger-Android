@@ -168,13 +168,11 @@ class ClientWrapperBindings(
     }
 
     override fun registerForNotifications(token: String) {
-        TODO()
-//        client.registerForNotifications(token)
+        messenger.registerForNotifications(token)
     }
 
     override fun unregisterForNotifications() {
-        TODO()
-//        client.unregisterForNotifications()
+        messenger.unregisterForNotifications
     }
 
     override fun getUser(): UserBase {
