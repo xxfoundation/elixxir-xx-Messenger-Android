@@ -6,6 +6,7 @@ import java.io.FileOutputStream
 import java.util.Date
 
 interface MessengerFileManager {
+    fun doesDirectoryExist(path: String): Boolean
     fun isDirectoryEmpty(path: String): Boolean
     fun removeItem(path: String)
     fun createDirectory(path: String)
@@ -15,6 +16,11 @@ interface MessengerFileManager {
 }
 
 class AndroidFileManager(private val appDirectory: String) : MessengerFileManager {
+
+    override fun doesDirectoryExist(path: String): Boolean {
+        return File(appDirectory, path).exists()
+    }
+
     override fun isDirectoryEmpty(path: String): Boolean {
         return with (File(appDirectory, path)) {
             listFiles()?.isEmpty() ?: !exists()

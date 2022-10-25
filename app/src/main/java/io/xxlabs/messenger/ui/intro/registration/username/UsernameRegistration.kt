@@ -35,7 +35,7 @@ class UsernameRegistration @Inject constructor(
             + Dispatchers.IO
     )
 
-    private val sessionExists get() = messenger.isCreated()
+    private val isConnected get() = messenger.isConnected()
 
     private val username = MutableLiveData<String?>(null)
     override val usernameTitle: Spanned = getSpannableTitle()
@@ -194,7 +194,7 @@ class UsernameRegistration @Inject constructor(
 
     private fun registerUsername(username: String, isDemoAcct: Boolean = false) {
         scope.launch {
-            if (!sessionExists) getOrCreateSession()
+            if (!isConnected) getOrCreateSession()
 
             try {
                 messenger.register(username)

@@ -89,8 +89,7 @@ class SplashScreenViewModel @Inject constructor(
 
     fun clearAppData() {
         viewModelScope.launch(Dispatchers.IO) {
-            messenger.destroy()
-            messenger.create()
+            if (!messenger.isCreated()) messenger.create()
             _appDataCleared.postValue(true)
         }
     }
