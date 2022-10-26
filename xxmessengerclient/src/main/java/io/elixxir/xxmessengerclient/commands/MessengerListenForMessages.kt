@@ -12,7 +12,7 @@ class MessengerListenForMessages(private val env: MessengerEnvironment) {
             e2e.registerListener(
                 senderId = byteArrayOf(),
                 messageType = MessageType.XxMessage,
-                e2eListener = env.messageListeners.listeners.values.first()
+                e2eListener = env.messageListeners.getListener()
             )
             env.isListeningForMessages = true
         } catch (e: Exception) {

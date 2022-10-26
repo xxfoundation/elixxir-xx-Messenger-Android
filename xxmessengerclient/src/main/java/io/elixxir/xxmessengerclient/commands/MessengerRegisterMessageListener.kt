@@ -7,12 +7,6 @@ import java.util.*
 class MessengerRegisterMessageListener(private val env: MessengerEnvironment) {
 
     operator fun invoke(listener: MessageListener) {
-        env.messageListeners.listeners.run {
-            if (isEmpty()) {
-                put(UUID.randomUUID(), listener)
-            } else {
-                set(env.messageListeners.listeners.keys.first(), listener)
-            }
-        }
+        env.messageListeners.setListener(listener)
     }
 }
