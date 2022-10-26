@@ -24,7 +24,7 @@ abstract class ClientModule {
 
     @Binds
     @Singleton
-    abstract fun bindEnvironment(environment: DevEnvironment): MessengerEnvironment
+    abstract fun bindEnvironment(environment: MainUDEnvironment): MessengerEnvironment
 
     @Binds
     @Singleton
