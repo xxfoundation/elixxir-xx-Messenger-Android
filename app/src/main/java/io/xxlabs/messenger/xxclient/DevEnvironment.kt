@@ -18,6 +18,7 @@ class DevEnvironment @Inject constructor(
         get() = readBytes(R.raw.ud_contact_test)
     override val ndfCert: String
         get() = readText(R.raw.xx_ndf)
+    override val udAddress: String = "46.101.98.49:18001"
 
     private fun readBytes(resourceId: Int): ByteArray {
         return appContext().resources

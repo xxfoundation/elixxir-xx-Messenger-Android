@@ -13,11 +13,11 @@ import io.elixxir.xxmessengerclient.utils.*
 abstract class MessengerEnvironment {
     abstract val passwordStorage: PasswordStorage
     abstract val storageDir: String
-    abstract val udCert: ByteArray
-    abstract val udContact: ByteArray
     abstract val ndfCert: String
 
-    open val udAddress: String = "46.101.98.49:18001"
+    open val udCert: ByteArray get() = e2e!!.getUdCertFromNdf()
+    open val udContact: ByteArray get() = e2e!!.getUdContactFromNdf().data
+    open val udAddress: String get() = e2e!!.getUdAddressFromNdf()
     open val sleep: (ms: Long) -> Unit = { Thread.sleep(it) }
 
     val bindings: Bindings = BindingsAdapter()
