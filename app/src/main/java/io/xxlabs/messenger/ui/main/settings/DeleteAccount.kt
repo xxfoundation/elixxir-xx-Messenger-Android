@@ -78,17 +78,9 @@ class DeleteAccount @Inject constructor(
     private fun deleteAccount() {
         repo.unregisterForNotification()
             .flatMap { repo.deleteUser() }
-            .flatMap { repo.stopNetworkFollower() }
             .subscribeOn(schedulers.single)
             .observeOn(schedulers.io)
             .flatMap {
-                // Wait for running processes to complete.
-                var isBusy: Boolean
-//                do {
-//                    Thread.sleep(RUNNING_PROCESSES_POLL_INTERVAL)
-//                    isBusy = ClientRepository.clientWrapper.client.hasRunningProcessies()
-//                } while (isBusy)
-
                 Single.just(clearAppData())
             }
             .flatMap { daoRepository.deleteAll() }

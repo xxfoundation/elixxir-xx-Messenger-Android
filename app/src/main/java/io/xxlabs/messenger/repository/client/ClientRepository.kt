@@ -195,8 +195,10 @@ class ClientRepository @Inject constructor(
             }
             try {
                 messenger.ud?.permanentDeleteAccount(username)
+                messenger.destroy()
                 emitter.onSuccess(true)
             } catch (err: Exception) {
+                messenger.destroy()
                 emitter.onError(err)
             }
         }
