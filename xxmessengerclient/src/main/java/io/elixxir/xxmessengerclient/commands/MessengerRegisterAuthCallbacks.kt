@@ -9,12 +9,6 @@ class MessengerRegisterAuthCallbacks(
 ) {
 
     operator fun invoke(authCallback: AuthEventListener) {
-        env.authCallbacks.authCallbacks.run {
-            if (isEmpty()) {
-                put(UUID.randomUUID(), authCallback)
-            } else {
-                set(env.authCallbacks.authCallbacks.keys.first(), authCallback)
-            }
-        }
+        env.authCallbacks.setAuthCallback(authCallback)
     }
 }
