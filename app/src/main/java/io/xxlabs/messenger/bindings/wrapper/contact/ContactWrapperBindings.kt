@@ -13,10 +13,9 @@ class ContactWrapperBindings(
     }
 
     private fun addFactToFactList(fact: String, type: FactType) {
-        val updated = contact.setFactsOnContact(
+        contact = contact.setFactsOnContact(
             listOf(Fact(fact, type.value))
         )
-        contact = updated
     }
 
     override fun addUsername(username: String) {
@@ -36,19 +35,19 @@ class ContactWrapperBindings(
     }
 
     override fun getUsernameFact(raw: Boolean): String {
-        return getFactStringfy(FactType.USERNAME, raw)
+        return getFactStringify(FactType.USERNAME) ?: "xx messenger User"
     }
 
-    override fun getEmailFact(raw: Boolean): String {
-        return getFactStringfy(FactType.EMAIL, raw)
+    override fun getEmailFact(raw: Boolean): String? {
+        return getFactStringify(FactType.EMAIL)
     }
 
-    override fun getPhoneFact(raw: Boolean): String {
-        return getFactStringfy(FactType.PHONE, raw)
+    override fun getPhoneFact(raw: Boolean): String? {
+        return getFactStringify(FactType.PHONE)
     }
 
-    override fun getNameFact(raw: Boolean): String {
-        return getFactStringfy(FactType.NICKNAME, raw)
+    override fun getNameFact(raw: Boolean): String? {
+        return getFactStringify(FactType.NICKNAME)
     }
 
     override fun getFormattedPhone(): String? {
@@ -65,8 +64,8 @@ class ContactWrapperBindings(
         }
     }
 
-    private fun getFactStringfy(type: FactType, raw: Boolean): String {
-        return getFact(type)?.fact ?: ""
+    private fun getFactStringify(type: FactType): String? {
+        return getFact(type)?.fact
     }
 
     override fun getStringifiedFacts(): String {
@@ -74,10 +73,6 @@ class ContactWrapperBindings(
     }
 
     override fun getDisplayName(): CharSequence {
-        return if (getNameFact().isNullOrEmpty()) {
-            getUsernameFact()
-        } else {
-            getNameFact()
-        }
+        return getNameFact() ?: getUsernameFact()
     }
 }

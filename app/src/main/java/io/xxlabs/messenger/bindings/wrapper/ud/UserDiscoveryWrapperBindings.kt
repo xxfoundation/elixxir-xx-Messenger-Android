@@ -47,11 +47,11 @@ data class UserDiscoveryWrapperBindings(
         userContact.addPhone(phone)
     }
 
-    override fun getUdEmail(raw: Boolean): String {
+    override fun getUdEmail(raw: Boolean): String? {
         return userContact.getEmailFact(raw)
     }
 
-    override fun getUdPhone(raw: Boolean): String {
+    override fun getUdPhone(raw: Boolean): String? {
         return userContact.getPhoneFact(raw)
     }
 
