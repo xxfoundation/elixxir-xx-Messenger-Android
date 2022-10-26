@@ -26,7 +26,6 @@ class UdRegistrationViewModel @Inject constructor(
     var emailCode = MutableLiveData<Boolean?>()
     var phoneCode = MutableLiveData<Boolean?>()
     var codeLoading = MutableLiveData<DataRequestState<Any>>()
-    var isComingFromProfile = false
 
     //Internal
     var registeredEmail: Boolean = false
@@ -36,9 +35,6 @@ class UdRegistrationViewModel @Inject constructor(
         registrationStep.value = UdRegistrationStep.NONE
     }
 
-    fun setRegistrationStep(step: Int) {
-        registrationStep.value = UdRegistrationStep.from(step)
-    }
 
     fun confirmFact(confirmationId: String, code: String, fact: String, isEmailCode: Boolean) {
         codeLoading.value = DataRequestState.Start()
@@ -101,34 +97,6 @@ class UdRegistrationViewModel @Inject constructor(
                     phoneRegistrationState.value = DataRequestState.Success(confirmationId)
                 }.subscribe()
         )
-    }
-
-    fun getCurrentStep(): UdRegistrationStep {
-        return registrationStep.value!!
-    }
-
-    fun onCurrentStepFinish() {
-        when (registrationStep.value) {
-            UdRegistrationStep.NONE -> {
-                registrationStep.postValue(UdRegistrationStep.EMAIL_INPUT_SUCCESS)
-            }
-            UdRegistrationStep.EMAIL_INPUT_SUCCESS -> {
-                registrationStep.postValue(UdRegistrationStep.PHONE_INPUT_SUCCESS)
-            }
-            UdRegistrationStep.PHONE_INPUT_SUCCESS -> {
-                registrationStep.postValue(UdRegistrationStep.ALL_DONE)
-            }
-
-            else -> {}
-        }
-    }
-
-    fun getUdEmail(): String? {
-        return repo.getUdEmail()
-    }
-
-    fun getUdPhone(): String? {
-        return repo.getUdPhone()
     }
 
     override fun onCleared() {
