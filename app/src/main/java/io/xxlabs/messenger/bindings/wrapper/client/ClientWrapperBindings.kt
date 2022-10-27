@@ -111,7 +111,7 @@ class ClientWrapperBindings(
         return messenger.sendMessage(
             recipientId,
             payload
-        ).let {
+        )?.let {
             SendReportBindings(it)
         }
     }

@@ -11,12 +11,13 @@ class MessengerWaitForNodes(private val env: MessengerEnvironment) {
         targetRatio: Float = 0.75F,
     ) {
         val cMix = env.cMix ?: throw MessengerException.NotLoaded("CMix")
-        var report = cMix.getNodeRegistrationStatus()
+        val updateStatus = { cMix.getNodeRegistrationStatus() ?: throw MessengerException.TimedOut()}
+        var report = updateStatus()
         var _retries = retries
 
         while (report.ratio < targetRatio && _retries > 0) {
             env.sleep(retryIntervalMs)
-            report = cMix.getNodeRegistrationStatus()
+            report = updateStatus()
             _retries--
         }
 

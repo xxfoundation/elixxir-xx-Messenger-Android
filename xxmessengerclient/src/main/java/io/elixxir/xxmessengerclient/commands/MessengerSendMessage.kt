@@ -12,7 +12,7 @@ class MessengerSendMessage(private val env: MessengerEnvironment) {
     operator fun invoke(
         receiver: UserId,
         payload: Payload,
-    ): SendReport {
+    ): SendReport? {
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
         val ud = env.ud ?: throw MessengerException.NotLoaded("UD")
 

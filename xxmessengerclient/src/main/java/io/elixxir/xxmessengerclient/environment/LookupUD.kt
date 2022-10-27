@@ -16,7 +16,7 @@ class LookupUD(private val bindings: Bindings) {
         listener: UdLookupResultListener,
         lookupId: UserId,
         singleUseParams: SingleUseParams
-    ): SingleUseReport {
+    ): SingleUseReport? {
         return bindings.lookupUd(
             e2eId,
             contact,
