@@ -1,13 +1,14 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.report
 
-import bindings.GroupSendReport
+import io.elixxir.xxclient.models.GroupSendReport
 
-class GroupSendReportBindings(private val groupSendReport: GroupSendReport) : GroupSendReportBase {
-    override fun getRoundID(): Long = TODO("groupSendReport.roundID")
 
-    override fun getTimestampMs(): Long = TODO("groupSendReport.timestampMS")
+class GroupSendReportBindings(private val groupSendReport: GroupSendReport?) : GroupSendReportBase {
+    override fun getRoundID(): Long = groupSendReport?.rounds?.firstOrNull() ?: 0
 
-    override fun getMessageID(): ByteArray = TODO("groupSendReport.messageID")
+    override fun getTimestampMs(): Long = groupSendReport?.timestamp ?: 0
 
-    override fun getRoundUrl(): String? = TODO("groupSendReport.roundURL")
+    override fun getMessageID(): ByteArray = groupSendReport?.messageId ?: byteArrayOf()
+
+    override fun getRoundUrl(): String? = groupSendReport?.roundUrl
 }

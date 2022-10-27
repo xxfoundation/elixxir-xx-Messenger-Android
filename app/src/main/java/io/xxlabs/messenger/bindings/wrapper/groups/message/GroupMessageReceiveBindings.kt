@@ -1,67 +1,44 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.message
 
 import data.proto.CMIXText
+import io.elixxir.xxclient.models.GroupChatMessage
+import io.elixxir.xxclient.utils.ReceptionId
+import io.elixxir.xxclient.utils.RoundId
 import io.xxlabs.messenger.support.extensions.toBase64String
 
-class GroupMessageReceiveBindings(/*val msg: GroupMessageReceive*/) : GroupMessageReceiveBase {
-    override fun getEphemeralId(): Long {
-        TODO()
-//        return msg.ephemeralID
-    }
+data class GroupMessageReceiveBindings(
+    private val decryptedMessage: GroupChatMessage?,
+    private val message: ByteArray?,
+    private val receptionId: ReceptionId?,
+    private val ephemeralId: Long,
+    private val roundId: RoundId,
+    private val error: Exception?
+) : GroupMessageReceiveBase {
+    override fun getEphemeralId(): Long = ephemeralId
 
-    override fun getGroupId(): ByteArray {
-        TODO()
-//        return msg.groupID
-    }
+    override fun getGroupId(): ByteArray = decryptedMessage?.groupId ?: byteArrayOf()
 
-    override fun getMessageId(): ByteArray {
-        TODO()
-//        return msg.messageID
-    }
+    override fun getMessageId(): ByteArray = decryptedMessage?.messageId ?: byteArrayOf()
 
-    override fun getPayload(): ByteArray {
-        TODO()
-//        return msg.payload
-    }
+    override fun getPayload(): ByteArray = decryptedMessage?.payload ?: byteArrayOf()
 
     override fun getPayloadString(): String? {
-        TODO()
-//        if (msg.payload.contentEquals(byteArrayOf())) {
-//            return null
-//        }
-//
-//        return CMIXText.parseFrom(msg.payload).toByteArray().toBase64String()
+        return if (getPayload()contentEquals(byteArrayOf())) {
+             null
+        } else CMIXText.parseFrom(getPayload()).toByteArray().toBase64String()
     }
 
-    override fun getRecipientId(): ByteArray {
-        TODO()
-//        return msg.recipientID
-    }
+    override fun getRecipientId(): ByteArray = receptionId ?: byteArrayOf()
 
-    override fun getRoundId(): Long {
-        TODO()
-//        return msg.roundID
-    }
+    override fun getRoundId(): Long = roundId
 
-    override fun getSenderId(): ByteArray {
-        TODO()
-//        return msg.senderID
-    }
+    override fun getSenderId(): ByteArray = decryptedMessage?.senderId ?: byteArrayOf()
 
-    override fun getRoundTimestampNano(): Long {
-        TODO()
-//        return msg.roundTimestampNano
-    }
+    override fun getRoundTimestampNano(): Long = decryptedMessage?.timestamp ?: 0
 
-    override fun getTimestampNano(): Long {
-        TODO()
-//        return msg.timestampNano
-    }
+    override fun getTimestampNano(): Long = decryptedMessage?.timestamp ?: 0
 
-    override fun getTimestampMs(): Long {
-        TODO()
-//        return msg.timestampMS
-    }
+    override fun getTimestampMs(): Long = decryptedMessage?.timestamp ?: 0
 
-    override fun getRoundUrl(): String? = TODO("msg.roundURL")
+    override fun getRoundUrl(): String? = null
 }

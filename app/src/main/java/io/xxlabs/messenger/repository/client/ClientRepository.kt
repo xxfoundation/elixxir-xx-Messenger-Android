@@ -3,6 +3,12 @@ package io.xxlabs.messenger.repository.client
 import bindings.NetworkHealthCallback
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
+import io.elixxir.xxclient.callbacks.GroupMessageListener
+import io.elixxir.xxclient.callbacks.GroupRequestListener
+import io.elixxir.xxclient.group.Group
+import io.elixxir.xxclient.models.GroupChatMessage
+import io.elixxir.xxclient.utils.ReceptionId
+import io.elixxir.xxclient.utils.RoundId
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
@@ -16,8 +22,10 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.chat.GroupChatBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBase
+import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.bindings.wrapper.groups.message.GroupMessageReceiveBase
+import io.xxlabs.messenger.bindings.wrapper.groups.message.GroupMessageReceiveBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.report.GroupSendReportBase
 import io.xxlabs.messenger.bindings.wrapper.groups.report.NewGroupReportBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
@@ -60,7 +68,31 @@ class ClientRepository @Inject constructor(
         onGroupReceived: (GroupBase) -> Unit,
         onMessageReceived: (GroupMessageReceiveBase) -> Unit
     ) {
+        val groupChat = messenger.startGroupChat(
+            object : GroupRequestListener {
+                override fun onRequestReceived(group: Group) {
+                    onGroupReceived(GroupBindings(group))
+                }
+            },
+            object : GroupMessageListener {
+                override val name: String
+                    get() = this::class.java.simpleName
 
+                override fun onMessageReceived(
+                    decryptedMessage: GroupChatMessage?,
+                    message: ByteArray?,
+                    receptionId: ReceptionId?,
+                    ephemeralId: Long,
+                    roundId: RoundId,
+                    error: Exception?
+                ) {
+                    GroupMessageReceiveBindings(
+                        decryptedMessage, message, receptionId, ephemeralId, roundId, error
+                    )
+                }
+            }
+        )
+        groupManager = GroupChatBindings(groupChat)
     }
 
     override fun sendGroupMessage(

@@ -21,6 +21,7 @@ class Messenger(val env: MessengerEnvironment) {
     val load: MessengerLoad = MessengerLoad(env)
     val registerAuthCallbacks: MessengerRegisterAuthCallbacks = MessengerRegisterAuthCallbacks(env)
     val registerMessageListener: MessengerRegisterMessageListener = MessengerRegisterMessageListener(env)
+    val startGroupChat: MessengerStartGroupChat = MessengerStartGroupChat(env)
     val start: MessengerStart = MessengerStart(env)
     val stop: MessengerStop = MessengerStop(env)
     val isConnected: MessengerIsConnected = MessengerIsConnected(env)

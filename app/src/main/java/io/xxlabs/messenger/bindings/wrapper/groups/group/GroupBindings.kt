@@ -1,6 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.group
 
-import bindings.Group
+import io.elixxir.xxclient.group.Group
 import io.xxlabs.messenger.bindings.wrapper.groups.membership.GroupMembershipBindings
 
 class GroupBindings(val group: Group): GroupBase {
@@ -9,8 +9,7 @@ class GroupBindings(val group: Group): GroupBase {
     }
 
     override fun getMembership(): GroupMembershipBindings {
-        TODO()
-//        return GroupMembershipBindings(group.membership)
+        return GroupMembershipBindings(group.membership)
     }
 
     override fun getName(): ByteArray {
@@ -18,14 +17,14 @@ class GroupBindings(val group: Group): GroupBase {
     }
 
     override fun serialize(): ByteArray {
-        return group.serialize()
+        return group.serialize
     }
 
-    override fun initMessage(): String? {
-        return group.initMessage?.decodeToString()
+    override fun initMessage(): String {
+        return group.initMessage.decodeToString()
     }
 
     override fun getCreatedMs(): Long {
-        return group.createdMS
+        return group.createdMs
     }
 }

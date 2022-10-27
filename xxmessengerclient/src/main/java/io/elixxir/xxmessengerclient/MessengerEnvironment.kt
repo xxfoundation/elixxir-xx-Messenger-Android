@@ -42,6 +42,7 @@ abstract class MessengerEnvironment {
     open val login: Login = Login(bindings)
     open val lookupUD: LookupUD = LookupUD(bindings)
     open val messageListeners: ListenersRegistry = ListenersRegistry()
+    open val groupListeners: GroupListenersRegistry = GroupListenersRegistry()
     open val multiLookupUD: MultiLookupUD = MultiLookupUD(bindings)
     open val ndfEnvironment: NDFEnvironment = NDFEnvironment(cert = ndfCert)
     open val newCMix: NewCMix = NewCMix(bindings)
