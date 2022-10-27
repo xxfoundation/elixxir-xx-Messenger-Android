@@ -239,29 +239,6 @@ class BindingsRestoreHandler(
         clientWrapper.registerMessageListener(messageReceivedListener)
     }
 
-    private suspend fun areNodesReady(
-        clientWrapper: ClientWrapperBindings,
-        retries: Int = 0
-    ): Boolean {
-        return try {
-            delay(ClientRepository.NODES_READY_POLL_INTERVAL)
-            val status = clientWrapper.getNodeRegistrationStatus()
-            val rate: Double = ((status.first.toDouble() / status.second))
-            log("[NODE REGISTRATION STATUS]\n\nRegistration rate: ${(rate * 100).toInt()}%")
-
-            return if (rate < ClientRepository.NODES_READY_MINIMUM_RATE
-                && retries <= NODES_READY_MAX_RETRIES
-            ) {
-                areNodesReady(clientWrapper, retries+1)
-            } else {
-                (rate >= ClientRepository.NODES_READY_MINIMUM_RATE)
-            }
-        } catch (e: Exception) {
-            log(e.message)
-            areNodesReady(clientWrapper, retries)
-        }
-    }
-
     private suspend fun fetchUserProfile(
         user: ContactWrapperBindings,
         ud: UserDiscoveryWrapperBindings,

@@ -198,12 +198,6 @@ class ClientWrapperBindings(
         dummyTrafficManager.enabled = enabled
     }
 
-    fun getNodeRegistrationStatus(): Pair<Long, Long> {
-        return cMix.getNodeRegistrationStatus().let {
-            Pair(it.registeredCount, it.totalCount)
-        }
-    }
-
     companion object {
         // Cover Traffic "Dummy Traffic"
         private const val MAX_NUM_MESSAGES = 5L
