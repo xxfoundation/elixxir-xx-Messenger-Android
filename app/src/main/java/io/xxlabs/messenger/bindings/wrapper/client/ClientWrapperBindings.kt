@@ -68,8 +68,8 @@ class ClientWrapperBindings(
 
     override fun registerAuthCallback(
         registerAuthCallback: (contact: ByteArray) -> Unit,
-        authConfirmCallback: ((contact: ByteArray) -> Unit),
-        authResetCallback: ((contact: ByteArray) -> Unit)
+        authConfirmCallback: (contact: ByteArray) -> Unit,
+        authResetCallback: (contact: ByteArray) -> Unit
     ) {
         messenger.registerAuthCallbacks(
             object : AuthEventListener {
