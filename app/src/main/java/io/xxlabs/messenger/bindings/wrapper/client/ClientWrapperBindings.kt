@@ -67,7 +67,7 @@ class ClientWrapperBindings(
     }
 
     override fun registerAuthCallback(
-        registerAuthCallback: (contact: ByteArray) -> Unit,
+        authReceivedCallback: (contact: ByteArray) -> Unit,
         authConfirmCallback: (contact: ByteArray) -> Unit,
         authResetCallback: (contact: ByteArray) -> Unit
     ) {
@@ -88,7 +88,7 @@ class ClientWrapperBindings(
                     ephemeralId: Long,
                     roundId: Long
                 ) {
-                    contact?.let { registerAuthCallback(it) }
+                    contact?.let { authReceivedCallback(it) }
                 }
 
                 override fun onReset(
