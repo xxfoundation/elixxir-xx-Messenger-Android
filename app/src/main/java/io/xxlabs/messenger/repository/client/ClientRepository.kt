@@ -805,10 +805,7 @@ class ClientRepository @Inject constructor(
         receivedContact: Contact,
         verifiedContact: ContactWrapperBase
     ): Boolean {
-        return receivedContact.marshaled?.let{
-            try { clientWrapper.verifyOwnership(it, verifiedContact.marshal()) }
-            catch (e: Exception) { false }
-        } ?: false
+        return receivedContact.userId.contentEquals(verifiedContact.getId())
     }
 
     override fun enableDummyTraffic(enabled: Boolean) {

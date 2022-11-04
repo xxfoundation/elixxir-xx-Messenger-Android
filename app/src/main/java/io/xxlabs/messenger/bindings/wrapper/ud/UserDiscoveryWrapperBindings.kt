@@ -94,9 +94,9 @@ data class UserDiscoveryWrapperBindings(
         messenger.lookupContact(
             userId,
             object : UdLookupResultListener {
-                override fun onResponse(response: Result<List<ContactData>>) {
+                override fun onResponse(response: Result<ContactData>) {
                     callback(
-                        response.getOrNull()?.first()?.let {
+                        response.getOrNull()?.let {
                             ContactWrapperBase.from(it)
                         },
                         response.exceptionOrNull()?.message
