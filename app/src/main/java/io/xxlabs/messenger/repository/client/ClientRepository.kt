@@ -7,6 +7,7 @@ import io.elixxir.xxclient.callbacks.GroupMessageListener
 import io.elixxir.xxclient.callbacks.GroupRequestListener
 import io.elixxir.xxclient.group.Group
 import io.elixxir.xxclient.models.GroupChatMessage
+import io.elixxir.xxclient.models.InvalidDataException
 import io.elixxir.xxclient.utils.ReceptionId
 import io.elixxir.xxclient.utils.RoundId
 import io.elixxir.xxmessengerclient.Messenger
@@ -284,7 +285,7 @@ class ClientRepository @Inject constructor(
     ): Single<Boolean> {
         return Single.create { emitter ->
             try {
-                clientWrapper.registerAuthCallback(onContactReceived, onContactReceived, onResetReceived)
+                clientWrapper.registerAuthCallback(onContactReceived, onConfirmationReceived, onResetReceived)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
@@ -567,7 +568,11 @@ class ClientRepository @Inject constructor(
                 }
 
                 val roundId = clientWrapper.confirmAuthenticatedChannel(data)
-                emitter.onSuccess(roundId)
+                if (roundId > 0) {
+                    emitter.onSuccess(roundId)
+                } else {
+                    throw InvalidDataException()
+                }
             } catch (err: Exception) {
                 emitter.onError(err)
             }
