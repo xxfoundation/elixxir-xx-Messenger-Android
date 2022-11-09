@@ -28,11 +28,11 @@ class MessageReceivedListener @Inject constructor(
     override fun onMessageReceived(message: BindingsMessage) {
         try {
             val cmixText = CMIXText.parseFrom(message.payload.fromBase64toByteArray())
-            val timestamp = message.timestamp
+            val timestamp = message.getTimestampMs()
             val javaTimestamp = System.currentTimeMillis()
             // Get the text of the message
 
-            Timber.v("Bindings timestamp (ms): ${message.timestamp}")
+            Timber.v("Bindings timestamp (ms): ${message.getTimestampMs()}")
             Timber.v("Bindings timestamp (nano): ${message.timestamp}")
             Timber.v("Java timestamp (ms): $javaTimestamp")
             Timber.v("Kronos timestamp (ms): ${XxMessengerApplication.kronosClock.getCurrentNtpTimeMs()}")
