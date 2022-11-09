@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.bindings.wrapper.report
 
+import com.google.gson.Gson
 import io.elixxir.xxclient.models.SendReport
 import io.elixxir.xxclient.utils.fromBase64toByteArray
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
@@ -14,7 +15,15 @@ class SendReportBindings(val sendReport: SendReport): SendReportBase {
 
     override fun getTimestampNano(): Long = (sendReport.timestamp ?: 0) * 1_000_000
 
-    override fun marshal(): ByteArray = byteArrayOf() // TODO: Expose JSON bytes
+    override fun marshal(): ByteArray = Gson().toJson(sendReport).encodeToByteArray()
 
     override fun getRoundUrl(): String = sendReport.roundUrl ?: ""
+
+    companion object {
+        fun from(marshalledReport: ByteArray): SendReportBindings {
+            return SendReportBindings(
+                Gson().fromJson(marshalledReport.decodeToString(), SendReport::class.java)
+            )
+        }
+    }
 }

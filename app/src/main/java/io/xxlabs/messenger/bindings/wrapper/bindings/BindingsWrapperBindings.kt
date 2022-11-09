@@ -8,6 +8,7 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.client.ClientWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.report.SendReportBase
+import io.xxlabs.messenger.bindings.wrapper.report.SendReportBindings
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBase
 import io.xxlabs.messenger.bindings.wrapper.ud.UserDiscoveryWrapperBindings
 import io.xxlabs.messenger.data.datatype.Environment
@@ -167,8 +168,7 @@ class BindingsWrapperBindings {
         }
 
         override fun unmarshallSendReport(marshalledReport: ByteArray): SendReportBase {
-            TODO()
-//            return SendReportBindings(Bindings.unmarshalSendReport(marshalledReport))
+            return SendReportBindings.from(marshalledReport)
         }
 
         fun getXxdkVersion(): String {
