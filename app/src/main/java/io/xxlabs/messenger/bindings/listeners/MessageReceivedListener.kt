@@ -10,6 +10,7 @@ import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.data.datatype.MessageStatus
 import io.xxlabs.messenger.data.room.model.PrivateMessageData
 import io.xxlabs.messenger.repository.DaoRepository
+import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
 import io.xxlabs.messenger.support.extensions.toBase64String
 import timber.log.Timber
 import javax.inject.Inject
@@ -26,7 +27,7 @@ class MessageReceivedListener @Inject constructor(
 
     override fun onMessageReceived(message: BindingsMessage) {
         try {
-            val cmixText = CMIXText.parseFrom(message.payload)
+            val cmixText = CMIXText.parseFrom(message.payload.fromBase64toByteArray())
             val timestamp = message.timestamp
             val javaTimestamp = System.currentTimeMillis()
             // Get the text of the message
@@ -44,9 +45,9 @@ class MessageReceivedListener @Inject constructor(
             )
 
             insertMsgByContactId(
-                message.id,
-                message.sender,
-                message.recipientId,
+                message.id.fromBase64toByteArray(),
+                message.sender.fromBase64toByteArray(),
+                message.recipientId.fromBase64toByteArray(),
                 cmixText,
                 timestamp,
                 message.roundUrl
