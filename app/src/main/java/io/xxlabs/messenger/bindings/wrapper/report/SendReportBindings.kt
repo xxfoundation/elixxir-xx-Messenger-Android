@@ -11,9 +11,9 @@ class SendReportBindings(val sendReport: SendReport): SendReportBase {
 
     override fun getRoundList(): RoundListBase = RoundListBindings(sendReport.roundIdList)
 
-    override fun getTimestampMs(): Long = sendReport.timestamp ?: 0
+    override fun getTimestampMs(): Long = (sendReport.timestamp ?: 0) / 1_000_000
 
-    override fun getTimestampNano(): Long = (sendReport.timestamp ?: 0) * 1_000_000
+    override fun getTimestampNano(): Long = sendReport.timestamp ?: 0
 
     override fun marshal(): ByteArray = Gson().toJson(sendReport).encodeToByteArray()
 
