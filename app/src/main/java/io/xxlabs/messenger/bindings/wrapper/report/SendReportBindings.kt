@@ -1,11 +1,12 @@
 package io.xxlabs.messenger.bindings.wrapper.report
 
 import io.elixxir.xxclient.models.SendReport
+import io.elixxir.xxclient.utils.fromBase64toByteArray
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBase
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListBindings
 
 class SendReportBindings(val sendReport: SendReport): SendReportBase {
-    override fun getMessageId(): ByteArray = sendReport.messageId ?: byteArrayOf()
+    override fun getMessageId(): ByteArray = sendReport.messageId?.fromBase64toByteArray() ?: byteArrayOf()
 
     override fun getRoundList(): RoundListBase = RoundListBindings(sendReport.roundIdList)
 
@@ -13,7 +14,7 @@ class SendReportBindings(val sendReport: SendReport): SendReportBase {
 
     override fun getTimestampNano(): Long = (sendReport.timestamp ?: 0) * 1_000_000
 
-    override fun marshal(): ByteArray = byteArrayOf()
+    override fun marshal(): ByteArray = byteArrayOf() // TODO: Expose JSON bytes
 
     override fun getRoundUrl(): String = sendReport.roundUrl ?: ""
 }
