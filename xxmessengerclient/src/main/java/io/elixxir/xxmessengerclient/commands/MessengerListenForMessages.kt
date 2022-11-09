@@ -10,7 +10,7 @@ class MessengerListenForMessages(private val env: MessengerEnvironment) {
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
         try {
             e2e.registerListener(
-                senderId = byteArrayOf(),
+                senderId = null,
                 messageType = MessageType.XxMessage,
                 e2eListener = env.messageListeners.getListener()
             )
