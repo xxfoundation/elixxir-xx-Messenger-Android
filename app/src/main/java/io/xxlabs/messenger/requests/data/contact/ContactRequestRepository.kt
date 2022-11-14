@@ -70,6 +70,7 @@ class ContactRequestsRepository @Inject constructor(
 
     override fun delete(request: ContactRequest) {
         scope.launch {
+            requestsService.deleteContactRequest(request)
             localDataSource.getRequest(request.requestId)?.apply {
                 localDataSource.deleteRequest(this)
             }
@@ -94,8 +95,8 @@ class ContactRequestsRepository @Inject constructor(
         scope.launch {
             when (request.requestStatus) {
                 VERIFICATION_FAIL -> verify(request)
-                RESET_FAIL, RESET_SENT -> resetSession(request)
-                SEND_FAIL, SENT -> resendRequest(request)
+                SEND_FAIL, SENT, RESET_FAIL, RESET_SENT -> resetSession(request)
+//                SEND_FAIL, SENT -> resendRequest(request)
                 CONFIRM_FAIL -> accept(request)
                 SENDING -> sendRequest(request)
                 else -> Timber.d("Unknown request status: ${request.requestStatus.value}")
@@ -149,7 +150,7 @@ class ContactRequestsRepository @Inject constructor(
     }
 
     private fun resetSession(request: ContactRequest) {
-        if (requestsService.resetSession(request.model)) update(request, RESET_SENT)
+        if (requestsService.resetSession(request.model)) update(request, RESENT)
         else update(request, RESET_FAIL)
     }
 

@@ -291,18 +291,18 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
     private fun NotificationForMeReport.notificationText(): String =
         when {
             isGroupRequest() -> getString(R.string.notification_group_request_text)
-            isRequest() -> getString(R.string.notification_request_text)
+            isRequest() || isReset() -> getString(R.string.notification_request_text)
             isConfirm() -> getString(R.string.notification_confirm_text)
             isE2E() -> getString(R.string.notification_e2e_text)
             isGroup() -> getString(R.string.notification_group_text)
             isEndFT() -> getString(R.string.notification_endft_text)
-            isReset() -> getString(R.string.notification_reset_text)
+//            isReset() -> getString(R.string.notification_reset_text)
             else -> "New activity" // Other types should not be displayed in the first place.
         }
 
     private fun NotificationForMeReport.channelId(): String =
         when {
-            isRequest() || isGroupRequest() -> getString(R.string.request_notification_channel_id)
+            isRequest() || isGroupRequest() || isReset() -> getString(R.string.request_notification_channel_id)
             isConfirm() -> getString(R.string.confirm_notification_channel_id)
             isE2E() || isEndFT() -> getString(R.string.e2e_notification_channel_id)
             isGroup() -> getString(R.string.group_notification_channel_id)
@@ -311,7 +311,7 @@ class MessagingService : FirebaseMessagingService(), HasAndroidInjector {
 
     private fun NotificationForMeReport.channelName(): String =
         when {
-            isRequest() || isGroupRequest() -> getString(R.string.notification_request_channel_label)
+            isRequest() || isGroupRequest() || isReset() -> getString(R.string.notification_request_channel_label)
             isConfirm() -> getString(R.string.notification_confirm_channel_label)
             isE2E() || isEndFT() -> getString(R.string.notification_e2e_channel_label)
             isGroup() -> getString(R.string.notification_group_channel_label)

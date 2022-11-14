@@ -52,6 +52,9 @@ interface ClientWrapperBase {
     ): Long
 
     fun confirmAuthenticatedChannel(marshalledContact: ByteArray): Long
+
+    fun deleteRequest(marshalledContact: ByteArray)
+
     fun waitForRoundCompletion(
         roundId: Long,
         timeoutMillis: Long,

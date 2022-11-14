@@ -88,6 +88,8 @@ class ClientWrapperMock(val contact: ContactData) : ClientWrapperBase {
         return Random.nextLong()
     }
 
+    override fun deleteRequest(marshalledContact: ByteArray) {}
+
     override fun waitForRoundCompletion(
         roundId: Long,
         timeoutMillis: Long,

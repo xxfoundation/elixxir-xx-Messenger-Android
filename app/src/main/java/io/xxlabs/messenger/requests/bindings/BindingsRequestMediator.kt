@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.requests.bindings
 
+import com.dropbox.core.android.AuthActivity.result
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.repository.base.BaseRepository
@@ -64,15 +65,34 @@ class BindingsRequestMediator @Inject constructor(
     override suspend fun verifyContactRequest(request: ContactRequest): VerificationResult =
        requestVerifier.verifyRequest(request)
 
+    override suspend fun deleteContactRequest(request: ContactRequest): Boolean {
+        return deleteContactRequest(request.model)
+    }
+
+    private fun deleteContactRequest(contact: Contact): Boolean {
+        var result = false
+        try {
+            ClientRepository.clientWrapper.client.deleteRequest(contact.userId)
+            result = true
+        } catch (e: Exception) {
+            Timber.d(
+                "Exception occurred when deleting request for ${contact.displayName}: ${e.message}."
+            )
+        }
+        return result
+    }
+
     override fun resetSession(contact: Contact): Boolean {
         var result = false
         try {
-            val roundId = ClientRepository.clientWrapper.client.resetSession(
-                contact.marshaled,
-                repo.getMashalledUser(),
-                ""
-            )
-            result = roundId > 0
+            if (deleteContactRequest(contact)) {
+                val roundId = ClientRepository.clientWrapper.client.resetSession(
+                    contact.marshaled,
+                    repo.getMashalledUser(),
+                    ""
+                )
+                result = roundId > 0
+            }
         } catch (e: Exception) {
             Timber.d(
                 "Exception occurred when resetting ${contact.displayName}: ${e.message}."
