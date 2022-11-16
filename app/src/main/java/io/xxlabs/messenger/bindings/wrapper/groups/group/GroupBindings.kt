@@ -9,7 +9,7 @@ class GroupBindings(val group: Group): GroupBase {
     }
 
     override fun getMembership(): GroupMembershipBindings {
-        return GroupMembershipBindings(group.membership)
+        return GroupMembershipBindings(group.membership.members)
     }
 
     override fun getName(): ByteArray {

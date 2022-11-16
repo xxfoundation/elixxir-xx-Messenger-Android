@@ -12,8 +12,8 @@ class GroupMembershipBindings(private val groupMembership: List<GroupMember>) : 
 
     override fun getAll(): List<GroupMemberBase> {
         val list = mutableListOf<GroupMemberBindings>()
-        for (i in 0 until len()) {
-            list.add(GroupMemberBindings(groupMembership[i.toInt()]))
+        for (memberId in groupMembership) {
+            list.add(GroupMemberBindings(memberId))
         }
         return list
     }

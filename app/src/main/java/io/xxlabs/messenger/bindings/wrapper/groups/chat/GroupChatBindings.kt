@@ -1,7 +1,7 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.chat
 
 import io.elixxir.xxclient.groupchat.GroupChat
-import io.elixxir.xxclient.models.BindingsModel.Companion.encodeArray
+import io.elixxir.xxclient.utils.encoded
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBindings
@@ -33,12 +33,12 @@ class GroupChatBindings(val groupChat: GroupChat) : GroupChatBase {
         initialMessage: String?
     ): NewGroupReportBase {
         val groupReport = groupChat.makeGroup(
-            encodeArray(idList),
+            idList.encoded(),
             name.encodeToByteArray(),
             initialMessage?.encodeToByteArray() ?: byteArrayOf()
         )
-
-        return NewGroupReportBindings(groupReport, null)
+        val group = groupReport?.id?.let { groupChat.getGroup(it) }
+        return NewGroupReportBindings(groupReport, group)
     }
 
     override fun numGroups(): Long {
