@@ -12,6 +12,7 @@ import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
+import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
@@ -198,8 +199,8 @@ class UsernameRegistration @Inject constructor(
 
             try {
                 messenger.register(username)
-                messenger.ud?.contact?.getIdFromContact()?.let {
-                    preferences.setUserId(it)
+                messenger.myContact().run {
+                    saveUser(ContactWrapperBase.from(data))
                 }
                 onSuccessfulRegistration(username, isDemoAcct)
             } catch (e: Exception) {
@@ -207,6 +208,11 @@ class UsernameRegistration @Inject constructor(
                 enableUI()
             }
         }
+    }
+
+    private fun saveUser(profile: ContactWrapperBase) {
+        preferences.setUserId(profile.getId())
+        preferences.userData = profile.getStringifiedFacts()
     }
 
     private fun displayError(errorMsg: String) {
