@@ -847,7 +847,7 @@ class ClientRepository @Inject constructor(
             ClientWrapperBindings(messenger)
         }
         val userWrapper: ContactWrapperBindings
-            get() = ContactWrapperBindings(messenger.ud!!.contact)
+            get() = ContactWrapperBindings(messenger.myContact())
 
         val udWrapperBindings: UserDiscoveryWrapperBindings by lazy {
             UserDiscoveryWrapperBindings(messenger)
