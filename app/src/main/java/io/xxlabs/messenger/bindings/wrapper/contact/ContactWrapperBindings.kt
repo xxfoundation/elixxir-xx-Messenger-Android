@@ -35,19 +35,19 @@ class ContactWrapperBindings(
     }
 
     override fun getUsernameFact(raw: Boolean): String {
-        return getFactStringify(FactType.USERNAME) ?: "xx messenger User"
+        return getFactStringify(FactType.USERNAME, raw) ?: "xx messenger User"
     }
 
     override fun getEmailFact(raw: Boolean): String? {
-        return getFactStringify(FactType.EMAIL)
+        return getFactStringify(FactType.EMAIL, raw)
     }
 
     override fun getPhoneFact(raw: Boolean): String? {
-        return getFactStringify(FactType.PHONE)
+        return getFactStringify(FactType.PHONE, raw)
     }
 
     override fun getNameFact(raw: Boolean): String? {
-        return getFactStringify(FactType.NICKNAME)
+        return getFactStringify(FactType.NICKNAME, raw)
     }
 
     override fun getFormattedPhone(): String? {
@@ -64,12 +64,26 @@ class ContactWrapperBindings(
         }
     }
 
-    private fun getFactStringify(type: FactType): String? {
-        return getFact(type)?.fact
+    private fun getFactStringify(type: FactType, raw: Boolean): String? {
+        val prefix = if (raw) {
+            when (type) {
+                FactType.USERNAME -> 'U'
+                FactType.EMAIL -> 'E'
+                FactType.PHONE -> 'P'
+                FactType.NICKNAME -> ""
+            }
+        } else ""
+        return getFact(type)?.fact?.let {
+            "$prefix$it"
+        }
     }
 
     override fun getStringifiedFacts(): String {
-        return contact.getFactsFromContact().toString()
+        return contact.getFactsFromContact().mapNotNull { fact ->
+            FactType.from(fact.type)?.let { factType ->
+                getFactStringify(factType, true)
+            }
+        }.joinToString(separator = ",", postfix = ";")
     }
 
     override fun getDisplayName(): CharSequence {
