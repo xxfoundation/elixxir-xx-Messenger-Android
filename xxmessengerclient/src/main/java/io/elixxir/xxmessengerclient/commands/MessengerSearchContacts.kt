@@ -17,7 +17,7 @@ class MessengerSearchContacts(private val env: MessengerEnvironment) {
 
         env.searchUD(
             e2eId = e2e.id,
-            udContact = ud.contact,
+            udContact = ud.contactModel,
             facts = query,
             searchResultListener = listener,
             singleUseParams = env.getSingleUseParams()

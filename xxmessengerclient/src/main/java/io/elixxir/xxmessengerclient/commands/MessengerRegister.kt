@@ -30,6 +30,6 @@ class MessengerRegister(private val env: MessengerEnvironment) {
     }
 
     private fun createProfile(e2e: E2e, ud: UserDiscovery) {
-        e2e.contact.setFactsOnContact(ud.facts)
+        e2e.userProfile.setFactsOnContact(ud.facts)
     }
 }

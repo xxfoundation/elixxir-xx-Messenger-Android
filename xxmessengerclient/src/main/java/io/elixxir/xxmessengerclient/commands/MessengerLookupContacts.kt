@@ -16,7 +16,7 @@ class MessengerLookupContacts(private val env: MessengerEnvironment) {
 
         env.multiLookupUD(
             e2eId = e2e.id,
-            contact = ud.contact,
+            contact = ud.contactModel,
             lookupIds = idsList,
             listener = listener,
             singleUeParams = env.getSingleUseParams()

@@ -10,7 +10,7 @@ class MessengerMyContact(private val env: MessengerEnvironment) {
     operator fun invoke(includeFacts: IncludedFacts = IncludedFacts.All): Contact {
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
         val ud = env.ud ?: throw MessengerException.NotLoaded("UD")
-        val contact = e2e.contact
+        val contact = e2e.userProfile
 
         return when (includeFacts) {
             is IncludedFacts.All -> contact.setFactsOnContact(ud.facts)
