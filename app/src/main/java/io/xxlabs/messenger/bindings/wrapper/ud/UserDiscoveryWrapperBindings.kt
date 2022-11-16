@@ -21,7 +21,7 @@ data class UserDiscoveryWrapperBindings(
         messenger.ud!!
     }
     private val userContact: ContactWrapperBindings
-        get() = ContactWrapperBindings(ud.contact)
+        get() = ContactWrapperBindings(messenger.myContact())
 
     override fun search(input: String, factType: FactType, callback: (ContactWrapperBase?, String?) -> (Unit)) {
         messenger.searchContacts(
@@ -74,7 +74,7 @@ data class UserDiscoveryWrapperBindings(
     }
 
     override fun removeFact(factType: FactType): Boolean {
-        ud.contact.getFactsFromContact().firstOrNull {
+        messenger.myContact().getFactsFromContact().firstOrNull {
             it.type == factType.value
         }?.let {
             ud.removeFact(it)
@@ -83,10 +83,14 @@ data class UserDiscoveryWrapperBindings(
     }
 
     override fun deleteUser(username: String) {
-        ud.contact.getFactsFromContact().firstOrNull {
-            it.fact == username
+        userContact.getNameFact()?.takeIf {
+            it == username
         }?.let {
-            ud.permanentDeleteAccount(it)
+            messenger.myContact().getFactsFromContact().firstOrNull { fact ->
+                fact.fact == username
+            }?.let { usernameFact ->
+                ud.permanentDeleteAccount(usernameFact)
+            }
         }
     }
 
