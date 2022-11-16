@@ -198,6 +198,9 @@ class UsernameRegistration @Inject constructor(
 
             try {
                 messenger.register(username)
+                messenger.ud?.contact?.getIdFromContact()?.let {
+                    preferences.setUserId(it)
+                }
                 onSuccessfulRegistration(username, isDemoAcct)
             } catch (e: Exception) {
                 displayError(e.message ?: "Failed to register username.")
