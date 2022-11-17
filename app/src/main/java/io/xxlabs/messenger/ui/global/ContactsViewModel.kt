@@ -23,7 +23,6 @@ import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
-import io.xxlabs.messenger.repository.client.ClientRepository
 import io.xxlabs.messenger.requests.data.contact.ContactRequestData
 import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.data.contact.RequestMigrator
@@ -569,10 +568,11 @@ class ContactsViewModel @Inject constructor(
                 .subscribeOn(schedulers.single)
                 .observeOn(schedulers.io)
                 .flatMap { groupReport ->
-                    val group = groupReport.getGroup()
-                    groupId = group.getID()
-                    createdMs = group.getCreatedMs()
-                    daoRepo.createUserGroup(group)
+                    groupReport.getGroup()?.run {
+                        groupId = getID()
+                        createdMs = getCreatedMs()
+                        daoRepo.createUserGroup(this)
+                    }
                 }.flatMap {
                     Timber.v("[GROUPS CREATION] Getting group...")
                     daoRepo.getGroup(groupId)

@@ -1,11 +1,12 @@
 package io.xxlabs.messenger.bindings.wrapper.groups.report
 
+import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBase
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupMock
 import io.xxlabs.messenger.bindings.wrapper.round.RoundListMock
 import io.xxlabs.messenger.data.room.model.GroupData
 
 class NewGroupReportMock(val group: GroupData, val idsList: List<ByteArray>) : NewGroupReportBase{
-    override fun getGroup(): GroupMock {
+    override fun getGroup(): GroupBase? {
         return GroupMock(group, idsList)
     }
 
