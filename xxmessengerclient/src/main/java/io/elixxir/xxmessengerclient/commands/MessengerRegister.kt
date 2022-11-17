@@ -12,10 +12,10 @@ class MessengerRegister(private val env: MessengerEnvironment) {
     operator fun invoke(username: String) {
         val cMix = env.cMix ?: throw MessengerException.NotLoaded("CMix")
         val e2e = env.e2e ?: throw MessengerException.NotLoaded("E2E")
-        loadUd(username, cMix, e2e)
+        env.ud = loadUd(username, cMix, e2e)
     }
 
-    private fun loadUd(username: String, cMix: CMix, e2e: E2e) {
+    private fun loadUd(username: String, cMix: CMix, e2e: E2e): UserDiscovery =
         env.newOrLoadUd(
             e2eId = e2e.id,
             networkFollowerStatus = cMix.getNetworkFollowerStatus(),
@@ -24,10 +24,9 @@ class MessengerRegister(private val env: MessengerEnvironment) {
             certificateData = env.udCert,
             contact = ContactAdapter(env.udContact),
             udIpAddress = env.udAddress
-        ).getOrThrow().run {
+        ).getOrThrow().apply {
             createProfile(e2e, this)
         }
-    }
 
     private fun createProfile(e2e: E2e, ud: UserDiscovery) {
         e2e.userProfile.setFactsOnContact(ud.facts)
