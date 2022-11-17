@@ -13,6 +13,7 @@ import io.elixxir.xxclient.utils.RoundId
 import io.elixxir.xxmessengerclient.Messenger
 import io.reactivex.Maybe
 import io.reactivex.Single
+import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.application.SchedulerProvider
 import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.backup.bindings.BackupService
@@ -162,13 +163,15 @@ class ClientRepository @Inject constructor(
 
     override fun isLoggedIn(): Single<Boolean> {
         return Single.create { emitter ->
-            if (!messenger.isLoggedIn()) {
+            if (!messenger.isConnected()) {
                 messenger.run {
                     if (!isLoaded()) load()
                     start()
                     if (!isConnected()) connect()
-                    logIn()
+                    if (!isRegistered()) register(preferences.name)
+                    if (!isLoggedIn()) logIn()
                     XxMessengerApplication.isUserDiscoveryRunning = true
+                    preferences.lastAppVersion = BuildConfig.VERSION_CODE
                 }
             }
             emitter.onSuccess(messenger.isLoggedIn())
