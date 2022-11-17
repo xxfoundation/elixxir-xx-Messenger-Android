@@ -6,7 +6,7 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBindings
 
 class UserBindings(private val messenger: Messenger) : UserBase {
     override fun getReceptionId(): ByteArray {
-        return messenger.cMix?.makeReceptionIdentity() ?: byteArrayOf()
+        return messenger.e2e?.receptionIdentity ?: byteArrayOf()
     }
 
     override fun getContact(): ContactWrapperBase {

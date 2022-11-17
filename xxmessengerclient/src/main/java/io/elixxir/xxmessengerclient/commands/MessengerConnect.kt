@@ -11,7 +11,7 @@ class MessengerConnect(private val env: MessengerEnvironment) {
         env.e2e = env.login(
             cMixId = cMix.id,
             authCallbacks = env.authCallbacks.getAuthCallback(),
-            receptionId = cMix.makeReceptionIdentity(),
+            receptionId = cMix.makeLegacyReceptionIdentity(),
             e2eParams = env.getE2EParams()
         ).getOrThrow()
     }
