@@ -588,42 +588,39 @@ class ClientRepository @Inject constructor(
         idsList: List<ByteArray>,
         initialMessage: String?
     ): Single<NewGroupReportBase> {
+        val groupError = Exception("Could not create group, try again")
+
         return Single.create { emitter ->
             try {
                 val groupReport = groupManager.makeGroup(idsList, name, initialMessage)
 
-                val group = groupReport.getGroup()
-                val status = groupReport.getStatus()
-                Timber.v(
-                    "[GROUPS CREATION] Group created ID: ${
-                        group.getID().toBase64String()
-                    }"
-                )
-                Timber.v("[GROUPS CREATION] Status: $status")
-                if (status == 0L) {
-                    Timber.v("[GROUPS CREATION] Error did not send any invite")
-                    emitter.onError(Exception("Could not create group, try again"))
-                } else if (status == 1L || status == 2L) {
-                    Timber.v("[GROUPS CREATION] Resending missing requests")
-                    var resendReport: NewGroupReportBase
-                    var resendStatus: Long
-                    var trials = 5
-                    do {
-                        Timber.v("[GROUPS CREATION] Resending invites...")
-                        resendReport = resendInviteLocal(group.getID())
-                        resendStatus = resendReport.getStatus()
-                        Timber.v("[GROUPS CREATION] New status:  $resendStatus")
-                        trials--
-                    } while (resendStatus != 3L || trials > 0)
-                    emitter.onSuccess(resendReport)
-                } else {
-                    Timber.v("[GROUPS CREATION] Successfully sent all the requests!")
-                    emitter.onSuccess(groupReport)
+                when (groupReport.getStatus()) {
+                    0L -> {
+                        Timber.v("[GROUPS CREATION] Error did not send any invite")
+                        emitter.onError(groupError)
+                    }
+                    1L, 2L -> {
+                        groupReport.getGroup()?.let {
+                            emitter.onSuccess(retryGroupRequests(it))
+                        } ?: emitter.onError(groupError)
+                    }
+                    else -> {
+                        Timber.v("[GROUPS CREATION] Successfully sent all the requests!")
+                        emitter.onSuccess(groupReport)
+                    }
                 }
             } catch (err: Exception) {
                 emitter.onError(err)
             }
         }
+    }
+
+    private fun retryGroupRequests(group: GroupBase, retries: Int = 5): NewGroupReportBase {
+        Timber.v("[GROUPS CREATION] Resending missing requests ($retries retries remaining)")
+
+        return resendInviteLocal(group.getID()).takeIf {
+            it.getStatus() == 3L || retries == 0
+        } ?: retryGroupRequests(group, retries - 1)
     }
 
     override fun resendInviteLocal(groupId: ByteArray): NewGroupReportBase {
@@ -633,7 +630,6 @@ class ClientRepository @Inject constructor(
     override fun resendInvite(groupId: ByteArray): Single<NewGroupReportBase> {
         return Single.create { emitter ->
             try {
-
                 val report = groupManager.resendRequest(groupId)
                 emitter.onSuccess(report)
             } catch (err: Exception) {
