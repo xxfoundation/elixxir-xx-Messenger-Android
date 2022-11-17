@@ -11,6 +11,7 @@ import androidx.lifecycle.MutableLiveData
 import io.elixxir.xxmessengerclient.Messenger
 import io.xxlabs.messenger.BuildConfig
 import io.xxlabs.messenger.R
+import io.xxlabs.messenger.application.XxMessengerApplication
 import io.xxlabs.messenger.bindings.wrapper.bindings.bindingsErrorMessage
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.repository.PreferencesRepository
@@ -225,6 +226,7 @@ class UsernameRegistration @Inject constructor(
                 if (!isLoaded()) load()
                 start()
                 if (!isConnected()) connect()
+                XxMessengerApplication.isUserDiscoveryRunning = true
             }
             preferences.lastAppVersion = BuildConfig.VERSION_CODE
         } catch (err: Exception) {
