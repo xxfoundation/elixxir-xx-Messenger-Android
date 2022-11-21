@@ -830,9 +830,7 @@ class ClientRepository @Inject constructor(
     }
 
     override suspend fun getPartners(): List<String> {
-        return messenger.e2e?.getAllPartnerIds()?.map {
-            it.toBase64String()
-        } ?: listOf()
+        return messenger.e2e?.getAllPartnerIds() ?: listOf()
     }
 
     companion object {
