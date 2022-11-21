@@ -2,6 +2,7 @@ package io.xxlabs.messenger.bindings.wrapper.groups.chat
 
 import io.elixxir.xxclient.groupchat.GroupChat
 import io.elixxir.xxclient.utils.encoded
+import io.elixxir.xxclient.utils.fromBase64toByteArray
 import io.xxlabs.messenger.bindings.wrapper.groups.group.GroupBindings
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBase
 import io.xxlabs.messenger.bindings.wrapper.groups.id.IdListBindings
@@ -37,7 +38,7 @@ class GroupChatBindings(val groupChat: GroupChat) : GroupChatBase {
             name.encodeToByteArray(),
             initialMessage?.encodeToByteArray() ?: byteArrayOf()
         )
-        val group = groupReport?.id?.let { groupChat.getGroup(it) }
+        val group = groupReport?.id?.let { groupChat.getGroup(it.fromBase64toByteArray()) }
         return NewGroupReportBindings(groupReport, group)
     }
 
