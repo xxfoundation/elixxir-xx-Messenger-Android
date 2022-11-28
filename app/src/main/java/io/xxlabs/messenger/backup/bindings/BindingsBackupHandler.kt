@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.backup.bindings
 
 import bindings.Backup
-import bindings.Bindings
 import bindings.UpdateBackupFunc
 import io.xxlabs.messenger.backup.data.restore.ExtrasJson
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
@@ -51,7 +50,6 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     }
 
     fun initializeBackup(backupPassword: String) {
-        TODO()
 //        backup = Bindings.initializeBackup(
 //            backupPassword,
 //            BackupCallback(backupTaskCallback),
@@ -61,7 +59,6 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     }
 
     fun initializeBackupDuringRestore(backupPassword: String? = "") {
-        TODO()
 //        backup = Bindings.initializeBackup(
 //            backupPassword,
 //            BackupCallback(backupTaskCallback),
@@ -96,7 +93,7 @@ class BindingsBackupHandler(private val preferences: PreferencesRepository) {
     }
 
     private fun getEnabledBackup(): Backup? {
-        TODO()
+        return null
 //        return backup ?: try {
 //            Bindings.resumeBackup(BackupCallback(backupTaskCallback), client)
 //        } catch (e: Exception) {
