@@ -4,7 +4,7 @@ import bindings.Bindings
 import bindings.UserDiscovery
 
 interface CrustDataSource {
-    suspend fun uploadBackup(path: String): ByteArray
+    suspend fun uploadBackup(path: String): Result<ByteArray>
     suspend fun recoverBackup(username: String): Result<ByteArray>
 }
 
@@ -14,10 +14,15 @@ class BindingsCrustMediator(
 ) : CrustDataSource {
 
 
-    override suspend fun uploadBackup(path: String): ByteArray {
-        return udManager?.let {
-            Bindings.uploadBackup(path, udManager, receptionRsaPrivateKey)
-        } ?: byteArrayOf()
+    override suspend fun uploadBackup(path: String): Result<ByteArray> {
+        return try {
+            udManager?.let {
+                val uploadSuccessReport = Bindings.uploadBackup(path, udManager, receptionRsaPrivateKey)
+                Result.success(uploadSuccessReport)
+            } ?: Result.failure(Exception("Failed to run backup. UserDiscovery not initialized."))
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 
     override suspend fun recoverBackup(username: String): Result<ByteArray> {
