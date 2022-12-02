@@ -34,7 +34,14 @@ class Crust private constructor(
         null
     }
 
-    private fun signInRequired(): Boolean = false
+    private fun signInRequired(): Boolean {
+        return if (preferences.name.isBlank()) {
+            true
+        } else {
+            onAuthResultSuccess()
+            false
+        }
+    }
 
     private fun authBackgroundsApp() = false
 
