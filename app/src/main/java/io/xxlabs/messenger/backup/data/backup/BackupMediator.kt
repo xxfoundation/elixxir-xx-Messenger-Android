@@ -24,6 +24,7 @@ class BackupMediator @Inject constructor(
             googleDrive.location.name -> googleDrive
             dropbox.location.name -> dropbox
             sftp.location.name -> sftp
+            crust.location.name -> crust
             else -> null
         }
 

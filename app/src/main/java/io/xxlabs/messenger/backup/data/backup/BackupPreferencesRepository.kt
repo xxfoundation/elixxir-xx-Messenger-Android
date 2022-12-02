@@ -5,6 +5,7 @@ interface BackupPreferencesRepository {
     var isGoogleDriveEnabled: Boolean
     var isDropboxEnabled: Boolean
     var isSftpEnabled: Boolean
+    var isCrustEnabled: Boolean
     var backupPassword: String?
     var autoBackup: Boolean
     var wiFiOnlyBackup: Boolean

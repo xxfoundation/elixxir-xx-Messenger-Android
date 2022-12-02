@@ -245,6 +245,13 @@ class PreferencesRepository @Inject constructor(
             preferences.edit().putBoolean("sftp_enabled", value).apply()
         }
 
+    override var isCrustEnabled: Boolean = preferences.getBoolean("crust_enabled", false)
+        get() = preferences.getBoolean("crust_enabled", false)
+        set(value) {
+            field = value
+            preferences.edit().putBoolean("crust_enabled", value).apply()
+        }
+
     override var backupPassword: String? = preferences.getString("backup_pw", null)
         get() = preferences.getString("backup_pw", null)
         set(value) {
