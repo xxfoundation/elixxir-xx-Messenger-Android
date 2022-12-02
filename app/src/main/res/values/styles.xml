@@ -15,6 +15,12 @@
         <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
+    <style name="AppDialogTheme" parent="Theme.MaterialComponents.Light.Dialog.Alert">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
     <!-- Splash Screen theme -->
     <style name="SplashTheme" parent="@style/Theme.AppCompat.Light.NoActionBar">
         <item name="android:background">@drawable/bg_splash_screen</item>
