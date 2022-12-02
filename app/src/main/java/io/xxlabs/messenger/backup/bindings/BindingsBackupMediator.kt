@@ -1,5 +1,6 @@
 package io.xxlabs.messenger.backup.bindings
 
+import bindings.UserDiscovery
 import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
@@ -27,6 +28,13 @@ class BindingsBackupMediator @Inject constructor(
     private val backupHandler = BindingsBackupHandler(preferences)
     private val restoreHandler =
         BindingsRestoreHandler(preferences, daoRepo, messageReceivedListener, backupHandler)
+
+    override fun initializeCrustIntegration(
+        userDiscovery: UserDiscovery,
+        receptionRsaPrivKey: ByteArray
+    ) {
+
+    }
 
     override val backupFilePath: String
         get() = File(appContext().filesDir, BACKUP_FILE_NAME).path

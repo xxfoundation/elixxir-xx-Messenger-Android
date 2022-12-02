@@ -14,7 +14,7 @@ abstract class BackupLocationRepository(
     backupService: BackupService,
 ) : AccountBackupDataSource {
 
-    private val crustApi = BindingsCrustMediator()
+    protected val crustApi = BindingsCrustMediator()
 
     protected val googleDrive = GoogleDrive.getInstance(backupService, preferences)
     protected val dropbox = Dropbox.getInstance(backupService, preferences)

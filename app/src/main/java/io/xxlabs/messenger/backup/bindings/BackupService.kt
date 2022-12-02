@@ -1,9 +1,12 @@
 package io.xxlabs.messenger.backup.bindings
 
+import bindings.UserDiscovery
 import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 
 interface BackupService {
+    fun initializeCrustIntegration(userDiscovery: UserDiscovery, receptionRsaPrivKey: ByteArray)
+
     val backupFilePath: String
     /**
      * Assists in debugging restore-related issues.

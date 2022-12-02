@@ -3,6 +3,7 @@ package io.xxlabs.messenger.repository.client
 import android.content.Context
 import bindings.Bindings
 import bindings.NetworkHealthCallback
+import bindings.UserDiscovery
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import io.reactivex.Maybe
@@ -224,11 +225,19 @@ class ClientRepository @Inject constructor(
             try {
                 udWrapperBindings = BindingsWrapperBindings
                     .newUserDiscovery(clientWrapper) as UserDiscoveryWrapperBindings
+                initializeCrust(udWrapperBindings.userDiscovery)
                 emitter.onSuccess(true)
             } catch (e: Exception) {
                 emitter.onError(e)
             }
         }
+    }
+
+    private fun initializeCrust(userDiscovery: UserDiscovery) {
+        backupService.initializeCrustIntegration(
+            userDiscovery,
+            clientWrapper.client.user.receptionRSAPrivateKeyPem
+        )
     }
 
     override fun isLoggedIn(): Single<Boolean> {
