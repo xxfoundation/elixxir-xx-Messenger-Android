@@ -7,6 +7,7 @@ import io.xxlabs.messenger.backup.cloud.CloudStorage
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.BackupLocation
+import io.xxlabs.messenger.backup.model.BackupSnapshot
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -49,8 +50,10 @@ class Crust private constructor(
     }
 
     private suspend fun fetchData() {
-        cachedBackupData = crustApi.recoverBackup("").getOrNull()?.let {
+        cachedBackupData = crustApi.recoverBackup(preferences.name).getOrNull()?.let {
             AccountArchive(it)
+        }?.also {
+            updateLastBackup(CrustBackupData.from(it))
         }
     }
 
@@ -88,5 +91,15 @@ class Crust private constructor(
             preferences: BackupPreferencesRepository,
             crustApi: CrustDataSource
         ): Crust = instance ?: Crust(backupService, preferences, crustApi)
+    }
+}
+
+private class CrustBackupData(
+    override val sizeBytes: Long,
+    override val date: Long = System.currentTimeMillis()
+) : BackupSnapshot {
+
+    companion object Factory {
+        fun from(backupData: AccountArchive) = CrustBackupData(backupData.data.size.toLong())
     }
 }
