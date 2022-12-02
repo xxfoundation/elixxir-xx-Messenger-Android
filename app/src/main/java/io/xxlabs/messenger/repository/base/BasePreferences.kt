@@ -27,7 +27,6 @@ abstract class BasePreferences : BackupPreferencesRepository, NotificationPrefer
     abstract var currentNotificationsTokenId: String
     abstract var notificationsTokenId: String
     abstract var userId: String
-    abstract var name: String
 
     //Settings
     abstract var areNotificationsOn: Boolean

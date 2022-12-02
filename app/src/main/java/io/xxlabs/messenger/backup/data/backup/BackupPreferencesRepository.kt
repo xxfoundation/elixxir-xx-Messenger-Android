@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.backup.data.backup
 
 interface BackupPreferencesRepository {
+    var name: String
     var isBackupEnabled: Boolean
     var isGoogleDriveEnabled: Boolean
     var isDropboxEnabled: Boolean

@@ -13,7 +13,6 @@ class BindingsCrustMediator(
     var receptionRsaPrivateKey: ByteArray = byteArrayOf()
 ) : CrustDataSource {
 
-
     override suspend fun uploadBackup(path: String): Result<ByteArray> {
         return try {
             udManager?.let {

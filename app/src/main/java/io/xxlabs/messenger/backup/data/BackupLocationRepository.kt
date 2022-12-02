@@ -14,12 +14,10 @@ abstract class BackupLocationRepository(
     backupService: BackupService,
 ) : AccountBackupDataSource {
 
-    protected val crustApi = BindingsCrustMediator()
-
     protected val googleDrive = GoogleDrive.getInstance(backupService, preferences)
     protected val dropbox = Dropbox.getInstance(backupService, preferences)
     protected val sftp = Sftp.getInstance(backupService, preferences)
-    protected val crust = Crust.getInstance(backupService, preferences, crustApi)
+    protected val crust = Crust.getInstance(backupService, preferences, backupService.crustApi)
 
     override val locations: List<AccountBackup> = listOf(
         googleDrive,

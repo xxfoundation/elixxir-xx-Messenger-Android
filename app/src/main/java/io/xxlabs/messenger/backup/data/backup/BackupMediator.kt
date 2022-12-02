@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.backup.data.backup
 
-import bindings.UserDiscovery
 import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.data.BackupLocationRepository
 import io.xxlabs.messenger.backup.model.AccountBackup
@@ -16,16 +15,6 @@ class BackupMediator @Inject constructor(
     BackupService by backupService,
     BackupTaskPublisher by backupTaskPublisher
 {
-    override fun initializeCrustIntegration(
-        userDiscovery: UserDiscovery,
-        receptionRsaPrivKey: ByteArray
-    ) {
-        crustApi.apply {
-            udManager = userDiscovery
-            receptionRsaPrivateKey = receptionRsaPrivKey
-        }
-    }
-
     private val settingsHandler: BackupPreferencesDelegate by lazy {
         BackupPreferencesDelegate(preferences, this)
     }

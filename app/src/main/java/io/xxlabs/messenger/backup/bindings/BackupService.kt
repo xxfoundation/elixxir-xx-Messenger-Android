@@ -1,17 +1,23 @@
 package io.xxlabs.messenger.backup.bindings
 
 import bindings.UserDiscovery
+import io.xxlabs.messenger.backup.cloud.crust.CrustDataSource
 import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 
 interface BackupService {
-    fun initializeCrustIntegration(userDiscovery: UserDiscovery, receptionRsaPrivKey: ByteArray)
+    /**
+     * Exposes upload and restore functions to/from Crust storage.
+     */
+    val crustApi: CrustDataSource
 
     val backupFilePath: String
     /**
      * Assists in debugging restore-related issues.
      */
     val restoreLogger: RestoreLogger
+
+    fun initializeCrustIntegration(userDiscovery: UserDiscovery, receptionRsaPrivKey: ByteArray)
 
     /**
      * Set a [BackupTaskCallback] to be notified whenever a new backup file is created.

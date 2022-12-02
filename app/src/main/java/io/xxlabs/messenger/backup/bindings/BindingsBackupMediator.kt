@@ -1,6 +1,7 @@
 package io.xxlabs.messenger.backup.bindings
 
 import bindings.UserDiscovery
+import io.xxlabs.messenger.backup.cloud.crust.BindingsCrustMediator
 import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
@@ -29,11 +30,16 @@ class BindingsBackupMediator @Inject constructor(
     private val restoreHandler =
         BindingsRestoreHandler(preferences, daoRepo, messageReceivedListener, backupHandler)
 
+    override val crustApi = BindingsCrustMediator()
+
     override fun initializeCrustIntegration(
         userDiscovery: UserDiscovery,
         receptionRsaPrivKey: ByteArray
     ) {
-
+        crustApi.apply {
+            udManager = userDiscovery
+            receptionRsaPrivateKey = receptionRsaPrivKey
+        }
     }
 
     override val backupFilePath: String
