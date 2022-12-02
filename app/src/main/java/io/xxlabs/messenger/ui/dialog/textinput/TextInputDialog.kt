@@ -2,6 +2,7 @@ package io.xxlabs.messenger.ui.dialog.textinput
 
 import android.content.DialogInterface
 import android.os.Bundle
+import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -24,12 +25,16 @@ class TextInputDialog : XxBottomSheetDialog() {
     private val dialogUI: TextInputDialogUI by lazy {
         requireArguments().get(ARG_UI) as TextInputDialogUI
     }
+    private val isSensitive: Boolean by lazy {
+        requireArguments().getBoolean(ARG_SENSITIVE)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
         binding = DataBindingUtil.inflate(
             inflater,
             R.layout.component_textinput_dialog,
@@ -45,9 +50,18 @@ class TextInputDialog : XxBottomSheetDialog() {
         }
 
         initClickListeners()
+        setInputPrivacy()
         binding.lifecycleOwner = viewLifecycleOwner
         binding.ui = dialogUI
         return binding.root
+    }
+
+    private fun setInputPrivacy() {
+        if (isSensitive) {
+            binding.edittextDialogTextInput.editText?.apply {
+                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            }
+        }
     }
 
     private fun initClickListeners() {
@@ -98,11 +112,12 @@ class TextInputDialog : XxBottomSheetDialog() {
 
     companion object Factory {
         private const val ARG_UI: String = "ui"
-
-        fun newInstance(dialogUI: TextInputDialogUI): TextInputDialog =
+        private const val ARG_SENSITIVE: String = "sensitive"
+        fun newInstance(dialogUI: TextInputDialogUI, isSensitive: Boolean = false): TextInputDialog =
             TextInputDialog().apply {
                 arguments = Bundle().apply {
                     putSerializable(ARG_UI, dialogUI)
+                    putBoolean(ARG_SENSITIVE, isSensitive)
                 }
             }
     }
