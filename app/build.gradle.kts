@@ -154,6 +154,18 @@ android {
                 "io.xxlabs.messenger.data.datatype.Environment.MAIN_NET"
             )
         }
+
+        create("crustIntegrationDebug") {
+            initWith(getByName("debug"))
+            versionNameSuffix = "-CrustIntegrationDebug"
+            matchingFallbacks += "debug"
+
+            buildConfigField(
+                "io.xxlabs.messenger.data.datatype.Environment",
+                "ENVIRONMENT",
+                "io.xxlabs.messenger.data.datatype.Environment.CRUST_INTEGRATION"
+            )
+        }
     }
 
     android.variantFilter {

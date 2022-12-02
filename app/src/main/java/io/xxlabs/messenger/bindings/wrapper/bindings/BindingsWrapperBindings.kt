@@ -48,6 +48,12 @@ class BindingsWrapperBindings {
                         certificateFor(Environment.RELEASE_NET)
                     )
                 }
+                Environment.CRUST_INTEGRATION -> {
+                    downloadAndVerifySignedNdfWithUrl(
+                        NDF_URL_MAINNET,
+                        certificateFor(Environment.MAIN_NET)
+                    )
+                }
                 else -> getLocalNdf()
             }
 
@@ -60,7 +66,7 @@ class BindingsWrapperBindings {
 
         private fun certificateFor(environment: Environment): String {
             val certFile: Int = when (environment) {
-                Environment.MAIN_NET -> R.raw.mainnet
+                Environment.MAIN_NET, Environment.CRUST_INTEGRATION -> R.raw.mainnet
                 Environment.RELEASE_NET -> R.raw.release
                 else -> {
                     throw UnsupportedOperationException("No certificate found for $environment")
@@ -119,7 +125,10 @@ class BindingsWrapperBindings {
 
         private fun UserDiscoveryWrapperBindings.onUdInitialized() {
             XxMessengerApplication.isUserDiscoveryRunning = true
-            development(BuildConfig.DEBUG)
+            when (BuildConfig.ENVIRONMENT) {
+                Environment.CRUST_INTEGRATION -> crustIntegration(true)
+                else -> development(BuildConfig.DEBUG)
+            }
         }
 
         private fun UserDiscoveryWrapperBindings.development(enabled: Boolean) {
@@ -128,6 +137,18 @@ class BindingsWrapperBindings {
                     devUserDiscoveryIp,
                     rawBytes(R.raw.ud_elixxir_io),
                     rawBytes(R.raw.ud_contact_test)
+                )
+            } else {
+                restoreNormalUD()
+            }
+        }
+
+        private fun UserDiscoveryWrapperBindings.crustIntegration(enabled: Boolean) {
+            if (enabled) {
+                setAlternativeUD(
+                    devUserDiscoveryIp,
+                    rawBytes(R.raw.ud_crust),
+                    rawBytes(R.raw.ud_contact_crust)
                 )
             } else {
                 restoreNormalUD()
