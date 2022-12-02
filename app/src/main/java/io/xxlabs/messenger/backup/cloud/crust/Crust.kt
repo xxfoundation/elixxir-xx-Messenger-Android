@@ -70,8 +70,12 @@ class Crust private constructor(
     private fun backup() {
         scope.launch {
             updateProgress()
-            crustApi.uploadBackup(backupService.backupFilePath)
-            updateProgress(25)
+            crustApi.uploadBackup(backupService.backupFilePath).run {
+                when {
+                    isSuccess -> updateProgress(100)
+                    isFailure -> updateProgress(error = exceptionOrNull())
+                }
+            }
         }
     }
 
