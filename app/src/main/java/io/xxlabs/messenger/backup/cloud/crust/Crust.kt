@@ -128,7 +128,7 @@ class Crust private constructor(
             backupService: BackupService,
             preferences: BackupPreferencesRepository,
             crustApi: CrustDataSource
-        ): Crust = instance ?: Crust(backupService, preferences, crustApi)
+        ): Crust = instance ?: Crust(backupService, preferences, crustApi).also { instance = it }
     }
 }
 
