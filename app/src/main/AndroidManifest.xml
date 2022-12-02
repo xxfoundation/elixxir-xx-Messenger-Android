@@ -99,6 +99,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".backup.cloud.dropbox.DropboxAuthActivity" />
+        <activity
+            android:name=".backup.cloud.crust.login.ui.CrustLoginActivity"
+            android:theme="@style/Theme.AppCompat.Dialog"
+            android:excludeFromRecents="true"
+        />
 
         <meta-data
             android:name="QUERY_LOG"

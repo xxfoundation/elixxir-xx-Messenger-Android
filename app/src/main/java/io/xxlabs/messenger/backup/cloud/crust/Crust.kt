@@ -1,13 +1,19 @@
 package io.xxlabs.messenger.backup.cloud.crust
 
+import android.content.Intent
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.bindings.AccountArchive
 import io.xxlabs.messenger.backup.bindings.BackupService
+import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.CloudStorage
+import io.xxlabs.messenger.backup.cloud.crust.login.ui.CrustLoginActivity
+import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
+import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginActivity
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.BackupLocation
 import io.xxlabs.messenger.backup.model.BackupSnapshot
+import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -22,6 +28,30 @@ class Crust private constructor(
 ) : CloudStorage(backupService) {
 
     private var cachedBackupData: AccountArchive? = null
+    private var username: String? = null
+
+    private val authHandler: AuthHandler by lazy {
+        object : AuthHandler {
+            override val signInIntent: Intent
+                get() = Intent(appContext(), CrustLoginActivity::class.java).apply {
+                    action = CrustLoginActivity.CRUST_AUTH_INTENT
+                }
+
+            override fun handleSignInResult(data: Intent?) {
+                data?.getStringExtra(CrustLoginActivity.EXTRA_CRUST_USERNAME)?.run {
+                    username = this
+                    authResultCallback.onSuccess()
+                } ?: run {
+                    username = null
+                    authResultCallback.onFailure("Crust restore cancelled")
+                }
+            }
+
+            override fun signOut() {
+                username = null
+            }
+        }
+    }
 
     override val location: BackupLocation = BackupLocationData(
         R.drawable.ic_sftp,
@@ -31,7 +61,8 @@ class Crust private constructor(
         ::signOut,
         ::isEnabled
     ) {
-        null
+        _authResultCallback = it
+        authHandler
     }
 
     private fun signInRequired(): Boolean {
@@ -57,7 +88,7 @@ class Crust private constructor(
     }
 
     private suspend fun fetchData() {
-        cachedBackupData = crustApi.recoverBackup(preferences.name).getOrNull()?.let {
+        cachedBackupData = crustApi.recoverBackup(username ?: preferences.name).getOrNull()?.let {
             AccountArchive(it)
         }?.also {
             updateLastBackup(CrustBackupData.from(it))
