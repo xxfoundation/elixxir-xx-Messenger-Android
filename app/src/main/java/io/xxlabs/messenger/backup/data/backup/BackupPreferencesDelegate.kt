@@ -4,6 +4,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import io.xxlabs.messenger.backup.cloud.crust.Crust
 import io.xxlabs.messenger.backup.cloud.drive.GoogleDrive
 import io.xxlabs.messenger.backup.cloud.dropbox.Dropbox
 import io.xxlabs.messenger.backup.cloud.sftp.transfer.Sftp
@@ -59,6 +60,7 @@ class BackupPreferencesDelegate(
             is GoogleDrive -> googleDriveEnabled(enabled)
             is Dropbox -> dropboxEnabled(enabled)
             is Sftp -> sftpEnabled(enabled)
+            is Crust -> crustEnabled(enabled)
         }
         reflectChanges()
         if (enabled) tryBackup()
@@ -69,6 +71,7 @@ class BackupPreferencesDelegate(
         if (enabled) {
             preferences.isDropboxEnabled = false
             preferences.isSftpEnabled = false
+            preferences.isCrustEnabled = false
         }
     }
 
@@ -77,6 +80,7 @@ class BackupPreferencesDelegate(
         if (enabled) {
             preferences.isGoogleDriveEnabled = false
             preferences.isSftpEnabled = false
+            preferences.isCrustEnabled = false
         }
     }
 
@@ -85,6 +89,16 @@ class BackupPreferencesDelegate(
         if (enabled) {
             preferences.isGoogleDriveEnabled = false
             preferences.isDropboxEnabled = false
+            preferences.isCrustEnabled = false
+        }
+    }
+
+    private fun crustEnabled(enabled: Boolean) {
+        preferences.isCrustEnabled = enabled
+        if (enabled) {
+            preferences.isGoogleDriveEnabled = false
+            preferences.isDropboxEnabled = false
+            preferences.isSftpEnabled = false
         }
     }
 
