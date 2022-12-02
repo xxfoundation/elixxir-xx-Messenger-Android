@@ -110,7 +110,7 @@ class RestoreDetailFragment : Fragment(), Injectable {
     }
 
     private fun showSetPasswordDialog(dialogUI: TextInputDialogUI) {
-        TextInputDialog.newInstance(dialogUI)
+        TextInputDialog.newInstance(dialogUI, true)
             .show(childFragmentManager, null)
         ui.onPasswordPromptHandled()
     }
