@@ -7,8 +7,6 @@ import io.xxlabs.messenger.backup.bindings.BackupService
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.CloudStorage
 import io.xxlabs.messenger.backup.cloud.crust.login.ui.CrustLoginActivity
-import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
-import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginActivity
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
 import io.xxlabs.messenger.backup.model.BackupLocation

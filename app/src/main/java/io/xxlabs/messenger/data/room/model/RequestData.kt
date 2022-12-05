@@ -2,7 +2,6 @@ package io.xxlabs.messenger.data.room.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Index
 import androidx.room.PrimaryKey
 import io.xxlabs.messenger.requests.model.Request
 

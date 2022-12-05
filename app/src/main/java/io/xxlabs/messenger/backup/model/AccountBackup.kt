@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.AuthResultCallback
 import kotlinx.coroutines.flow.StateFlow
-import java.io.Serializable
 
 /**
  * An account backup or restore option.

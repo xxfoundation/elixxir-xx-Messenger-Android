@@ -11,8 +11,8 @@ import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.databinding.FragmentRegistration2faBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.ui.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
 import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.xxlabs.messenger.ui.intro.registration.success.RegistrationStep
 
 class RegistrationTfaFragment : RegistrationFlowFragment(), Injectable {
 

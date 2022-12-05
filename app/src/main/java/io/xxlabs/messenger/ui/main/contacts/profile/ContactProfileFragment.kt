@@ -9,11 +9,11 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
-import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
-import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
 import io.xxlabs.messenger.ui.base.BaseContactDetailsFragment
+import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
+import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.contacts.delete.DeleteConnectionDialog
 import io.xxlabs.messenger.ui.main.contacts.delete.DeleteConnectionDialogUI

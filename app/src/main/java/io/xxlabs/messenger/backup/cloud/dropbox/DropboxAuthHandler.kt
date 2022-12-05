@@ -1,10 +1,10 @@
 package io.xxlabs.messenger.backup.cloud.dropbox
 
 import android.content.Intent
-import io.xxlabs.messenger.backup.cloud.dropbox.DropboxAuthActivity.Companion.EXTRA_DBX_CREDENTIAL
-import io.xxlabs.messenger.backup.cloud.dropbox.DropboxAuthActivity.Companion.START_OAUTH_INTENT
 import io.xxlabs.messenger.backup.cloud.AuthHandler
 import io.xxlabs.messenger.backup.cloud.AuthResultCallback
+import io.xxlabs.messenger.backup.cloud.dropbox.DropboxAuthActivity.Companion.EXTRA_DBX_CREDENTIAL
+import io.xxlabs.messenger.backup.cloud.dropbox.DropboxAuthActivity.Companion.START_OAUTH_INTENT
 import io.xxlabs.messenger.support.appContext
 import timber.log.Timber
 

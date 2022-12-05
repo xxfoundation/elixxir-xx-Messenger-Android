@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import androidx.annotation.IdRes
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
-import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.data.room.model.formattedEmail
 import io.xxlabs.messenger.data.room.model.formattedPhone
 import io.xxlabs.messenger.requests.model.ContactRequest

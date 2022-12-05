@@ -2,7 +2,6 @@ package io.xxlabs.messenger.ui.dialog.textinput
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.InputType
 import android.text.Spannable
 import android.text.SpannableStringBuilder
 import android.text.method.LinkMovementMethod
@@ -12,8 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.textfield.TextInputLayout
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTextinputDialogBinding

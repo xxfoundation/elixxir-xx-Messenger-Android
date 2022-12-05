@@ -21,7 +21,6 @@ import io.xxlabs.messenger.ui.base.BaseInjectorActivity
 import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_INVITATION
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
-import timber.log.Timber
 import javax.inject.Inject
 
 class SplashScreenPlaceholderActivity : BaseInjectorActivity() {

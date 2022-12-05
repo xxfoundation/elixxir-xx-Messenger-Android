@@ -1,32 +1,23 @@
 package io.xxlabs.messenger.requests.ui.list
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import io.xxlabs.messenger.data.room.model.Contact
-import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.databinding.FragmentRequestListBinding
 import io.xxlabs.messenger.di.utils.Injectable
-import io.xxlabs.messenger.requests.model.ContactRequest
-import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
-import io.xxlabs.messenger.requests.ui.accepted.contact.RequestAcceptedDialog
-import io.xxlabs.messenger.requests.ui.accepted.group.InvitationAcceptedDialog
-import io.xxlabs.messenger.requests.ui.details.contact.RequestDetailsDialog
-import io.xxlabs.messenger.requests.ui.details.group.InvitationDetailsDialog
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestItem
 import io.xxlabs.messenger.requests.ui.list.adapter.RequestsAdapter
-import io.xxlabs.messenger.support.extensions.toBase64String
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

@@ -17,7 +17,6 @@ import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.databinding.FragmentUserSearchBinding
 import io.xxlabs.messenger.requests.ui.RequestsFragment
@@ -41,7 +40,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.lang.Exception
 
 class UserSearchFragment : RequestsFragment() {
 

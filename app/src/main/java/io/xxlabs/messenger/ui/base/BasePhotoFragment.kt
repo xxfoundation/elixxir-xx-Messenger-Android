@@ -29,7 +29,6 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.media.CameraProvider
 import io.xxlabs.messenger.media.DeviceStorageProvider
 import io.xxlabs.messenger.media.MediaCallback
-import io.xxlabs.messenger.media.MicrophoneProvider
 import io.xxlabs.messenger.support.dialog.PopupActionDialog
 import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.support.view.BitmapResolver
@@ -38,7 +37,6 @@ import timber.log.Timber
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.IOException
-import java.lang.ClassCastException
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -10,13 +10,12 @@ import io.xxlabs.messenger.backup.cloud.sftp.login.SshCredentials
 import io.xxlabs.messenger.backup.cloud.sftp.login.ui.SshLoginActivity
 import io.xxlabs.messenger.backup.data.backup.BackupPreferencesRepository
 import io.xxlabs.messenger.backup.data.restore.RestoreEnvironment
-import io.xxlabs.messenger.backup.model.*
+import io.xxlabs.messenger.backup.model.BackupLocation
 import io.xxlabs.messenger.support.appContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import kotlin.Exception
 
 /**
  * Encapsulates SFTP API.

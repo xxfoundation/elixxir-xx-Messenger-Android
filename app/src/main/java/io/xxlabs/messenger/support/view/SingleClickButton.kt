@@ -2,8 +2,7 @@ package io.xxlabs.messenger.support.view
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.ImageView
-import android.widget.TextView
+import android.view.View.OnClickListener
 import androidx.appcompat.widget.AppCompatButton
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView

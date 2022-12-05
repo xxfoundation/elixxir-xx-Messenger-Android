@@ -8,8 +8,6 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.support.util.Utils
 import timber.log.Timber
-import java.io.Serializable
-import java.util.*
 
 @Entity(
     tableName = "Contacts",

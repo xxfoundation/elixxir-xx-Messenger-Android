@@ -27,7 +27,6 @@ import io.xxlabs.messenger.repository.base.BaseRepository
 import io.xxlabs.messenger.requests.data.group.GroupInvitationData
 import io.xxlabs.messenger.requests.data.group.GroupRequestsRepository
 import io.xxlabs.messenger.requests.data.group.InvitationMigrator
-import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.util.Utils

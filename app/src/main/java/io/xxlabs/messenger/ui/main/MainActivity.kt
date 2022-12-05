@@ -11,16 +11,16 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
-import android.widget.ProgressBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.os.bundleOf
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.setPadding
-import androidx.lifecycle.*
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.observe
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.ui.onNavDestinationSelected
 import com.bumptech.glide.Glide
 import com.google.android.material.shape.CornerFamily
@@ -57,11 +57,16 @@ import io.xxlabs.messenger.ui.main.chats.ChatsViewModel
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.component_menu.*
-import kotlinx.android.synthetic.main.fragment_delete_account.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.collections.MutableList
+import kotlin.collections.MutableMap
+import kotlin.collections.mutableListOf
+import kotlin.collections.mutableMapOf
+import kotlin.collections.removeLastOrNull
+import kotlin.collections.set
 
 private val Bundle.isPrivateMessage: Boolean
     get() = getByteArray(MainActivity.INTENT_PRIVATE_CHAT) != null

@@ -30,6 +30,7 @@ import io.xxlabs.messenger.filetransfer.*
 import io.xxlabs.messenger.repository.DaoRepository
 import io.xxlabs.messenger.repository.PreferencesRepository
 import io.xxlabs.messenger.repository.base.BaseRepository
+import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.support.extensions.toBase64String
 import io.xxlabs.messenger.support.isMockVersion
 import io.xxlabs.messenger.support.misc.DummyGenerator
@@ -40,9 +41,6 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import kotlin.NoSuchElementException
-import kotlin.collections.HashMap
-import io.xxlabs.messenger.support.appContext
 
 private const val MINIMUM_RECORDING_DURATION_MS = 1000
 

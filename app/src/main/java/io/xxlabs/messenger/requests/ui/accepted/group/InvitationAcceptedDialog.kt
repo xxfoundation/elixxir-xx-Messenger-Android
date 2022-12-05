@@ -14,7 +14,6 @@ import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.databinding.ComponentRequestAcceptedDialogBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
-import io.xxlabs.messenger.requests.ui.details.contact.RequestDetailsDialog
 import javax.inject.Inject
 
 /**

@@ -45,7 +45,6 @@ import kotlinx.android.synthetic.main.fragment_requests.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 open class RequestsFragment : BaseFragment() {

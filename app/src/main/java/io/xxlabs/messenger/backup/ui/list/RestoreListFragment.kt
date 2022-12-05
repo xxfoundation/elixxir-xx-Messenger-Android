@@ -10,7 +10,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.backup.data.BackupSource
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
-import java.lang.Exception
 import javax.inject.Inject
 
 /**

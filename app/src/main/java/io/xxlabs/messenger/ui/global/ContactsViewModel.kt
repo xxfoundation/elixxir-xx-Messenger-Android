@@ -15,9 +15,9 @@ import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperMock
 import io.xxlabs.messenger.data.data.DataRequestState
 import io.xxlabs.messenger.data.data.PayloadWrapper
 import io.xxlabs.messenger.data.data.SimpleRequestState
-import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.FactType
 import io.xxlabs.messenger.data.datatype.MessageStatus
+import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.datatype.RequestStatus.*
 import io.xxlabs.messenger.data.room.model.*
 import io.xxlabs.messenger.repository.DaoRepository

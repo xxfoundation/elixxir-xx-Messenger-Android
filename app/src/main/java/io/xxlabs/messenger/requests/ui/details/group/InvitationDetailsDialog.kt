@@ -19,7 +19,6 @@ import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.requests.ui.RequestsViewModel
 import io.xxlabs.messenger.requests.ui.details.group.adapter.MembersAdapter
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch

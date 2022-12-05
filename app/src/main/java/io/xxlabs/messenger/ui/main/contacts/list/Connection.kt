@@ -1,6 +1,9 @@
 package io.xxlabs.messenger.ui.main.contacts.list
 
-import io.xxlabs.messenger.data.room.model.*
+import io.xxlabs.messenger.data.room.model.Contact
+import io.xxlabs.messenger.data.room.model.ContactData
+import io.xxlabs.messenger.data.room.model.Group
+import io.xxlabs.messenger.data.room.model.dummyThumbnail
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.dummy.randomString
 import kotlinx.coroutines.flow.Flow

@@ -3,9 +3,6 @@ package io.xxlabs.messenger.ui.main.chats
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,7 +35,6 @@ import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainViewModel
-import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionUI
 import io.xxlabs.messenger.ui.main.chats.newConnections.NewConnectionsAdapter
 import io.xxlabs.messenger.ui.main.chats.search.SearchResultAdapter

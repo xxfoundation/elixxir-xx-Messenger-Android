@@ -16,14 +16,15 @@ import io.xxlabs.messenger.data.datatype.RequestStatus
 import io.xxlabs.messenger.data.room.model.ContactData
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialog
 import io.xxlabs.messenger.support.dialog.PopupActionBottomDialogFragment
-import io.xxlabs.messenger.support.extensions.*
+import io.xxlabs.messenger.support.extensions.setInsets
+import io.xxlabs.messenger.support.extensions.setOnSingleClickListener
+import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.support.view.LooperCircularProgressBar
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.dialog.info.showInfoDialog
 import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.global.NetworkViewModel
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.contacts.*
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialog
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogUI
 import kotlinx.android.synthetic.main.component_toolbar_generic.*

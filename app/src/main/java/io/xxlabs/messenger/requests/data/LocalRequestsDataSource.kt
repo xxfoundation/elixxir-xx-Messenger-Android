@@ -1,8 +1,6 @@
 package io.xxlabs.messenger.requests.data
 
 import io.xxlabs.messenger.data.room.model.RequestData
-import io.xxlabs.messenger.requests.model.ContactRequest
-import io.xxlabs.messenger.requests.model.GroupInvitation
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRequestsDataSource {

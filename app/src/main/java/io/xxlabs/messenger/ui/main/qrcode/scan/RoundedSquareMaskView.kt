@@ -2,12 +2,8 @@ package io.xxlabs.messenger.ui.main.qrcode.scan
 
 import android.content.Context
 import android.graphics.*
-import android.os.Build
-import android.os.Build.VERSION_CODES.S
 import android.util.AttributeSet
 import android.view.SurfaceView
-import android.view.View
-import androidx.core.graphics.toRectF
 import androidx.databinding.BindingAdapter
 import io.xxlabs.messenger.R
 import kotlin.math.abs

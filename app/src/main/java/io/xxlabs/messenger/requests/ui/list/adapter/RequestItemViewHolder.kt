@@ -6,12 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import io.xxlabs.messenger.R
-import io.xxlabs.messenger.databinding.ListItemEmptyPlaceholderBinding
-import io.xxlabs.messenger.databinding.ListItemHiddenRequestsToggleBinding
-import io.xxlabs.messenger.databinding.ListItemRequestBinding
-import io.xxlabs.messenger.databinding.ListItemRequestSearchResultBinding
-import io.xxlabs.messenger.databinding.ListItemSectionDividerBinding
-import timber.log.Timber
+import io.xxlabs.messenger.databinding.*
 import java.io.InvalidObjectException
 
 abstract class RequestItemViewHolder(view: View) : RecyclerView.ViewHolder(view) {

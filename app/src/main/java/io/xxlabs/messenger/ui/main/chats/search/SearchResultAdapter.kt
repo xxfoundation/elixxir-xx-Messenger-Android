@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.databinding.ListItemSearchResultBinding
 import io.xxlabs.messenger.databinding.ListItemSectionHeaderBinding
 import io.xxlabs.messenger.ui.main.chat.setVisibility
-import java.lang.ClassCastException
 
 class SearchResultAdapter :
     ListAdapter<SearchResultItem, RecyclerView.ViewHolder>(SearchResultDiffUtil()) {

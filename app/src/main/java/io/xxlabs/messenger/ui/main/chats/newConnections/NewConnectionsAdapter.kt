@@ -5,8 +5,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import io.xxlabs.messenger.data.room.model.ContactData
-import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.databinding.ListItemNewConnectionBinding
 
 class NewConnectionsAdapter :

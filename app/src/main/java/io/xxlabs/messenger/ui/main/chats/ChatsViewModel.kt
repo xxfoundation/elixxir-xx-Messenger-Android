@@ -29,7 +29,6 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
-import kotlin.collections.HashMap
 import kotlin.collections.set
 
 class ChatsViewModel @Inject constructor(

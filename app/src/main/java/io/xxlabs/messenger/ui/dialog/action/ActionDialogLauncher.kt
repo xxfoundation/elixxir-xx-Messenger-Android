@@ -1,8 +1,8 @@
 package io.xxlabs.messenger.ui.dialog.action
 
 import androidx.fragment.app.Fragment
-import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
+import io.xxlabs.messenger.ui.dialog.warning.WarningDialogUI
 
 /**
  * Launches an ActionDialog with a positive button.

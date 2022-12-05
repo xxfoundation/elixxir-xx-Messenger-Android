@@ -1,7 +1,6 @@
 package io.xxlabs.messenger.data.room.model
 
 import android.graphics.Bitmap
-import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
 import io.xxlabs.messenger.support.view.BitmapResolver
 import kotlinx.coroutines.Dispatchers

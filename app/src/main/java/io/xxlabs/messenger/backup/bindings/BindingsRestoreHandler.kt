@@ -1,6 +1,8 @@
 package io.xxlabs.messenger.backup.bindings
 
-import bindings.*
+import bindings.Bindings
+import bindings.Client
+import bindings.Contact
 import io.xxlabs.messenger.backup.data.restore.BackupReport
 import io.xxlabs.messenger.backup.data.restore.RestoreLogger
 import io.xxlabs.messenger.bindings.listeners.MessageReceivedListener

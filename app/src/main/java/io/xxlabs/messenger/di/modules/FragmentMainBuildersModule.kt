@@ -20,9 +20,9 @@ import io.xxlabs.messenger.requests.ui.send.SendRequestDialog
 import io.xxlabs.messenger.search.*
 import io.xxlabs.messenger.ui.main.chat.PrivateMessagesFragment
 import io.xxlabs.messenger.ui.main.chats.ChatsFragment
-import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment
 import io.xxlabs.messenger.ui.main.contacts.PhotoSelectorFragment
 import io.xxlabs.messenger.ui.main.contacts.invitation.ContactInvitation
+import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragment
 import io.xxlabs.messenger.ui.main.contacts.profile.ContactProfileFragment
 import io.xxlabs.messenger.ui.main.contacts.select.ContactSelectionFragment
 import io.xxlabs.messenger.ui.main.contacts.success.ContactSuccessFragment

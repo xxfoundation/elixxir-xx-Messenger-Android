@@ -4,7 +4,6 @@ import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.data.room.model.Group
 import io.xxlabs.messenger.data.room.model.thumbnail
 import io.xxlabs.messenger.requests.ui.list.adapter.ItemThumbnail
-import io.xxlabs.messenger.support.extensions.toBase64String
 
 sealed interface SearchResultItem {
     val id: Int

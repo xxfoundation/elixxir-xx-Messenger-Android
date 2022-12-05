@@ -4,7 +4,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.requests.model.GroupInvitation
-import io.xxlabs.messenger.requests.ui.details.group.adapter.MemberItem
 import io.xxlabs.messenger.requests.ui.list.adapter.GroupInviteItem
 
 /**

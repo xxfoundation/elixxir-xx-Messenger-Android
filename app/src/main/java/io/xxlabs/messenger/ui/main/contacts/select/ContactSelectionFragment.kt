@@ -20,7 +20,6 @@ import io.xxlabs.messenger.ui.global.ContactsViewModel
 import io.xxlabs.messenger.ui.main.contacts.ContactsFragment
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsListScrollHandler
 import io.xxlabs.messenger.ui.main.contacts.list.ConnectionsViewModel
-import io.xxlabs.messenger.ui.main.contacts.list.ContactListFragmentDirections
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialog
 import io.xxlabs.messenger.ui.main.groups.create.CreateGroupDialogUI
 import javax.inject.Inject

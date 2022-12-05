@@ -9,7 +9,10 @@ import io.xxlabs.messenger.requests.data.RequestDataSource
 import io.xxlabs.messenger.requests.model.GroupInvitation
 import io.xxlabs.messenger.support.util.value
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import javax.inject.Inject
 
 class GroupRequestsRepository @Inject constructor(

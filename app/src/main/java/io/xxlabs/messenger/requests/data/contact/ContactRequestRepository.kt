@@ -10,11 +10,12 @@ import io.xxlabs.messenger.requests.bindings.VerificationResult
 import io.xxlabs.messenger.requests.data.LocalRequestsDataSource
 import io.xxlabs.messenger.requests.data.RequestDataSource
 import io.xxlabs.messenger.requests.model.ContactRequest
-import io.xxlabs.messenger.support.appContext
-import io.xxlabs.messenger.support.extensions.toast
 import io.xxlabs.messenger.support.util.value
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.take
 import timber.log.Timber
 import javax.inject.Inject
 

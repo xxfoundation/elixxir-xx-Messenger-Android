@@ -1,10 +1,10 @@
 package io.xxlabs.messenger.backup.ui.backup
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
@@ -12,12 +12,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import io.xxlabs.messenger.backup.cloud.CloudAuthentication
 import io.xxlabs.messenger.backup.data.BackupSource
-import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
-import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
 import io.xxlabs.messenger.databinding.FragmentBackupSettingsBinding
 import io.xxlabs.messenger.databinding.ListItemBackupOptionBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.support.view.SnackBarActivity
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialog
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import javax.inject.Inject
 
 /**

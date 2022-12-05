@@ -1,6 +1,5 @@
 package io.xxlabs.messenger.requests.bindings
 
-import com.dropbox.core.android.AuthActivity.result
 import io.xxlabs.messenger.bindings.wrapper.contact.ContactWrapperBase
 import io.xxlabs.messenger.data.room.model.Contact
 import io.xxlabs.messenger.repository.base.BaseRepository

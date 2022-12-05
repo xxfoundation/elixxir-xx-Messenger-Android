@@ -12,12 +12,14 @@ import io.xxlabs.messenger.backup.data.restore.RestoreLog
 import io.xxlabs.messenger.backup.data.restore.RestoreManager
 import io.xxlabs.messenger.backup.model.AccountBackup
 import io.xxlabs.messenger.backup.ui.backup.BackupPassword
-import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
 import io.xxlabs.messenger.bindings.wrapper.bindings.BindingsWrapperBindings
 import io.xxlabs.messenger.support.appContext
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.dialog.info.TwoButtonInfoDialogUI
-import kotlinx.coroutines.*
+import io.xxlabs.messenger.ui.dialog.textinput.TextInputDialogUI
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class RestoreDetailViewModel @AssistedInject constructor(
     private val restoreManager: RestoreManager,

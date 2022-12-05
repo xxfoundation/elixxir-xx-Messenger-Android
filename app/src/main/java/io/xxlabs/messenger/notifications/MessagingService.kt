@@ -27,8 +27,8 @@ import io.xxlabs.messenger.requests.ui.RequestsFragment
 import io.xxlabs.messenger.support.util.value
 import io.xxlabs.messenger.ui.intro.splash.SplashScreenPlaceholderActivity
 import io.xxlabs.messenger.ui.main.MainActivity
-import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_GROUP_CHAT
+import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_NOTIFICATION_CLICK
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_PRIVATE_CHAT
 import io.xxlabs.messenger.ui.main.MainActivity.Companion.INTENT_REQUEST
 import kotlinx.coroutines.*

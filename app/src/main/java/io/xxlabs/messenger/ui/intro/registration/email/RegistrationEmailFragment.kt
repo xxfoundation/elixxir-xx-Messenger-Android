@@ -10,8 +10,8 @@ import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.FragmentRegistrationEmailBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.ui.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 
 class RegistrationEmailFragment : RegistrationFlowFragment(), Injectable {
 

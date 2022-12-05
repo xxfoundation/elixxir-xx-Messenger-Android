@@ -11,8 +11,8 @@ import io.xxlabs.messenger.data.data.Country
 import io.xxlabs.messenger.databinding.FragmentRegistrationPhoneBinding
 import io.xxlabs.messenger.di.utils.Injectable
 import io.xxlabs.messenger.ui.dialog.info.InfoDialog
-import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 import io.xxlabs.messenger.ui.intro.registration.RegistrationFlowFragment
+import io.xxlabs.messenger.ui.intro.registration.tfa.TwoFactorAuthCredentials
 import io.xxlabs.messenger.ui.main.countrycode.CountryFullscreenDialog
 import io.xxlabs.messenger.ui.main.countrycode.CountrySelectionListener
 

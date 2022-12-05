@@ -14,9 +14,9 @@ import io.xxlabs.messenger.requests.data.contact.ContactRequestsRepository
 import io.xxlabs.messenger.requests.data.group.GroupRequestsRepository
 import io.xxlabs.messenger.requests.model.ContactRequest
 import io.xxlabs.messenger.requests.model.GroupInvitation
+import io.xxlabs.messenger.requests.ui.accepted.RequestAcceptedUI
 import io.xxlabs.messenger.requests.ui.accepted.contact.RequestAccepted
 import io.xxlabs.messenger.requests.ui.accepted.contact.RequestAcceptedListener
-import io.xxlabs.messenger.requests.ui.accepted.RequestAcceptedUI
 import io.xxlabs.messenger.requests.ui.accepted.group.InvitationAccepted
 import io.xxlabs.messenger.requests.ui.accepted.group.InvitationAcceptedListener
 import io.xxlabs.messenger.requests.ui.details.contact.RequestDetails

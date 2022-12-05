@@ -26,8 +26,7 @@ import io.xxlabs.messenger.support.singleExecutorInstance
 import io.xxlabs.messenger.ui.base.BaseFragment
 import io.xxlabs.messenger.ui.main.qrcode.QrCodeViewModel
 import io.xxlabs.messenger.ui.main.qrcode.zxing.ZXingQrCodeAnalyzer
-import kotlinx.android.synthetic.main.fragment_qr_code_scan.cameraFlashControl
-import kotlinx.android.synthetic.main.fragment_qr_code_scan.cameraPreview
+import kotlinx.android.synthetic.main.fragment_qr_code_scan.*
 import javax.inject.Inject
 import com.google.zxing.Result as QrScanResult
 

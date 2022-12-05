@@ -13,7 +13,8 @@ import io.xxlabs.messenger.data.room.model.ChatMessage
 import io.xxlabs.messenger.data.room.model.GroupData
 import io.xxlabs.messenger.data.room.model.GroupMessage
 import io.xxlabs.messenger.support.dialog.MenuChatDialog
-import io.xxlabs.messenger.support.extensions.*
+import io.xxlabs.messenger.support.extensions.fromBase64toByteArray
+import io.xxlabs.messenger.support.extensions.navigateSafe
 import io.xxlabs.messenger.support.touch.MessageSwipeController
 import io.xxlabs.messenger.support.touch.SwipeActions
 import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
@@ -21,7 +22,6 @@ import io.xxlabs.messenger.ui.main.MainActivity
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesFragment
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController
 import io.xxlabs.messenger.ui.main.chat.adapters.ChatMessagesAdapter
-import io.xxlabs.messenger.ui.dialog.warning.showConfirmDialog
 import javax.inject.Inject
 
 class GroupMessagesFragment : ChatMessagesFragment<GroupMessage>() {
