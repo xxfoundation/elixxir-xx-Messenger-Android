@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputLayout
 import io.xxlabs.messenger.R
 import io.xxlabs.messenger.databinding.ComponentTextinputDialogBinding
 import io.xxlabs.messenger.support.view.XxBottomSheetDialog
@@ -58,8 +59,8 @@ class TextInputDialog : XxBottomSheetDialog() {
 
     private fun setInputPrivacy() {
         if (isSensitive) {
-            binding.edittextDialogTextInput.editText?.apply {
-                inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+            binding.edittextDialogTextInput.apply {
+                endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
             }
         }
     }
