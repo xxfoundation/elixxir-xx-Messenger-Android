@@ -111,7 +111,10 @@ class Crust private constructor(
             updateProgress()
             crustApi.uploadBackup(backupService.backupFilePath).run {
                 when {
-                    isSuccess -> updateProgress(100)
+                    isSuccess -> {
+                        updateProgress(100)
+                        updateLastBackup(CrustBackupData.fromLatestBackup())
+                    }
                     isFailure -> updateProgress(error = exceptionOrNull())
                 }
             }
@@ -137,5 +140,6 @@ private class CrustBackupData(
 
     companion object Factory {
         fun from(backupData: AccountArchive) = CrustBackupData(backupData.data.size.toLong())
+        fun fromLatestBackup() = CrustBackupData(1)
     }
 }
