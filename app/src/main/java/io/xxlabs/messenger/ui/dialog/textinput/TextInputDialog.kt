@@ -58,6 +58,7 @@ class TextInputDialog : XxBottomSheetDialog() {
         if (isSensitive) {
             binding.edittextDialogTextInput.apply {
                 endIconMode = TextInputLayout.END_ICON_PASSWORD_TOGGLE
+                errorIconDrawable = null
             }
         }
     }
