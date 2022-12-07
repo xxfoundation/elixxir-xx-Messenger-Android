@@ -30,7 +30,7 @@ class BindingsBackupMediator @Inject constructor(
     private val restoreHandler =
         BindingsRestoreHandler(preferences, daoRepo, messageReceivedListener, backupHandler)
 
-    override val crustApi = BindingsCrustMediator()
+    override val crustApi = BindingsCrustMediator(username = preferences.name)
 
     override fun initializeCrustIntegration(
         userDiscovery: UserDiscovery,

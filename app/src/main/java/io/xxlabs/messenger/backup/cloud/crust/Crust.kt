@@ -86,6 +86,7 @@ class Crust private constructor(
     }
 
     private suspend fun fetchData() {
+
         cachedBackupData = crustApi.recoverBackup(username ?: preferences.name).getOrNull()?.let {
             AccountArchive(it)
         }?.also {
