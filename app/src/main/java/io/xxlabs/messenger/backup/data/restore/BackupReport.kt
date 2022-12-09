@@ -32,10 +32,7 @@ data class BackupReport(
     }
 
     val userPhone: String? get() = userData?.userPhone
-    val phoneStringified: String? get() = userPhone?.run {
-        if (isNotEmpty()) "E$this"
-        else this
-    }
+    val phoneStringified: String? get() = userPhone
 
     fun getContacts(): ByteArray = Gson().toJson(contacts).encodeToByteArray()
 
