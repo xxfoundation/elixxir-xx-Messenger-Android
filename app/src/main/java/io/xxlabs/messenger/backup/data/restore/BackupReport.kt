@@ -33,7 +33,7 @@ data class BackupReport(
 
     val userPhone: String? get() = userData?.userPhone
     val phoneStringified: String? get() = userPhone?.run {
-        if (isNotEmpty()) "P$this"
+        if (isNotEmpty()) "E$this"
         else this
     }
 
