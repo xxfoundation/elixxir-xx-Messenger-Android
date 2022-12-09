@@ -52,7 +52,7 @@ class Crust private constructor(
     }
 
     override val location: BackupLocation = BackupLocationData(
-        R.drawable.ic_sftp,
+        R.drawable.crustlogo,
         "Crust",
         ::signInRequired,
         ::authBackgroundsApp,
