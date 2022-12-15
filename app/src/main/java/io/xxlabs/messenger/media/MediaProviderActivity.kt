@@ -4,15 +4,24 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Environment
 import androidx.activity.result.ActivityResultCallback
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.core.content.PermissionChecker
+import androidx.lifecycle.lifecycleScope
 import io.xxlabs.messenger.BuildConfig
+import io.xxlabs.messenger.support.view.BitmapResolver
 import io.xxlabs.messenger.ui.base.BaseKeystoreActivity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
+import java.security.AccessController.getContext
 
 /**
  * Superclass for Activities that perform actions that require sensitive permissions
@@ -97,11 +106,48 @@ abstract class MediaProviderActivity :
     }
 
     private val cameraResultCallback = ActivityResultCallback<Boolean> { isSuccess ->
-        if (isSuccess) {
-            callback?.onFilesSelected(listOf(latestMediaUri))
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                if (isSuccess) {
+                    BitmapResolver.getBitmap(latestMediaUri)?.let {
+                        correctPhotoOrientation(it, latestMediaUri)
+                    }
+                    callback?.onFilesSelected(listOf(latestMediaUri))
+                }
+                callback = null
+                shouldStopNetworkFollower = true
+            }
         }
-        callback = null
-        shouldStopNetworkFollower = true
+    }
+
+    private fun correctPhotoOrientation(image: Bitmap, uri: Uri) {
+        val ei = ExifInterface(uri.path!!)
+        val orientation = ei.getAttributeInt(
+            ExifInterface.TAG_ORIENTATION,
+            ExifInterface.ORIENTATION_UNDEFINED
+        )
+        when (orientation) {
+            ExifInterface.ORIENTATION_ROTATE_90 -> rotateImage(image, 90F)
+            ExifInterface.ORIENTATION_ROTATE_180 -> rotateImage(image, 180F)
+            ExifInterface.ORIENTATION_ROTATE_270 -> rotateImage(image, 270F)
+        }
+
+        contentResolver.openOutputStream(uri).use {
+            image.compress(Bitmap.CompressFormat.PNG, 100, it)
+        }
+    }
+
+    private fun rotateImage(source: Bitmap, angle: Float): Bitmap {
+        val matrix = Matrix().apply { postRotate(angle) }
+        return Bitmap.createBitmap(
+            source,
+            0,
+            0,
+            source.width,
+            source.height,
+            matrix,
+            true
+        )
     }
 
     private val cameraLauncher = registerForActivityResult(
