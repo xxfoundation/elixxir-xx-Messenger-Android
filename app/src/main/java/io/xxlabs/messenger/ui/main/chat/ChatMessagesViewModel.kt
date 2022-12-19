@@ -25,7 +25,9 @@ import io.xxlabs.messenger.support.util.Utils
 import io.xxlabs.messenger.ui.dialog.info.InfoDialogUI
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.ALL_MESSAGES
 import io.xxlabs.messenger.ui.main.chat.ChatMessagesUIController.Companion.MAX_REPLY_PREVIEW_LENGTH
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.*
 
@@ -514,9 +516,13 @@ abstract class ChatMessagesViewModel<T: ChatMessage> (
     override fun getUserId() = preferences.getUserId()
 
     protected fun onMessageSent(resetMessageInput: Boolean = true) {
-        _beepEvent.value = true
-        _vibrateEvent.value = HapticFeedbackConstants.LONG_PRESS
-        if (resetMessageInput) resetMessageInput()
+        viewModelScope.launch {
+            withContext(Dispatchers.Main) {
+                _beepEvent.value = true
+                _vibrateEvent.value = HapticFeedbackConstants.LONG_PRESS
+                if (resetMessageInput) resetMessageInput()
+            }
+        }
     }
 
     protected open fun resetMessageInput() {

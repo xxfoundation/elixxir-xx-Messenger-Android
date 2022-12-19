@@ -121,7 +121,8 @@ abstract class MediaProviderActivity :
     }
 
     private fun correctPhotoOrientation(image: Bitmap, uri: Uri) {
-        val ei = ExifInterface(uri.path!!)
+        val inputStream = contentResolver.openInputStream(uri) ?: return
+        val ei = ExifInterface(inputStream)
         val orientation = ei.getAttributeInt(
             ExifInterface.TAG_ORIENTATION,
             ExifInterface.ORIENTATION_UNDEFINED
