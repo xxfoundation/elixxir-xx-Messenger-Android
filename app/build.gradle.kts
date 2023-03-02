@@ -166,6 +166,18 @@ android {
                 "io.xxlabs.messenger.data.datatype.Environment.CRUST_INTEGRATION"
             )
         }
+
+        create("localNdf") {
+            initWith(getByName("mainNet"))
+            versionNameSuffix = "-localNdf"
+            matchingFallbacks += "release"
+
+            buildConfigField(
+                "io.xxlabs.messenger.data.datatype.Environment",
+                "ENVIRONMENT",
+                "io.xxlabs.messenger.data.datatype.Environment.LOCAL_NDF"
+            )
+        }
     }
 
     android.variantFilter {

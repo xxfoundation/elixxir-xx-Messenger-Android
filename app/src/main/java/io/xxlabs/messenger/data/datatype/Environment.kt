@@ -5,4 +5,5 @@ enum class Environment {
     MOCK,
     MAIN_NET,
     CRUST_INTEGRATION
+    LOCAL_NDF
 }

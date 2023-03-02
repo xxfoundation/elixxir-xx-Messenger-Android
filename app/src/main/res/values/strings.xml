@@ -5,6 +5,7 @@
     <string name="xx_app_name_mainNet">xx messenger</string>
     <string name="xx_app_name_mainNetDebug">xx messenger</string>
     <string name="xx_app_name_releaseNetDebug">xx messenger</string>
+    <string name="xx_app_name_localNdf">xx messenger</string>
     <string name="xx_app_name_crustIntegrationDebug">xx messenger</string>
 
     <!-- Bottom navigation Menu Titles -->
