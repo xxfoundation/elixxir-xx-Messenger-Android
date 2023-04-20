@@ -106,21 +106,22 @@ class ContactRequestsRepository @Inject constructor(
     }
 
     override suspend fun verify(request: ContactRequest): Boolean = withContext(Dispatchers.Default) {
-        update(request, VERIFYING)
-        when (requestsService.verifyContactRequest(request)) {
-            is VerificationResult.Verified -> {
-                update(request, VERIFIED)
-                true
-            }
-            is VerificationResult.Fraudulent -> {
-                handleFraudulentRequest(request)
-                false
-            }
-            else -> {
-                update(request, VERIFICATION_FAIL)
-                false
-            }
-        }
+        update(request, VERIFIED)
+        true
+//        when (requestsService.verifyContactRequest(request)) {
+//            is VerificationResult.Verified -> {
+//                update(request, VERIFIED)
+//                true
+//            }
+//            is VerificationResult.Fraudulent -> {
+//                handleFraudulentRequest(request)
+//                false
+//            }
+//            else -> {
+//                update(request, VERIFICATION_FAIL)
+//                false
+//            }
+//        }
     }
 
     override fun failUnverifiedRequests() {

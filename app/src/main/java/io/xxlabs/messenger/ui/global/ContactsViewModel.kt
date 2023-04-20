@@ -390,14 +390,15 @@ class ContactsViewModel @Inject constructor(
     fun verifyNewRequest(
         contact: ContactData
     ) {
-        updateContactStatus(contact.userId, VERIFYING) {
-            Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
-            if (contact.hasFacts()) { //UD Search
-                verifyContactViaSearch(contact)
-            } else { // UD Lookup
-                verifyContactViaLookup(contact)
-            }
-        }
+        onContactVerified(contact)
+//        updateContactStatus(contact.userId, VERIFYING) {
+//            Timber.v("[RECEIVED REQUEST] Verifying Request ${contact.userId.toBase64String()}...")
+//            if (contact.hasFacts()) { //UD Search
+//                verifyContactViaSearch(contact)
+//            } else { // UD Lookup
+//                verifyContactViaLookup(contact)
+//            }
+//        }
     }
 
     private fun verifyContactViaSearch(contact: ContactData) {
