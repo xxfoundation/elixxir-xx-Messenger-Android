@@ -4,6 +4,7 @@ enum class Environment {
     RELEASE_NET,
     MOCK,
     MAIN_NET,
-    CRUST_INTEGRATION
-    LOCAL_NDF
+    CRUST_INTEGRATION,
+    LOCAL_NDF,
+    NOTIFICATIONS_TEST
 }

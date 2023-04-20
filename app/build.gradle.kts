@@ -178,6 +178,18 @@ android {
                 "io.xxlabs.messenger.data.datatype.Environment.LOCAL_NDF"
             )
         }
+
+        create("notificationsTest") {
+            initWith(getByName("mainNet"))
+            versionNameSuffix = "-test"
+            matchingFallbacks += "release"
+
+            buildConfigField(
+                "io.xxlabs.messenger.data.datatype.Environment",
+                "ENVIRONMENT",
+                "io.xxlabs.messenger.data.datatype.Environment.NOTIFICATIONS_TEST"
+            )
+        }
     }
 
     android.variantFilter {

@@ -31,6 +31,8 @@ class BindingsWrapperBindings {
             "https://elixxir-bins.s3.us-west-1.amazonaws.com/ndf/mainnet.json"
         private const val NDF_URL_RELEASE =
             "https://elixxir-bins.s3.us-west-1.amazonaws.com/ndf/release.json"
+        private const val NDF_URL_NOTIFICATIONS_TEST =
+            "https://elixxir-bins.s3.us-west-1.amazonaws.com/ndf/default.json"
 
         override fun getNdf(): String = recursiveGetNdf()
 
@@ -54,6 +56,12 @@ class BindingsWrapperBindings {
                         certificateFor(Environment.MAIN_NET)
                     )
                 }
+                Environment.NOTIFICATIONS_TEST -> {
+                    downloadAndVerifySignedNdfWithUrl(
+                        NDF_URL_NOTIFICATIONS_TEST,
+                        certificateFor(Environment.NOTIFICATIONS_TEST)
+                    )
+                }
                 else -> getLocalNdf()
             }
 
@@ -68,6 +76,7 @@ class BindingsWrapperBindings {
             val certFile: Int = when (environment) {
                 Environment.MAIN_NET, Environment.CRUST_INTEGRATION -> R.raw.mainnet
                 Environment.RELEASE_NET -> R.raw.release
+                Environment.NOTIFICATIONS_TEST -> R.raw.test_cert
                 else -> {
                     throw UnsupportedOperationException("No certificate found for $environment")
                 }
