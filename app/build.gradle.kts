@@ -35,8 +35,8 @@ android {
 
     defaultConfig {
         applicationId = "io.xxlabs.messenger"
-        versionCode = 663
-        versionName = "2.96"
+        versionCode = 664
+        versionName = "2.961"
         minSdk = 26
         targetSdk = 31
         testInstrumentationRunner = "io.xxlabs.messenger.CustomTestRunner"
@@ -180,9 +180,9 @@ android {
         }
 
         create("notificationsTest") {
-            initWith(getByName("mainNet"))
+            initWith(getByName("mainNetDebug"))
             versionNameSuffix = "-test"
-            matchingFallbacks += "release"
+            matchingFallbacks += "debug"
 
             buildConfigField(
                 "io.xxlabs.messenger.data.datatype.Environment",
