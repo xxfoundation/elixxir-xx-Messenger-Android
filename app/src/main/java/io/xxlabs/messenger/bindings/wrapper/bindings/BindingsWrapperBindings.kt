@@ -136,6 +136,7 @@ class BindingsWrapperBindings {
             XxMessengerApplication.isUserDiscoveryRunning = true
             when (BuildConfig.ENVIRONMENT) {
                 Environment.CRUST_INTEGRATION -> crustIntegration(true)
+                Environment.NOTIFICATIONS_TEST -> development(false)
                 else -> development(BuildConfig.DEBUG)
             }
         }
